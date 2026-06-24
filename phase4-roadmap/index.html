@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Redface 2 — Phase 4 par vue</title>
+<style>
+  :root{
+    --ground:#15121A; --surface:#1E1925; --surface-2:#272030;
+    --line:#352C42; --text:#ECE4DE; --muted:#9C8FA6; --faint:#6E6478;
+    --red:#E23A4E; --cyan:#34C0CE;
+    --ready:#5FB97E; --capture:#E0A93A; --repro:#E27A42;
+    --dep:#6E8BE0; --gated:#A883DD;
+    --mono:ui-monospace,"SF Mono","Cascadia Code",Menlo,Consolas,monospace;
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--ground);color:var(--text);font-family:var(--sans);
+    line-height:1.55;-webkit-font-smoothing:antialiased;
+    background-image:radial-gradient(1100px 520px at 82% -8%, rgba(226,58,78,.14), transparent 60%);}
+  .wrap{max-width:1080px;margin:0 auto;padding:clamp(20px,5vw,64px) clamp(16px,4vw,40px) 80px;}
+  a{color:var(--cyan);text-decoration:none}
+  a:hover{text-decoration:underline}
+
+  /* hero */
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.32em;text-transform:uppercase;
+    color:var(--red);font-weight:600;margin:0 0 14px}
+  h1{font-size:clamp(34px,7vw,68px);line-height:.98;letter-spacing:-.025em;font-weight:800;
+    margin:0 0 18px}
+  h1 .v{color:var(--red)}
+  .thesis{font-size:clamp(16px,2.3vw,20px);color:var(--muted);max-width:62ch;margin:0 0 26px}
+  .metarow{display:flex;flex-wrap:wrap;gap:8px 22px;font-family:var(--mono);font-size:12.5px;
+    color:var(--faint);border-top:1px solid var(--line);padding-top:16px}
+  .metarow b{color:var(--text);font-weight:600}
+
+  /* section headers */
+  h2{font-size:clamp(22px,3.4vw,30px);letter-spacing:-.015em;margin:60px 0 6px;font-weight:800}
+  h2 .hash{font-family:var(--mono);color:var(--red);font-weight:700;font-size:.62em;
+    vertical-align:.18em;margin-right:10px}
+  .lede{color:var(--muted);margin:0 0 24px;max-width:64ch}
+
+  /* topo / change grid */
+  .changes{display:grid;grid-template-columns:repeat(auto-fit,minmax(225px,1fr));gap:12px}
+  .chg{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+  .chg .k{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--red);margin:0 0 7px;font-weight:600}
+  .chg p{margin:0;font-size:14.5px;color:#D7CDD6}
+  .chg .big{font-size:26px;font-weight:800;color:var(--text);font-family:var(--mono);letter-spacing:-.02em}
+  .chg .strike{color:var(--faint);text-decoration:line-through;text-decoration-color:var(--red)}
+
+  /* completeness strip */
+  .strip{display:flex;flex-wrap:wrap;gap:14px;margin:22px 0 0}
+  .stat{flex:1 1 150px;background:linear-gradient(180deg,var(--surface-2),var(--surface));
+    border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+  .stat .n{font-family:var(--mono);font-size:30px;font-weight:800;letter-spacing:-.03em;line-height:1}
+  .stat .l{font-size:12.5px;color:var(--muted);margin-top:6px}
+  .stat.ok{border-color:rgba(95,185,126,.4)}
+  .stat.ok .n{color:var(--ready)}
+
+  /* phase cards */
+  .phase{background:var(--surface);border:1px solid var(--line);border-radius:16px;
+    margin:14px 0;overflow:hidden}
+  .phase.next{border-color:var(--red);box-shadow:0 0 0 1px rgba(226,58,78,.35),0 18px 40px -28px rgba(226,58,78,.6)}
+  .ph-head{display:flex;align-items:baseline;gap:16px;padding:18px 22px;
+    border-bottom:1px solid var(--line);flex-wrap:wrap}
+  .ph-num{font-family:var(--mono);font-size:30px;font-weight:800;color:var(--faint);
+    letter-spacing:-.04em;line-height:1}
+  .phase.next .ph-num{color:var(--red)}
+  .ph-title{font-size:19px;font-weight:700;letter-spacing:-.01em}
+  .ph-vue{font-family:var(--mono);font-size:11px;color:var(--cyan);
+    border:1px solid rgba(52,192,206,.4);border-radius:6px;padding:2px 7px;letter-spacing:.04em}
+  .ph-count{margin-left:auto;font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+  .ph-flag{font-family:var(--mono);font-size:10.5px;font-weight:700;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--red);border:1px solid var(--red);border-radius:6px;
+    padding:3px 8px}
+  .ph-desc{padding:12px 22px 4px;color:var(--muted);font-size:14px}
+
+  /* issue rows */
+  ul.issues{list-style:none;margin:0;padding:8px 12px 16px}
+  ul.issues li{display:flex;align-items:flex-start;gap:12px;padding:8px 10px;border-radius:9px;flex-wrap:wrap}
+  ul.issues li:hover{background:var(--surface-2)}
+  .num{font-family:var(--mono);font-size:13px;color:var(--faint);min-width:46px;font-weight:600;padding-top:1px}
+  .phase.next .num{color:var(--text)}
+  .ti{flex:1 1 240px;font-size:14.5px;color:#DDD3DB}
+  .lead .ti{font-weight:700;color:var(--text)}
+  .lead .num{color:var(--red)}
+  .chips{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+  .chip{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.08em;
+    text-transform:uppercase;padding:2px 7px;border-radius:5px;white-space:nowrap;border:1px solid}
+  .c-ready{color:var(--ready);border-color:rgba(95,185,126,.45);background:rgba(95,185,126,.08)}
+  .c-capture{color:var(--capture);border-color:rgba(224,169,58,.45);background:rgba(224,169,58,.08)}
+  .c-repro{color:var(--repro);border-color:rgba(226,122,66,.45);background:rgba(226,122,66,.08)}
+  .c-dep{color:var(--dep);border-color:rgba(110,139,224,.45);background:rgba(110,139,224,.08)}
+  .c-gated{color:var(--gated);border-color:rgba(168,131,221,.45);background:rgba(168,131,221,.08)}
+  .c-quick{color:var(--cyan);border-color:rgba(52,192,206,.45);background:rgba(52,192,206,.08)}
+  .c-prio{color:#fff;border-color:var(--red);background:var(--red)}
+
+  /* continuous phases : flatter, no number */
+  .cont .phase{background:var(--surface);border-style:dashed}
+  .cont .ph-num{display:none}
+
+  /* legend */
+  .legend{display:flex;flex-wrap:wrap;gap:10px 20px;background:var(--surface);
+    border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin-top:14px}
+  .legend .li{display:flex;align-items:center;gap:9px;font-size:13px;color:var(--muted)}
+
+  /* umbrella + next */
+  .foot{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px}
+  .panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px 22px}
+  .panel.umbrella{border-left:3px solid var(--gated)}
+  .panel.next{border-left:3px solid var(--red)}
+  .panel .pk{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--muted);margin:0 0 8px}
+  .panel h3{margin:0 0 8px;font-size:17px}
+  .panel p{margin:0;font-size:14px;color:var(--muted)}
+  .codex{margin-top:38px;background:linear-gradient(180deg,rgba(168,131,221,.10),transparent);
+    border:1px solid rgba(168,131,221,.3);border-radius:14px;padding:22px 24px}
+  .codex .pk{color:var(--gated)}
+  .codex ul{margin:10px 0 0;padding-left:20px;color:#D7CDD6;font-size:14px}
+  .codex li{margin:5px 0}
+  .pageftr{margin-top:44px;border-top:1px solid var(--line);padding-top:16px;
+    font-family:var(--mono);font-size:11.5px;color:var(--faint)}
+
+  @media (max-width:620px){.foot{grid-template-columns:1fr}.ph-count{margin-left:0;width:100%}}
+
+  .reveal{opacity:0;transform:translateY(10px);animation:rise .6s ease forwards}
+  @keyframes rise{to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion:reduce){.reveal{animation:none;opacity:1;transform:none}}
+</style>
+</head>
+<body style="margin:0">
+
+
+<div class="wrap">
+
+  <p class="eyebrow">Redface 2 · Roadmap produit</p>
+  <h1>Phase&nbsp;4,<br>par <span class="v">vue</span>.</h1>
+  <p class="thesis">Le backlog est réorganisé autour des écrans de l'app : cinq chantiers de
+    refonte séquencés, puis trois phases génériques continues. Une issue = une vue, un type, un
+    statut. Plus de zone d'ombre, plus de doublon.</p>
+  <div class="metarow">
+    <span>📅 <b>23 juin 2026</b></span>
+    <span>repo <b>ForumHFR/redface2</b></span>
+    <span>base <b>bêta 0.16.0 / app-v179</b></span>
+    <span>gate <b style="color:var(--gated)">Codex GO</b></span>
+  </div>
+
+  <!-- ====== TOPO : CE QUI A CHANGÉ ====== -->
+  <h2><span class="hash">01</span>Ce qui a changé</h2>
+  <p class="lede">Migration d'une taxonomie « par phase de projet » vers une taxonomie « par vue ».
+    Tout exécuté en un batch idempotent sous le compte de maintenance.</p>
+  <div class="changes">
+    <div class="chg"><p class="k">Milestones</p><p><span class="big strike">3</span> &nbsp;→&nbsp; <span class="big" style="color:var(--red)">8</span><br>anciens fermés, structure par vue</p></div>
+    <div class="chg"><p class="k">Issues reclassées</p><p><span class="big">63</span><br>titre normalisé (« Phase 5 — » retiré) + labels <span style="font-family:var(--mono);font-size:12px">vue:* · status:* · type</span></p></div>
+    <div class="chg"><p class="k">Labels obsolètes</p><p><span class="big">0</span><br><span style="font-family:var(--mono);font-size:12px">polish</span> et <span style="font-family:var(--mono);font-size:12px">phase-*</span> retirés partout</p></div>
+    <div class="chg"><p class="k">Fermées (livré)</p><p><span style="font-family:var(--mono);color:var(--ready)">#375 #380 #518</span><br>recherche intra-topic · aperçu [img] · plein écran</p></div>
+    <div class="chg"><p class="k">Requalifiée</p><p><span style="font-family:var(--mono)">#605</span> → ombrelle de suivi (sans milestone, label <span style="font-family:var(--mono);font-size:12px">meta</span>)</p></div>
+    <div class="chg"><p class="k">Correction Codex</p><p><span style="font-family:var(--mono)">#6</span> : <span style="font-family:var(--mono);font-size:12px">status:gated</span> → <span style="font-family:var(--mono);font-size:12px;color:var(--dep)">blocked-dependency</span></p></div>
+  </div>
+
+  <div class="strip">
+    <div class="stat ok"><div class="n">64</div><div class="l">issues ouvertes — toutes classées</div></div>
+    <div class="stat ok"><div class="n">0</div><div class="l">orpheline (hors ombrelle #605)</div></div>
+    <div class="stat"><div class="n">5+3</div><div class="l">chantiers par vue + phases continues</div></div>
+    <div class="stat"><div class="n">2</div><div class="l">axes : milestone = où je code · <span style="font-family:var(--mono);color:var(--cyan)">vue:*</span> = surface touchée</div></div>
+  </div>
+
+  <!-- ====== CHANTIERS PAR VUE ====== -->
+  <h2><span class="hash">02</span>Chantiers par vue — séquencés</h2>
+  <p class="lede">L'ordre est intentionnel : chaque refonte stabilise une surface avant la suivante.
+    Les items <span class="chip c-quick" style="font-size:9px">QUICK</span> sont saisissables tôt si un creux le permet, sans rouvrir l'écran deux fois.</p>
+
+  <!-- 01 Drapeaux (NEXT) -->
+  <div class="phase next reveal">
+    <div class="ph-head">
+      <span class="ph-num">01</span>
+      <span class="ph-title">Drapeaux</span>
+      <span class="ph-vue">vue:drapeaux</span>
+      <span class="ph-flag">◀ Prochaine</span>
+      <span class="ph-count">6 issues</span>
+    </div>
+    <p class="ph-desc">Tête de phase : refonte de l'écran Drapeaux (maquette + #179 avant code).</p>
+    <ul class="issues">
+      <li class="lead"><span class="num">#603</span><span class="ti">Refonte de la vue Drapeaux</span><span class="chips"></span></li>
+      <li><span class="num">#602</span><span class="ti">Aide intégrée des drapeaux (signification + tuto 1er lancement)</span><span class="chips"><span class="chip c-ready">ready</span></span></li>
+      <li><span class="num">#328</span><span class="ti">Liste topics : appui long = menu d'actions rapides</span><span class="chips"><span class="chip c-ready">ready</span></span></li>
+      <li><span class="num">#297</span><span class="ti">Poser/afficher les drapeaux depuis un listing de catégorie</span><span class="chips"><span class="chip c-capture">capture</span></span></li>
+      <li><span class="num">#413</span><span class="ti">Favoris de post HFR (poser / lister / retirer)</span><span class="chips"><span class="chip c-capture">capture</span></span></li>
+      <li><span class="num">#251</span><span class="ti">Cyan manquant (REST global tronqué par récence)</span><span class="chips"><span class="chip c-repro">repro</span></span></li>
+    </ul>
+  </div>
+
+  <!-- 02 Topic -->
+  <div class="phase reveal">
+    <div class="ph-head">
+      <span class="ph-num">02</span><span class="ph-title">Topic</span>
+      <span class="ph-vue">vue:topic</span><span class="ph-count">19 issues</span>
+    </div>
+    <p class="ph-desc">Refonte #604 : rendu des posts, scroll/ascenseur, citations. La vue la plus dense.</p>
+    <ul class="issues">
+      <li class="lead"><span class="num">#604</span><span class="ti">Refonte de la vue Topic</span><span class="chips"></span></li>
+      <li><span class="num">#280</span><span class="ti">Interlignes irréguliers dans le rendu des posts</span><span class="chips"><span class="chip c-ready">ready</span></span></li>
+      <li><span class="num">#610</span><span class="ti">Image [img] : dimensionnement différent inline vs bloc</span><span class="chips"><span class="chip c-ready">ready</span></span></li>
+      <li><span class="num">#256</span><span class="ti">Rendu : fast-path marqueur hfr-cc-image</span><span class="chips"><span class="chip c-ready">ready</span></span></li>
+      <li><span class="num">#377</span><span class="ti">Ascenseur de sujet v2 : option défilement continu</span><span class="chips"><span class="chip c-ready">ready</span></span></li>
+      <li><span class="num">#600</span><span class="ti">Lisibilité du repère « dernier post lu »</span><span class="chips"><span class="chip c-ready">ready</span><span class="chip c-quick">quick</span></span></li>
+      <li><span class="num">#295</span><span class="ti">Icônes menus / sections / sticky (parité web)</span><span class="chips"></span></li>
+      <li><span class="num">#290</span><span class="ti">Recherche : filtres page (plage de dates = recherche globale)</span><span class="chips"><span class="chip c-capture">capture</span></span></li>
+      <li><span class="num">#340</span><span class="ti">Ton du message (MsgIcon) : lecture + picker optionnel</span><span class="chips"><span class="chip c-capture">capture</span></span></li>
+      <li><span class="num">#532</span><span class="ti">Lignes vides : aligner le plafonnement sur HFR web</span><span class="chips"><span class="chip c-capture">capture</span></span></li>
+      <li><span class="num">#583</span><span class="ti">Citation dont le message source est sur une autre page</span><span class="chips"><span class="chip c-capture">capture</span></span></li>
+      <li><span class="num">#334</span><span class="ti">« Real New Answer » : signaler qu'un de ses posts est cité</span><span class="chips"><span class="chip c-capture">capture</span></span></li>
+      <li><span class="num">#545</span><span class="ti">Édition indisponible (isEditable=false : lien non détecté en auth)</span><span class="chips"><span class="chip c-capture">capture</span></span></li>
+      <li><span class="num">#622</span><span class="ti">Compteur de pages erroné pendant le chargement</span><span class="chips"><span class="chip c-repro">repro</span></span></li>
+      <li><span class="num">#599</span><span class="ti">Boutons flottants « page suivante » et « + » superposés</span><span class="chips"><span class="chip c-repro">repro</span></span></li>
+      <li><span class="num">#278</span><span class="ti">Après une réponse, le topic ne recharge pas sur le nouveau post</span><span class="chips"><span class="chip c-repro">repro</span></span></li>
+      <li><span class="num">#343</span><span class="ti">Réponse débordant sur une nouvelle page : reste sur l'ancienne</span><span class="chips"><span class="chip c-repro">repro</span></span></li>
+      <li><span class="num">#394</span><span class="ti">Dernier post lu supprimé : ouvre en haut sans repère</span><span class="chips"><span class="chip c-repro">repro</span></span></li>
+      <li><span class="num">#477</span><span class="ti">Flash en haut de page avant le saut au dernier post lu</span><span class="chips"><span class="chip c-repro">repro</span></span></li>
+    </ul>
+  </div>
+
+  <!-- 03 Éditeur -->
+  <div class="phase reveal">
+    <div class="ph-head">
+      <span class="ph-num">03</span><span class="ph-title">Éditeur</span>
+      <span class="ph-vue">vue:editeur</span><span class="ph-count">12 issues</span>
+    </div>
+    <p class="ph-desc">Écriture : citation, multi-quote, médias, upload. Les quick-wins sont rapatriés ici
+      pour ne pas retoucher l'éditeur deux fois.</p>
+    <ul class="issues">
+      <li><span class="num">#327</span><span class="ti">Citer un long post en ne gardant que le début (troncature)</span><span class="chips"><span class="chip c-ready">ready</span></span></li>
+      <li><span class="num">#381</span><span class="ti">Citer uniquement la portion de texte sélectionnée</span><span class="chips"><span class="chip c-ready">ready</span></span></li>
+      <li><span class="num">#459</span><span class="ti">Câbler l'upload d'images (nouveau-sujet + MP)</span><span class="chips"><span class="chip c-ready">ready</span><span class="chip c-quick">quick</span></span></li>
+      <li><span class="num">#555</span><span class="ti">Édition d'un post long : le clavier ne s'ouvre pas + scroll inactif</span><span class="chips"><span class="chip c-ready">ready</span><span class="chip c-quick">quick</span></span></li>
+      <li><span class="num">#250</span><span class="ti">Smiley picker (tab Wiki) : révéler la recherche + clavier au switch</span><span class="chips"><span class="chip c-ready">ready</span><span class="chip c-quick">quick</span></span></li>
+      <li><span class="num">#441</span><span class="ti">Migrer les VM éditeur → SmileyPickerController</span><span class="chips"><span class="chip c-ready">ready</span><span class="chip c-quick">quick</span></span></li>
+      <li><span class="num">#480</span><span class="ti">« Citer » / « Citation multiple » en icône d'en-tête</span><span class="chips"></span></li>
+      <li><span class="num">#436</span><span class="ti">Multi-quote v2 : marquage des posts + « Tout vider le panier »</span><span class="chips"></span></li>
+      <li><span class="num">#190</span><span class="ti">Médias éditeur avancés : GIFs, bibliothèque, favoris/récents</span><span class="chips"></span></li>
+      <li><span class="num">#472</span><span class="ti">Support du Markdown (en complément du BBCode HFR)</span><span class="chips"></span></li>
+      <li><span class="num">#489</span><span class="ti">Support super-h comme 3e hébergeur d'images</span><span class="chips"><span class="chip c-capture">capture</span></span></li>
+      <li><span class="num">#447</span><span class="ti">Le champ ne suit pas le curseur + pas d'autoscroll en sélection</span><span class="chips"><span class="chip c-repro">repro</span></span></li>
+    </ul>
+  </div>
+
+  <!-- 04 Réglages -->
+  <div class="phase reveal">
+    <div class="ph-head">
+      <span class="ph-num">04</span><span class="ph-title">Réglages</span>
+      <span class="ph-vue">vue:reglages</span><span class="ph-count">5 issues</span>
+    </div>
+    <p class="ph-desc">Après stabilisation du rendu (#604/#280), pour ne pas refaire l'aperçu.</p>
+    <ul class="issues">
+      <li><span class="num">#595</span><span class="ti">Aperçu en direct des changements d'affichage</span><span class="chips"><span class="chip c-ready">ready</span></span></li>
+      <li><span class="num">#310</span><span class="ti">Mode économie de données (images wifi/preview/full)</span><span class="chips"><span class="chip c-ready">ready</span></span></li>
+      <li><span class="num">#601</span><span class="ti">Export/import des réglages (fichier local + sync MPStorage2)</span><span class="chips"></span></li>
+      <li><span class="num">#296</span><span class="ti">Personnalisation des couleurs de l'UI (long terme)</span><span class="chips"></span></li>
+      <li><span class="num">#554</span><span class="ti">Position perdue au retour d'une rubrique</span><span class="chips"><span class="chip c-repro">repro</span></span></li>
+    </ul>
+  </div>
+
+  <!-- 05 Compte HFR -->
+  <div class="phase reveal">
+    <div class="ph-head">
+      <span class="ph-num">05</span><span class="ph-title">Compte HFR</span>
+      <span class="ph-vue">vue:compte</span><span class="ph-count">6 issues</span>
+    </div>
+    <p class="ph-desc">Login, profil (editprofil), modération, sanctions, permissions. Largement bloqué
+      sur capture HFR.</p>
+    <ul class="issues">
+      <li class="lead"><span class="num">#276</span><span class="ti">Login impossible au premier lancement</span><span class="chips"><span class="chip c-prio">prio</span><span class="chip c-repro">repro</span></span></li>
+      <li><span class="num">#311</span><span class="ti">Avatars / signatures / posts-par-page (editprofil.php)</span><span class="chips"><span class="chip c-capture">capture</span></span></li>
+      <li><span class="num">#293</span><span class="ti">Modération : signaler / alerter un post</span><span class="chips"><span class="chip c-capture">capture</span></span></li>
+      <li><span class="num">#294</span><span class="ti">Compte : consulter ses sanctions</span><span class="chips"><span class="chip c-capture">capture</span></span></li>
+      <li><span class="num">#242</span><span class="ti">Permissions/erreurs HFR : section bannie + erreur TT</span><span class="chips"><span class="chip c-capture">capture</span></span></li>
+      <li><span class="num">#221</span><span class="ti">Mettre en valeur les pseudos admin/supadmin/modérateur</span><span class="chips"><span class="chip c-capture">capture</span></span></li>
+    </ul>
+  </div>
+
+  <!-- ====== PHASES CONTINUES ====== -->
+  <h2><span class="hash">03</span>Phases génériques — continues</h2>
+  <p class="lede">Non séquencées (d'où l'absence de numéro) : elles avancent en parallèle des chantiers
+    par vue, dès qu'un créneau ou une dépendance se libère.</p>
+  <div class="cont">
+
+    <div class="phase reveal">
+      <div class="ph-head"><span class="ph-num"></span><span class="ph-title">Quick wins &amp; Material 3</span><span class="ph-count">2 issues — vraiment autonomes</span></div>
+      <p class="ph-desc">Aucun chevauchement avec une phase dédiée (sinon rapatrié dans la vue concernée).</p>
+      <ul class="issues">
+        <li><span class="num">#182</span><span class="ti">Pinch-to-zoom sur les images de posts <span style="color:var(--faint)">· vue:topic</span></span><span class="chips"><span class="chip c-prio">prio</span><span class="chip c-ready">ready</span></span></li>
+        <li><span class="num">#326</span><span class="ti">Choisir l'icône de l'application <span style="color:var(--faint)">· vue:reglages</span></span><span class="chips"><span class="chip c-ready">ready</span></span></li>
+      </ul>
+    </div>
+
+    <div class="phase reveal">
+      <div class="ph-head"><span class="ph-num"></span><span class="ph-title">Infra &amp; dette</span><span class="ph-count">11 issues</span></div>
+      <p class="ph-desc">Refactors, benchmarks, CI/CD, architecture extensions.</p>
+      <ul class="issues">
+        <li><span class="num">#625</span><span class="ti">Tech-debt : TODOs sans issue, drafts trackés</span><span class="chips"><span class="chip c-ready">ready</span></span></li>
+        <li><span class="num">#626</span><span class="ti">Auditer les catch génériques + justifier chaque @Suppress</span><span class="chips"><span class="chip c-ready">ready</span></span></li>
+        <li><span class="num">#195</span><span class="ti">Rendre le bootstrap proxy réseau asynchrone</span><span class="chips"><span class="chip c-ready">ready</span></span></li>
+        <li><span class="num">#30</span><span class="ti">MCP ADB + ReDroid : boucle feedback IA autonome</span><span class="chips"><span class="chip c-ready">ready</span></span></li>
+        <li><span class="num">#596</span><span class="ti">CI/CD : annonce auto du changelog HFR à chaque release (MCP)</span><span class="chips"></span></li>
+        <li><span class="num">#7</span><span class="ti">Architecture extensions (PostDecorator + @IntoSet)</span><span class="chips"></span></li>
+        <li><span class="num">#442</span><span class="ti">Notifications système pour les MP non lus <span style="color:var(--faint)">· vue:mp</span></span><span class="chips"></span></li>
+        <li><span class="num">#630</span><span class="ti">Backfill provenance .source.txt des fixtures legacy</span><span class="chips"><span class="chip c-capture">capture</span></span></li>
+        <li><span class="num">#141</span><span class="ti">Microbenchmark parser HFR</span><span class="chips"><span class="chip c-gated">gated</span></span></li>
+        <li><span class="num">#142</span><span class="ti">Macrobenchmark parcours topic</span><span class="chips"><span class="chip c-gated">gated</span></span></li>
+        <li><span class="num">#6</span><span class="ti">MPStorage : sync cross-device</span><span class="chips"><span class="chip c-dep">dépendance</span></span></li>
+      </ul>
+    </div>
+
+    <div class="phase reveal">
+      <div class="ph-head"><span class="ph-num"></span><span class="ph-title">Méta / long terme</span><span class="ph-count">2 issues</span></div>
+      <p class="ph-desc">Non planifié — liste vivante et idées.</p>
+      <ul class="issues">
+        <li><span class="num">#419</span><span class="ti">Known issues &amp; compromis assumés (liste vivante)</span><span class="chips"></span></li>
+        <li><span class="num">#481</span><span class="ti">Résumé IA des posts non lus d'un topic</span><span class="chips"></span></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- legend -->
+  <h2><span class="hash">04</span>Lecture des statuts</h2>
+  <div class="legend">
+    <span class="li"><span class="chip c-ready">ready</span> prêt à développer</span>
+    <span class="li"><span class="chip c-capture">capture</span> bloqué : capture HFR requise</span>
+    <span class="li"><span class="chip c-repro">repro</span> bloqué : repro / investigation device</span>
+    <span class="li"><span class="chip c-gated">gated</span> bloqué : gate de décision (lancer)</span>
+    <span class="li"><span class="chip c-dep">dépendance</span> bloqué : projet externe (hfr-redkit)</span>
+    <span class="li"><span class="chip c-quick">quick</span> petit lot, saisissable tôt</span>
+    <span class="li"><span class="chip c-prio">prio</span> priorité haute</span>
+  </div>
+
+  <!-- umbrella + next -->
+  <div class="foot">
+    <div class="panel umbrella">
+      <p class="pk">Ombrelle</p>
+      <h3>#605 — suivi Phase 4</h3>
+      <p>Hors milestone, label <span style="font-family:var(--mono);font-size:12px">meta</span>. Porte la structure complète et le fil d'avancement par vue.</p>
+    </div>
+    <div class="panel next">
+      <p class="pk">Prochaine étape produit</p>
+      <h3>#603 — Refonte Drapeaux</h3>
+      <p>Sur base saine : cadrage Codex + maquette, puis skill <span style="font-family:var(--mono);font-size:12px">/validate</span> et filet de non-régression.</p>
+    </div>
+  </div>
+
+  <!-- codex gate -->
+  <div class="codex">
+    <p class="pk">Gate Codex — gpt-5.5 / xhigh · verdict GO</p>
+    <p style="margin:0;color:#D7CDD6;font-size:14.5px">La structure est jugée saine et réversible. Validé sans réserve :</p>
+    <ul>
+      <li>Granularité des 8 milestones (Topic à 19 ≈ #604, Réglages à 5 OK) — ne pas redécouper.</li>
+      <li>Double-axe <b>milestone = chantier d'exécution</b> / <b>vue:* = surface produit</b> : bon découplage, divergences assumées (#182, #326, #442).</li>
+      <li>Types <span style="font-family:var(--mono);font-size:12px">bug/enhancement</span> natifs + <span style="font-family:var(--mono);font-size:12px">refactor/spike</span> : pragmatique, pas besoin de <span style="font-family:var(--mono);font-size:12px">type:*</span>.</li>
+      <li>Placements #447/#545 et quick-wins-en-Éditeur : confirmés.</li>
+      <li><b>1 correction appliquée</b> : #6 sorti de <span style="font-family:var(--mono);font-size:12px">status:gated</span> → <span style="font-family:var(--mono);font-size:12px;color:var(--dep)">status:blocked-dependency</span> (dépendance externe ≠ gate de décision).</li>
+    </ul>
+  </div>
+
+  <p class="pageftr">Redface 2 · Phase 4 par vue · exécuté &amp; gaté Codex le 2026-06-23 · 64 issues ouvertes, 0 orpheline · github.com/ForumHFR/redface2/milestones</p>
+
+</div>
+
+</body>
+</html>
