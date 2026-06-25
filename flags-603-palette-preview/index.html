@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Palette Drapeaux — Material vs HFR pur + DT">
+<title>Palette Drapeaux — aperçu (Material vs HFR pur · DT fuchsia)</title>
+<style>
+  :root {
+    --bg: #14121a; --surface: #1e1b27; --surface-2: #262232; --line: #322d40;
+    --ink: #ece9f1; --muted: #9a93a8; --faint: #6f6880;
+    /* HFR pur (gif) */
+    --hfr-cyan: #00FFFF; --hfr-red: #FF0000; --hfr-fav: #F0F83F; --hfr-dt: #FF00FF;
+    /* Material (code actuel) */
+    --mat-cyan: #00BCD4; --mat-red: #D32F2F; --mat-fav: #F9A825;
+    --blue: #6aa7ff; --green: #4cc38a;
+    font-synthesis: none;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; color: var(--ink); line-height: 1.55;
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    background:
+      radial-gradient(1100px 520px at 82% -8%, rgba(255,0,255,.08), transparent 60%),
+      radial-gradient(900px 480px at 6% 2%, rgba(0,255,255,.05), transparent 55%),
+      var(--bg);
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: clamp(28px,5vw,68px) clamp(16px,4vw,40px) 90px; }
+  .mono { font-family: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace; }
+
+  .eyebrow { font-size:.74rem; letter-spacing:.22em; text-transform:uppercase; color:var(--hfr-dt); font-weight:650; margin:0 0 14px; display:flex; align-items:center; gap:10px; }
+  .eyebrow::before { content:""; width:26px; height:2px; background:var(--hfr-dt); display:inline-block; }
+  h1 { font-size:clamp(1.9rem,4.8vw,3rem); line-height:1.05; margin:0 0 16px; font-weight:780; letter-spacing:-.02em; text-wrap:balance; }
+  .lede { font-size:1.05rem; color:var(--muted); max-width:66ch; margin:0 0 8px; }
+
+  section { margin-top: clamp(42px,6vw,68px); }
+  .sec-head { display:flex; align-items:baseline; gap:14px; margin:0 0 22px; border-bottom:1px solid var(--line); padding-bottom:12px; }
+  .sec-head h2 { font-size:1.3rem; margin:0; font-weight:720; letter-spacing:-.01em; }
+  .sec-head .k { font-size:.74rem; letter-spacing:.16em; text-transform:uppercase; color:var(--faint); font-weight:600; margin-left:auto; }
+
+  /* ---- Palette comparison ---- */
+  .pal { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:14px; }
+  .bucket { background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:18px; }
+  .bucket .name { font-weight:700; font-size:1rem; margin:0 0 2px; }
+  .bucket .role { font-size:.82rem; color:var(--muted); margin:0 0 16px; }
+  .swatches { display:flex; gap:12px; }
+  .sw { flex:1; }
+  .chipcol { height:62px; border-radius:11px; border:1px solid rgba(255,255,255,.08); margin-bottom:8px; box-shadow: inset 0 0 0 1px rgba(0,0,0,.15); }
+  .sw .lbl { font-size:.68rem; text-transform:uppercase; letter-spacing:.08em; color:var(--faint); font-weight:650; margin-bottom:3px; }
+  .sw .hex { font-size:.82rem; font-weight:650; }
+  .sw .rgb { font-size:.72rem; color:var(--muted); }
+  .bucket.dt { border-color: rgba(255,0,255,.4); }
+  .badge-new { font-size:.64rem; font-weight:800; text-transform:uppercase; letter-spacing:.06em; color:var(--hfr-dt); border:1px solid rgba(255,0,255,.4); background:rgba(255,0,255,.1); border-radius:5px; padding:2px 7px; margin-left:8px; vertical-align:middle; }
+  .delta { margin-top:14px; font-size:.78rem; color:var(--faint); border-top:1px dashed var(--line); padding-top:10px; }
+  .delta b { color:var(--muted); font-weight:640; }
+
+  /* ---- Two list previews ---- */
+  .lists { display:grid; grid-template-columns:repeat(auto-fit,minmax(290px,1fr)); gap:18px; }
+  .phone { background:var(--surface); border:1px solid var(--line); border-radius:18px; overflow:hidden; }
+  .phone .cap { padding:11px 16px; font-size:.78rem; color:var(--muted); border-bottom:1px solid var(--line); display:flex; justify-content:space-between; align-items:center; }
+  .phone .cap b { color:var(--ink); font-weight:650; }
+  .row { display:grid; grid-template-columns:4px 1fr auto; gap:13px; align-items:center; padding:12px 16px; border-bottom:1px solid rgba(50,45,64,.6); }
+  .row:last-child { border-bottom:0; }
+  .stripe { width:4px; align-self:stretch; border-radius:2px; min-height:32px; }
+  .row .title { font-size:.93rem; font-weight:650; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .row.read .title { font-weight:500; color:#b7b1c2; }
+  .row .meta { font-size:.76rem; color:var(--muted); display:flex; gap:10px; margin-top:2px; }
+  .row .meta .who { color:var(--faint); }
+  .pill { font-size:.72rem; font-weight:700; padding:2px 8px; border-radius:8px; font-variant-numeric:tabular-nums; white-space:nowrap; }
+  .tag-dt { font-size:.62rem; font-weight:800; letter-spacing:.05em; padding:2px 6px; border-radius:5px; color:#120013; background:var(--hfr-dt); }
+
+  /* ---- Menu Drapeaux mockup ---- */
+  .menu-grid { display:grid; grid-template-columns: 1.1fr 1fr; gap:18px; align-items:start; }
+  @media (max-width:760px){ .menu-grid{ grid-template-columns:1fr; } }
+  .device { background:var(--surface); border:1px solid var(--line); border-radius:20px; overflow:hidden; }
+  /* app bar */
+  .appbar { display:flex; align-items:center; gap:10px; padding:12px 14px; background:var(--surface-2); border-bottom:1px solid var(--line); }
+  .ab-ico { width:34px; height:34px; border-radius:10px; display:grid; place-items:center; background:rgba(255,255,255,.05); border:1px solid var(--line); }
+  .ab-ico svg { width:18px; height:18px; fill:var(--ink); }
+  .ab-search { flex:1; height:34px; border-radius:999px; background:var(--bg); border:1px solid var(--line); display:flex; align-items:center; padding:0 12px; gap:8px; color:var(--faint); font-size:.82rem; }
+  .ab-search svg { width:15px; height:15px; fill:var(--faint); }
+  .avatar { width:30px; height:30px; border-radius:50%; background:linear-gradient(135deg,#8e1d24,#d32f2f); display:grid; place-items:center; font-size:.7rem; font-weight:700; color:#fff; }
+  /* tab picker */
+  .tabs { display:flex; gap:7px; padding:11px 14px; flex-wrap:wrap; border-bottom:1px solid var(--line); }
+  .tab { font-size:.78rem; font-weight:600; padding:5px 12px; border-radius:999px; border:1px solid var(--line); color:var(--muted); background:var(--bg); display:inline-flex; align-items:center; gap:6px; }
+  .tab .dot { width:8px; height:8px; border-radius:50%; }
+  .tab.active { color:var(--ink); border-color:rgba(255,255,255,.25); background:var(--surface-2); }
+  .tab.dt { border-color:rgba(255,0,255,.45); color:#f3c9f3; }
+  /* config sheet */
+  .sheet { background:var(--surface-2); border:1px solid var(--line); border-radius:18px; overflow:hidden; }
+  .sheet .handle { width:36px; height:4px; border-radius:2px; background:var(--line); margin:10px auto 4px; }
+  .sheet h3 { margin:0; padding:6px 18px 14px; font-size:1rem; font-weight:700; border-bottom:1px solid var(--line); }
+  .opt { padding:14px 18px; border-bottom:1px solid var(--line); }
+  .opt:last-child { border-bottom:0; }
+  .opt .olabel { font-size:.82rem; color:var(--muted); margin:0 0 9px; font-weight:600; }
+  .seg { display:flex; gap:0; border:1px solid var(--line); border-radius:10px; overflow:hidden; }
+  .seg button { flex:1; border:0; background:transparent; color:var(--muted); font-size:.8rem; font-weight:600; padding:8px 4px; cursor:default; display:flex; align-items:center; justify-content:center; gap:7px; border-right:1px solid var(--line); font-family:inherit; }
+  .seg button:last-child { border-right:0; }
+  .seg button.on { background:rgba(255,255,255,.06); color:var(--ink); }
+  .mk-stripe { width:4px; height:16px; border-radius:2px; background:var(--hfr-cyan); }
+  .mk-pastille { width:18px; height:18px; border-radius:50%; background:rgba(0,255,255,.2); display:grid; place-items:center; }
+  .mk-pastille i { width:8px; height:8px; border-radius:2px; background:var(--hfr-cyan); display:block; }
+  .mk-dot { width:9px; height:9px; border-radius:50%; background:var(--hfr-cyan); }
+  .toggle { display:flex; align-items:center; justify-content:space-between; }
+  .sw-pill { width:40px; height:23px; border-radius:999px; background:var(--bg); border:1px solid var(--line); position:relative; }
+  .sw-pill.on { background:rgba(0,255,255,.25); border-color:rgba(0,255,255,.5); }
+  .sw-pill::after { content:""; position:absolute; top:2px; left:2px; width:17px; height:17px; border-radius:50%; background:var(--faint); transition:.15s; }
+  .sw-pill.on::after { left:19px; background:var(--hfr-cyan); }
+  .caption { font-size:.78rem; color:var(--faint); margin-top:12px; }
+
+  .note { background:linear-gradient(180deg,var(--surface),var(--surface-2)); border:1px solid var(--line); border-radius:16px; padding:20px 22px; margin-top:38px; }
+  .note p { margin:0 0 10px; }
+  .note p:last-child { margin:0; }
+  .note b { color:var(--ink); }
+  .note .mono, .opt .mono { color:var(--hfr-dt); }
+  a { color:var(--blue); }
+  .legend { font-size:.78rem; color:var(--faint); margin-top:10px; }
+  .readdemo { display:flex; flex-wrap:wrap; gap:20px; align-items:center; margin-top:14px; padding:12px 16px; background:var(--surface); border:1px solid var(--line); border-radius:12px; font-size:.82rem; color:var(--muted); }
+  .readdemo .rd-label { color:var(--ink); font-weight:600; }
+  .rd-ex { display:inline-flex; align-items:center; gap:9px; }
+  .rd-stripe { width:4px; height:22px; border-radius:2px; display:inline-block; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Redface 2 · Vue Drapeaux · couleurs</p>
+    <h1>Palette des drapeaux — aperçu</h1>
+    <p class="lede">Comparaison des deux palettes (tons <b>Material</b> actuels du code vs valeurs <b>HFR pures</b> relevées sur les gifs d'origine), aperçu de la liste dans les deux, et maquette du menu de la vue Drapeaux. Plus une 4ᵉ couleur proposée : <b>DT en fuchsia</b>, dans l'esprit EGA/CGA des couleurs pures HFR.</p>
+  </header>
+
+  <!-- ============ PALETTES ============ -->
+  <section>
+    <div class="sec-head"><h2>Les deux palettes, côte à côte</h2><span class="k">source : gifs HFR</span></div>
+    <div class="pal">
+
+      <div class="bucket">
+        <p class="name">Cyan</p>
+        <p class="role">Mes sujets (participés) · <span class="mono">flag1.gif</span></p>
+        <div class="swatches">
+          <div class="sw"><div class="lbl">HFR pur</div><div class="chipcol" style="background:var(--hfr-cyan)"></div><div class="hex mono">#00FFFF</div><div class="rgb mono">0,255,255</div></div>
+          <div class="sw"><div class="lbl">Material (code)</div><div class="chipcol" style="background:var(--mat-cyan)"></div><div class="hex mono">#00BCD4</div><div class="rgb mono">0,188,212</div></div>
+        </div>
+        <div class="delta"><b>Écart :</b> bleu canard Material vs cyan pur.</div>
+      </div>
+
+      <div class="bucket">
+        <p class="name">Rouge</p>
+        <p class="role">Lus uniquement · <span class="mono">flag0.gif</span></p>
+        <div class="swatches">
+          <div class="sw"><div class="lbl">HFR pur</div><div class="chipcol" style="background:var(--hfr-red)"></div><div class="hex mono">#FF0000</div><div class="rgb mono">255,0,0</div></div>
+          <div class="sw"><div class="lbl">Material (code)</div><div class="chipcol" style="background:var(--mat-red)"></div><div class="hex mono">#D32F2F</div><div class="rgb mono">211,47,47</div></div>
+        </div>
+        <div class="delta"><b>Écart :</b> rouge brique Material vs rouge pur.</div>
+      </div>
+
+      <div class="bucket">
+        <p class="name">Favori</p>
+        <p class="role">Favoris · <span class="mono">favoris.gif</span></p>
+        <div class="swatches">
+          <div class="sw"><div class="lbl">HFR pur</div><div class="chipcol" style="background:var(--hfr-fav)"></div><div class="hex mono">#F0F83F</div><div class="rgb mono">240,248,63</div></div>
+          <div class="sw"><div class="lbl">Material (code)</div><div class="chipcol" style="background:var(--mat-fav)"></div><div class="hex mono">#F9A825</div><div class="rgb mono">249,168,37</div></div>
+        </div>
+        <div class="delta"><b>Écart :</b> le plus gros — ambre/or Material vs jaune-lime HFR (vert 248 vs 168).</div>
+      </div>
+
+      <div class="bucket dt">
+        <p class="name">DT <span class="badge-new">nouveau</span></p>
+        <p class="role">Onglet MultiMP (opt-in) · pas de couleur aujourd'hui</p>
+        <div class="swatches">
+          <div class="sw"><div class="lbl">Fuchsia (proposé)</div><div class="chipcol" style="background:var(--hfr-dt)"></div><div class="hex mono">#FF00FF</div><div class="rgb mono">255,0,255</div></div>
+          <div class="sw"><div class="lbl">EGA bright (alt.)</div><div class="chipcol" style="background:#FF55FF"></div><div class="hex mono">#FF55FF</div><div class="rgb mono">255,85,255</div></div>
+        </div>
+        <div class="delta"><b>Logique :</b> complète le trio pur cyan/rouge en magenta CGA. <span class="mono">#FF00FF</span> = fuchsia VGA pur (assorti à <span class="mono">#00FFFF</span>/<span class="mono">#FF0000</span>).</div>
+      </div>
+
+    </div>
+    <p class="legend">CGA/EGA : le magenta « bright » historique est <span class="mono" style="color:var(--muted)">#FF55FF</span> ; <span class="mono" style="color:var(--muted)">#FF00FF</span> (fuchsia VGA/web) est le pendant pur exact de <span class="mono" style="color:var(--muted)">#00FFFF</span>. Je pars sur <span class="mono" style="color:var(--muted)">#FF00FF</span> par cohérence.</p>
+  </section>
+
+  <!-- ============ LIST PREVIEW ============ -->
+  <section>
+    <div class="sec-head"><h2>La liste, dans les deux palettes</h2><span class="k">marqueur barre</span></div>
+    <div class="lists">
+
+      <div class="phone">
+        <div class="cap"><b>HFR pur</b> + DT fuchsia <span style="color:var(--faint)">criard, fidèle web</span></div>
+        <div class="row"><div class="stripe" style="background:#00FFFF"></div><div><div class="title">Hardware — config du moment</div><div class="meta"><span class="who">Kermine</span><span>01-05 17:07</span></div></div><span class="pill" style="color:#00FFFF;background:rgba(0,255,255,.16)">+2</span></div>
+        <div class="row"><div class="stripe" style="background:#FF0000"></div><div><div class="title">Kotlin / Compose — questions</div><div class="meta"><span class="who">Shaad</span><span>01-05 16:40</span></div></div><span class="pill" style="color:#FF0000;background:rgba(255,0,0,.16)">+3</span></div>
+        <div class="row"><div class="stripe" style="background:#F0F83F"></div><div><div class="title">Jeux indé à suivre</div><div class="meta"><span class="who">tinc</span><span>01-05 15:22</span></div></div><span class="pill" style="color:#F0F83F;background:rgba(240,248,63,.16)">+8</span></div>
+        <div class="row"><div class="stripe" style="background:#FF00FF"></div><div><div class="title">MultiMP — orga sortie LAN <span class="tag-dt">DT</span></div><div class="meta"><span class="who">3 interlocuteurs</span><span>01-05 14:05</span></div></div><span class="pill" style="color:#FF00FF;background:rgba(255,0,255,.16)">+1</span></div>
+      </div>
+
+      <div class="phone">
+        <div class="cap"><b>Material (code actuel)</b> + DT <span style="color:var(--faint)">harmonieux M3</span></div>
+        <div class="row"><div class="stripe" style="background:#00BCD4"></div><div><div class="title">Hardware — config du moment</div><div class="meta"><span class="who">Kermine</span><span>01-05 17:07</span></div></div><span class="pill" style="color:#00BCD4;background:rgba(0,188,212,.16)">+2</span></div>
+        <div class="row"><div class="stripe" style="background:#D32F2F"></div><div><div class="title">Kotlin / Compose — questions</div><div class="meta"><span class="who">Shaad</span><span>01-05 16:40</span></div></div><span class="pill" style="color:#D32F2F;background:rgba(211,47,47,.16)">+3</span></div>
+        <div class="row"><div class="stripe" style="background:#F9A825"></div><div><div class="title">Jeux indé à suivre</div><div class="meta"><span class="who">tinc</span><span>01-05 15:22</span></div></div><span class="pill" style="color:#F9A825;background:rgba(249,168,37,.16)">+8</span></div>
+        <div class="row"><div class="stripe" style="background:#D500F9"></div><div><div class="title">MultiMP — orga sortie LAN <span class="tag-dt" style="background:#D500F9;color:#fff">DT</span></div><div class="meta"><span class="who">3 interlocuteurs</span><span>01-05 14:05</span></div></div><span class="pill" style="color:#D500F9;background:rgba(213,0,249,.16)">+1</span></div>
+      </div>
+
+    </div>
+    <div class="readdemo">
+      <span class="rd-label">État lu (piloté par <span class="mono">hasUnread</span>, indépendant du bucket) :</span>
+      <span class="rd-ex"><span class="rd-stripe" style="background:#FF0000"></span>non lu — couleur pleine</span>
+      <span class="rd-ex"><span class="rd-stripe" style="background:rgba(255,0,0,.35)"></span>entièrement lu — α 0.35 (<span class="mono">READ_ALPHA</span>)</span>
+    </div>
+    <p class="legend">Les 4 lignes ci-dessus sont en <b>couleur pleine</b> (sujets non lus). Un sujet <b>entièrement lu</b> voit son marqueur atténué à 35 % d'alpha — y compris dans le bucket « Lu » : un sujet rouge avec des messages non lus reste en <span class="mono" style="color:var(--muted)">#FF0000</span> plein. DT : <span class="mono" style="color:var(--muted)">#FF00FF</span> (pur) ou <span class="mono" style="color:var(--muted)">#D500F9</span> (Material).</p>
+  </section>
+
+  <!-- ============ MENU DRAPEAUX ============ -->
+  <section>
+    <div class="sec-head"><h2>Le menu de la vue Drapeaux</h2><span class="k">app bar + config rapide</span></div>
+    <div class="menu-grid">
+
+      <div class="device">
+        <div class="appbar">
+          <div class="ab-ico" title="picker d'onglet">
+            <svg viewBox="0 -960 960 960"><path d="M200-120v-680h360l16 80h224v400H520l-16-80H280v280h-80Zm300-440Zm86 160h134v-240H510l-16-80H280v240h290l16 80Z"/></svg>
+          </div>
+          <div class="ab-search"><svg viewBox="0 -960 960 960"><path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/></svg>Rechercher dans les drapeaux</div>
+          <div class="avatar">Xa</div>
+        </div>
+        <div class="tabs">
+          <span class="tab active"><span class="dot" style="background:var(--hfr-cyan)"></span>Mes sujets</span>
+          <span class="tab"><span class="dot" style="background:var(--hfr-red)"></span>Lu</span>
+          <span class="tab"><span class="dot" style="background:var(--hfr-fav)"></span>Favoris</span>
+          <span class="tab">Super</span>
+          <span class="tab dt"><span class="dot" style="background:var(--hfr-dt)"></span>DT</span>
+        </div>
+        <div class="row" style="border-top:0"><div class="stripe" style="background:#00FFFF"></div><div><div class="title">Hardware — config du moment</div><div class="meta"><span class="who">Kermine</span><span>+2 pages</span></div></div></div>
+        <div class="row"><div class="stripe" style="background:#FF00FF"></div><div><div class="title">MultiMP — orga sortie LAN <span class="tag-dt">DT</span></div><div class="meta"><span class="who">3 interlocuteurs</span></div></div></div>
+        <p class="caption" style="padding:0 16px 14px">App bar « façon Réglages » : tap sur l'icône drapeau = picker d'onglet ; les 5 onglets (dont <b>DT</b>, opt-in).</p>
+      </div>
+
+      <div class="sheet">
+        <div class="handle"></div>
+        <h3>Affichage des drapeaux</h3>
+        <div class="opt">
+          <p class="olabel">Style de marqueur</p>
+          <div class="seg">
+            <button class="on"><span class="mk-stripe"></span>Barre</button>
+            <button><span class="mk-pastille"><i></i></span>Pastille</button>
+            <button><span class="mk-dot"></span>Point</button>
+          </div>
+        </div>
+        <div class="opt">
+          <p class="olabel">Options</p>
+          <div class="toggle" style="margin-bottom:12px"><span style="font-size:.88rem">Regrouper par catégorie</span><span class="sw-pill on"></span></div>
+          <div class="toggle" style="margin-bottom:12px"><span style="font-size:.88rem">Afficher les sujets lus</span><span class="sw-pill"></span></div>
+          <div class="toggle"><span style="font-size:.88rem">Onglet DT (MultiMP)</span><span class="sw-pill on" style="background:rgba(255,0,255,.25);border-color:rgba(255,0,255,.5)"></span></div>
+        </div>
+        <div class="opt">
+          <p class="olabel">Densité</p>
+          <div class="seg">
+            <button>Compacte</button>
+            <button class="on">Standard</button>
+            <button>Confort</button>
+          </div>
+        </div>
+        <p class="caption" style="padding:0 18px 16px">Ouvert via re-tap de l'onglet Drapeaux de la barre du bas (#309). Le toggle <span class="mono">DT</span> active l'onglet MultiMP (dépend de MPStorage #6).</p>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div class="note">
+      <p><b>Ce qui est réel vs proposé.</b> Les 3 buckets (Cyan/Rouge/Favori) existent dans <span class="mono" style="color:var(--muted)">FlagPalette.kt</span> en tons Material. Le menu (style de marqueur, options, densité) est livré (#603, v0.17.0).</p>
+      <p><b>DT fuchsia = nouveau.</b> <span class="mono">FlagType</span> n'a que 3 valeurs ; pas de couleur DT aujourd'hui. L'ajouter touche l'enum + <span class="mono" style="color:var(--muted)">FlagPalette</span> + les <span class="mono" style="color:var(--muted)">when</span> exhaustifs, et l'onglet DT lui-même dépend de MPStorage (#6, upstream pas prêt). Donc : couleur faisable tout de suite, alimentation des lignes DT = bloquée en amont.</p>
+      <p><b>À trancher :</b> palette HFR pure (criarde, fidèle) ou Material (harmonieuse, actuelle) pour les 3 ? Et DT = <span class="mono">#FF00FF</span> (pur) ou <span class="mono" style="color:var(--muted)">#D500F9</span> (Material) ? Une fois choisi, je fais le diff <span class="mono" style="color:var(--muted)">FlagPalette.kt</span> + test.</p>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

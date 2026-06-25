@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Favori — candidats de jaune">
+<title>Favori — propositions de jaune (drapeaux RF2)</title>
+<style>
+  :root{
+    --bg:#14121a; --surface:#1e1b27; --surface-2:#262232; --line:#322d40;
+    --ink:#ece9f1; --muted:#9a93a8; --faint:#6f6880;
+    --cyan:#00bcd4; --red:#d32f2f;
+    font-synthesis:none;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; color:var(--ink); line-height:1.5;
+    font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    background:
+      radial-gradient(1000px 480px at 80% -10%, rgba(205,220,57,.07), transparent 60%),
+      var(--bg);
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:760px; margin:0 auto; padding:clamp(26px,5vw,60px) clamp(16px,4vw,32px) 80px;}
+  .mono{font-family:ui-monospace,"SF Mono","JetBrains Mono",Menlo,Consolas,monospace;}
+  .eyebrow{font-size:.72rem; letter-spacing:.22em; text-transform:uppercase; color:#cddc39; font-weight:650; margin:0 0 12px; display:flex; align-items:center; gap:10px;}
+  .eyebrow::before{content:""; width:24px; height:2px; background:#cddc39; display:inline-block;}
+  h1{font-size:clamp(1.7rem,4.5vw,2.5rem); line-height:1.05; margin:0 0 14px; font-weight:760; letter-spacing:-.02em; text-wrap:balance;}
+  .lede{font-size:1.02rem; color:var(--muted); max-width:62ch; margin:0 0 30px;}
+  .lede b{color:var(--ink);}
+
+  .cand{background:var(--surface); border:1px solid var(--line); border-radius:14px; margin-bottom:14px; overflow:hidden;}
+  .cand.rec{border-color:rgba(205,220,57,.5); box-shadow:0 0 0 1px rgba(205,220,57,.18);}
+  .cand.ref{opacity:.92;}
+  .cand .head{display:flex; align-items:center; gap:12px; padding:12px 16px; border-bottom:1px solid var(--line);}
+  .sw{width:30px; height:30px; border-radius:8px; border:1px solid rgba(255,255,255,.1); flex:none;}
+  .head .meta{min-width:0;}
+  .head .hex{font-weight:700; font-size:.95rem;}
+  .head .note{font-size:.8rem; color:var(--muted);}
+  .tag{margin-left:auto; font-size:.64rem; font-weight:800; text-transform:uppercase; letter-spacing:.06em; padding:3px 8px; border-radius:5px; white-space:nowrap;}
+  .tag.rec{color:#1a1d05; background:#cddc39;}
+  .tag.bad{color:#e8a; background:rgba(232,86,90,.14); border:1px solid rgba(232,86,90,.3); color:#f0a; }
+  .tag.bad{color:#f3a9b2;}
+
+  /* sample rows */
+  .rows{display:flex; flex-direction:column;}
+  .row{display:grid; grid-template-columns:4px 1fr auto; gap:12px; align-items:stretch; padding:11px 16px; border-bottom:1px solid rgba(50,45,64,.55);}
+  .row:last-child{border-bottom:0;}
+  .stripe{width:4px; border-radius:2px; align-self:stretch; min-height:34px;}
+  .body{min-width:0; align-self:center;}
+  .title{font-size:.95rem; font-weight:650; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .row.read .title{font-weight:500; color:#b7b1c2;}
+  .sub{font-size:.76rem; color:var(--muted); margin-top:2px;}
+  .pill{align-self:center; font-size:.74rem; font-weight:700; padding:2px 9px; border-radius:8px; white-space:nowrap;}
+  .rowlabel{font-size:.68rem; color:var(--faint); text-transform:uppercase; letter-spacing:.07em; align-self:center;}
+
+  .ctx{background:linear-gradient(180deg,var(--surface),var(--surface-2)); border:1px solid var(--line); border-radius:14px; padding:18px 20px; margin-top:26px; font-size:.9rem; color:var(--muted);}
+  .ctx b{color:var(--ink);}
+  .ctx .chips{display:flex; gap:10px; margin-top:12px; flex-wrap:wrap;}
+  .chip{display:inline-flex; align-items:center; gap:8px; font-size:.82rem; border:1px solid var(--line); border-radius:999px; padding:5px 12px; background:var(--surface);}
+  .chip .d{width:12px; height:12px; border-radius:3px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="eyebrow">Redface 2 · Drapeaux · favori</p>
+  <h1>Le jaune des favoris — candidats</h1>
+  <p class="lede">Objectif : garder l'<b>essence lime</b> du drapeau favori HFR (vert-jaune, pas ambre) <b>sans</b> le côté neon du pur. Chaque ligne montre le marqueur en barre + la pastille « +N », en haut non lu (couleur pleine) et en bas lu (atténué α 0.35), sur le fond sombre de l'app. Le cyan/rouge ci-dessous sont en tons Material (ceux qui ne te choquaient pas).</p>
+
+  <!-- F0F83F : pur, actuel -->
+  <div class="cand ref">
+    <div class="head">
+      <span class="sw" style="background:#F0F83F"></span>
+      <div class="meta"><div class="hex mono">#F0F83F</div><div class="note">HFR pur (actuel) — neon, « immonde »</div></div>
+      <span class="tag bad">actuel</span>
+    </div>
+    <div class="rows">
+      <div class="row"><span class="stripe" style="background:#F0F83F"></span><div class="body"><div class="title">Le topic des jeux indé à suivre</div><div class="sub">tinc · 01-05 17:07</div></div><span class="pill" style="color:#F0F83F;background:rgba(240,248,63,.16)">+8</span></div>
+      <div class="row read"><span class="stripe" style="background:rgba(240,248,63,.35)"></span><div class="body"><div class="title">Topic favori déjà lu</div></div><span class="rowlabel">lu</span></div>
+    </div>
+  </div>
+
+  <!-- DCE63C : pur adouci -->
+  <div class="cand">
+    <div class="head">
+      <span class="sw" style="background:#DCE63C"></span>
+      <div class="meta"><div class="hex mono">#DCE63C</div><div class="note">Pur à peine adouci — garde le punch, un cran moins agressif</div></div>
+    </div>
+    <div class="rows">
+      <div class="row"><span class="stripe" style="background:#DCE63C"></span><div class="body"><div class="title">Le topic des jeux indé à suivre</div><div class="sub">tinc · 01-05 17:07</div></div><span class="pill" style="color:#DCE63C;background:rgba(220,230,60,.16)">+8</span></div>
+      <div class="row read"><span class="stripe" style="background:rgba(220,230,60,.35)"></span><div class="body"><div class="title">Topic favori déjà lu</div></div><span class="rowlabel">lu</span></div>
+    </div>
+  </div>
+
+  <!-- D4E157 : Material Lime 400 -->
+  <div class="cand">
+    <div class="head">
+      <span class="sw" style="background:#D4E157"></span>
+      <div class="meta"><div class="hex mono">#D4E157</div><div class="note">Material Lime 400 — lime clair, doux</div></div>
+    </div>
+    <div class="rows">
+      <div class="row"><span class="stripe" style="background:#D4E157"></span><div class="body"><div class="title">Le topic des jeux indé à suivre</div><div class="sub">tinc · 01-05 17:07</div></div><span class="pill" style="color:#D4E157;background:rgba(212,225,87,.16)">+8</span></div>
+      <div class="row read"><span class="stripe" style="background:rgba(212,225,87,.35)"></span><div class="body"><div class="title">Topic favori déjà lu</div></div><span class="rowlabel">lu</span></div>
+    </div>
+  </div>
+
+  <!-- CDDC39 : Material Lime 500 - reco -->
+  <div class="cand rec">
+    <div class="head">
+      <span class="sw" style="background:#CDDC39"></span>
+      <div class="meta"><div class="hex mono">#CDDC39</div><div class="note">Material Lime 500 — l'essence lime HFR, calibré pour l'UI</div></div>
+      <span class="tag rec">reco</span>
+    </div>
+    <div class="rows">
+      <div class="row"><span class="stripe" style="background:#CDDC39"></span><div class="body"><div class="title">Le topic des jeux indé à suivre</div><div class="sub">tinc · 01-05 17:07</div></div><span class="pill" style="color:#CDDC39;background:rgba(205,220,57,.16)">+8</span></div>
+      <div class="row read"><span class="stripe" style="background:rgba(205,220,57,.35)"></span><div class="body"><div class="title">Topic favori déjà lu</div></div><span class="rowlabel">lu</span></div>
+    </div>
+  </div>
+
+  <!-- C0CA33 : Material Lime 600 -->
+  <div class="cand">
+    <div class="head">
+      <span class="sw" style="background:#C0CA33"></span>
+      <div class="meta"><div class="hex mono">#C0CA33</div><div class="note">Material Lime 600 — lime profond, mat, plus sobre</div></div>
+    </div>
+    <div class="rows">
+      <div class="row"><span class="stripe" style="background:#C0CA33"></span><div class="body"><div class="title">Le topic des jeux indé à suivre</div><div class="sub">tinc · 01-05 17:07</div></div><span class="pill" style="color:#C0CA33;background:rgba(192,202,51,.18)">+8</span></div>
+      <div class="row read"><span class="stripe" style="background:rgba(192,202,51,.35)"></span><div class="body"><div class="title">Topic favori déjà lu</div></div><span class="rowlabel">lu</span></div>
+    </div>
+  </div>
+
+  <!-- F9A825 : ambre, ancien, trop loin -->
+  <div class="cand ref">
+    <div class="head">
+      <span class="sw" style="background:#F9A825"></span>
+      <div class="meta"><div class="hex mono">#F9A825</div><div class="note">Material ambre (ancien) — « trop loin de l'original, perd l'essence »</div></div>
+      <span class="tag bad">ancien</span>
+    </div>
+    <div class="rows">
+      <div class="row"><span class="stripe" style="background:#F9A825"></span><div class="body"><div class="title">Le topic des jeux indé à suivre</div><div class="sub">tinc · 01-05 17:07</div></div><span class="pill" style="color:#F9A825;background:rgba(249,168,37,.16)">+8</span></div>
+      <div class="row read"><span class="stripe" style="background:rgba(249,168,37,.35)"></span><div class="body"><div class="title">Topic favori déjà lu</div></div><span class="rowlabel">lu</span></div>
+    </div>
+  </div>
+
+  <div class="ctx">
+    <b>Et le cyan / rouge ?</b> Ta critique « trop loin » visait l'<b>ancien favori</b> (ambre). Le cyan et le rouge en tons Material ne te choquaient pas — je propose donc d'y <b>revenir</b> (le pur les rendait criards eux aussi), et de ne changer que le favori vers un des limes ci-dessus.
+    <div class="chips">
+      <span class="chip"><span class="d" style="background:#00bcd4"></span><span class="mono">#00BCD4</span> cyan Material</span>
+      <span class="chip"><span class="d" style="background:#d32f2f"></span><span class="mono">#D32F2F</span> rouge Material</span>
+      <span class="chip"><span class="d" style="background:#cddc39"></span><span class="mono">#CDDC39</span> favori lime (reco)</span>
+    </div>
+    <p style="margin:14px 0 0; font-size:.85rem;">Dis-moi si tu veux aussi des variantes pour le cyan/rouge, ou si on garde Material pour eux. (L'icône drapeau RF2 « craignos » = sujet séparé : je peux revenir au glyphe propre ou redessiner un drapeau lisse — dis-moi.)</p>
+  </div>
+</div>
+</body>
+</html>

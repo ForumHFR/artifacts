@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Drapeaux — palettes alternatives">
+<title>Drapeaux — palettes alternatives (à choisir plus tard)</title>
+<style>
+  :root{
+    --bg:#14121a; --surface:#1e1b27; --surface-2:#262232; --line:#322d40;
+    --ink:#ece9f1; --muted:#9a93a8; --faint:#6f6880;
+    font-synthesis:none;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; color:var(--ink); line-height:1.5;
+    font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    background:radial-gradient(1000px 480px at 82% -10%, rgba(0,188,212,.06), transparent 60%), var(--bg);
+    -webkit-font-smoothing:antialiased;}
+  .wrap{max-width:980px; margin:0 auto; padding:clamp(26px,5vw,60px) clamp(16px,4vw,32px) 80px;}
+  .mono{font-family:ui-monospace,"SF Mono","JetBrains Mono",Menlo,Consolas,monospace;}
+  .eyebrow{font-size:.72rem; letter-spacing:.22em; text-transform:uppercase; color:#00bcd4; font-weight:650; margin:0 0 12px; display:flex; align-items:center; gap:10px;}
+  .eyebrow::before{content:""; width:24px; height:2px; background:#00bcd4; display:inline-block;}
+  h1{font-size:clamp(1.7rem,4.5vw,2.5rem); line-height:1.05; margin:0 0 14px; font-weight:760; letter-spacing:-.02em; text-wrap:balance;}
+  .lede{font-size:1.02rem; color:var(--muted); max-width:64ch; margin:0 0 30px;}
+  .lede b{color:var(--ink);}
+  .grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:18px;}
+  .pal{background:var(--surface); border:1px solid var(--line); border-radius:16px; overflow:hidden;}
+  .pal.cur{border-color:rgba(0,188,212,.5);}
+  .pal .head{display:flex; align-items:baseline; gap:10px; padding:14px 18px 12px; border-bottom:1px solid var(--line);}
+  .pal .head h2{margin:0; font-size:1.05rem; font-weight:720;}
+  .pal .head .desc{font-size:.8rem; color:var(--muted);}
+  .tag{margin-left:auto; font-size:.62rem; font-weight:800; text-transform:uppercase; letter-spacing:.06em; padding:3px 8px; border-radius:5px; color:#04222a; background:#00bcd4; white-space:nowrap;}
+  .row{display:grid; grid-template-columns:4px 1fr auto; gap:12px; align-items:center; padding:10px 18px; border-bottom:1px solid rgba(50,45,64,.5);}
+  .row:last-child{border-bottom:0;}
+  .stripe{width:4px; align-self:stretch; min-height:30px; border-radius:2px;}
+  .t{font-size:.9rem; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .who{font-size:.74rem; color:var(--muted);}
+  .pill{font-size:.7rem; font-weight:700; padding:2px 8px; border-radius:8px; white-space:nowrap;}
+  .dt{font-size:.6rem; font-weight:800; padding:1px 5px; border-radius:4px; vertical-align:middle; margin-left:6px;}
+  .hexrow{display:flex; flex-wrap:wrap; gap:6px; padding:11px 18px; background:var(--surface-2); font-size:.72rem;}
+  .hx{display:inline-flex; align-items:center; gap:6px; color:var(--muted);}
+  .hx .d{width:11px; height:11px; border-radius:3px;}
+  a{color:#6aa7ff;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="eyebrow">Redface 2 · Drapeaux · palettes</p>
+  <h1>Palettes alternatives</h1>
+  <p class="lede">Quatre jeux complets (Mes sujets / Lu / Favori / DT) rendus en contexte sur fond sombre. La <b>« Material »</b> est celle qu'on vient de coder. Les autres sont là pour quand tu voudras changer — dis-moi le nom et je l'applique. Toutes gardent les <b>teintes</b> HFR (cyan / rouge / lime / magenta) sans le neon du pur.</p>
+
+  <div class="grid">
+
+    <!-- A. Material (current) -->
+    <div class="pal cur">
+      <div class="head"><h2>Material</h2><span class="desc">tons 500/700 — l'actuel</span><span class="tag">codé</span></div>
+      <div class="row"><span class="stripe" style="background:#00BCD4"></span><div><div class="t">Hardware — config du moment</div><div class="who">Kermine</div></div><span class="pill" style="color:#00BCD4;background:rgba(0,188,212,.16)">+2</span></div>
+      <div class="row"><span class="stripe" style="background:#D32F2F"></span><div><div class="t">Kotlin / Compose</div><div class="who">Shaad</div></div><span class="pill" style="color:#D32F2F;background:rgba(211,47,47,.16)">+3</span></div>
+      <div class="row"><span class="stripe" style="background:#CDDC39"></span><div><div class="t">Jeux indé à suivre</div><div class="who">tinc</div></div><span class="pill" style="color:#CDDC39;background:rgba(205,220,57,.16)">+8</span></div>
+      <div class="row"><span class="stripe" style="background:#D500F9"></span><div><div class="t">MultiMP — LAN <span class="dt" style="background:#D500F9;color:#fff">DT</span></div><div class="who">3 interlocuteurs</div></div><span class="pill" style="color:#D500F9;background:rgba(213,0,249,.16)">+1</span></div>
+      <div class="hexrow"><span class="hx"><span class="d" style="background:#00BCD4"></span><span class="mono">#00BCD4</span></span><span class="hx"><span class="d" style="background:#D32F2F"></span><span class="mono">#D32F2F</span></span><span class="hx"><span class="d" style="background:#CDDC39"></span><span class="mono">#CDDC39</span></span><span class="hx"><span class="d" style="background:#D500F9"></span><span class="mono">#D500F9</span></span></div>
+    </div>
+
+    <!-- B. Vif -->
+    <div class="pal">
+      <div class="head"><h2>Vif</h2><span class="desc">tons accent (A) — plus de peps</span></div>
+      <div class="row"><span class="stripe" style="background:#00E5FF"></span><div><div class="t">Hardware — config du moment</div><div class="who">Kermine</div></div><span class="pill" style="color:#00E5FF;background:rgba(0,229,255,.16)">+2</span></div>
+      <div class="row"><span class="stripe" style="background:#FF1744"></span><div><div class="t">Kotlin / Compose</div><div class="who">Shaad</div></div><span class="pill" style="color:#FF1744;background:rgba(255,23,68,.16)">+3</span></div>
+      <div class="row"><span class="stripe" style="background:#D4E157"></span><div><div class="t">Jeux indé à suivre</div><div class="who">tinc</div></div><span class="pill" style="color:#D4E157;background:rgba(212,225,87,.16)">+8</span></div>
+      <div class="row"><span class="stripe" style="background:#E040FB"></span><div><div class="t">MultiMP — LAN <span class="dt" style="background:#E040FB;color:#fff">DT</span></div><div class="who">3 interlocuteurs</div></div><span class="pill" style="color:#E040FB;background:rgba(224,64,251,.16)">+1</span></div>
+      <div class="hexrow"><span class="hx"><span class="d" style="background:#00E5FF"></span><span class="mono">#00E5FF</span></span><span class="hx"><span class="d" style="background:#FF1744"></span><span class="mono">#FF1744</span></span><span class="hx"><span class="d" style="background:#D4E157"></span><span class="mono">#D4E157</span></span><span class="hx"><span class="d" style="background:#E040FB"></span><span class="mono">#E040FB</span></span></div>
+    </div>
+
+    <!-- C. Sobre -->
+    <div class="pal">
+      <div class="head"><h2>Sobre</h2><span class="desc">tons 700/800 — plus calme, mat</span></div>
+      <div class="row"><span class="stripe" style="background:#0097A7"></span><div><div class="t">Hardware — config du moment</div><div class="who">Kermine</div></div><span class="pill" style="color:#26C6DA;background:rgba(0,151,167,.2)">+2</span></div>
+      <div class="row"><span class="stripe" style="background:#C62828"></span><div><div class="t">Kotlin / Compose</div><div class="who">Shaad</div></div><span class="pill" style="color:#EF5350;background:rgba(198,40,40,.2)">+3</span></div>
+      <div class="row"><span class="stripe" style="background:#AFB42B"></span><div><div class="t">Jeux indé à suivre</div><div class="who">tinc</div></div><span class="pill" style="color:#D4E157;background:rgba(175,180,43,.2)">+8</span></div>
+      <div class="row"><span class="stripe" style="background:#AB47BC"></span><div><div class="t">MultiMP — LAN <span class="dt" style="background:#AB47BC;color:#fff">DT</span></div><div class="who">3 interlocuteurs</div></div><span class="pill" style="color:#CE93D8;background:rgba(171,71,188,.2)">+1</span></div>
+      <div class="hexrow"><span class="hx"><span class="d" style="background:#0097A7"></span><span class="mono">#0097A7</span></span><span class="hx"><span class="d" style="background:#C62828"></span><span class="mono">#C62828</span></span><span class="hx"><span class="d" style="background:#AFB42B"></span><span class="mono">#AFB42B</span></span><span class="hx"><span class="d" style="background:#AB47BC"></span><span class="mono">#AB47BC</span></span></div>
+    </div>
+
+    <!-- D. Fidèle adouci -->
+    <div class="pal">
+      <div class="head"><h2>Fidèle adouci</h2><span class="desc">plus proche du gif HFR, juste dompté</span></div>
+      <div class="row"><span class="stripe" style="background:#1AD4E6"></span><div><div class="t">Hardware — config du moment</div><div class="who">Kermine</div></div><span class="pill" style="color:#1AD4E6;background:rgba(26,212,230,.16)">+2</span></div>
+      <div class="row"><span class="stripe" style="background:#E53935"></span><div><div class="t">Kotlin / Compose</div><div class="who">Shaad</div></div><span class="pill" style="color:#E53935;background:rgba(229,57,53,.16)">+3</span></div>
+      <div class="row"><span class="stripe" style="background:#DCE63C"></span><div><div class="t">Jeux indé à suivre</div><div class="who">tinc</div></div><span class="pill" style="color:#DCE63C;background:rgba(220,230,60,.16)">+8</span></div>
+      <div class="row"><span class="stripe" style="background:#EA47F0"></span><div><div class="t">MultiMP — LAN <span class="dt" style="background:#EA47F0;color:#fff">DT</span></div><div class="who">3 interlocuteurs</div></div><span class="pill" style="color:#EA47F0;background:rgba(234,71,240,.16)">+1</span></div>
+      <div class="hexrow"><span class="hx"><span class="d" style="background:#1AD4E6"></span><span class="mono">#1AD4E6</span></span><span class="hx"><span class="d" style="background:#E53935"></span><span class="mono">#E53935</span></span><span class="hx"><span class="d" style="background:#DCE63C"></span><span class="mono">#DCE63C</span></span><span class="hx"><span class="d" style="background:#EA47F0"></span><span class="mono">#EA47F0</span></span></div>
+    </div>
+
+  </div>
+  <p class="lede" style="margin-top:26px; font-size:.9rem;">Dis « Vif », « Sobre » ou « Fidèle adouci » (ou un mix : ex. « Sobre mais le favori de Fidèle ») et je code le swap. Tu peux aussi me donner des hex précis.</p>
+</div>
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Bande catégorie — styles">
+<title>Bande catégorie — propositions de style</title>
+<style>
+  :root{
+    /* vraies couleurs du thème sombre RF2 */
+    --surface:#1A1111; --onSurface:#F0DEDC; --surfaceVariant:#534342; --onSurfaceVariant:#D7C1BF;
+    --outline:#9F8C8A; --outlineVariant:#534342;
+    --container:#271D1D; --containerHigh:#322727; --containerHighest:#3D3131;
+    --primary:#FFB3B1; --primaryContainer:#733338; --onPrimaryContainer:#FFDAD9;
+    --tertiary:#E2C28C;
+    --cyan:#00BCD4; --lime:#CDDC39;
+    --bg:#120B0B; --line:#2a201f; --muted:#9a8f8e; --faint:#6f6360;
+    font-synthesis:none;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; color:var(--onSurface); line-height:1.5;
+    font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    background:var(--bg); -webkit-font-smoothing:antialiased;}
+  .wrap{max-width:900px; margin:0 auto; padding:clamp(26px,5vw,56px) clamp(16px,4vw,32px) 80px;}
+  .mono{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;}
+  .eyebrow{font-size:.72rem; letter-spacing:.22em; text-transform:uppercase; color:var(--tertiary); font-weight:650; margin:0 0 12px;}
+  h1{font-size:clamp(1.7rem,4.5vw,2.4rem); line-height:1.05; margin:0 0 14px; font-weight:760; letter-spacing:-.02em;}
+  .lede{font-size:1.02rem; color:var(--muted); max-width:64ch; margin:0 0 30px;}
+  .lede b{color:var(--onSurface);}
+  .grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(360px,1fr)); gap:18px;}
+  .card{border:1px solid var(--line); border-radius:16px; overflow:hidden; background:var(--surface);}
+  .card.rec{border-color:rgba(226,194,140,.5);}
+  .card .cap{display:flex; align-items:baseline; gap:8px; padding:13px 16px 11px; border-bottom:1px solid var(--line); background:var(--bg);}
+  .card .cap h2{margin:0; font-size:1rem; font-weight:720;}
+  .card .cap .d{font-size:.78rem; color:var(--muted);}
+  .tag{margin-left:auto; font-size:.6rem; font-weight:800; text-transform:uppercase; letter-spacing:.06em; padding:3px 8px; border-radius:5px; color:#241a08; background:var(--tertiary); white-space:nowrap;}
+  /* sample list area on real surface */
+  .list{background:var(--surface);}
+  /* generic band */
+  .band{display:flex; align-items:center; gap:12px; padding:0 16px; height:44px;}
+  .band .ico{width:20px; height:20px; flex:none; display:grid; place-items:center;}
+  .band .ico svg{width:20px; height:20px;}
+  .band .nm{flex:1; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .band .chev{font-size:0;}
+  .band .chev svg{width:20px; height:20px;}
+  /* rows */
+  .row{display:grid; grid-template-columns:4px 1fr; gap:12px; align-items:stretch; padding:11px 16px; border-bottom:1px solid var(--line);}
+  .row:last-child{border-bottom:0;}
+  .stripe{width:4px; border-radius:2px; align-self:stretch; min-height:30px;}
+  .t{font-size:.92rem; font-weight:600; color:var(--onSurface); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .sub{font-size:.75rem; color:var(--muted); margin-top:2px;}
+
+  /* ---- V1 actuel : surfaceVariant block ---- */
+  .v1 .band{background:var(--surfaceVariant);}
+  .v1 .ico svg{fill:var(--onSurfaceVariant);} .v1 .nm{color:var(--onSurfaceVariant); font-size:.9rem; font-weight:600;} .v1 .chev svg{fill:var(--onSurfaceVariant);}
+
+  /* ---- V2 subhead minimal ---- */
+  .v2 .band{background:transparent; height:38px; border-bottom:1px solid var(--outlineVariant);}
+  .v2 .ico svg{fill:var(--muted); width:16px; height:16px;} .v2 .ico{width:16px;height:16px;}
+  .v2 .nm{color:var(--muted); font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.09em;}
+  .v2 .chev svg{fill:var(--faint); width:18px; height:18px;}
+
+  /* ---- V3 soft container ---- */
+  .v3 .band{background:var(--container);}
+  .v3 .ico svg{fill:var(--onSurfaceVariant);} .v3 .nm{color:var(--onSurface); font-size:.92rem; font-weight:650;} .v3 .chev svg{fill:var(--muted);}
+
+  /* ---- V4 leading accent ---- */
+  .v4 .band{background:transparent; border-bottom:1px solid var(--outlineVariant); position:relative; padding-left:16px;}
+  .v4 .accent{position:absolute; left:0; top:8px; bottom:8px; width:3px; border-radius:0 2px 2px 0; background:var(--primary);}
+  .v4 .ico svg{fill:var(--primary);} .v4 .nm{color:var(--onSurface); font-size:.92rem; font-weight:650;} .v4 .chev svg{fill:var(--muted);}
+
+  /* ---- V5 tonal chip ---- */
+  .v5 .band{background:transparent; height:46px;}
+  .v5 .chip{display:inline-flex; align-items:center; gap:8px; background:var(--containerHigh); border-radius:999px; padding:5px 12px 5px 10px;}
+  .v5 .chip svg{width:16px; height:16px; fill:var(--onSurfaceVariant);}
+  .v5 .chip span{font-size:.82rem; font-weight:650; color:var(--onSurface);}
+  .v5 .spacer{flex:1;}
+  .v5 .chev svg{fill:var(--muted);}
+
+  .note{font-size:.82rem; color:var(--muted); padding:10px 16px; background:var(--bg); border-top:1px solid var(--line);}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="eyebrow">Redface 2 · Drapeaux · bande catégorie</p>
+  <h1>Bande de catégorie — styles</h1>
+  <p class="lede">Vue « Mes sujets par catégorie ». L'actuelle est un <b>bloc plein <span class="mono">surfaceVariant</span> #534342</b> — lourd et terne sur le fond sombre. Quatre alternatives, rendues en contexte (bande + 2 sujets dessous) sur le vrai fond #1A1111.</p>
+
+  <div class="grid">
+
+    <!-- V1 actuel -->
+    <div class="card">
+      <div class="cap"><h2>1 · Actuel</h2><span class="d">bloc surfaceVariant</span><span class="tag" style="background:#5a4a48;color:#f3a9b2">actuel</span></div>
+      <div class="list v1">
+        <div class="band"><span class="ico"><svg viewBox="0 -960 960 960"><path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h240l80 80h320q33 0 56.5 23.5T880-640v400q0 33-23.5 56.5T800-160H160Z"/></svg></span><span class="nm">Hardware</span><span class="chev"><svg viewBox="0 -960 960 960"><path d="M504-480 348-636q-11-11-11-28t11-28q11-11 28-11t28 11l184 184q6 6 8.5 13t2.5 15q0 8-2.5 15t-8.5 13L412-268q-11 11-28 11t-28-11q-11-11-11-28t11-28l148-156Z"/></svg></span></div>
+        <div class="row"><span class="stripe" style="background:var(--cyan)"></span><div><div class="t">Config du moment et retours</div><div class="sub">Kermine · 01-05 17:07</div></div></div>
+        <div class="row"><span class="stripe" style="background:var(--lime)"></span><div><div class="t">Watercooling, le topic</div><div class="sub">tinc · 01-05 16:40</div></div></div>
+      </div>
+      <div class="note">bg <span class="mono">#534342</span> · texte <span class="mono">#D7C1BF</span></div>
+    </div>
+
+    <!-- V2 subhead minimal (reco) -->
+    <div class="card rec">
+      <div class="cap"><h2>2 · Sous-titre minimal</h2><span class="d">léger, aéré</span><span class="tag">reco</span></div>
+      <div class="list v2">
+        <div class="band"><span class="ico"><svg viewBox="0 -960 960 960"><path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h240l80 80h320q33 0 56.5 23.5T880-640v400q0 33-23.5 56.5T800-160H160Z"/></svg></span><span class="nm">Hardware</span><span class="chev"><svg viewBox="0 -960 960 960"><path d="M504-480 348-636q-11-11-11-28t11-28q11-11 28-11t28 11l184 184q6 6 8.5 13t2.5 15q0 8-2.5 15t-8.5 13L412-268q-11 11-28 11t-28-11q-11-11-11-28t11-28l148-156Z"/></svg></span></div>
+        <div class="row"><span class="stripe" style="background:var(--cyan)"></span><div><div class="t">Config du moment et retours</div><div class="sub">Kermine · 01-05 17:07</div></div></div>
+        <div class="row"><span class="stripe" style="background:var(--lime)"></span><div><div class="t">Watercooling, le topic</div><div class="sub">tinc · 01-05 16:40</div></div></div>
+      </div>
+      <div class="note">pas de bloc · nom en capitales espacées <span class="mono">#D7C1BF</span> · filet bas</div>
+    </div>
+
+    <!-- V3 soft container -->
+    <div class="card">
+      <div class="cap"><h2>3 · Container doux</h2><span class="d">bloc subtil</span></div>
+      <div class="list v3">
+        <div class="band"><span class="ico"><svg viewBox="0 -960 960 960"><path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h240l80 80h320q33 0 56.5 23.5T880-640v400q0 33-23.5 56.5T800-160H160Z"/></svg></span><span class="nm">Hardware</span><span class="chev"><svg viewBox="0 -960 960 960"><path d="M504-480 348-636q-11-11-11-28t11-28q11-11 28-11t28 11l184 184q6 6 8.5 13t2.5 15q0 8-2.5 15t-8.5 13L412-268q-11 11-28 11t-28-11q-11-11-11-28t11-28l148-156Z"/></svg></span></div>
+        <div class="row"><span class="stripe" style="background:var(--cyan)"></span><div><div class="t">Config du moment et retours</div><div class="sub">Kermine · 01-05 17:07</div></div></div>
+        <div class="row"><span class="stripe" style="background:var(--lime)"></span><div><div class="t">Watercooling, le topic</div><div class="sub">tinc · 01-05 16:40</div></div></div>
+      </div>
+      <div class="note">bg <span class="mono">#271D1D</span> (surfaceContainer) · texte <span class="mono">#F0DEDC</span></div>
+    </div>
+
+    <!-- V4 leading accent -->
+    <div class="card">
+      <div class="cap"><h2>4 · Accent latéral</h2><span class="d">filet + icône teintée</span></div>
+      <div class="list v4">
+        <div class="band"><span class="accent"></span><span class="ico"><svg viewBox="0 -960 960 960"><path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h240l80 80h320q33 0 56.5 23.5T880-640v400q0 33-23.5 56.5T800-160H160Z"/></svg></span><span class="nm">Hardware</span><span class="chev"><svg viewBox="0 -960 960 960"><path d="M504-480 348-636q-11-11-11-28t11-28q11-11 28-11t28 11l184 184q6 6 8.5 13t2.5 15q0 8-2.5 15t-8.5 13L412-268q-11 11-28 11t-28-11q-11-11-11-28t11-28l148-156Z"/></svg></span></div>
+        <div class="row"><span class="stripe" style="background:var(--cyan)"></span><div><div class="t">Config du moment et retours</div><div class="sub">Kermine · 01-05 17:07</div></div></div>
+        <div class="row"><span class="stripe" style="background:var(--lime)"></span><div><div class="t">Watercooling, le topic</div><div class="sub">tinc · 01-05 16:40</div></div></div>
+      </div>
+      <div class="note">accent + icône <span class="mono">#FFB3B1</span> (primary) · transparent · filet bas</div>
+    </div>
+
+    <!-- V5 tonal chip -->
+    <div class="card">
+      <div class="cap"><h2>5 · Puce tonale</h2><span class="d">nom dans un chip</span></div>
+      <div class="list v5">
+        <div class="band"><span class="chip"><svg viewBox="0 -960 960 960"><path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h240l80 80h320q33 0 56.5 23.5T880-640v400q0 33-23.5 56.5T800-160H160Z"/></svg><span>Hardware</span></span><span class="spacer"></span><span class="chev"><svg viewBox="0 -960 960 960"><path d="M504-480 348-636q-11-11-11-28t11-28q11-11 28-11t28 11l184 184q6 6 8.5 13t2.5 15q0 8-2.5 15t-8.5 13L412-268q-11 11-28 11t-28-11q-11-11-11-28t11-28l148-156Z"/></svg></span></div>
+        <div class="row"><span class="stripe" style="background:var(--cyan)"></span><div><div class="t">Config du moment et retours</div><div class="sub">Kermine · 01-05 17:07</div></div></div>
+        <div class="row"><span class="stripe" style="background:var(--lime)"></span><div><div class="t">Watercooling, le topic</div><div class="sub">tinc · 01-05 16:40</div></div></div>
+      </div>
+      <div class="note">chip <span class="mono">#322727</span> (surfaceContainerHigh) · reste transparent</div>
+    </div>
+
+  </div>
+  <p class="lede" style="margin-top:26px; font-size:.9rem;">Dis le numéro (ou « 2 mais avec l'icône teintée de la 4 »…) et je code la bande. Ma reco : <b>2 (sous-titre minimal)</b> — enlève le bloc lourd, respire, et garde le chevron pour la tappabilité.</p>
+</div>
+</body>
+</html>
