@@ -3,11 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Refonte de la vue Drapeaux (#603) Redface 2 — etat final et feuille de route, release dev 0.17.0.">
+<meta name="description" content="Refonte de la vue Drapeaux (#603) Redface 2 — etat de la phase, releases dev 0.17.0 -> 0.17.5, bugs et issues a traiter.">
 <title>#603 — Refonte vue Drapeaux · état & feuille de route</title>
 <style>
   :root {
-    /* Ground: near-black with a faint violet bias (the app's dark surface family). */
     --bg: #14121a;
     --surface: #1e1b27;
     --surface-2: #262232;
@@ -15,12 +14,12 @@
     --ink: #ece9f1;
     --muted: #9a93a8;
     --faint: #6f6880;
-    /* HFR flag identity — the subject's own palette. Cyan is the Drapeaux accent. */
     --cyan: #2ecbe0;
     --red: #e8565a;
     --favori: #f9a825;
-    --green: #4cc38a;   /* semantic: merged / done */
+    --green: #4cc38a;
     --blue: #6aa7ff;
+    --fuchsia: #d56af0;
     font-synthesis: none;
   }
   * { box-sizing: border-box; }
@@ -38,7 +37,6 @@
   .wrap { max-width: 1060px; margin: 0 auto; padding: clamp(28px, 5vw, 72px) clamp(18px, 4vw, 40px) 96px; }
   .mono { font-family: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace; }
 
-  /* ---- Header ---- */
   .eyebrow {
     font-size: .74rem; letter-spacing: .22em; text-transform: uppercase;
     color: var(--cyan); font-weight: 650; margin: 0 0 14px;
@@ -63,82 +61,62 @@
   .chip.rel { color: var(--ink); border-color: rgba(76,195,138,.42); }
   .chip.rel .dot { background: var(--green); box-shadow: 0 0 0 4px rgba(76,195,138,.14); }
 
-  /* ---- Section scaffolding ---- */
+  /* ---- Summary stats ---- */
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-top: 30px; }
+  .stat { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; }
+  .stat .n { font-size: 2rem; font-weight: 800; letter-spacing: -.03em; font-variant-numeric: tabular-nums; line-height: 1; }
+  .stat .l { font-size: .78rem; color: var(--muted); margin-top: 6px; }
+  .stat.c1 .n { color: var(--green); }
+  .stat.c2 .n { color: var(--cyan); }
+  .stat.c3 .n { color: var(--red); }
+  .stat.c4 .n { color: var(--favori); }
+
   section { margin-top: clamp(46px, 7vw, 78px); }
   .sec-head { display: flex; align-items: baseline; gap: 14px; margin: 0 0 22px; border-bottom: 1px solid var(--line); padding-bottom: 12px; }
   .sec-head h2 { font-size: 1.34rem; margin: 0; font-weight: 720; letter-spacing: -.01em; }
   .sec-head .k { font-size: .76rem; letter-spacing: .18em; text-transform: uppercase; color: var(--faint); font-weight: 600; margin-left: auto; }
+  .intro { color: var(--muted); font-size: .95rem; margin: -8px 0 22px; max-width: 70ch; }
 
-  /* ---- Preview (recreation of the refonted list) ---- */
-  .preview { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
-  .preview .cap { padding: 12px 18px; font-size: .8rem; color: var(--muted); border-bottom: 1px solid var(--line); display: flex; gap: 8px; align-items: center; }
-  .preview .cap b { color: var(--ink); font-weight: 650; }
-  .row { display: grid; grid-template-columns: 4px 1fr auto; gap: 14px; align-items: center; padding: 13px 18px; border-bottom: 1px solid rgba(50,45,64,.6); }
-  .row:last-child { border-bottom: 0; }
-  .stripe { width: 4px; align-self: stretch; border-radius: 2px; min-height: 34px; }
-  .row .body { min-width: 0; }
-  .row .title { font-size: .98rem; font-weight: 650; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .row.read .title { font-weight: 500; color: #b7b1c2; }
-  .row .meta { font-size: .8rem; color: var(--muted); display: flex; justify-content: space-between; gap: 16px; margin-top: 3px; }
-  .row .meta .date { color: var(--faint); font-variant-numeric: tabular-nums; }
-  .pill { font-size: .76rem; font-weight: 700; padding: 2px 9px; border-radius: 8px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  /* ---- Release timeline ---- */
+  .rel-list { display: flex; flex-direction: column; gap: 0; }
+  .rl { display: grid; grid-template-columns: 132px 1fr; gap: 18px; padding: 16px 0; border-bottom: 1px solid var(--line); }
+  .rl:last-child { border-bottom: 0; }
+  .rl .ver { display: flex; flex-direction: column; gap: 4px; }
+  .rl .ver .v { font-weight: 750; font-size: 1rem; letter-spacing: -.01em; }
+  .rl .ver .b { font-size: .78rem; color: var(--faint); }
+  .rl .ver .latest { align-self: flex-start; font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--green); background: rgba(76,195,138,.13); border: 1px solid rgba(76,195,138,.3); border-radius: 6px; padding: 2px 7px; }
+  .rl .body p { margin: 0; font-size: .92rem; color: var(--ink); }
+  .rl .body p .sub { color: var(--muted); }
+  .rl .body .note { font-size: .82rem; color: var(--faint); margin-top: 5px; }
 
-  .legend { display: flex; flex-wrap: wrap; gap: 22px; padding: 16px 18px; background: var(--surface-2); border-top: 1px solid var(--line); font-size: .82rem; color: var(--muted); align-items: center; }
-  .legend .item { display: inline-flex; align-items: center; gap: 9px; }
-  .legend .m-stripe { width: 4px; height: 22px; border-radius: 2px; background: var(--cyan); }
-  .legend .m-pastille { width: 24px; height: 24px; border-radius: 50%; background: rgba(46,203,224,.18); display: grid; place-items: center; }
-  .legend .m-pastille svg { width: 15px; height: 15px; fill: var(--cyan); }
-  .legend .m-dot { width: 11px; height: 11px; border-radius: 50%; background: var(--cyan); }
-  .legend b { color: var(--ink); font-weight: 600; }
-
-  /* ---- PR cards ---- */
-  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(232px, 1fr)); gap: 14px; }
-  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 18px 18px 16px; display: flex; flex-direction: column; gap: 9px; }
-  .card .top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
-  .card .pr { font-size: .82rem; font-weight: 700; letter-spacing: .02em; }
-  .card h3 { font-size: 1rem; margin: 0; font-weight: 680; letter-spacing: -.01em; }
-  .card p { margin: 0; font-size: .87rem; color: var(--muted); }
-  .tag { font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; padding: 3px 9px; border-radius: 6px; white-space: nowrap; }
-  .tag.merged { color: var(--green); background: rgba(76,195,138,.13); border: 1px solid rgba(76,195,138,.3); }
-  .tag.open { color: var(--cyan); background: rgba(46,203,224,.12); border: 1px solid rgba(46,203,224,.32); }
-  .card .ref { font-size: .76rem; color: var(--faint); margin-top: 2px; }
-  .card .ref a { color: var(--blue); text-decoration: none; }
-  .card .ref a:hover { text-decoration: underline; }
-
-  /* ---- Spikes table ---- */
+  /* ---- Issue rows ---- */
   .tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 14px; }
-  table { border-collapse: collapse; width: 100%; min-width: 560px; font-size: .9rem; }
-  th, td { text-align: left; padding: 13px 16px; border-bottom: 1px solid var(--line); vertical-align: top; }
-  th { font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; color: var(--faint); font-weight: 650; background: var(--surface-2); }
+  table { border-collapse: collapse; width: 100%; min-width: 600px; font-size: .91rem; }
+  th, td { text-align: left; padding: 12px 15px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font-size: .7rem; text-transform: uppercase; letter-spacing: .1em; color: var(--faint); font-weight: 650; background: var(--surface-2); }
   tr:last-child td { border-bottom: 0; }
-  td .verdict { font-weight: 700; font-size: .82rem; }
-  .go { color: var(--green); } .defer { color: var(--favori); }
   td b { color: var(--ink); font-weight: 640; }
+  td .who { color: var(--faint); font-size: .82rem; }
+  td a { color: var(--blue); text-decoration: none; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  td a:hover { text-decoration: underline; }
+  .tag { font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; padding: 3px 8px; border-radius: 6px; white-space: nowrap; display: inline-block; }
+  .tag.bug { color: var(--red); background: rgba(232,86,90,.13); border: 1px solid rgba(232,86,90,.3); }
+  .tag.enh { color: var(--cyan); background: rgba(46,203,224,.11); border: 1px solid rgba(46,203,224,.3); }
+  .tag.fixed { color: var(--green); background: rgba(76,195,138,.13); border: 1px solid rgba(76,195,138,.3); }
+  .tag.open { color: var(--favori); background: rgba(249,168,37,.12); border: 1px solid rgba(249,168,37,.3); }
+  .tag.defer { color: var(--faint); background: rgba(255,255,255,.03); border: 1px solid var(--line); }
 
-  /* ---- Roadmap ---- */
-  .road { display: flex; flex-direction: column; gap: 12px; }
-  .step { display: grid; grid-template-columns: auto 1fr; gap: 16px; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; }
-  .step .badge { font-weight: 800; font-size: .92rem; color: var(--bg); background: var(--cyan); width: 46px; height: 46px; border-radius: 11px; display: grid; place-items: center; align-self: start; letter-spacing: -.02em; }
-  .step.cond .badge { background: var(--favori); }
-  .step h3 { margin: 0 0 3px; font-size: 1.02rem; font-weight: 680; }
-  .step p { margin: 0 0 8px; font-size: .89rem; color: var(--muted); }
-  .step .facts { display: flex; flex-wrap: wrap; gap: 7px; }
-  .fct { font-size: .74rem; color: var(--muted); border: 1px solid var(--line); border-radius: 6px; padding: 3px 8px; background: var(--surface-2); }
-  .fct b { color: var(--ink); font-weight: 640; }
-
-  .deferred { columns: 2 280px; column-gap: 26px; }
-  .deferred li { break-inside: avoid; margin: 0 0 11px; font-size: .9rem; color: var(--muted); padding-left: 2px; }
+  /* ---- Deferred list ---- */
+  .deferred { columns: 2 280px; column-gap: 26px; list-style: none; padding: 0; margin: 0; }
+  .deferred li { break-inside: avoid; margin: 0 0 13px; font-size: .9rem; color: var(--muted); }
   .deferred li b { color: var(--ink); font-weight: 640; }
-  ul.bare { list-style: none; padding: 0; margin: 0; }
-  ul.bare li::marker { color: var(--cyan); }
-  .deferred { list-style: none; padding: 0; }
+  .deferred li a { color: var(--blue); text-decoration: none; }
 
-  /* ---- Continue / footer ---- */
   .next { background: linear-gradient(180deg, var(--surface), var(--surface-2)); border: 1px solid var(--line); border-radius: 16px; padding: 24px 22px; }
   .next ol { margin: 12px 0 0; padding-left: 22px; }
   .next li { margin: 0 0 9px; color: var(--ink); }
   .next li span { color: var(--muted); }
-  .next code, .ref code, .step code { font-family: ui-monospace, Menlo, monospace; font-size: .85em; background: rgba(255,255,255,.05); padding: 1px 6px; border-radius: 5px; color: var(--cyan); }
+  .next code, .rl code { font-family: ui-monospace, Menlo, monospace; font-size: .85em; background: rgba(255,255,255,.05); padding: 1px 6px; border-radius: 5px; color: var(--cyan); }
   .rule { color: var(--faint); font-size: .82rem; margin-top: 26px; border-top: 1px solid var(--line); padding-top: 16px; }
   .rule b { color: var(--muted); font-weight: 640; }
   a { color: var(--blue); }
@@ -150,180 +128,118 @@
   <header>
     <p class="eyebrow">Redface 2 · Phase 4 · UI</p>
     <h1>Refonte de la vue Drapeaux <span class="num">#603</span></h1>
-    <p class="lede">Refonte terminée : décisions actées, modèle de présentation testé, nouvelle app bar, liste refondue, bottom sheet d'appui-long, barre de progression et menu de config rapide. Huit lots livrés en PRs séparées, chacun revu par Codex et CI verte, plus une passe de revue à 4 agents. Tout est dans <span class="mono">dev</span> et déjà <b>shippé sur le canal dev</b> (<span class="mono">app-v180</span> / <span class="mono">0.17.0</span>). Reste à promouvoir vers bêta/prod quand tu le décides.</p>
+    <p class="lede">Socle livré et en dogfood actif. La refonte (8 lots) est dans <span class="mono">dev</span> depuis <span class="mono">app-v180</span> ; cinq passes de finition ont suivi les retours des testeurs HFR jusqu'à <b><span class="mono">app-v185</span> / 0.17.5</b>. Cette page fait le point : ce qui est shippé, les bugs, et les pistes restantes — classées <b>phase en cours</b> (#603) vs différées.</p>
     <div class="statusline">
-      <span class="chip prog"><span class="dot"></span>Refonte complète — 8 PRs mergées</span>
-      <span class="chip">PR0→PR6 + fix review dans <span class="mono">&nbsp;dev</span></span>
-      <span class="chip rel"><span class="dot"></span>release dev · app-v180 / 0.17.0</span>
-      <span class="chip">25 juin 2026</span>
+      <span class="chip prog"><span class="dot"></span>Socle livré · en finition</span>
+      <span class="chip rel"><span class="dot"></span>dernier build dev · <span class="mono">&nbsp;app-v185 / 0.17.5</span></span>
+      <span class="chip">26 juin 2026</span>
+    </div>
+
+    <div class="stats">
+      <div class="stat c1"><div class="n">6</div><div class="l">builds dev livrés (v180→v185)</div></div>
+      <div class="stat c2"><div class="n">11</div><div class="l">issues ouvertes au triage</div></div>
+      <div class="stat c3"><div class="n">3</div><div class="l">bugs résolus en finition</div></div>
+      <div class="stat c4"><div class="n">7</div><div class="l">pistes pour la phase en cours</div></div>
     </div>
   </header>
 
   <section>
-    <div class="sec-head"><h2>Aperçu — la ligne refondue</h2><span class="k">PR3 · rendu</span></div>
-    <div class="preview">
-      <div class="cap">Reconstitution fidèle du rendu <b>Roborazzi</b> (thème sombre) — marqueur barre de couleur par défaut, pastille « pages à lire », metadata auteur · date.</div>
+    <div class="sec-head"><h2>Livré — releases dev</h2><span class="k">v180 → v185</span></div>
+    <p class="intro">La refonte d'un coup (v180), puis une boucle serrée de finitions guidée par le topic DEV. Chaque build : Codex GO + CI verte, mergé dans <span class="mono">dev</span>, dispo Play interne + F-Droid <span class="mono">.dev</span>.</p>
+    <div class="rel-list">
 
-      <div class="row">
-        <div class="stripe" style="background:var(--cyan)"></div>
-        <div class="body">
-          <div class="title">[Topic] Hardware — config du moment et retours</div>
-          <div class="meta"><span>Kermine</span><span class="date">01-05-2026 à 17:07</span></div>
-        </div>
-        <span class="pill" style="color:var(--cyan);background:rgba(46,203,224,.15)">+2</span>
+      <div class="rl">
+        <div class="ver"><span class="v">0.17.0</span><span class="b mono">app-v180</span></div>
+        <div class="body"><p><b>Refonte complète</b> <span class="sub">— 8 PRs : nouvelle app bar « Réglages » (recherche + picker d'onglet), liste refondue (marqueur barre/pastille/point, pastille « pages à lire », icônes de catégorie, métadonnées auteur·date), bottom sheet d'appui-long + super-favori local, barre de progression fine en haut, menu de config rapide.</span></p></div>
       </div>
 
-      <div class="row read">
-        <div class="stripe" style="background:rgba(46,203,224,.35)"></div>
-        <div class="body">
-          <div class="title">Kotlin / Compose — questions diverses</div>
-          <div class="meta"><span>Shaad</span><span class="date">01-05-2026 à 17:07</span></div>
-        </div>
-        <span></span>
+      <div class="rl">
+        <div class="ver"><span class="v">0.17.1</span><span class="b mono">app-v181</span></div>
+        <div class="body"><p><b>1ʳᵉ passe couleurs/icône</b> <span class="sub">— palette HFR pure, icône drapeau RF2 teintée, recherche sur 1 ligne, retrait du spinner central, stripe pleine hauteur.</span></p><p class="note">Verdict testeurs : couleurs pures « criardes », icône pixel-art « craignos ».</p></div>
       </div>
 
-      <div class="row">
-        <div class="stripe" style="background:var(--favori)"></div>
-        <div class="body">
-          <div class="title">Le topic des jeux indé à suivre</div>
-          <div class="meta"><span>tinc</span><span class="date">01-05-2026 à 17:07</span></div>
-        </div>
-        <span class="pill" style="color:var(--favori);background:rgba(249,168,37,.15)">+8</span>
+      <div class="rl">
+        <div class="ver"><span class="v">0.17.2</span><span class="b mono">app-v182</span></div>
+        <div class="body"><p><b>Palette retonée + fix bug</b> <span class="sub">— favori vert-lime, DT fuchsia, cyan/rouge adoucis ; rollback de l'icône vers le glyphe propre ; correction du menu rapide qui s'ouvrait tout seul à la navigation ; « +lus » nettoyé, liseré avatar, bandes compactes, chevron à la bonne taille.</span></p></div>
       </div>
 
-      <div class="row">
-        <div class="stripe" style="background:var(--red)"></div>
-        <div class="body">
-          <div class="title">Le topic de la blague Carambar et autres réjouissances</div>
-          <div class="meta"><span>Lt Ripley</span><span class="date">01-05-2026 à 17:07</span></div>
-        </div>
-        <span class="pill" style="color:var(--red);background:rgba(232,86,90,.15)">+26</span>
+      <div class="rl">
+        <div class="ver"><span class="v">0.17.3</span><span class="b mono">app-v183</span></div>
+        <div class="body"><p><b>Titre 1 ligne + bande allégée</b> <span class="sub">— option « titre sur une seule ligne » (réglage global) ; bande de catégorie en sous-titre discret au lieu du bloc plein.</span></p></div>
       </div>
 
-      <div class="legend">
-        <span class="item"><span class="m-stripe"></span><b>Barre</b> (défaut)</span>
-        <span class="item"><span class="m-pastille"><svg viewBox="0 -960 960 960"><path d="M320-280h320v-400H320v400Zm80-80v-240h160v240H400ZM200-80v-80h-40q-33 0-56.5-23.5T80-240v-160h80q17 0 28.5-11.5T200-440q0-17-11.5-28.5T160-480H80v-80h80q17 0 28.5-11.5T200-600q0-17-11.5-28.5T160-640H80q0-33 23.5-56.5T160-720h40v-80q0-33 23.5-56.5T280-880h80q0-17 11.5-28.5T400-920q17 0 28.5 11.5T440-880h80q0-17 11.5-28.5T560-920q17 0 28.5 11.5T600-880h80q33 0 56.5 23.5T760-800v80h40q33 0 56.5 23.5T880-640h-80q-17 0-28.5 11.5T760-600q0 17 11.5 28.5T800-560h80v80h-80q-17 0-28.5 11.5T760-440q0 17 11.5 28.5T800-400h80v160q0 33-23.5 56.5T800-160h-40v80h-80v-80h-80v80h-80v-80h-80v80h-80Zm480-160v-480H280v480h400Z"/></svg></span><b>Pastille</b> + icône catégorie</span>
-        <span class="item"><span class="m-dot"></span><b>Dot</b> (legacy)</span>
-        <span class="item" style="color:var(--faint)">configurable · couleur = bucket (favori gagne) · désaturé si lu</span>
+      <div class="rl">
+        <div class="ver"><span class="v">0.17.4</span><span class="b mono">app-v184</span></div>
+        <div class="body"><p><b>4 styles de bande + fix rond auto</b> <span class="sub">— bande de catégorie au choix : Sobre / Bloc / Accent / Puce ; le rond de chargement ne s'affiche plus pendant l'auto-refresh.</span></p></div>
       </div>
+
+      <div class="rl">
+        <div class="ver"><span class="v">0.17.5</span><span class="b mono">app-v185</span><span class="latest">dernier</span></div>
+        <div class="body"><p><b>Plus aucun rond de chargement</b> <span class="sub">— l'indicateur circulaire du pull-to-refresh est retiré (onglets drapeaux + DT) ; la fine barre du haut devient l'unique repère (manuel, auto, initial). Le swipe-down déclenche toujours le refresh.</span></p><p class="note">Clôt <a href="https://github.com/ForumHFR/redface2/issues/659">#659</a>.</p></div>
+      </div>
+
     </div>
   </section>
 
   <section>
-    <div class="sec-head"><h2>Livré — le socle</h2><span class="k">PR0 → PR3</span></div>
-    <div class="grid">
-      <div class="card">
-        <div class="top"><span class="pr" style="color:var(--muted)">PR0 · ADR + spikes</span><span class="tag merged">mergé</span></div>
-        <h3>Décisions actées</h3>
-        <p>ADR-017 (modèle, marqueur, persistance, <span class="mono">quotedMe</span>) + rapport des 4 spikes + drafts vision/roadmap.</p>
-        <div class="ref">docs-only · <a href="https://github.com/ForumHFR/redface2/pull/639">#639</a></div>
-      </div>
-      <div class="card">
-        <div class="top"><span class="pr" style="color:var(--muted)">PR1 · modèle (TDD)</span><span class="tag merged">mergé</span></div>
-        <h3>Couche de présentation pure</h3>
-        <p><span class="mono">pagesToRead</span>, couleur effective (favori gagne), <span class="mono">FlagRowUiModel</span>, <span class="mono">MarkerStyle</span>. 11 tests.</p>
-        <div class="ref">core/domain + feature/flags · <a href="https://github.com/ForumHFR/redface2/pull/640">#640</a></div>
-      </div>
-      <div class="card">
-        <div class="top"><span class="pr" style="color:var(--muted)">PR2 · app bar</span><span class="tag merged">mergé</span></div>
-        <h3>Search app bar « Réglages »</h3>
-        <p>Icône drapeau → picker d'onglet, recherche client, account menu. Remplace header + tab row.</p>
-        <div class="ref">feature/flags · <a href="https://github.com/ForumHFR/redface2/pull/641">#641</a></div>
-      </div>
-      <div class="card">
-        <div class="top"><span class="pr" style="color:var(--muted)">PR3 · liste</span><span class="tag merged">mergé</span></div>
-        <h3>Liste de drapeaux refondue</h3>
-        <p>Marqueur configurable, pastille « +N », en-têtes à icônes (16 Material Symbols), Roborazzi.</p>
-        <div class="ref">core/ui + feature/flags · <a href="https://github.com/ForumHFR/redface2/pull/642">#642</a> · fix review <a href="https://github.com/ForumHFR/redface2/pull/643">#643</a></div>
-      </div>
-    </div>
-  </section>
-
-  <section>
-    <div class="sec-head"><h2>Spikes bloquants — levés</h2><span class="k">PR0</span></div>
+    <div class="sec-head"><h2>Bugs</h2><span class="k">résolus &amp; ouverts</span></div>
     <div class="tablewrap">
       <table>
-        <thead><tr><th>Spike</th><th>Verdict</th><th>Conséquence</th></tr></thead>
+        <thead><tr><th>Sujet</th><th>État</th><th>Remonté par</th><th>Réf.</th></tr></thead>
         <tbody>
-          <tr>
-            <td><b>1 · <span class="mono">quotedMe</span></b> (« cité »)</td>
-            <td><span class="verdict defer">DIFFÉRÉ</span></td>
-            <td>Aucune source serveur (ni <span class="mono">Flag</span>, ni REST). Jamais simulé — réintroduit si une source réelle apparaît.</td>
-          </tr>
-          <tr>
-            <td><b>2 ·</b> signal refresh auto</td>
-            <td><span class="verdict go">GO</span></td>
-            <td><span class="mono">Loading || isRefreshing</span> couvre manuel + auto. Débloque PR4.</td>
-          </tr>
-          <tr>
-            <td><b>3 ·</b> app bar translucide / scroll</td>
-            <td><span class="verdict go">GO</span></td>
-            <td>Idiome <span class="mono">elevated</span> existant. Translucidité-au-scroll + hide-on-scroll <b>différés</b>.</td>
-          </tr>
-          <tr>
-            <td><b>4 ·</b> icônes catégories</td>
-            <td><span class="verdict go">GO</span></td>
-            <td>Set complet livré en PR3 : 19 cats → Material Symbols, fallback forum.</td>
-          </tr>
+          <tr><td><b>Rond de chargement</b> persistant (auto puis manuel) — redondant avec la barre du haut</td><td><span class="tag fixed">résolu v184/v185</span></td><td class="who">styx42, XaTriX</td><td><a href="https://github.com/ForumHFR/redface2/issues/659">#659</a> · <a href="https://github.com/ForumHFR/redface2/issues/657">#657</a></td></tr>
+          <tr><td><b>Menu de config rapide</b> qui s'ouvrait tout seul en changeant de catégorie / au retour</td><td><span class="tag fixed">résolu v182</span></td><td class="who">nicko, thibw</td><td class="who">PR #651</td></tr>
+          <tr><td><b>Swipe entre onglets</b> : l'animation de la liste arrive du mauvais côté</td><td><span class="tag open">ouvert</span></td><td class="who">styx42, nicko</td><td><a href="https://github.com/ForumHFR/redface2/issues/660">#660</a></td></tr>
+          <tr><td><b>Retour depuis Réglages</b> quitte l'appli au lieu de revenir à l'écran précédent</td><td><span class="tag open">ouvert</span></td><td class="who">tinc</td><td><a href="https://github.com/ForumHFR/redface2/issues/667">#667</a></td></tr>
+          <tr><td><b>Cyan manquant</b> : REST global tronqué par récence (drapeau non listé)</td><td><span class="tag open">ouvert · repro</span></td><td class="who">backlog</td><td><a href="https://github.com/ForumHFR/redface2/issues/251">#251</a></td></tr>
         </tbody>
       </table>
     </div>
   </section>
 
   <section>
-    <div class="sec-head"><h2>Livré — la suite du run</h2><span class="k">3 PRs · mergées</span></div>
-    <div class="road">
-      <div class="step">
-        <div class="badge">PR5</div>
-        <div>
-          <h3>Bottom sheet d'appui-long (F2)</h3>
-          <p>Remplace le dialog de retrait par un bottom sheet riche : métadonnées API (déjà dans <span class="mono">Flag</span> : créateur, dernier répondant, dates, position, réponses, catégorie), quick-actions, et option <b>« Super favori » locale</b>. Sans choix de couleur.</p>
-          <div class="facts"><span class="fct"><b>nouveau</b> store local super-favori (DataStore)</span><span class="fct">métadonnées : zéro appel réseau</span><span class="fct">mergé · <a href="https://github.com/ForumHFR/redface2/pull/644" style="color:var(--blue);text-decoration:none">#644</a></span></div>
-        </div>
-      </div>
-      <div class="step">
-        <div class="badge">PR6</div>
-        <div>
-          <h3>Menu de config rapide</h3>
-          <p>Tap sur l'icône Drapeaux de la bottom bar → popup de réglages rapides de la vue (groupement, non-lus, style de marqueur, densité). Câble enfin <span class="mono">markerStyle</span> de bout en bout (lecture + écriture DataStore). <b>Sans</b> le hide-on-scroll.</p>
-          <div class="facts"><span class="fct">étend <b>FlagsViewSettings</b> (markerStyle, densité)</span><span class="fct">migration DataStore conservatrice</span><span class="fct">mergé · <a href="https://github.com/ForumHFR/redface2/pull/646" style="color:var(--blue);text-decoration:none">#646</a></span></div>
-        </div>
-      </div>
-      <div class="step">
-        <div class="badge">PR4</div>
-        <div>
-          <h3>Barre de progression M3</h3>
-          <p>Fine, linéaire, non ondulée, sous l'app bar — visible pendant tout chargement (manuel ET auto). Pilotée par le signal existant <span class="mono">Loading || isRefreshing</span> (spike 2 concluant → feu vert).</p>
-          <div class="facts"><span class="fct">spike refresh-auto : <b>GO</b></span><span class="fct">mergé · <a href="https://github.com/ForumHFR/redface2/pull/645" style="color:var(--blue);text-decoration:none">#645</a></span></div>
-        </div>
-      </div>
+    <div class="sec-head"><h2>À traiter — phase en cours</h2><span class="k">#603 · vue:drapeaux</span></div>
+    <p class="intro">Retours testeurs du topic DEV triés en issues, rattachés à la refonte Drapeaux. C'est le périmètre actif.</p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Piste</th><th>Type</th><th>Remonté par</th><th>Réf.</th></tr></thead>
+        <tbody>
+          <tr><td><b>Découvrabilité</b> du menu d'affichage (appui long barre du bas) et de la bascule « +lus » (re-tap « Mes sujets ») — peu évidents</td><td><span class="tag enh">enhancement</span></td><td class="who">nicko, thibw, styx42, CharLee</td><td><a href="https://github.com/ForumHFR/redface2/issues/661">#661</a></td></tr>
+          <tr><td><b>Icônes de catégorie</b> représentatives (manette, etc.) + pastille agrandie avec icône en fond (option, façon RF1)</td><td><span class="tag enh">design</span></td><td class="who">nicko, Ayuget</td><td><a href="https://github.com/ForumHFR/redface2/issues/664">#664</a></td></tr>
+          <tr><td><b>Top bar translucide</b> / liste visible au défilement dessous (déféré du MVP)</td><td><span class="tag enh">design</span></td><td class="who">XaTriX</td><td><a href="https://github.com/ForumHFR/redface2/issues/665">#665</a></td></tr>
+          <tr><td><b>Barre du bas</b> : option afficher / masquer les libellés des onglets</td><td><span class="tag enh">design</span></td><td class="who">XaTriX</td><td><a href="https://github.com/ForumHFR/redface2/issues/666">#666</a></td></tr>
+          <tr><td><b>Messages d'état vide</b> des listes à homogénéiser</td><td><span class="tag enh">quick-win</span></td><td class="who">styx42</td><td><a href="https://github.com/ForumHFR/redface2/issues/662">#662</a></td></tr>
+          <tr><td><b>Swipe cyclique</b> entre onglets (dernier ↔ premier)</td><td><span class="tag enh">enhancement</span></td><td class="who">styx42</td><td><a href="https://github.com/ForumHFR/redface2/issues/663">#663</a></td></tr>
+          <tr><td><b>Couleurs des drapeaux</b> : faire évoluer le jaune favori, trouver une teinte super-favori (itération en cours)</td><td><span class="tag enh">design</span></td><td class="who">XaTriX, nicko</td><td class="who">#603</td></tr>
+        </tbody>
+      </table>
     </div>
   </section>
 
   <section>
-    <div class="sec-head"><h2>Différé — backlog post-MVP</h2><span class="k">PR7 &amp; +</span></div>
+    <div class="sec-head"><h2>Différé — phases suivantes</h2><span class="k">backlog</span></div>
+    <p class="intro">Noté mais hors périmètre de la finition Drapeaux : ça viendra avec les chantiers super-favoris, réglages ou la vue Topic.</p>
     <ul class="deferred">
-      <li><b>Hide-on-scroll</b> de la bottom bar + app bar translucide « contenu glissant dessous » (sensible insets/scroll).</li>
-      <li><b>Onglets configurables / masquables</b> et catégories repliables (mono-catégorie).</li>
-      <li><b>Paliers de densité</b> avancés (ultra-compact → confort+) au-delà du défaut.</li>
-      <li><b>Migration DataStore</b> élargie + versionnage des nouveaux champs.</li>
-      <li><b><span class="mono">quotedMe</span></b> : réintroduction si une source serveur réelle est trouvée.</li>
-      <li><b>Recherche</b> étendue aux onglets DT et au-delà du filtre titre client.</li>
-      <li>Réafficher <b>p.X/Y</b> dans la ligne si le retrait de la position s'avère regretté (décision PR3 à valider).</li>
-      <li>Onglet <b>« Super »</b> alimenté par les super-favoris locaux.</li>
+      <li><b>Listes / onglets configurables</b> (fusion des sources) — viendra avec les super-favoris. <a href="https://github.com/ForumHFR/redface2/issues/668">#668</a></li>
+      <li><b>Préréglages de densité</b> XS–XL pilotant tous les réglages d'affichage. <a href="https://github.com/ForumHFR/redface2/issues/669">#669</a></li>
+      <li><b>Super-favoris</b> : fonctionnalités dédiées (override de notif, suivi d'événements…) — brainstorm ouvert.</li>
+      <li><b>Raccourcis d'icône d'appli</b> (appui long : MP à…, topics les plus suivis) — noté.</li>
+      <li><b>Refonte vue Topic</b> (en-tête, fonds de posts modérateurs, compacité). <a href="https://github.com/ForumHFR/redface2/issues/604">#604</a></li>
+      <li><b>Intitulés des listes</b> (Mes sujets / Lu / Favoris…) à clarifier — à arbitrer.</li>
     </ul>
   </section>
 
   <section>
-    <div class="sec-head"><h2>Et maintenant</h2><span class="k">handoff</span></div>
+    <div class="sec-head"><h2>Prochaines étapes</h2><span class="k">suggestion</span></div>
     <div class="next">
-      <p style="margin:0;color:var(--muted)">Les 8 PRs (PR0→PR6 + fix review) sont mergées dans <code>dev</code> et <b>shippées sur le canal dev</b> : <code>app-v180</code> / <code>0.17.0</code>, Play interne « Redface 2 dev » + F-Droid <code>.dev</code>, changelog posté sur HFR. Prochaines étapes :</p>
       <ol>
-        <li><b>Dogfood le build dev</b> <span>(Play interne « Redface 2 dev » / F-Droid <code>.dev</code>) : marqueurs Barre/Pastille/Point via le re-tap de l'icône Drapeaux, app bar, bottom sheet d'appui-long, barre de progression.</span></li>
-        <li><b>Promouvoir <code>dev → bêta</code></b> <span>(open testing) quand tu valides — release bêta en <code>0.17.0</code> + release notes Play, cf. tes conventions.</span></li>
-        <li><b>Backlog différé</b> <span>: hide-on-scroll, onglets configurables, densités avancées, onglet « Super » alimenté, <code>quotedMe</code> si une source serveur apparaît.</span></li>
+        <li><b>Bugs d'abord</b> <span>— swipe au mauvais côté (<a href="https://github.com/ForumHFR/redface2/issues/660">#660</a>) et retour Réglages (<a href="https://github.com/ForumHFR/redface2/issues/667">#667</a>).</span></li>
+        <li><b>Quick-wins #603</b> <span>— messages d'état vide (<a href="https://github.com/ForumHFR/redface2/issues/662">#662</a>), swipe cyclique (<a href="https://github.com/ForumHFR/redface2/issues/663">#663</a>).</span></li>
+        <li><b>Découvrabilité &amp; densité</b> <span>— rendre les contrôles évidents (<a href="https://github.com/ForumHFR/redface2/issues/661">#661</a>) ; le chantier densité XS–XL (<a href="https://github.com/ForumHFR/redface2/issues/669">#669</a>) recoupe plusieurs retours.</span></li>
+        <li><b>Polish visuel</b> <span>— icônes/pastilles (<a href="https://github.com/ForumHFR/redface2/issues/664">#664</a>), top bar au défilement (<a href="https://github.com/ForumHFR/redface2/issues/665">#665</a>), itération couleurs.</span></li>
+        <li><b>Décision</b> <span>— quand le ressenti est bon, promouvoir <span class="mono">dev → bêta</span> et enchaîner sur la vue Topic (<a href="https://github.com/ForumHFR/redface2/issues/604">#604</a>).</span></li>
       </ol>
-      <p class="rule"><b>Règles tenues sur tout le run :</b> gh = compte XaaT uniquement · review Codex sur chaque diff · CI verte par lot · aucune donnée absente simulée (<span class="mono">quotedMe</span>) · branches depuis <code>origin/dev</code> frais · aucun merge sans validation.</p>
+      <p class="rule"><b>Suivi :</b> umbrella Phase 4 <a href="https://github.com/ForumHFR/redface2/issues/605">#605</a> · refonte Drapeaux <a href="https://github.com/ForumHFR/redface2/issues/603">#603</a>. Page mise à jour à <span class="mono">app-v185 / 0.17.5</span>, 26 juin 2026.</p>
     </div>
   </section>
 
