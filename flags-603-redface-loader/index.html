@@ -1,0 +1,208 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Redface 2 #603 — simulation : le smiley HFR redface en indicateur de chargement custom, roulant sur lui-même, y compris l'indicateur contenu « en haut ».">
+<title>redface en loader</title>
+<style>
+  :root{
+    --page:#e7dfe2; --card:#fffafb; --ink:#241c20; --muted:#7c6f74; --faint:#a99ca1;
+    --chrome:#1f2d8a; --ok:#2f8f5b; --line:#e3d6da;
+    --app-bg:#fbf6f7; --app-header:#f8ecef; --app-surface:#ffffff; --app-band:#f3dfe4;
+    --app-red:#c4242c; --app-pill:#f1e4e7; --app-muted:#9a8a8f; --app-ink:#2c2226;
+    --redface:url("data:image/gif;base64,R0lGODlhDwAPAKEBAAAAAP8AAAEBAQAAACH5BAEAAAIALAAAAAAPAA8AAAIwlA2Zx5IB4WIgWnnqvQAFXYGfEz2S9qGbZZbtyZasitKkJGP3aXvrSFGlGhlFh1EAADs=");
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--page);color:var(--ink);
+    font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:1000px;margin:0 auto;padding:clamp(22px,4vw,46px) clamp(14px,3.5vw,30px) 72px;}
+  .mono{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;}
+  .eyebrow{font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;color:var(--chrome);font-weight:700;margin:0 0 10px;}
+  h1{font-size:clamp(1.6rem,3.6vw,2.3rem);margin:0 0 12px;letter-spacing:-.02em;font-weight:800;text-wrap:balance;}
+  .lede{color:#564b4f;font-size:1.02rem;margin:0;max-width:62ch;}
+  .lede b{color:var(--ink);}
+
+  /* redface sprite — the 15px gif scaled up, kept crisp (pixel-art forum charm) */
+  .rf{background-image:var(--redface);background-size:contain;background-repeat:no-repeat;background-position:center;
+    image-rendering:pixelated;display:inline-block;}
+
+  .controls{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:26px 0 22px;
+    background:rgba(231,223,226,.9);border:1px solid var(--line);border-radius:12px;padding:12px 16px;}
+  .play{border:1px solid #cbbdc2;background:#fff;border-radius:10px;width:40px;height:36px;font-size:1rem;cursor:pointer;color:var(--ink);}
+  .play:hover{border-color:var(--chrome);}
+  .controls label{font-size:.84rem;font-weight:600;display:flex;align-items:center;gap:8px;}
+  .controls input[type=range]{accent-color:var(--chrome);width:140px;}
+
+  .hero{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:30px;display:flex;align-items:center;gap:28px;flex-wrap:wrap;justify-content:center;text-align:center;margin-bottom:24px;}
+  .hero .big{width:88px;height:88px;}
+  .hero .label{max-width:30ch;}
+  .hero .label h2{margin:0 0 6px;font-size:1.1rem;}
+  .hero .label p{margin:0;color:var(--muted);font-size:.92rem;}
+  .yes{color:var(--ok);font-weight:800;}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;align-items:start;}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:12px;}
+  .card h3{margin:0;font-size:.98rem;}
+  .card p{margin:0;font-size:.8rem;color:var(--muted);}
+  .stage{height:96px;border-radius:12px;background:var(--app-surface);border:1px solid var(--app-band);position:relative;overflow:hidden;display:grid;place-items:center;}
+
+  /* phone mock — the "en haut" contained indicator (like the M3 expressive reference) */
+  .phonecard{grid-column:1 / -1;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;}
+  .phonecard .head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:12px;flex-wrap:wrap;}
+  .phonecard h3{margin:0;font-size:1rem;}
+  .phase{font-weight:800;font-size:.85rem;color:var(--chrome);font-variant-numeric:tabular-nums;}
+  .phone{max-width:330px;margin:0 auto;border:1px solid #d8ccd0;border-radius:16px;overflow:hidden;background:var(--app-bg);}
+  .appbar{background:var(--app-header);padding:10px 10px 0;}
+  .appbar-row{display:flex;align-items:center;gap:7px;}
+  .flag{width:30px;height:30px;flex:none;display:grid;place-items:center;}
+  .flag svg{width:18px;height:18px;fill:var(--app-red);}
+  .pill{flex:1;height:34px;background:var(--app-pill);border-radius:999px;display:flex;align-items:center;padding:0 12px;}
+  .pill span{color:var(--app-muted);font-size:.78rem;}
+  .avatar{width:26px;height:26px;border-radius:50%;background:#e9d3cf;border:1px solid #ddc4c0;flex:none;}
+  .slot{height:4px;margin-top:10px;position:relative;overflow:hidden;}
+  .loadbar{position:absolute;inset:0;display:none;}
+  .loadbar::before{content:"";position:absolute;top:0;height:100%;width:42%;background:var(--app-red);border-radius:2px;animation:bar 1.05s ease-in-out infinite;}
+  .show-bar .loadbar{display:block;}
+  .content{position:relative;height:150px;background:var(--app-surface);overflow:hidden;}
+  .row{display:grid;grid-template-columns:11px 1fr auto;gap:9px;align-items:center;padding:12px;border-bottom:1px solid var(--app-band);}
+  .rdot{width:10px;height:10px;border-radius:50%;background:var(--app-red);}
+  .rt{font-size:.84rem;font-weight:600;color:var(--app-ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .rm{font-size:.68rem;color:var(--app-muted);margin-top:1px;}
+  .rn{font-size:.66rem;font-weight:700;color:var(--app-red);background:#f8dde0;border-radius:7px;padding:1px 6px;}
+  /* the contained puck holding the redface */
+  .puck{position:absolute;left:50%;top:0;width:42px;height:42px;border-radius:50%;background:#fff;
+    box-shadow:0 2px 9px rgba(60,30,34,.24);display:grid;place-items:center;
+    transform:translate(-50%,-46px) scale(.6);opacity:0;will-change:transform,opacity;}
+  .puck .rf{width:26px;height:26px;}
+
+  @keyframes spin{to{transform:rotate(360deg);}}
+  @keyframes rollacross{0%{transform:translateX(-70px) rotate(0);}100%{transform:translateX(70px) rotate(540deg);}}
+  @keyframes bar{0%{left:-42%;}100%{left:100%;}}
+
+  /* continuously-rolling sprites in the variant cards / hero (independent of the phone timeline) */
+  .roll{animation:spin 1.05s linear infinite;}
+  .roll-across{width:34px;height:34px;animation:rollacross 1.8s ease-in-out infinite alternate;}
+  .speedy{animation-duration:.55s;}
+  .lazy{animation-duration:1.8s;}
+
+  .foot{margin-top:30px;font-size:.8rem;color:var(--muted);border-top:1px solid var(--line);padding-top:14px;}
+  .foot code{background:#f0eaec;padding:1px 5px;border-radius:4px;color:#5b3f72;}
+  @media (prefers-reduced-motion: reduce){ .roll,.roll-across,.loadbar::before,.puck .rf{animation:none!important;} }
+</style>
+
+<div class="wrap">
+  <p class="eyebrow">Redface 2 · #603 · loader</p>
+  <h1>Le smiley redface en indicateur de chargement</h1>
+  <p class="lede"><span class="yes">Oui, c'est faisable</span> — le smiley <b>redface</b> (15×15, embarqué tel quel) tourné sur lui-même par une simple rotation. Ci-dessous : la roulade sur place, l'indicateur <b>contenu « en haut »</b> (façon l'indicateur expressive de ta capture) joué à travers tirage → chargement → terminé, et quelques variantes. <b>Ce sont des simulations</b>, pas du code applicatif.</p>
+
+  <div class="controls">
+    <button class="play" id="play" aria-label="Lecture / pause">⏸</button>
+    <label>Vitesse de roulade
+      <input type="range" id="speed" min="40" max="200" value="105" aria-label="Vitesse">
+    </label>
+    <span class="mono" id="speedval" style="font-size:.8rem;color:var(--muted)">1.05 s/tour</span>
+  </div>
+
+  <div class="hero">
+    <span class="rf roll big" id="herorf" aria-label="redface qui roule"></span>
+    <div class="label">
+      <h2>« Rouler sur lui-même » ✓</h2>
+      <p>Une rotation continue (<code class="mono">rotate 360°</code>). Le pixel-art est gardé net (<code class="mono">image-rendering: pixelated</code>) — le grain forum fait partie du charme.</p>
+    </div>
+  </div>
+
+  <div class="grid">
+
+    <div class="phonecard">
+      <div class="head">
+        <h3>Indicateur contenu « en haut » (pull-to-refresh)</h3>
+        <span class="phase" id="phase">Tirage</span>
+      </div>
+      <div class="phone" id="phone">
+        <div class="appbar">
+          <div class="appbar-row">
+            <span class="flag"><svg viewBox="0 -960 960 960"><path d="M200-120v-680h360l16 80h224v400H520l-16-80H280v280h-80Z"/></svg></span>
+            <span class="pill"><span>Rechercher dans les drapeaux…</span></span>
+            <span class="avatar"></span>
+          </div>
+          <div class="slot"><div class="loadbar"></div></div>
+        </div>
+        <div class="content">
+          <div class="puck" id="puck"><span class="rf" id="puckrf"></span></div>
+          <div class="row"><span class="rdot"></span><div><div class="rt">RDNA4 — AMD RX90x0</div><div class="rm">SupaPictave · 10:24</div></div><span class="rn">+297</span></div>
+          <div class="row"><span class="rdot"></span><div><div class="rt">Le topik du vieux matos</div><div class="rm">rat de combat · 07:53</div></div><span class="rn">+17</span></div>
+          <div class="row"><span class="rdot"></span><div><div class="rt">[TU] Claviers mécaniques</div><div class="rm">nokiv · 09:02</div></div><span class="rn">+5</span></div>
+        </div>
+      </div>
+      <p style="margin-top:10px">Le redface descend du haut dans une pastille blanche (comme l'indicateur de ta capture) en suivant le tirage, <b>roule pendant le chargement</b>, puis se retire. La barre rouge fine reste possible en doublure ou en relais.</p>
+    </div>
+
+    <div class="card">
+      <h3>Contenu (pastille)</h3>
+      <div class="stage"><span class="puck" style="position:static;transform:none;opacity:1;box-shadow:0 2px 8px rgba(60,30,34,.2)"><span class="rf roll"></span></span></div>
+      <p>Dans une pastille blanche élevée — lisible sur n'importe quel fond de liste. Le défaut Material.</p>
+    </div>
+
+    <div class="card">
+      <h3>Sans conteneur</h3>
+      <div class="stage"><span class="rf roll" style="width:36px;height:36px"></span></div>
+      <p>Le redface nu, posé sur la liste. Plus léger, moins contrasté sur fond clair.</p>
+    </div>
+
+    <div class="card">
+      <h3>Roule en travers</h3>
+      <div class="stage"><span class="rf roll-across"></span></div>
+      <p>Variante ludique : il roule comme une roue d'un bord à l'autre (rotation + translation).</p>
+    </div>
+
+    <div class="card">
+      <h3>Cadences</h3>
+      <div class="stage" style="gap:18px;grid-auto-flow:column"><span class="rf roll speedy" style="width:30px;height:30px"></span><span class="rf roll" style="width:30px;height:30px"></span><span class="rf roll lazy" style="width:30px;height:30px"></span></div>
+      <p>Rapide / standard / lent — à caler sur le ressenti.</p>
+    </div>
+
+  </div>
+
+  <p class="foot">Simulation visuelle, pas du code de prod. Le sprite est le <code>redface.gif</code> HFR (15×15) embarqué en data-URI et tourné en CSS. En vrai, on tinterait/rotaterait le drawable dans le slot <code>indicator</code> du <code>PullToRefreshBox</code> (cf. l'amorce livrée en v0.17.11). Note : l'indicateur « en haut » qui roule pendant le chargement réintroduit le double indicateur avec la barre du haut — à arbitrer (redface seul, ou redface en amorce puis barre).</p>
+</div>
+
+<script>
+  const $=id=>document.getElementById(id);
+  // hero + variant rolls share the speed slider
+  const speed=$('speed'), speedval=$('speedval');
+  function applySpeed(){
+    const s=(speed.value/100).toFixed(2);
+    speedval.textContent=s+' s/tour';
+    document.querySelectorAll('.roll').forEach(e=>{ if(!e.classList.contains('speedy')&&!e.classList.contains('lazy')) e.style.animationDuration=s+'s'; });
+    $('puckrf').style.animationDuration=s+'s';
+  }
+  speed.addEventListener('input',applySpeed);
+
+  // phone "en haut" timeline: pull -> refresh -> done
+  const PULL_END=0.30, REFRESH_END=0.82, HIDDEN=-46, REST=20;
+  const phone=$('phone'), puck=$('puck'), puckrf=$('puckrf'), phaseEl=$('phase');
+  function applyPhase(t){
+    let phase,pull;
+    if(t<PULL_END){phase='pull';pull=t/PULL_END;}
+    else if(t<REFRESH_END){phase='refresh';pull=1;}
+    else{phase='done';pull=0;}
+    phaseEl.textContent= phase==='pull'?'Tirage':phase==='refresh'?'Chargement':'Terminé';
+    phone.classList.toggle('show-bar', phase==='refresh');
+    let y,op,sc;
+    if(phase==='pull'){y=HIDDEN+(REST-HIDDEN)*pull;op=Math.min(1,pull*1.4);sc=.6+.4*pull;}
+    else if(phase==='refresh'){y=REST;op=1;sc=1;}
+    else{y=HIDDEN;op=0;sc=.6;}
+    puck.style.transform=`translate(-50%, ${y}px) scale(${sc})`;
+    puck.style.opacity=op;
+    // the redface only rolls while refreshing (during pull it just follows, then it spins)
+    puckrf.style.animation = phase==='refresh' ? `spin ${(speed.value/100).toFixed(2)}s linear infinite` : 'none';
+  }
+
+  let playing=true,t=0,last=null,raf=null;const PERIOD=4200;
+  function loop(ts){ if(last==null)last=ts; const dt=ts-last; last=ts; if(playing){ t=(t+dt/PERIOD)%1; applyPhase(t);} raf=requestAnimationFrame(loop); }
+  $('play').addEventListener('click',()=>{ playing=!playing; $('play').textContent=playing?'⏸':'▶'; last=null;
+    document.querySelectorAll('.roll,.roll-across').forEach(e=>e.style.animationPlayState=playing?'running':'paused'); });
+
+  const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  applySpeed();
+  if(reduce){ playing=false; $('play').textContent='▶'; applyPhase(0.5); }
+  else { applyPhase(0); raf=requestAnimationFrame(loop); }
+</script>
