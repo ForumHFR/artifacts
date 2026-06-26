@@ -1,0 +1,261 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vue Drapeaux — Lot 2 (pastille + découvrabilité)</title>
+<meta name="description" content="Simulations pour le Lot 2 de la refonte Drapeaux : pastille agrandie avec icône de catégorie en fond (#664b) et découvrabilité du menu d'affichage / bascule +lus (#661).">
+<style>
+  :root{
+    --ground:#15121A;--surface:#1E1925;--surface2:#241E2C;--line:#352C42;
+    --text:#ECE4DE;--muted:#9C8FA6;--faint:#6E6478;
+    --red:#E23A4E;--cyan:#34C0CE;
+    --flag-cyan:#33B6C4;--flag-or:#E3B341;--flag-red:#E2544E;--flag-dt:#C457A8;
+    --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--ground);color:var(--text);font-family:var(--sans);line-height:1.55;
+    background-image:radial-gradient(1100px 520px at 88% -12%,rgba(52,192,206,.10),transparent 60%);}
+  .wrap{max-width:1000px;margin:0 auto;padding:clamp(26px,5vw,64px) clamp(16px,4vw,40px) 96px;}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:var(--cyan);font-weight:600;margin:0 0 12px}
+  h1{font-size:clamp(28px,5vw,46px);line-height:1.02;letter-spacing:-.025em;font-weight:800;margin:0 0 12px;text-wrap:balance}
+  .lede{color:var(--muted);max-width:64ch;margin:0 0 8px}
+  .issuetag{display:inline-block;font-family:var(--mono);font-size:11.5px;color:var(--ground);background:var(--cyan);
+    padding:1px 8px;border-radius:999px;font-weight:700;vertical-align:middle}
+  h2{font-size:clamp(21px,3.4vw,30px);letter-spacing:-.02em;margin:0 0 4px;font-weight:750}
+  section{margin-top:clamp(40px,7vw,80px);scroll-margin-top:20px}
+  .sub{color:var(--muted);max-width:66ch;margin:6px 0 22px}
+  .panel{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:clamp(16px,3vw,26px)}
+  .grid2{display:grid;gap:20px;grid-template-columns:1fr}
+  @media(min-width:760px){.grid2{grid-template-columns:minmax(280px,360px) 1fr;align-items:start}}
+  /* ---- controls ---- */
+  .controls{display:flex;flex-direction:column;gap:18px}
+  .ctl label{display:block;font-size:13px;color:var(--muted);margin-bottom:7px;font-weight:600;letter-spacing:.01em}
+  .ctl .val{font-family:var(--mono);color:var(--text);font-size:12px}
+  input[type=range]{width:100%;accent-color:var(--cyan);height:22px}
+  .seg{display:inline-flex;background:var(--surface2);border:1px solid var(--line);border-radius:10px;padding:3px;gap:3px}
+  .seg button{appearance:none;border:0;background:transparent;color:var(--muted);font-family:var(--sans);
+    font-size:13px;font-weight:600;padding:6px 12px;border-radius:7px;cursor:pointer}
+  .seg button[aria-pressed=true]{background:var(--cyan);color:var(--ground)}
+  .seg button:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+  .switch{display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none}
+  .switch input{position:absolute;opacity:0;width:0;height:0}
+  .track{width:42px;height:24px;border-radius:999px;background:var(--surface2);border:1px solid var(--line);position:relative;transition:background .15s,border-color .15s;flex:none}
+  .track::after{content:"";position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:var(--muted);transition:transform .15s,background .15s}
+  .switch input:checked + .track{background:rgba(52,192,206,.25);border-color:var(--cyan)}
+  .switch input:checked + .track::after{transform:translateX(18px);background:var(--cyan)}
+  .switch input:focus-visible + .track{outline:2px solid var(--cyan);outline-offset:2px}
+  .switch span.lbl{font-size:13.5px;color:var(--text);font-weight:600}
+  /* ---- phone / list mock ---- */
+  .phone{background:#100D15;border:1px solid var(--line);border-radius:22px;padding:10px;max-width:420px;margin:0 auto;box-shadow:0 24px 60px -28px rgba(0,0,0,.8)}
+  .screen{background:var(--ground);border-radius:14px;overflow:hidden}
+  .appbar{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--surface);border-bottom:1px solid var(--line)}
+  .searchpill{flex:1;display:flex;align-items:center;gap:9px;background:var(--surface2);border:1px solid var(--line);border-radius:999px;padding:8px 14px;color:var(--faint);font-size:13.5px;min-width:0}
+  .iconbtn{flex:none;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;color:var(--muted);background:transparent;border:0;cursor:pointer;position:relative}
+  .iconbtn:hover{background:var(--surface2);color:var(--text)}
+  .iconbtn:focus-visible{outline:2px solid var(--cyan);outline-offset:1px}
+  .iconbtn svg{width:21px;height:21px}
+  .row{display:flex;align-items:center;gap:13px;padding:11px 14px;border-bottom:1px solid rgba(53,44,66,.6)}
+  .row:last-child{border-bottom:0}
+  .pastille{flex:none;display:grid;place-items:center;position:relative;color:#0c0a10;box-shadow:0 2px 6px -2px rgba(0,0,0,.6)}
+  .pastille svg.cat{position:absolute;inset:0;margin:auto;width:62%;height:62%;opacity:var(--iconop,0);
+    fill:rgba(255,255,255,.92);transition:opacity .15s}
+  .pastille .glyph{font-weight:800;font-size:calc(var(--psize,40px) * .42);font-family:var(--sans);position:relative;z-index:1;opacity:var(--glyphop,1)}
+  .meta{min-width:0;flex:1}
+  .ttitle{font-size:14.5px;font-weight:650;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .tsub{font-size:12px;color:var(--faint);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .tsub .scat{color:var(--muted)}
+  .catband{padding:6px 14px;background:var(--surface2);font-size:11.5px;font-family:var(--mono);letter-spacing:.04em;
+    text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px}
+  .catband svg{width:15px;height:15px;fill:var(--muted)}
+  /* ---- discoverability mocks ---- */
+  .mocks{display:grid;gap:18px;grid-template-columns:1fr}
+  @media(min-width:680px){.mocks{grid-template-columns:1fr 1fr}}
+  .mock{background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
+  .mock .cap{padding:13px 16px 4px}
+  .mock .cap h3{margin:0 0 3px;font-size:15.5px;letter-spacing:-.01em}
+  .mock .cap p{margin:0 0 6px;font-size:12.5px;color:var(--muted)}
+  .mock .demo{padding:10px 12px 14px;margin-top:auto}
+  .screen.mini{border:1px solid var(--line)}
+  .badge-new{position:absolute;top:5px;right:5px;width:8px;height:8px;border-radius:50%;background:var(--red);box-shadow:0 0 0 2px var(--surface)}
+  .chiprow{display:flex;gap:7px;padding:9px 14px;background:var(--ground);border-bottom:1px solid rgba(53,44,66,.6);overflow-x:auto}
+  .chip{flex:none;font-size:12.5px;padding:5px 12px;border-radius:999px;border:1px solid var(--line);color:var(--muted);background:var(--surface)}
+  .chip.on{background:var(--cyan);color:var(--ground);border-color:var(--cyan);font-weight:650}
+  .menu{position:relative}
+  .sheet{margin:8px;background:var(--surface2);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  .sheet .mi{display:flex;align-items:center;gap:11px;padding:11px 14px;font-size:13.5px;color:var(--text);border-bottom:1px solid rgba(53,44,66,.6)}
+  .sheet .mi:last-child{border-bottom:0}
+  .sheet .mi svg{width:18px;height:18px;fill:var(--muted);flex:none}
+  .sheet .mi .tick{margin-left:auto;color:var(--cyan)}
+  .coach{position:absolute;top:52px;right:10px;max-width:190px;background:var(--cyan);color:var(--ground);
+    font-size:12px;font-weight:600;padding:9px 11px;border-radius:10px;line-height:1.35;box-shadow:0 10px 24px -10px rgba(0,0,0,.7)}
+  .coach::before{content:"";position:absolute;top:-6px;right:18px;width:12px;height:12px;background:var(--cyan);transform:rotate(45deg)}
+  .pros{font-size:12.5px;color:var(--muted);margin:2px 0 0;padding:0 16px 14px;list-style:none}
+  .pros li{position:relative;padding-left:18px;margin:5px 0}
+  .pros li::before{content:"";position:absolute;left:0;top:7px;width:8px;height:8px;border-radius:2px;background:var(--cyan);opacity:.55}
+  .pros li.con::before{background:var(--red)}
+  .note{font-size:13px;color:var(--muted);background:var(--surface2);border:1px solid var(--line);border-left:3px solid var(--cyan);
+    border-radius:0 10px 10px 0;padding:12px 15px;margin-top:18px}
+  .note b{color:var(--text)}
+  footer{margin-top:64px;border-top:1px solid var(--line);padding-top:16px;font-family:var(--mono);font-size:11.5px;color:var(--faint)}
+  a{color:var(--cyan)}
+  @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<!-- icônes catégorie réutilisables -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <symbol id="i-game" viewBox="0 0 24 24"><path d="M7 8h10a4 4 0 0 1 3.9 3.1l1 4.6a2.3 2.3 0 0 1-4.2 1.7L16.2 16H7.8l-1.5 1.4A2.3 2.3 0 0 1 2.1 15.7l1-4.6A4 4 0 0 1 7 8Zm.5 2.6v1.4H6.1v1.4h1.4v1.4h1.4v-1.4h1.4v-1.4H8.9v-1.4H7.5Zm8.3.2a1 1 0 1 0 0 2 1 1 0 0 0 0-2Zm1.8 2.2a1 1 0 1 0 0 2 1 1 0 0 0 0-2Z"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M8 2h8a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Zm0 3v12h8V5H8Zm3.2 13.4h1.6v1.2h-1.6v-1.2Z"/></symbol>
+  <symbol id="i-ai" viewBox="0 0 24 24"><path d="M11 2h2v2.1a6 6 0 0 1 5 5.9v1h1.2v2H18v1a6 6 0 0 1-6 6 6 6 0 0 1-6-6v-1H4.8v-2H6v-1a6 6 0 0 1 5-5.9V2Zm1 6a4 4 0 0 0-4 4v1a4 4 0 0 0 8 0v-1a4 4 0 0 0-4-4Zm-1.6 4.2a1.1 1.1 0 1 1 0 2.2 1.1 1.1 0 0 1 0-2.2Zm3.2 0a1.1 1.1 0 1 1 0 2.2 1.1 1.1 0 0 1 0-2.2Z"/></symbol>
+  <symbol id="i-cart" viewBox="0 0 24 24"><path d="M3 3h2.2l.9 2H20a1 1 0 0 1 .96 1.27l-1.8 6.3A2 2 0 0 1 17.24 14H9.1l-.5 1.8H19v2H7.3a1.2 1.2 0 0 1-1.16-1.53L7.5 12 5 5H3V3Zm6 16a1.6 1.6 0 1 1 0 3.2A1.6 1.6 0 0 1 9 19Zm8 0a1.6 1.6 0 1 1 0 3.2A1.6 1.6 0 0 1 17 19Z"/></symbol>
+  <symbol id="i-code" viewBox="0 0 24 24"><path d="m8.4 7.4-4.2 4.2 4.2 4.2 1.4-1.4-2.8-2.8 2.8-2.8-1.4-1.4Zm7.2 0-1.4 1.4 2.8 2.8-2.8 2.8 1.4 1.4 4.2-4.2-4.2-4.2Z"/></symbol>
+  <symbol id="i-tune" viewBox="0 0 24 24"><path d="M4 6h9v2H4V6Zm12 0h4v2h-4V6Zm-3-2.4h2v6.8h-2V3.6ZM4 16h4v2H4v-2Zm10 0h6v2h-6v-2Zm-3-2.4h2v6.8h-2v-6.8Z"/></symbol>
+  <symbol id="i-more" viewBox="0 0 24 24"><path d="M12 4.2a1.9 1.9 0 1 1 0 3.8 1.9 1.9 0 0 1 0-3.8Zm0 5.9a1.9 1.9 0 1 1 0 3.8 1.9 1.9 0 0 1 0-3.8Zm0 5.9a1.9 1.9 0 1 1 0 3.8 1.9 1.9 0 0 1 0-3.8Z"/></symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24"><path d="M12 5C6.5 5 2.7 9.4 1.5 11.5a1 1 0 0 0 0 1C2.7 14.6 6.5 19 12 19s9.3-4.4 10.5-6.5a1 1 0 0 0 0-1C21.3 9.4 17.5 5 12 5Zm0 2.6a3.9 3.9 0 1 1 0 7.8 3.9 3.9 0 0 1 0-7.8Zm0 2a1.9 1.9 0 1 0 0 3.8 1.9 1.9 0 0 0 0-3.8Z"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><path d="M10.5 3a7.5 7.5 0 0 1 5.9 12.1l4.2 4.2-1.4 1.4-4.2-4.2A7.5 7.5 0 1 1 10.5 3Zm0 2a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11Z"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M9.6 16.2 4.8 11.4l1.4-1.4 3.4 3.4 8-8L19 6.8l-9.4 9.4Z"/></symbol>
+</defs></svg>
+
+<div class="wrap">
+  <p class="eyebrow">ForumHFR · Redface 2 · Refonte Drapeaux #603</p>
+  <h1>Lot 2 — pastille &amp; découvrabilité</h1>
+  <p class="lede">Simulations pour décider, avant de coder. Deux chantiers : la <b>pastille de drapeau agrandie avec l'icône de catégorie en fond</b> <span class="issuetag">#664b</span>, et la <b>découvrabilité du menu d'affichage et de la bascule « +lus »</b> <span class="issuetag">#661</span>.</p>
+
+  <!-- ============ SECTION 664b ============ -->
+  <section id="pastille">
+    <h2>1 · Pastille agrandie + icône de catégorie en fond <span class="issuetag">#664b</span></h2>
+    <p class="sub">Demande (nicko, XaTriX, pistes Ayuget) : pastilles cyan/or plus grosses, avec l'icône de catégorie <b>en filigrane dans la pastille</b> — utile surtout quand le tri par catégorie est <b>désactivé</b> (vue à plat), pour garder le repère de catégorie sans la bande. Joue avec les curseurs, puis regarde l'effet avec le tri catégorie ON puis OFF.</p>
+    <div class="panel grid2">
+      <div class="controls">
+        <div class="ctl"><label>Taille de la pastille <span class="val" id="vsize">40 dp</span></label>
+          <input type="range" id="size" min="26" max="56" value="40"></div>
+        <div class="ctl"><label>Opacité de l'icône en fond <span class="val" id="vop">35 %</span></label>
+          <input type="range" id="op" min="0" max="70" value="35"></div>
+        <div class="ctl"><label>Forme</label>
+          <div class="seg" id="shape" role="group" aria-label="Forme de la pastille">
+            <button data-r="50" aria-pressed="true">Ronde</button>
+            <button data-r="32" aria-pressed="false">Squircle</button>
+            <button data-r="14" aria-pressed="false">Carrée</button>
+          </div></div>
+        <div class="ctl"><label>Contenu</label>
+          <label class="switch"><input type="checkbox" id="showglyph" checked><span class="track"></span><span class="lbl">Garder la lettre du drapeau (C / ★)</span></label>
+        </div>
+        <div class="ctl">
+          <label class="switch"><input type="checkbox" id="catsort" checked><span class="track"></span><span class="lbl">Tri par catégorie (bande)</span></label>
+        </div>
+      </div>
+      <div>
+        <div class="phone"><div class="screen" id="listmock">
+          <div class="appbar"><div class="searchpill"><svg class="i" aria-hidden="true"><use href="#i-search"/></svg>Rechercher dans les drapeaux</div></div>
+          <!-- rempli par JS -->
+          <div id="rows"></div>
+        </div></div>
+      </div>
+    </div>
+    <div class="note"><b>Lecture :</b> avec le tri catégorie <b>ON</b>, la bande porte déjà la catégorie → l'icône en fond fait double emploi (opacité basse suffit, ou off). Avec le tri <b>OFF</b> (vue à plat), l'icône dans la pastille devient le seul indice de catégorie : c'est là qu'elle paie. Piste de réglage : <b>icône en fond automatique seulement quand le tri catégorie est désactivé.</b></div>
+  </section>
+
+  <!-- ============ SECTION 661 ============ -->
+  <section id="decouv">
+    <h2>2 · Découvrabilité : menu d'affichage &amp; bascule « +lus » <span class="issuetag">#661</span></h2>
+    <p class="sub">Aujourd'hui le menu d'affichage s'ouvre par re-tap / appui long sur l'onglet Drapeaux (« où est passée la roue dentée ? » — nicko), et « +lus » se fait en re-tapant « Mes sujets ». Personne ne trouve. Quatre pistes pour rendre ça visible, plus la piste « tout migrer dans les Réglages ».</p>
+    <div class="mocks">
+
+      <div class="mock">
+        <div class="cap"><h3>A · Icône d'affichage dans la barre</h3><p>Une icône <i>tune</i> à droite de la recherche ouvre le menu d'affichage. Visible, conventionnel.</p></div>
+        <div class="demo"><div class="phone" style="max-width:none"><div class="screen mini">
+          <div class="appbar"><div class="searchpill"><svg class="i" aria-hidden="true"><use href="#i-search"/></svg>Rechercher</div>
+            <button class="iconbtn" aria-label="Options d'affichage"><svg aria-hidden="true"><use href="#i-tune"/></svg><span class="badge-new"></span></button></div>
+          <div class="catband"><svg aria-hidden="true"><use href="#i-game"/></svg>Jeux Vidéo</div>
+          <div class="row"><span class="pastille" style="--psize:30px;width:30px;height:30px;border-radius:50%;background:var(--flag-cyan)"><span class="glyph">C</span></span><div class="meta"><div class="ttitle">Le topic des bons jeux</div></div></div>
+        </div></div></div>
+        <ul class="pros"><li>Convention Material (action bar)</li><li>Pastille « new » au 1er lancement pour attirer l'œil</li><li class="con">Une icône de plus dans la barre</li></ul>
+      </div>
+
+      <div class="mock">
+        <div class="cap"><h3>B · Menu débordement ⋮</h3><p>Le ⋮ classique : « Affichage… », « Afficher les lus », « Trier par catégorie ».</p></div>
+        <div class="demo"><div class="phone" style="max-width:none"><div class="screen mini">
+          <div class="appbar"><div class="searchpill"><svg class="i" aria-hidden="true"><use href="#i-search"/></svg>Rechercher</div>
+            <button class="iconbtn" aria-label="Plus d'options"><svg aria-hidden="true"><use href="#i-more"/></svg></button></div>
+          <div class="sheet">
+            <div class="mi"><svg aria-hidden="true"><use href="#i-tune"/></svg>Options d'affichage…</div>
+            <div class="mi"><svg aria-hidden="true"><use href="#i-eye"/></svg>Afficher les lus<span class="tick"><svg style="width:16px;height:16px;fill:var(--cyan)" aria-hidden="true"><use href="#i-check"/></svg></span></div>
+            <div class="mi"><svg aria-hidden="true"><use href="#i-game"/></svg>Trier par catégorie</div>
+          </div>
+        </div></div></div>
+        <ul class="pros"><li>Zéro encombrement visuel</li><li>Regroupe tout au même endroit</li><li class="con">Reste un cran moins direct (1 tap de plus)</li></ul>
+      </div>
+
+      <div class="mock">
+        <div class="cap"><h3>C · Chips de filtre visibles</h3><p>Une rangée de chips sous la recherche : <b>Non lus / Tous</b> règle « +lus » en un tap, toujours visible.</p></div>
+        <div class="demo"><div class="phone" style="max-width:none"><div class="screen mini">
+          <div class="appbar"><div class="searchpill"><svg class="i" aria-hidden="true"><use href="#i-search"/></svg>Rechercher</div>
+            <button class="iconbtn" aria-label="Options d'affichage"><svg aria-hidden="true"><use href="#i-tune"/></svg></button></div>
+          <div class="chiprow"><span class="chip on">Non lus</span><span class="chip">Tous (+lus)</span><span class="chip">Mes sujets</span><span class="chip">Favoris</span></div>
+          <div class="row"><span class="pastille" style="--psize:30px;width:30px;height:30px;border-radius:50%;background:var(--flag-or)"><span class="glyph">★</span></span><div class="meta"><div class="ttitle">Sujet favori épinglé</div></div></div>
+        </div></div></div>
+        <ul class="pros"><li>« +lus » devient évident et immédiat</li><li>Sert aussi de filtre par type de drapeau</li><li class="con">Prend une rangée verticale</li></ul>
+      </div>
+
+      <div class="mock">
+        <div class="cap"><h3>D · Coachmark au 1er lancement</h3><p>Une bulle ponctuelle pointe le contrôle la première fois, puis disparaît. Se combine avec A ou B.</p></div>
+        <div class="demo"><div class="phone" style="max-width:none"><div class="screen mini" style="position:relative">
+          <div class="appbar"><div class="searchpill"><svg class="i" aria-hidden="true"><use href="#i-search"/></svg>Rechercher</div>
+            <button class="iconbtn" aria-label="Options d'affichage"><svg aria-hidden="true"><use href="#i-tune"/></svg></button></div>
+          <div class="coach">Réglez l'affichage et montrez les lus ici</div>
+          <div class="catband"><svg aria-hidden="true"><use href="#i-cart"/></svg>Achats &amp; Bons plans</div>
+          <div class="row"><span class="pastille" style="--psize:30px;width:30px;height:30px;border-radius:50%;background:var(--flag-cyan)"><span class="glyph">C</span></span><div class="meta"><div class="ttitle">Bons plans du jour</div></div></div>
+        </div></div></div>
+        <ul class="pros"><li>Apprend le geste sans charger l'UI en permanence</li><li>Lié à l'aide intégrée (#602, différée)</li><li class="con">Vu une fois : ne résout pas la découvrabilité durable seul</li></ul>
+      </div>
+
+    </div>
+    <div class="note"><b>Piste de fond (styx42) :</b> une fois posée, la config d'affichage peut aussi vivre dans <b>Réglages &gt; Affichage</b> (comme les labels de la barre du bas en v190). Recommandation : <b>A ou C pour le geste rapide + une entrée miroir dans les Réglages</b> ; le ⋮ (B) si on veut zéro icône en plus. « +lus » gagne nettement à être un <b>chip visible (C)</b> plutôt qu'un re-tap caché.</div>
+  </section>
+
+  <footer>github.com/ForumHFR/artifacts · simulations non contractuelles · couleurs de drapeaux = palette en cours, le focus ici est la forme / la disposition</footer>
+</div>
+
+<script>
+  const $=id=>document.getElementById(id);
+  const TOPICS=[
+    {cat:'Jeux Vidéo', icon:'i-game', t:'[Switch 2] Le topic des bons plans', a:'nicko', flag:'cyan', g:'C'},
+    {cat:'Mobile', icon:'i-phone', t:'Pixel 11 Pro — retours &amp; astuces', a:'thibw', flag:'or', g:'★'},
+    {cat:'Intelligence Artificielle', icon:'i-ai', t:'Claude Opus 4.8 — vos prompts', a:'XaTriX', flag:'cyan', g:'C'},
+    {cat:'Programmation', icon:'i-code', t:'Kotlin / Compose — entraide', a:'Ayuget', flag:'or', g:'★'},
+    {cat:'Achats & Bons plans', icon:'i-cart', t:'Le topic des bons plans Amazon', a:'CharLee', flag:'cyan', g:'C'},
+  ];
+  const flagColor={cyan:'var(--flag-cyan)',or:'var(--flag-or)',red:'var(--flag-red)',dt:'var(--flag-dt)'};
+
+  function render(){
+    const size=+$('size').value, op=+$('op').value/100;
+    const r=+document.querySelector('#shape button[aria-pressed=true]').dataset.r;
+    const showglyph=$('showglyph').checked, catsort=$('catsort').checked;
+    $('vsize').textContent=size+' dp'; $('vop').textContent=Math.round(op*100)+' %';
+    const radius = r===50 ? '50%' : (size*r/100)+'px';
+    let html='';
+    let lastCat=null;
+    TOPICS.forEach(tp=>{
+      if(catsort && tp.cat!==lastCat){
+        html+=`<div class="catband"><svg aria-hidden="true"><use href="#${tp.icon}"/></svg>${tp.cat}</div>`;
+        lastCat=tp.cat;
+      }
+      const sub = catsort
+        ? `il y a 2 h · 14 pages · ${tp.a}`
+        : `<span class="scat">${tp.cat}</span> · 14 pages · ${tp.a}`;
+      html+=`<div class="row">
+        <span class="pastille" style="--psize:${size}px;--iconop:${op};--glyphop:${showglyph?1:0};width:${size}px;height:${size}px;border-radius:${radius};background:${flagColor[tp.flag]}">
+          <svg class="cat" aria-hidden="true"><use href="#${tp.icon}"/></svg>
+          <span class="glyph">${tp.g}</span>
+        </span>
+        <div class="meta"><div class="ttitle">${tp.t}</div><div class="tsub">${sub}</div></div>
+      </div>`;
+    });
+    $('rows').innerHTML=html;
+  }
+  $('shape').addEventListener('click',e=>{
+    const b=e.target.closest('button'); if(!b)return;
+    [...e.currentTarget.children].forEach(x=>x.setAttribute('aria-pressed', x===b));
+    render();
+  });
+  ['size','op','showglyph','catsort'].forEach(id=>$(id).addEventListener('input',render));
+  render();
+</script>
