@@ -1,0 +1,282 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Redface 2 #603 — comparateur animé des 4 indicateurs Material 3 de pull-to-refresh, et le motif « amorce seule + relais barre du haut ».">
+<title>Pull-to-refresh — 4 indicateurs</title>
+<style>
+  :root{
+    --page:#e7dfe2; --card:#fffafb; --ink:#241c20; --muted:#7c6f74; --faint:#a99ca1;
+    --chrome:#1f2d8a; --ok:#2f8f5b; --no:#b8463c; --line:#e3d6da;
+    /* app rose (reproduit de RF2) */
+    --app-bg:#fbf6f7; --app-header:#f8ecef; --app-surface:#ffffff; --app-band:#f3dfe4;
+    --app-red:#c4242c; --app-red-soft:#e7c5c8; --app-pill:#f1e4e7; --app-muted:#9a8a8f;
+    --app-ink:#2c2226; --app-faint:#bcaeb2; --puck:#ffffff; --ind:#c4242c;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--page);color:var(--ink);
+    font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.5;
+    -webkit-font-smoothing:antialiased;}
+  .wrap{max-width:1080px;margin:0 auto;padding:clamp(22px,4vw,46px) clamp(14px,3.5vw,30px) 72px;}
+  .mono{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;}
+  .eyebrow{font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;color:var(--chrome);font-weight:700;margin:0 0 10px;}
+  h1{font-size:clamp(1.6rem,3.6vw,2.35rem);margin:0 0 12px;letter-spacing:-.02em;font-weight:800;text-wrap:balance;}
+  .lede{color:#564b4f;font-size:1.02rem;margin:0;max-width:64ch;}
+  .lede b{color:var(--ink);}
+
+  /* answer callout */
+  .answer{margin:26px 0 8px;background:var(--card);border:1px solid var(--line);border-left:4px solid var(--chrome);
+    border-radius:14px;padding:18px 20px;}
+  .answer h2{font-size:1.02rem;margin:0 0 8px;}
+  .answer p{margin:0 0 8px;font-size:.95rem;color:#4d4347;}
+  .answer p:last-child{margin-bottom:0;}
+  .answer code{background:#f0eaec;padding:1px 6px;border-radius:5px;font-size:.86em;color:#5b3f72;}
+  .tag{display:inline-block;font-size:.7rem;font-weight:800;letter-spacing:.04em;padding:2px 8px;border-radius:999px;vertical-align:middle;}
+  .tag.goal{background:#e4f3ea;color:var(--ok);border:1px solid #bfe3cd;}
+
+  /* controls */
+  .controls{position:sticky;top:0;z-index:5;margin:24px 0 22px;background:rgba(231,223,226,.92);
+    backdrop-filter:blur(6px);border:1px solid var(--line);border-radius:14px;padding:14px 18px;
+    display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+  .play{border:1px solid #cbbdc2;background:#fff;border-radius:10px;width:42px;height:38px;font-size:1rem;cursor:pointer;color:var(--ink);flex:none;}
+  .play:hover{border-color:var(--chrome);}
+  .scrub{flex:1;min-width:180px;display:flex;align-items:center;gap:12px;}
+  .scrub input{flex:1;accent-color:var(--chrome);}
+  .phaselabel{font-weight:800;font-size:.9rem;min-width:108px;text-align:right;font-variant-numeric:tabular-nums;}
+  .phasebar{display:flex;gap:4px;width:100%;margin-top:10px;}
+  .phasebar span{flex:1;text-align:center;font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);
+    padding:3px 0;border-radius:6px;font-weight:700;}
+  .phasebar span.on{background:#dfe3f5;color:var(--chrome);}
+
+  /* grid of demos */
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;}
+  .demo{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:12px;}
+  .demo.goal{border-color:#bfe3cd;box-shadow:0 0 0 1px #bfe3cd inset;}
+  .demo .num{display:flex;align-items:center;gap:8px;font-size:.72rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--chrome);}
+  .demo.goal .num{color:var(--ok);}
+  .demo .num .dot{width:20px;height:20px;border-radius:6px;background:#dfe3f5;color:var(--chrome);display:grid;place-items:center;font-size:.72rem;}
+  .demo.goal .num .dot{background:#e4f3ea;color:var(--ok);}
+  .demo h3{margin:0;font-size:.98rem;}
+  .demo .api{font-size:.74rem;color:var(--muted);margin:-6px 0 0;}
+
+  /* phone header mock */
+  .phone{border:1px solid #d8ccd0;border-radius:14px;overflow:hidden;background:var(--app-bg);}
+  .appbar{background:var(--app-header);padding:9px 9px 0;}
+  .appbar-row{display:flex;align-items:center;gap:6px;}
+  .flag{width:30px;height:30px;flex:none;display:grid;place-items:center;}
+  .flag svg{width:18px;height:18px;fill:var(--app-red);}
+  .pill{flex:1;height:34px;background:var(--app-pill);border-radius:999px;display:flex;align-items:center;gap:7px;padding:0 11px;min-width:0;}
+  .pill svg{width:14px;height:14px;fill:var(--app-muted);flex:none;}
+  .pill span{color:var(--app-muted);font-size:.76rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .avatar{width:26px;height:26px;border-radius:50%;background:#e9d3cf;border:1px solid #ddc4c0;flex:none;}
+  /* loading-bar slot (the top bar that takes over) */
+  .slot{height:4px;margin-top:9px;position:relative;overflow:hidden;}
+  .loadbar{position:absolute;inset:0;display:none;}
+  .loadbar::before{content:"";position:absolute;top:0;height:100%;width:40%;background:var(--app-red);border-radius:2px;
+    animation:slide 1.05s ease-in-out infinite;}
+  .is-refreshing .loadbar{display:block;}
+
+  /* content area where the puck lives */
+  .content{position:relative;height:128px;background:var(--app-surface);overflow:hidden;}
+  .row{display:grid;grid-template-columns:11px 1fr auto;gap:9px;align-items:center;padding:11px 12px;border-bottom:1px solid var(--app-band);}
+  .rdot{width:10px;height:10px;border-radius:50%;background:var(--app-red);}
+  .rt{font-size:.82rem;font-weight:600;color:var(--app-ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .rm{font-size:.68rem;color:var(--app-muted);margin-top:1px;}
+  .rn{font-size:.66rem;font-weight:700;color:var(--app-red);background:#f8dde0;border-radius:7px;padding:1px 6px;}
+  /* the list slides down a touch while pulling, to sell the gesture */
+  .list{transition:none;}
+
+  /* the puck (descends from top, holds at threshold) */
+  .puck{position:absolute;left:50%;top:0;width:34px;height:34px;border-radius:50%;background:var(--puck);
+    box-shadow:0 2px 8px rgba(60,30,34,.22);display:grid;place-items:center;
+    transform:translate(-50%,-44px) scale(.6);opacity:0;will-change:transform,opacity;}
+  .puck svg{width:21px;height:21px;}
+
+  /* 1 — default circular arc spinner */
+  .ind-arc{transform-origin:center;}
+  .ind-arc circle{fill:none;stroke:var(--ind);stroke-width:3;stroke-linecap:round;}
+  .is-refreshing .ind-arc{animation:spin 0.9s linear infinite;}
+
+  /* 2 — expressive: a rounded clover (4 overlapping lobes) that rotates + pulses */
+  .ind-clover{transform-origin:center;}
+  .ind-clover circle{fill:var(--ind);}
+  .is-refreshing .ind-clover{animation:spin 1.4s cubic-bezier(.5,0,.5,1) infinite, pulse 1.4s ease-in-out infinite;}
+
+  /* 3 — IndicatorBox + custom glyph (two-arrow refresh) */
+  .ind-glyph{fill:var(--ind);transform-origin:center;}
+  .is-refreshing .ind-glyph{animation:spin 0.95s linear infinite;}
+
+  @keyframes spin{to{transform:rotate(360deg);}}
+  @keyframes pulse{0%,100%{scale:.9;}50%{scale:1.08;}}
+  @keyframes slide{0%{left:-40%;}100%{left:100%;}}
+
+  /* verdict footer */
+  .verdict{display:flex;align-items:center;gap:8px;font-size:.78rem;}
+  .chip{display:inline-flex;align-items:center;gap:5px;font-weight:700;font-size:.72rem;padding:3px 9px;border-radius:999px;}
+  .chip.yes{background:#fbe6e3;color:var(--no);}
+  .chip.no{background:#e4f3ea;color:var(--ok);}
+  .note{font-size:.76rem;color:var(--muted);margin:0;}
+  .note b{color:var(--ink);}
+
+  .foot{margin-top:30px;font-size:.8rem;color:var(--muted);border-top:1px solid var(--line);padding-top:14px;}
+  .foot code{background:#f0eaec;padding:1px 5px;border-radius:4px;color:#5b3f72;}
+
+  @media (prefers-reduced-motion: reduce){
+    .is-refreshing .ind-arc,.is-refreshing .ind-clover,.is-refreshing .ind-glyph,.loadbar::before{animation:none!important;}
+  }
+</style>
+
+<div class="wrap">
+  <p class="eyebrow">Redface 2 · #603 · pull-to-refresh</p>
+  <h1>Quatre façons d'annoncer un rechargement</h1>
+  <p class="lede">Les indicateurs Material 3 du swipe-to-refresh, animés à travers les trois phases du geste. Bouge la timeline ou laisse tourner : tu verras lesquels <b>continuent d'animer pendant le chargement</b> (donc font doublon avec la barre du haut) et lequel <b>s'efface après l'amorce</b>.</p>
+
+  <div class="answer">
+    <h2>Ta question : l'« expressive » anime-t-il pendant le chargement ?</h2>
+    <p><b>Oui — pas seulement l'amorce.</b> <code>PullToRefreshDefaults.LoadingIndicator</code> (comme le rond par défaut <code>Indicator</code>) suit le doigt au tirage <em>puis</em> joue son animation en continu tant que <code>isRefreshing</code> reste vrai. Vérifié sur la doc AndroidX (« signifie une opération de refresh en cours »).</p>
+    <p>Pour ton objectif — <b>juste amorcer, puis laisser la barre du haut prendre le relais</b> — aucun indicateur intégré ne le fait : il faut un <b>indicateur custom</b> rendu uniquement pendant le tirage (<code>!isRefreshing</code>, piloté par <code>state.distanceFraction</code>) qui disparaît dès le relâchement. C'est l'option <span class="tag goal">4 · ton objectif</span> ci-dessous.</p>
+  </div>
+
+  <div class="controls">
+    <button class="play" id="play" aria-label="Lecture / pause">⏸</button>
+    <div class="scrub">
+      <input type="range" id="scrub" min="0" max="1000" value="0" aria-label="Phase du geste">
+      <span class="phaselabel" id="plabel">Tirage</span>
+    </div>
+    <div class="phasebar">
+      <span id="p0">↓ Tirage (amorce)</span>
+      <span id="p1">⟳ Chargement</span>
+      <span id="p2">✓ Terminé</span>
+    </div>
+  </div>
+
+  <div class="grid" id="grid"></div>
+
+  <p class="foot">Reconstitution fidèle du thème rose RF2 ; les animations sont des approximations CSS des composants M3 (la forme « expressive » est un trèfle qui tourne+pulse, l'API réelle morphe une séquence de 7 polygones arrondis). La <b>barre rouge fine</b> en haut = le <code>LinearProgressIndicator</code> actuel de la vue Drapeaux (slot réservé 4 dp). « Doublon » = l'indicateur ET la barre tournent en même temps pendant le chargement.</p>
+</div>
+
+<script>
+  const FLAG_SVG = '<svg viewBox="0 -960 960 960"><path d="M200-120v-680h360l16 80h224v400H520l-16-80H280v280h-80Z"/></svg>';
+  const SEARCH_SVG = '<svg viewBox="0 -960 960 960"><path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/></svg>';
+  // refresh two-arrows glyph (Material) for the custom IndicatorBox demo
+  const REFRESH_SVG = '<svg class="ind-glyph" viewBox="0 -960 960 960"><path d="M480-160q-134 0-227-93t-93-227q0-134 93-227t227-93q69 0 132 28.5T720-690v-110h80v280H520v-80h168q-32-56-87.5-88T480-820q-100 0-170 70t-70 170q0 100 70 170t170 70q77 0 139-44t87-116h84q-28 106-114 173t-196 67Z"/></svg>';
+  const ARC_SVG = '<svg class="ind-arc" viewBox="0 0 36 36"><circle id="arc" cx="18" cy="18" r="13" stroke-dasharray="82" stroke-dashoffset="20"/></svg>';
+  // expressive clover: four overlapping lobes
+  const CLOVER_SVG = '<svg class="ind-clover" viewBox="0 0 36 36">'
+    +'<circle cx="18" cy="11" r="7.4"/><circle cx="25" cy="18" r="7.4"/>'
+    +'<circle cx="18" cy="25" r="7.4"/><circle cx="11" cy="18" r="7.4"/>'
+    +'<circle cx="18" cy="18" r="8.5"/></svg>';
+
+  const DEMOS = [
+    { n:1, goal:false, name:'Rond circulaire (défaut)', api:'PullToRefreshDefaults.Indicator',
+      ind:ARC_SVG, loading:true,
+      note:'Le classique M3. Tourne pendant tout le chargement → doublon avec la barre.' },
+    { n:2, goal:false, name:'Loading indicator (expressive)', api:'PullToRefreshDefaults.LoadingIndicator',
+      ind:CLOVER_SVG, loading:true,
+      note:'Formes qui morphent en continu pendant le chargement → doublon, mais look moderne.' },
+    { n:3, goal:false, name:'IndicatorBox + glyphe custom', api:'PullToRefreshDefaults.IndicatorBox { … }',
+      ind:REFRESH_SVG, loading:true,
+      note:'Le conteneur standard, ton icône dedans. Anime quand même pendant le chargement.' },
+    { n:4, goal:true, name:'Custom « amorce seule »', api:'indicator = { if (!isRefreshing) … }',
+      ind:CLOVER_SVG, loading:false,
+      note:'Apparaît au tirage, <b>s\'efface au relâchement</b> : la barre du haut prend le relais. Pas de doublon.' },
+  ];
+
+  const grid = document.getElementById('grid');
+  DEMOS.forEach(d => {
+    const el = document.createElement('div');
+    el.className = 'demo' + (d.goal ? ' goal' : '');
+    el.innerHTML = `
+      <div class="num"><span class="dot">${d.n}</span>${d.goal ? 'Ton objectif' : 'Option '+d.n}</div>
+      <h3>${d.name}</h3>
+      <p class="api mono">${d.api}</p>
+      <div class="phone" data-card>
+        <div class="appbar">
+          <div class="appbar-row">
+            <span class="flag">${FLAG_SVG}</span>
+            <span class="pill">${SEARCH_SVG}<span>Rechercher…</span></span>
+            <span class="avatar"></span>
+          </div>
+          <div class="slot"><div class="loadbar"></div></div>
+        </div>
+        <div class="content">
+          <div class="puck" data-puck>${d.ind}</div>
+          <div class="list">
+            <div class="row"><span class="rdot"></span><div><div class="rt">RDNA4 — AMD RX90x0</div><div class="rm">SupaPictave · 10:24</div></div><span class="rn">+297</span></div>
+            <div class="row"><span class="rdot"></span><div><div class="rt">Le topik du vieux matos</div><div class="rm">rat de combat · 07:53</div></div><span class="rn">+17</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="verdict">
+        <span class="chip ${d.loading ? 'yes' : 'no'}">${d.loading ? '● anime pendant le chargement' : '○ amorce seule'}</span>
+      </div>
+      <p class="note">${d.note}</p>`;
+    grid.appendChild(el);
+    d._card = el.querySelector('[data-card]');
+    d._puck = el.querySelector('[data-puck]');
+  });
+
+  const PULL_END = 0.30, REFRESH_END = 0.82;
+  const HIDDEN_Y = -44, REST_Y = 22; // px travel of the puck
+
+  function applyPhase(t){
+    let phase, pull;
+    if (t < PULL_END){ phase='pull'; pull = (t/PULL_END); }
+    else if (t < REFRESH_END){ phase='refresh'; pull = 1; }
+    else { phase='done'; pull = 0; }
+
+    document.getElementById('plabel').textContent =
+      phase==='pull' ? 'Tirage' : phase==='refresh' ? 'Chargement' : 'Terminé';
+    document.getElementById('p0').classList.toggle('on', phase==='pull');
+    document.getElementById('p1').classList.toggle('on', phase==='refresh');
+    document.getElementById('p2').classList.toggle('on', phase==='done');
+
+    DEMOS.forEach(d => {
+      d._card.classList.toggle('is-refreshing', phase==='refresh');
+      const puck = d._puck;
+      let y, op, sc;
+      if (phase==='pull'){
+        y = HIDDEN_Y + (REST_Y - HIDDEN_Y) * pull;
+        op = Math.min(1, pull*1.4);
+        sc = 0.6 + 0.4*pull;
+      } else if (phase==='refresh'){
+        // options 1-3 hold the puck at rest and animate; option 4 (amorce only) fades out
+        if (d.loading){ y = REST_Y; op = 1; sc = 1; }
+        else { y = REST_Y; op = 0; sc = 1; }
+      } else { // done
+        y = HIDDEN_Y; op = 0; sc = 0.6;
+      }
+      puck.style.transform = `translate(-50%, ${y}px) scale(${sc})`;
+      puck.style.opacity = op;
+      // during pull, give the determinate arc a growing sweep for option 1
+      const arc = puck.querySelector('#arc');
+      if (arc && phase==='pull'){ arc.setAttribute('stroke-dashoffset', String(82 - 62*pull)); }
+      else if (arc && phase!=='pull'){ arc.setAttribute('stroke-dashoffset', '20'); }
+    });
+  }
+
+  const scrub = document.getElementById('scrub');
+  const playBtn = document.getElementById('play');
+  let playing = true, raf = null, last = null, t = 0;
+  const PERIOD = 4200; // ms for a full cycle
+
+  function loop(ts){
+    if (last == null) last = ts;
+    const dt = ts - last; last = ts;
+    if (playing){
+      t = (t + dt/PERIOD) % 1;
+      scrub.value = String(Math.round(t*1000));
+      applyPhase(t);
+    }
+    raf = requestAnimationFrame(loop);
+  }
+  scrub.addEventListener('input', () => {
+    playing = false; playBtn.textContent = '▶';
+    t = scrub.value/1000; last = null; applyPhase(t);
+  });
+  playBtn.addEventListener('click', () => {
+    playing = !playing; playBtn.textContent = playing ? '⏸' : '▶'; last = null;
+  });
+
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce){ playing = false; playBtn.textContent = '▶'; t = 0.5; scrub.value = '500'; applyPhase(t); }
+  else { applyPhase(0); raf = requestAnimationFrame(loop); }
+</script>
