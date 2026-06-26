@@ -128,18 +128,18 @@
   <header>
     <p class="eyebrow">Redface 2 · Phase 4 · UI</p>
     <h1>Refonte de la vue Drapeaux <span class="num">#603</span></h1>
-    <p class="lede">Socle livré et en dogfood actif. La refonte (8 lots) est dans <span class="mono">dev</span> depuis <span class="mono">app-v180</span> ; cinq passes de finition ont suivi les retours des testeurs HFR jusqu'à <b><span class="mono">app-v185</span> / 0.17.5</b>. Cette page fait le point : ce qui est shippé, les bugs, et les pistes restantes — classées <b>phase en cours</b> (#603) vs différées.</p>
+    <p class="lede">Socle livré et en dogfood actif. La refonte (8 lots) est dans <span class="mono">dev</span> depuis <span class="mono">app-v180</span> ; des passes de finition ont suivi les retours des testeurs HFR jusqu'à <b><span class="mono">app-v186</span> / 0.17.6</b>. Cette page fait le point : ce qui est shippé, les bugs, et les pistes restantes — classées <b>phase en cours</b> (#603) vs différées.</p>
     <div class="statusline">
       <span class="chip prog"><span class="dot"></span>Socle livré · en finition</span>
-      <span class="chip rel"><span class="dot"></span>dernier build dev · <span class="mono">&nbsp;app-v185 / 0.17.5</span></span>
+      <span class="chip rel"><span class="dot"></span>dernier build dev · <span class="mono">&nbsp;app-v186 / 0.17.6</span></span>
       <span class="chip">26 juin 2026</span>
     </div>
 
     <div class="stats">
-      <div class="stat c1"><div class="n">6</div><div class="l">builds dev livrés (v180→v185)</div></div>
-      <div class="stat c2"><div class="n">11</div><div class="l">issues ouvertes au triage</div></div>
-      <div class="stat c3"><div class="n">3</div><div class="l">bugs résolus en finition</div></div>
-      <div class="stat c4"><div class="n">7</div><div class="l">pistes pour la phase en cours</div></div>
+      <div class="stat c1"><div class="n">7</div><div class="l">builds dev livrés (v180→v186)</div></div>
+      <div class="stat c2"><div class="n">9</div><div class="l">issues ouvertes</div></div>
+      <div class="stat c3"><div class="n">4</div><div class="l">bugs résolus en finition</div></div>
+      <div class="stat c4"><div class="n">6</div><div class="l">pistes pour la phase en cours</div></div>
     </div>
   </header>
 
@@ -174,8 +174,13 @@
       </div>
 
       <div class="rl">
-        <div class="ver"><span class="v">0.17.5</span><span class="b mono">app-v185</span><span class="latest">dernier</span></div>
+        <div class="ver"><span class="v">0.17.5</span><span class="b mono">app-v185</span></div>
         <div class="body"><p><b>Plus aucun rond de chargement</b> <span class="sub">— l'indicateur circulaire du pull-to-refresh est retiré (onglets drapeaux + DT) ; la fine barre du haut devient l'unique repère (manuel, auto, initial). Le swipe-down déclenche toujours le refresh.</span></p><p class="note">Clôt <a href="https://github.com/ForumHFR/redface2/issues/659">#659</a>.</p></div>
+      </div>
+
+      <div class="rl">
+        <div class="ver"><span class="v">0.17.6</span><span class="b mono">app-v186</span><span class="latest">dernier</span></div>
+        <div class="body"><p><b>Barre de chargement + états vides</b> <span class="sub">— la barre de chargement a un slot réservé : elle ne décale plus la liste/les bandes de catégorie, et fait office d'espace entre la search bar et la liste. Messages « liste vide » harmonisés (forme courte uniforme).</span></p><p class="note">Clôt <a href="https://github.com/ForumHFR/redface2/issues/671">#671</a> et <a href="https://github.com/ForumHFR/redface2/issues/662">#662</a>.</p></div>
       </div>
 
     </div>
@@ -189,6 +194,7 @@
         <tbody>
           <tr><td><b>Rond de chargement</b> persistant (auto puis manuel) — redondant avec la barre du haut</td><td><span class="tag fixed">résolu v184/v185</span></td><td class="who">styx42, XaTriX</td><td><a href="https://github.com/ForumHFR/redface2/issues/659">#659</a> · <a href="https://github.com/ForumHFR/redface2/issues/657">#657</a></td></tr>
           <tr><td><b>Menu de config rapide</b> qui s'ouvrait tout seul en changeant de catégorie / au retour</td><td><span class="tag fixed">résolu v182</span></td><td class="who">nicko, thibw</td><td class="who">PR #651</td></tr>
+          <tr><td><b>Barre de chargement</b> qui décalait la liste + bandes de catégorie de sa hauteur</td><td><span class="tag fixed">résolu v186</span></td><td class="who">XaTriX</td><td><a href="https://github.com/ForumHFR/redface2/issues/671">#671</a></td></tr>
           <tr><td><b>Swipe entre onglets</b> : l'animation de la liste arrive du mauvais côté</td><td><span class="tag open">ouvert</span></td><td class="who">styx42, nicko</td><td><a href="https://github.com/ForumHFR/redface2/issues/660">#660</a></td></tr>
           <tr><td><b>Retour depuis Réglages</b> quitte l'appli au lieu de revenir à l'écran précédent</td><td><span class="tag open">ouvert</span></td><td class="who">tinc</td><td><a href="https://github.com/ForumHFR/redface2/issues/667">#667</a></td></tr>
           <tr><td><b>Cyan manquant</b> : REST global tronqué par récence (drapeau non listé)</td><td><span class="tag open">ouvert · repro</span></td><td class="who">backlog</td><td><a href="https://github.com/ForumHFR/redface2/issues/251">#251</a></td></tr>
@@ -208,7 +214,6 @@
           <tr><td><b>Icônes de catégorie</b> représentatives (manette, etc.) + pastille agrandie avec icône en fond (option, façon RF1)</td><td><span class="tag enh">design</span></td><td class="who">nicko, Ayuget</td><td><a href="https://github.com/ForumHFR/redface2/issues/664">#664</a></td></tr>
           <tr><td><b>Top bar translucide</b> / liste visible au défilement dessous (déféré du MVP)</td><td><span class="tag enh">design</span></td><td class="who">XaTriX</td><td><a href="https://github.com/ForumHFR/redface2/issues/665">#665</a></td></tr>
           <tr><td><b>Barre du bas</b> : option afficher / masquer les libellés des onglets</td><td><span class="tag enh">design</span></td><td class="who">XaTriX</td><td><a href="https://github.com/ForumHFR/redface2/issues/666">#666</a></td></tr>
-          <tr><td><b>Messages d'état vide</b> des listes à homogénéiser</td><td><span class="tag enh">quick-win</span></td><td class="who">styx42</td><td><a href="https://github.com/ForumHFR/redface2/issues/662">#662</a></td></tr>
           <tr><td><b>Swipe cyclique</b> entre onglets (dernier ↔ premier)</td><td><span class="tag enh">enhancement</span></td><td class="who">styx42</td><td><a href="https://github.com/ForumHFR/redface2/issues/663">#663</a></td></tr>
           <tr><td><b>Couleurs des drapeaux</b> : faire évoluer le jaune favori, trouver une teinte super-favori (itération en cours)</td><td><span class="tag enh">design</span></td><td class="who">XaTriX, nicko</td><td class="who">#603</td></tr>
         </tbody>
@@ -234,12 +239,12 @@
     <div class="next">
       <ol>
         <li><b>Bugs d'abord</b> <span>— swipe au mauvais côté (<a href="https://github.com/ForumHFR/redface2/issues/660">#660</a>) et retour Réglages (<a href="https://github.com/ForumHFR/redface2/issues/667">#667</a>).</span></li>
-        <li><b>Quick-wins #603</b> <span>— messages d'état vide (<a href="https://github.com/ForumHFR/redface2/issues/662">#662</a>), swipe cyclique (<a href="https://github.com/ForumHFR/redface2/issues/663">#663</a>).</span></li>
+        <li><b>Quick-win #603</b> <span>— swipe cyclique entre onglets (<a href="https://github.com/ForumHFR/redface2/issues/663">#663</a>).</span></li>
         <li><b>Découvrabilité &amp; densité</b> <span>— rendre les contrôles évidents (<a href="https://github.com/ForumHFR/redface2/issues/661">#661</a>) ; le chantier densité XS–XL (<a href="https://github.com/ForumHFR/redface2/issues/669">#669</a>) recoupe plusieurs retours.</span></li>
         <li><b>Polish visuel</b> <span>— icônes/pastilles (<a href="https://github.com/ForumHFR/redface2/issues/664">#664</a>), top bar au défilement (<a href="https://github.com/ForumHFR/redface2/issues/665">#665</a>), itération couleurs.</span></li>
         <li><b>Décision</b> <span>— quand le ressenti est bon, promouvoir <span class="mono">dev → bêta</span> et enchaîner sur la vue Topic (<a href="https://github.com/ForumHFR/redface2/issues/604">#604</a>).</span></li>
       </ol>
-      <p class="rule"><b>Suivi :</b> umbrella Phase 4 <a href="https://github.com/ForumHFR/redface2/issues/605">#605</a> · refonte Drapeaux <a href="https://github.com/ForumHFR/redface2/issues/603">#603</a>. Page mise à jour à <span class="mono">app-v185 / 0.17.5</span>, 26 juin 2026.</p>
+      <p class="rule"><b>Suivi :</b> umbrella Phase 4 <a href="https://github.com/ForumHFR/redface2/issues/605">#605</a> · refonte Drapeaux <a href="https://github.com/ForumHFR/redface2/issues/603">#603</a>. Page mise à jour à <span class="mono">app-v186 / 0.17.6</span>, 26 juin 2026.</p>
     </div>
   </section>
 
