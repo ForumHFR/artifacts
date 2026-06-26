@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Redface 2 #603 — propositions d'espacement entre la barre du haut et les bandes de categorie (vue Drapeaux).">
+<title>Drapeaux — espacement barre / catégories</title>
+<style>
+  :root {
+    --page: #d9d1d4;
+    --ink: #2b2125;
+    --muted: #8d7e84;
+    --faint: #b3a4a9;
+    --accent: #1f2d8a;          /* page chrome accent (neutral, NOT the app red) */
+    /* App (light rose theme, reproduit de la capture) */
+    --app-bg: #fbf6f7;
+    --app-surface: #ffffff;
+    --app-header: #f8ecef;
+    --app-band: #f4e0e4;        /* surfaceContainer rosé = la bande "Hardware" */
+    --app-divider: #efe1e4;
+    --app-red: #c4242c;         /* drapeau / dot / onglet */
+    --app-red-faint: #e7c5c8;   /* dot lu */
+    --app-pill-bg: #f8dde0;
+    --app-pill-ink: #b02a30;
+    --app-ink: #2c2226;
+    --app-muted: #9a8a8f;
+    --app-faint: #b9aaae;
+    font-synthesis: none;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--page); color: var(--ink);
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.5; -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: clamp(26px,5vw,60px) clamp(16px,4vw,36px) 80px; }
+  .mono { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; }
+
+  header { max-width: 70ch; }
+  .eyebrow { font-size: .72rem; letter-spacing: .2em; text-transform: uppercase; color: var(--accent); font-weight: 700; margin: 0 0 12px; }
+  h1 { font-size: clamp(1.7rem,4vw,2.5rem); line-height: 1.06; margin: 0 0 14px; letter-spacing: -.02em; font-weight: 800; text-wrap: balance; }
+  .lede { color: #5b5054; font-size: 1.04rem; margin: 0 0 8px; }
+  .lede b { color: var(--ink); }
+  .meta { font-size: .85rem; color: var(--muted); margin: 6px 0 0; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(252px, 1fr)); gap: 22px; margin-top: 38px; }
+  .variant { display: flex; flex-direction: column; gap: 0; }
+  .vhead { margin: 0 0 12px; }
+  .vtag { display: inline-flex; align-items: center; gap: 8px; font-weight: 750; font-size: 1.02rem; letter-spacing: -.01em; }
+  .vtag .k { width: 24px; height: 24px; border-radius: 7px; background: var(--accent); color: #fff; font-size: .8rem; font-weight: 800; display: grid; place-items: center; }
+  .variant.reco .vtag .k { background: #1f8a4c; }
+  .vsub { font-size: .82rem; color: var(--muted); margin: 7px 0 0; }
+  .vsub b { color: var(--ink); font-weight: 650; }
+  .specs { display: flex; flex-wrap: wrap; gap: 6px; margin: 9px 0 0; }
+  .spec { font-size: .7rem; color: var(--muted); background: #efe7e9; border: 1px solid #e2d6d9; border-radius: 6px; padding: 2px 7px; }
+  .spec b { color: var(--ink); font-weight: 700; }
+  .reco-pill { font-size: .66rem; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; color: #1f8a4c; background: #e3f3ea; border: 1px solid #bfe4cd; border-radius: 6px; padding: 2px 7px; margin-left: 8px; vertical-align: middle; }
+
+  /* ---- Phone reconstruction ---- */
+  .phone { margin-top: 14px; border: 1px solid #cbbfc3; border-radius: 18px; overflow: hidden; background: var(--app-bg); box-shadow: 0 8px 24px rgba(40,30,34,.10); }
+  .app { background: var(--app-bg); }
+
+  .appbar { background: var(--app-header); padding: 12px 14px 0; }
+  .appbar .row1 { display: flex; align-items: center; gap: 12px; }
+  .flag { width: 22px; height: 22px; flex: none; fill: var(--app-red); }
+  .search { flex: 1; height: 38px; background: #f1e4e7; border-radius: 999px; display: flex; align-items: center; gap: 9px; padding: 0 14px; color: var(--app-muted); font-size: .82rem; min-width: 0; }
+  .search svg { width: 15px; height: 15px; fill: var(--app-muted); flex: none; }
+  .search span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .avatar { width: 30px; height: 30px; border-radius: 50%; background: #e9d3cf; flex: none; border: 1px solid #ddc4c0; }
+  .tabline { height: 3px; margin-top: 11px; background: linear-gradient(to right, var(--app-red) 0 56px, #efd9dd 56px); border-radius: 2px 2px 0 0; }
+
+  /* loading-bar SLOT — the variable gap under the app bar */
+  .slot { height: var(--slot); background: var(--app-bg); position: relative; }
+  .slot.loading::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--app-red); opacity: .9; }
+
+  /* category band — variable internal padding + min height */
+  .band { display: flex; align-items: center; gap: 11px; background: var(--app-band);
+          min-height: var(--band-min); padding: var(--band-vpad) 16px; }
+  .band .ico { width: 19px; height: 19px; fill: #7c5258; flex: none; }
+  .band .name { flex: 1; font-size: .95rem; font-weight: 650; color: var(--app-ink); }
+  .band .chev { width: 19px; height: 19px; fill: #9a7f84; flex: none; }
+
+  .list { background: var(--app-surface); }
+  .item { display: grid; grid-template-columns: 12px 1fr auto; gap: 11px; align-items: center;
+          padding: var(--row-vpad, 12px) 14px; border-bottom: 1px solid var(--app-divider); }
+  .dot { width: 11px; height: 11px; border-radius: 50%; background: var(--app-red); }
+  .item.read .dot { background: var(--app-red-faint); }
+  .item .b { min-width: 0; }
+  .item .t { font-size: .9rem; font-weight: 600; color: var(--app-ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .item.read .t { font-weight: 500; color: #6f6166; }
+  .item .m { display: flex; justify-content: space-between; gap: 12px; font-size: .74rem; color: var(--app-muted); margin-top: 2px; }
+  .item .m .d { color: var(--app-faint); font-variant-numeric: tabular-nums; }
+  .pill { font-size: .72rem; font-weight: 700; color: var(--app-pill-ink); background: var(--app-pill-bg); border-radius: 8px; padding: 2px 8px; font-variant-numeric: tabular-nums; }
+
+  .note { margin-top: 46px; background: #fff; border: 1px solid #e2d6d9; border-radius: 14px; padding: 20px 22px; max-width: 78ch; }
+  .note h2 { margin: 0 0 8px; font-size: 1.1rem; }
+  .note p { margin: 0 0 8px; color: #5b5054; font-size: .95rem; }
+  .note b { color: var(--ink); }
+  .note .mono { background: #f0e8ea; padding: 1px 6px; border-radius: 5px; font-size: .85em; }
+  .legend { font-size: .8rem; color: var(--muted); margin-top: 24px; display: flex; flex-wrap: wrap; gap: 8px 18px; }
+  .legend b { color: var(--ink); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <p class="eyebrow">Redface 2 · #603 · vue Drapeaux</p>
+    <h1>Espacement barre du haut / catégories</h1>
+    <p class="lede">Sur <b>app-v186</b>, le slot réservé à la barre de chargement (10&nbsp;dp) + la hauteur interne de la bande de catégorie (min 44&nbsp;dp) font <b>trop d'air</b> au-dessus et autour de « Hardware ». Voici 4 niveaux de resserrement, reconstitués fidèlement (thème rose clair, marqueur point, bande « Bloc »). Choisis-en un.</p>
+    <p class="meta">La barre de chargement est montrée <b>active</b> (trait rouge) dans chaque variante pour juger l'espace réel ; au repos, seul le slot subsiste — c'est lui qui ne doit plus décaler la liste.</p>
+  </header>
+
+  <div class="grid">
+
+    <!-- A : actuel -->
+    <div class="variant" style="--slot:10px; --band-min:44px; --band-vpad:13px; --row-vpad:12px;">
+      <div class="vhead">
+        <span class="vtag"><span class="k">A</span> Actuel (v186)</span>
+        <p class="vsub">Ce que tu vois maintenant.</p>
+        <div class="specs"><span class="spec">slot <b>10dp</b></span><span class="spec">bande min <b>44dp</b></span><span class="spec">pad vert. <b>13dp</b></span></div>
+      </div>
+      <div class="phone"><div class="app">
+        <div class="appbar">
+          <div class="row1">
+            <svg class="flag" viewBox="0 -960 960 960"><path d="M200-120v-680h360l16 80h224v400H520l-16-80H280v280h-80Z"/></svg>
+            <div class="search"><svg viewBox="0 -960 960 960"><path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/></svg><span>Rechercher dans les drap…</span></div>
+            <div class="avatar"></div>
+          </div>
+          <div class="tabline"></div>
+        </div>
+        <div class="slot loading"></div>
+        <div class="band">
+          <svg class="ico" viewBox="0 -960 960 960"><path d="M320-280h320v-400H320v400Zm80-80v-240h160v240H400ZM200-80v-80h-40q-33 0-56.5-23.5T80-240v-160h120v-80H80v-80h120v-80H80v-80q0-33 23.5-56.5T160-720h40v-80q0-33 23.5-56.5T280-880h80v120h80v-120h80v120h80v-120h80q33 0 56.5 23.5T800-800v40h80v80H800v80h80v80H800v80h80v80H800v160q0 33-23.5 56.5T720-160H560v120h-80v-120h-80v120h-80v-120h-80v120h-80Z"/></svg>
+          <span class="name">Hardware</span>
+          <svg class="chev" viewBox="0 -960 960 960"><path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z"/></svg>
+        </div>
+        <div class="list">
+          <div class="item"><span class="dot"></span><div class="b"><div class="t">[Topic unique] RDNA4 — AMD RX90x0</div><div class="m"><span>SupaPictave</span><span class="d">26-06 à 10:24</span></div></div><span class="pill">+297</span></div>
+          <div class="item"><span class="dot"></span><div class="b"><div class="t">Le topik du vieux matos (dès ~10/15 ans)</div><div class="m"><span>rat de combat</span><span class="d">26-06 à 07:53</span></div></div><span class="pill">+17</span></div>
+          <div class="item read"><span class="dot"></span><div class="b"><div class="t">demande d'avis pour echanger gtx 1070</div><div class="m"><span>miksair</span><span class="d">06-05 à 11:54</span></div></div><span></span></div>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- B : équilibré -->
+    <div class="variant" style="--slot:6px; --band-min:40px; --band-vpad:9px; --row-vpad:11px;">
+      <div class="vhead">
+        <span class="vtag"><span class="k">B</span> Équilibré</span>
+        <p class="vsub">Léger resserrement, garde un peu de respiration.</p>
+        <div class="specs"><span class="spec">slot <b>6dp</b></span><span class="spec">bande min <b>40dp</b></span><span class="spec">pad vert. <b>9dp</b></span></div>
+      </div>
+      <div class="phone"><div class="app">
+        <div class="appbar">
+          <div class="row1">
+            <svg class="flag" viewBox="0 -960 960 960"><path d="M200-120v-680h360l16 80h224v400H520l-16-80H280v280h-80Z"/></svg>
+            <div class="search"><svg viewBox="0 -960 960 960"><path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/></svg><span>Rechercher dans les drap…</span></div>
+            <div class="avatar"></div>
+          </div>
+          <div class="tabline"></div>
+        </div>
+        <div class="slot loading"></div>
+        <div class="band">
+          <svg class="ico" viewBox="0 -960 960 960"><path d="M320-280h320v-400H320v400Zm80-80v-240h160v240H400ZM200-80v-80h-40q-33 0-56.5-23.5T80-240v-160h120v-80H80v-80h120v-80H80v-80q0-33 23.5-56.5T160-720h40v-80q0-33 23.5-56.5T280-880h80v120h80v-120h80v120h80v-120h80q33 0 56.5 23.5T800-800v40h80v80H800v80h80v80H800v80h80v80H800v160q0 33-23.5 56.5T720-160H560v120h-80v-120h-80v120h-80v-120h-80v120h-80Z"/></svg>
+          <span class="name">Hardware</span>
+          <svg class="chev" viewBox="0 -960 960 960"><path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z"/></svg>
+        </div>
+        <div class="list">
+          <div class="item"><span class="dot"></span><div class="b"><div class="t">[Topic unique] RDNA4 — AMD RX90x0</div><div class="m"><span>SupaPictave</span><span class="d">26-06 à 10:24</span></div></div><span class="pill">+297</span></div>
+          <div class="item"><span class="dot"></span><div class="b"><div class="t">Le topik du vieux matos (dès ~10/15 ans)</div><div class="m"><span>rat de combat</span><span class="d">26-06 à 07:53</span></div></div><span class="pill">+17</span></div>
+          <div class="item read"><span class="dot"></span><div class="b"><div class="t">demande d'avis pour echanger gtx 1070</div><div class="m"><span>miksair</span><span class="d">06-05 à 11:54</span></div></div><span></span></div>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- C : serré (reco) -->
+    <div class="variant reco" style="--slot:4px; --band-min:36px; --band-vpad:7px; --row-vpad:11px;">
+      <div class="vhead">
+        <span class="vtag"><span class="k">C</span> Serré <span class="reco-pill">ma reco</span></span>
+        <p class="vsub">Slot réduit au strict (juste la barre, plus d'air en trop), bande compacte mais cible tactile OK.</p>
+        <div class="specs"><span class="spec">slot <b>4dp</b></span><span class="spec">bande min <b>36dp</b></span><span class="spec">pad vert. <b>7dp</b></span></div>
+      </div>
+      <div class="phone"><div class="app">
+        <div class="appbar">
+          <div class="row1">
+            <svg class="flag" viewBox="0 -960 960 960"><path d="M200-120v-680h360l16 80h224v400H520l-16-80H280v280h-80Z"/></svg>
+            <div class="search"><svg viewBox="0 -960 960 960"><path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/></svg><span>Rechercher dans les drap…</span></div>
+            <div class="avatar"></div>
+          </div>
+          <div class="tabline"></div>
+        </div>
+        <div class="slot loading"></div>
+        <div class="band">
+          <svg class="ico" viewBox="0 -960 960 960"><path d="M320-280h320v-400H320v400Zm80-80v-240h160v240H400ZM200-80v-80h-40q-33 0-56.5-23.5T80-240v-160h120v-80H80v-80h120v-80H80v-80q0-33 23.5-56.5T160-720h40v-80q0-33 23.5-56.5T280-880h80v120h80v-120h80v120h80v-120h80q33 0 56.5 23.5T800-800v40h80v80H800v80h80v80H800v80h80v80H800v160q0 33-23.5 56.5T720-160H560v120h-80v-120h-80v120h-80v-120h-80v120h-80Z"/></svg>
+          <span class="name">Hardware</span>
+          <svg class="chev" viewBox="0 -960 960 960"><path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z"/></svg>
+        </div>
+        <div class="list">
+          <div class="item"><span class="dot"></span><div class="b"><div class="t">[Topic unique] RDNA4 — AMD RX90x0</div><div class="m"><span>SupaPictave</span><span class="d">26-06 à 10:24</span></div></div><span class="pill">+297</span></div>
+          <div class="item"><span class="dot"></span><div class="b"><div class="t">Le topik du vieux matos (dès ~10/15 ans)</div><div class="m"><span>rat de combat</span><span class="d">26-06 à 07:53</span></div></div><span class="pill">+17</span></div>
+          <div class="item read"><span class="dot"></span><div class="b"><div class="t">demande d'avis pour echanger gtx 1070</div><div class="m"><span>miksair</span><span class="d">06-05 à 11:54</span></div></div><span></span></div>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- D : minimal -->
+    <div class="variant" style="--slot:4px; --band-min:32px; --band-vpad:5px; --row-vpad:10px;">
+      <div class="vhead">
+        <span class="vtag"><span class="k">D</span> Minimal</span>
+        <p class="vsub">Le plus dense — bande quasi collée, max d'infos à l'écran.</p>
+        <div class="specs"><span class="spec">slot <b>4dp</b></span><span class="spec">bande min <b>32dp</b></span><span class="spec">pad vert. <b>5dp</b></span></div>
+      </div>
+      <div class="phone"><div class="app">
+        <div class="appbar">
+          <div class="row1">
+            <svg class="flag" viewBox="0 -960 960 960"><path d="M200-120v-680h360l16 80h224v400H520l-16-80H280v280h-80Z"/></svg>
+            <div class="search"><svg viewBox="0 -960 960 960"><path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/></svg><span>Rechercher dans les drap…</span></div>
+            <div class="avatar"></div>
+          </div>
+          <div class="tabline"></div>
+        </div>
+        <div class="slot loading"></div>
+        <div class="band">
+          <svg class="ico" viewBox="0 -960 960 960"><path d="M320-280h320v-400H320v400Zm80-80v-240h160v240H400ZM200-80v-80h-40q-33 0-56.5-23.5T80-240v-160h120v-80H80v-80h120v-80H80v-80q0-33 23.5-56.5T160-720h40v-80q0-33 23.5-56.5T280-880h80v120h80v-120h80v120h80v-120h80q33 0 56.5 23.5T800-800v40h80v80H800v80h80v80H800v80h80v80H800v160q0 33-23.5 56.5T720-160H560v120h-80v-120h-80v120h-80v-120h-80v120h-80Z"/></svg>
+          <span class="name">Hardware</span>
+          <svg class="chev" viewBox="0 -960 960 960"><path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z"/></svg>
+        </div>
+        <div class="list">
+          <div class="item"><span class="dot"></span><div class="b"><div class="t">[Topic unique] RDNA4 — AMD RX90x0</div><div class="m"><span>SupaPictave</span><span class="d">26-06 à 10:24</span></div></div><span class="pill">+297</span></div>
+          <div class="item"><span class="dot"></span><div class="b"><div class="t">Le topik du vieux matos (dès ~10/15 ans)</div><div class="m"><span>rat de combat</span><span class="d">26-06 à 07:53</span></div></div><span class="pill">+17</span></div>
+          <div class="item read"><span class="dot"></span><div class="b"><div class="t">demande d'avis pour echanger gtx 1070</div><div class="m"><span>miksair</span><span class="d">06-05 à 11:54</span></div></div><span></span></div>
+        </div>
+      </div></div>
+    </div>
+
+  </div>
+
+  <div class="note">
+    <h2>Deux leviers indépendants</h2>
+    <p><b>1. Le slot de la barre de chargement</b> <span class="mono">LOADING_BAR_SLOT_HEIGHT</span> — il doit juste réserver la place de la barre pour qu'elle ne décale plus la liste. À <b>4dp</b> (= la barre seule) il n'y a plus d'air en trop ; les <b>6–10dp</b> ajoutent une respiration optionnelle.</p>
+    <p><b>2. La hauteur de la bande de catégorie</b> — <span class="mono">heightIn(min=…)</span> + padding vertical. Le min 44dp (cible tactile Material) est le principal responsable de l'air autour de « Hardware ». 36–40dp reste confortable au doigt ; 32dp est très dense.</p>
+    <p>Ma reco : <b>C (Serré)</b> — slot 4dp + bande 36dp/pad 7dp : plus de vide superflu, la bande reste lisible et cliquable. Mais dis-moi A/B/C/D (ou un mix, ex. « slot de B + bande de C »).</p>
+    <div class="legend">
+      <span><b>slot</b> = hauteur réservée sous la barre du haut</span>
+      <span><b>bande min</b> = hauteur minimale du bandeau catégorie</span>
+      <span><b>pad vert.</b> = marge haut/bas du contenu de la bande</span>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
