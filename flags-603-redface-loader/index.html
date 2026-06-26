@@ -73,6 +73,13 @@
     transform:translate(-50%,-46px) scale(.6);opacity:0;will-change:transform,opacity;}
   .puck .rf{width:26px;height:26px;}
 
+  /* "à la place de la barre de recherche" : le redface remplace la searchrow en haut */
+  .appbar2{position:relative;}
+  .appbar2 .searchrow{will-change:opacity;}
+  .appbar2 .rfbar{position:absolute;left:0;right:0;top:10px;height:34px;display:flex;align-items:center;justify-content:center;gap:9px;opacity:0;pointer-events:none;will-change:opacity;}
+  .appbar2 .rfbar .rf{width:30px;height:30px;}
+  .appbar2 .rfbar .txt{font-size:.8rem;font-weight:600;color:var(--app-red);}
+
   @keyframes spin{to{transform:rotate(360deg);}}
   @keyframes rollacross{0%{transform:translateX(-70px) rotate(0);}100%{transform:translateX(70px) rotate(540deg);}}
   @keyframes bar{0%{left:-42%;}100%{left:100%;}}
@@ -91,7 +98,7 @@
 <div class="wrap">
   <p class="eyebrow">Redface 2 · #603 · loader</p>
   <h1>Le smiley redface en indicateur de chargement</h1>
-  <p class="lede"><span class="yes">Oui, c'est faisable</span> — le smiley <b>redface</b> (15×15, embarqué tel quel) tourné sur lui-même par une simple rotation. Ci-dessous : la roulade sur place, l'indicateur <b>contenu « en haut »</b> (façon l'indicateur expressive de ta capture) joué à travers tirage → chargement → terminé, et quelques variantes. <b>Ce sont des simulations</b>, pas du code applicatif.</p>
+  <p class="lede"><span class="yes">Oui, c'est faisable</span> — le smiley <b>redface</b> (15×15, embarqué tel quel) tourné sur lui-même par une simple rotation. Ci-dessous : la roulade sur place, l'indicateur <b>contenu « en haut »</b> (façon l'indicateur expressive de ta capture), le redface <b>à la place de la barre de recherche</b> tout en haut, joués à travers tirage → chargement → terminé, et quelques variantes. <b>Ce sont des simulations</b>, pas du code applicatif.</p>
 
   <div class="controls">
     <button class="play" id="play" aria-label="Lecture / pause">⏸</button>
@@ -133,6 +140,30 @@
         </div>
       </div>
       <p style="margin-top:10px">Le redface descend du haut dans une pastille blanche (comme l'indicateur de ta capture) en suivant le tirage, <b>roule pendant le chargement</b>, puis se retire. La barre rouge fine reste possible en doublure ou en relais.</p>
+    </div>
+
+    <div class="phonecard">
+      <div class="head">
+        <h3>Redface à la place de la barre de recherche (tout en haut)</h3>
+        <span class="phase" id="phase2">Tirage</span>
+      </div>
+      <div class="phone" id="phone2">
+        <div class="appbar appbar2">
+          <div class="appbar-row searchrow" id="searchrow2">
+            <span class="flag"><svg viewBox="0 -960 960 960"><path d="M200-120v-680h360l16 80h224v400H520l-16-80H280v280h-80Z"/></svg></span>
+            <span class="pill"><span>Rechercher dans les drapeaux…</span></span>
+            <span class="avatar"></span>
+          </div>
+          <div class="rfbar" id="rfbar2"><span class="rf" id="bar2rf"></span><span class="txt">Chargement…</span></div>
+          <div class="slot"></div>
+        </div>
+        <div class="content">
+          <div class="row"><span class="rdot"></span><div><div class="rt">RDNA4 — AMD RX90x0</div><div class="rm">SupaPictave · 10:24</div></div><span class="rn">+297</span></div>
+          <div class="row"><span class="rdot"></span><div><div class="rt">Le topik du vieux matos</div><div class="rm">rat de combat · 07:53</div></div><span class="rn">+17</span></div>
+          <div class="row"><span class="rdot"></span><div><div class="rt">[TU] Claviers mécaniques</div><div class="rm">nokiv · 09:02</div></div><span class="rn">+5</span></div>
+        </div>
+      </div>
+      <p style="margin-top:10px">Au tirage puis pendant le chargement, la barre de recherche s'efface et le <b>redface roule à sa place</b>, centré tout en haut — comme l'indicateur de ta capture, mais occupant le bandeau du haut. Ici le redface EST le seul indicateur (pas de barre rouge séparée).</p>
     </div>
 
     <div class="card">
@@ -179,6 +210,7 @@
   // phone "en haut" timeline: pull -> refresh -> done
   const PULL_END=0.30, REFRESH_END=0.82, HIDDEN=-46, REST=20;
   const phone=$('phone'), puck=$('puck'), puckrf=$('puckrf'), phaseEl=$('phase');
+  const searchrow2=$('searchrow2'), rfbar2=$('rfbar2'), bar2rf=$('bar2rf'), phase2El=$('phase2');
   function applyPhase(t){
     let phase,pull;
     if(t<PULL_END){phase='pull';pull=t/PULL_END;}
@@ -194,6 +226,13 @@
     puck.style.opacity=op;
     // the redface only rolls while refreshing (during pull it just follows, then it spins)
     puckrf.style.animation = phase==='refresh' ? `spin ${(speed.value/100).toFixed(2)}s linear infinite` : 'none';
+
+    // mock 2 — the redface REPLACES the search bar at the very top (cross-fade with the pull)
+    const amt = phase==='pull' ? pull : phase==='refresh' ? 1 : 0;
+    phase2El.textContent = phaseEl.textContent;
+    searchrow2.style.opacity = String(1 - amt);
+    rfbar2.style.opacity = String(amt);
+    bar2rf.style.animation = phase==='refresh' ? `spin ${(speed.value/100).toFixed(2)}s linear infinite` : 'none';
   }
 
   let playing=true,t=0,last=null,raf=null;const PERIOD=4200;
