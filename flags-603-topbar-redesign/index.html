@@ -35,7 +35,7 @@
   .scene-dark{--scene-ink:#e6e9ec;--scene-ink-dim:#9aa3aa;--scene-surf:#101417;--scene-surf-2:#1a1f24;--bar-bg:21,23,25;--bar-line:255,255,255;--bar-line-a:.10}
 
   /* content list (passes UNDER the bar) */
-  .list{position:absolute;left:0;right:0;top:0;bottom:56px;overflow-y:auto;overflow-x:hidden;padding-top:96px;scrollbar-width:thin;touch-action:pan-y}
+  .list{position:absolute;left:0;right:0;top:0;bottom:56px;overflow-y:auto;overflow-x:hidden;padding-top:96px;scrollbar-width:thin;touch-action:pan-y;overscroll-behavior:contain}
   .row{display:flex;gap:12px;align-items:flex-start;padding:11px 16px;border-bottom:1px solid color-mix(in srgb,var(--scene-ink) 8%,transparent)}
   .row .stripe{width:4px;align-self:stretch;border-radius:2px;flex:0 0 auto}
   .row .body{flex:1}
@@ -66,7 +66,7 @@
   .iconbtn{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;border:0;background:transparent;cursor:pointer;flex:0 0 auto}
   .iconbtn:hover{background:color-mix(in srgb,var(--scene-ink) 10%,transparent)}
   .iconbtn svg{width:21px;height:21px;stroke:var(--scene-ink);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-  .avatar{width:32px;height:32px;border-radius:50%;flex:0 0 auto;background:linear-gradient(135deg,#5b6 cf,#8e7);display:grid;place-items:center;color:#fff;font-weight:700;font-size:13px;overflow:hidden}
+  .avatar{width:32px;height:32px;border-radius:50%;flex:0 0 auto;background:linear-gradient(135deg,#5b8ccf,#8e6fc3);display:grid;place-items:center;color:#fff;font-weight:700;font-size:13px;overflow:hidden}
   .searchfield{display:flex;align-items:center;gap:6px}
   .searchfield input{border:0;background:transparent;color:var(--scene-ink);font-size:13px;width:120px;outline:none;font-family:var(--sans)}
   .searchfield input::placeholder{color:var(--scene-ink-dim)}
@@ -246,7 +246,8 @@ function renderLeft(){
     else if(S.variant==="C"){ inner=`<span class="drapal" style="background:${c};box-shadow:0 0 0 2px var(--scene-surf),0 0 0 3.5px ${c},0 0 0 7px ${c}33"></span><span class="tabname" style="margin-left:5px">${name}</span>`; }
     else if(S.variant==="D") inner+=`<span class="eye" style="background:${c}2e"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="2" stroke-linecap="round"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="2.6"/></svg></span>`;
     else if(S.variant==="E") inner+=`<span class="underline" style="background:${c};box-shadow:0 0 6px ${c}66"></span>`;
-  } else if(S.variant==="B"){
+  } else if(S.variant==="B" && t.plus){
+    // OFF affordance (hollow dot) only on tabs that HAVE the +lus mode (Cyan/DT) — never a dead control.
     inner+=`<span class="statedot" style="background:transparent;border:1.5px solid ${c}99"></span>`;
   }
   lc.innerHTML=inner;
@@ -336,18 +337,15 @@ function drawLoader(ts){
   const c=flagColor(), cx=w/2, cy=h/2;
   const active=S.refreshing||S.pull>0.02;
   const spin=S.refreshing?el*2.2:clamp(S.pull,0,1)*0.5; // turns
-  if(S.loader===1){ // redface rolling — rounded-square logo disc that rotates
+  if(S.loader===1){ // redface rolling — a red tile with a little face, rotating
     ctx.save(); ctx.translate(cx,cy); ctx.rotate(spin*Math.PI*2);
-    const r=13;
-    ctx.fillStyle=c; roundRect(ctx,-r,-r,2*r,2*r,7); ctx.fill();
-    ctx.fillStyle="#ffffff"; ctx.font="bold 13px "+getMono(); ctx.textAlign="center"; ctx.textBaseline="middle";
-    ctx.fillText("R",0,1);
+    drawRedface(ctx,c);
     ctx.restore();
   } else if(S.loader===2){ // morphing capsule + 3 bouncing dots
-    const n=3;
-    for(let i=0;i<n;i++){
-      const ph=S.refreshing?Math.sin(el*6-i*0.7):0;
-      const dy=S.refreshing?ph*4:0;
+    const capW=clamp(w-12,18,200);
+    ctx.fillStyle=c+"24"; roundRect(ctx,cx-capW/2,cy-9,capW,18,9); ctx.fill(); // internal capsule shape
+    for(let i=0;i<3;i++){
+      const dy=S.refreshing?Math.sin(el*6-i*0.7)*4:0;
       ctx.fillStyle=c; ctx.globalAlpha=S.refreshing?(0.5+0.5*((Math.sin(el*6-i*0.7)+1)/2)):clamp(S.pull,0.2,1);
       ctx.beginPath(); ctx.arc(cx+(i-1)*13, cy+dy, 4, 0, 7); ctx.fill();
     }
@@ -370,7 +368,17 @@ function drawLoader(ts){
 }
 function pumpLoader(){ if(raf==null){ t0=null; raf=requestAnimationFrame(drawLoader); } }
 function roundRect(c,x,y,w,h,r){c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath();}
-function getMono(){return getComputedStyle(document.documentElement).getPropertyValue("--mono")||"monospace";}
+// « redface » = red rounded tile + a little white face (two eyes + smile). Drawn around (0,0); the
+// caller translates/rotates so it reads as a face that ROLLS. Stable in Compose via a vector drawable.
+function drawRedface(x,color){
+  const r=13;
+  x.fillStyle=color; roundRect(x,-r,-r,2*r,2*r,7); x.fill();
+  x.fillStyle="#fff";
+  x.beginPath(); x.arc(-4.6,-2.6,2,0,7); x.fill();
+  x.beginPath(); x.arc(4.6,-2.6,2,0,7); x.fill();
+  x.strokeStyle="#fff"; x.lineWidth=2; x.lineCap="round";
+  x.beginPath(); x.arc(0,1,5.6,0.16*Math.PI,0.84*Math.PI); x.stroke();
+}
 
 /* ---------- segmented controls ---------- */
 function buildSeg(el,items,cur,onPick,disabledFn){
@@ -416,23 +424,28 @@ function renderLoadCompare(){
   ).join("");
   startMiniLoaders();
 }
-let miniRaf=null;
+let miniRaf=null,minisVisible=true;
 function startMiniLoaders(){
   const minis=[...document.querySelectorAll(".lc-mini")];
-  if(miniRaf)cancelAnimationFrame(miniRaf);
+  if(miniRaf){cancelAnimationFrame(miniRaf);miniRaf=null;}
   const start=performance.now();
   function frame(ts){
+    if(!minisVisible||document.hidden){miniRaf=null;return;} // pause off-screen / tab hidden (perf)
     const el=(ts-start)/1000, c="#00BCD4";
     minis.forEach(cn=>{
       const k=+cn.dataset.k, x=cn.getContext("2d"), dpr=2; if(cn.width!==cn.clientWidth*dpr){cn.width=cn.clientWidth*dpr;cn.height=cn.clientHeight*dpr;}
       x.setTransform(dpr,0,0,dpr,0,0); const w=cn.clientWidth,h=cn.clientHeight; x.clearRect(0,0,w,h); const cx=w/2,cy=h/2;
-      if(k===1){x.save();x.translate(cx,cy);x.rotate(el*2.2*Math.PI*2);x.fillStyle=c;roundRect(x,-13,-13,26,26,7);x.fill();x.fillStyle="#fff";x.font="bold 13px monospace";x.textAlign="center";x.textBaseline="middle";x.fillText("R",0,1);x.restore();}
-      else if(k===2){for(let i=0;i<3;i++){const dy=Math.sin(el*6-i*0.7)*4;x.fillStyle=c;x.globalAlpha=0.5+0.5*((Math.sin(el*6-i*0.7)+1)/2);x.beginPath();x.arc(cx+(i-1)*13,cy+dy,4,0,7);x.fill();}x.globalAlpha=1;}
+      if(k===1){x.save();x.translate(cx,cy);x.rotate(el*2.2*Math.PI*2);drawRedface(x,c);x.restore();}
+      else if(k===2){x.fillStyle=c+"24";roundRect(x,cx-30,cy-9,60,18,9);x.fill();for(let i=0;i<3;i++){const dy=Math.sin(el*6-i*0.7)*4;x.fillStyle=c;x.globalAlpha=0.5+0.5*((Math.sin(el*6-i*0.7)+1)/2);x.beginPath();x.arc(cx+(i-1)*13,cy+dy,4,0,7);x.fill();}x.globalAlpha=1;}
       else if(k===3){x.lineWidth=3;x.strokeStyle=c+"33";x.beginPath();x.arc(cx,cy,15,0,7);x.stroke();x.strokeStyle=c;x.lineCap="round";const a=el*4;x.beginPath();x.arc(cx,cy,15,a,a+Math.PI*1.4);x.stroke();x.fillStyle=c;roundRect(x,cx-4,cy-5,8,10,2);x.fill();}
       else{x.fillStyle=c;roundRect(x,cx-38,cy-7,14,14,4);x.fill();const bx=cx-18,bw=52;x.fillStyle=c+"33";roundRect(x,bx,cy-3,bw,6,3);x.fill();const t=(el*0.8)%1,fw=bw*0.4,off=t*bw;x.save();roundRect(x,bx,cy-3,bw,6,3);x.clip();x.fillStyle=c;roundRect(x,bx+off-fw,cy-3,fw,6,3);x.fill();x.restore();}
     });
     miniRaf=requestAnimationFrame(frame);
   }
+  // pause the mini-loader loop entirely when the comparison strip leaves the viewport (Codex perf note)
+  const io=new IntersectionObserver(es=>{ minisVisible=es[0].isIntersecting; if(minisVisible&&miniRaf==null){miniRaf=requestAnimationFrame(frame);} },{threshold:.04});
+  io.observe(document.getElementById("loadcompare"));
+  document.addEventListener("visibilitychange",()=>{ if(!document.hidden&&minisVisible&&miniRaf==null)miniRaf=requestAnimationFrame(frame); });
   miniRaf=requestAnimationFrame(frame);
 }
 
@@ -449,16 +462,22 @@ function onScroll(){
 }
 
 /* ---------- pull gesture on the list ---------- */
-let dragY=null;
+let dragY=null,dragX=null,armed=false;
 function bindGesture(){
   const list=$("list");
-  list.addEventListener("pointerdown",e=>{ if(list.scrollTop<=0&&!S.refreshing){dragY=e.clientY;} });
+  list.addEventListener("pointerdown",e=>{ if(list.scrollTop<=0&&!S.refreshing){dragY=e.clientY;dragX=e.clientX;armed=false;} });
   list.addEventListener("pointermove",e=>{
     if(dragY==null)return;
-    const dy=e.clientY-dragY;
+    const dy=e.clientY-dragY, dx=e.clientX-dragX;
+    if(!armed){
+      // arm a vertical pull only past an 8px threshold AND when the gesture is clearly vertical;
+      // a dominantly-horizontal move belongs to the tab swipe → release this handler.
+      if(Math.abs(dx)>8 && Math.abs(dx)>=Math.abs(dy)){ dragY=null; return; }
+      if(dy>8 && dy>Math.abs(dx)){ armed=true; } else { return; }
+    }
     if(dy>0){ S.pull=clamp(dy/120,0,1.25); applyPull(); pumpLoader(); $("pull").value=Math.min(S.pull,1.25); e.preventDefault(); }
-  });
-  const end=()=>{ if(dragY==null)return; dragY=null; if(S.pull>=1){playRefresh();} else {settle();} };
+  },{passive:false});
+  const end=()=>{ if(dragY==null&&!armed)return; const wasArmed=armed; dragY=null;armed=false; if(wasArmed){ if(S.pull>=1){playRefresh();} else {settle();} } };
   list.addEventListener("pointerup",end); list.addEventListener("pointercancel",end); list.addEventListener("pointerleave",end);
 }
 function settle(){
