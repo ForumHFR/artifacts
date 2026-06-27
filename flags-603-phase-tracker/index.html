@@ -74,7 +74,7 @@
     <p class="eyebrow">Redface 2 · vue:drapeaux · #603</p>
     <h1>Phase Drapeaux — suivi</h1>
     <p class="sub">Une ligne par issue. La colonne <b>Validation</b> appartient à XaTriX : <b>« shippé » ou « issue fermée » ne veut pas dire validé</b> — c'est XaTriX qui valide en dernier ressort.</p>
-    <p class="updated">maj 2026-06-27 · dernier build dev <b>0.17.17 / app-v197</b> · milestone <b>Vue · Drapeaux</b></p>
+    <p class="updated">maj 2026-06-27 · dernier build dev <b>0.17.18 / app-v198</b> · milestone <b>Vue · Drapeaux</b></p>
   </header>
 
   <div class="stats">
@@ -107,6 +107,8 @@
   const VL={todo:["v-todo","⏳ à valider"],ok:["v-ok","✅ validé"],no:["v-no","❌ rejeté"],na:["v-na","—"]};
   const SECTIONS=[
     {h:"Shippé — attend ta validation", rows:[
+      {n:251,t:"Cyan manquant — sticky récupéré",c:"buckets REST excluaient les stickies flaggés des cats sans sous-cat (cat 32 IA). Fix REST-only : supplément topics/last p.1, route flag_owntopic, dédup+merge, best-effort. PAS de fallback HTML. Fixture réelle + 4 tests, Codex GO.",e:"ship",b:"v198",v:"todo"},
+      {n:662,t:"États vides Drapeaux refaits",c:"défaut style A (icône + titre + sous-texte par onglet) + option opt-in « états vides humoristiques » = smiley [:eric le looser] (style C). Vue groupée filtrée garde un message factuel. Codex GO.",e:"ship",b:"v198",v:"todo"},
       {n:690,t:"Drapeau favori — couleur D shippée",c:"ambre #FFB300 (variante D, vote CharLee/thibw/XaTriX) ; lisible aussi sur clair. Micro-bordure noire = option séparée non shippée (inspecteur v3)",e:"ship",b:"v197",v:"todo"},
       {n:695,t:"Scroll indépendant par onglet",c:"un LazyListState par bucket ; plus de bave d'un onglet à l'autre. Reste : suite audit swipe (#660 prereq)",e:"ship",b:"v197",v:"todo"},
       {n:671,t:"Bandes catégorie — preset C",c:"réglage de densité dédié à venir (#691)",e:"ship",b:"v195",v:"ok"},
@@ -114,9 +116,7 @@
       {n:679,t:"Menu rapide ne pop plus au retour",c:"",e:"ship",b:"v194",v:"ok"}
     ]},
     {h:"Attend ta décision / en cours", rows:[
-      {n:251,t:"Cyan manquant — vrai bug API confirmé",c:"l'API REST drapeaux EXCLUT les stickies flaggés (sticky cat32 flag_owntopic=1 non-lu : absent des buckets REST, présent dans topics/last). Fix REST-only validé Codex : supplément topics/last sur cats sans sous-cat, route par flag_owntopic, best-effort. PAS de fallback HTML. En implémentation.",e:"prog",b:"v196 KO",v:"no"},
       {n:660,t:"Animation swipe arrive du mauvais côté",c:"proto 4 variantes ; styx42 = slide au commit, nicko = page-turn → ton arbitrage",e:"gate",b:"—",v:"na"},
-      {n:662,t:"Homogénéiser les états vides",c:"décidé : défaut A (icône + texte par onglet), C en option (smiley [:eric le looser]) ; en implémentation",e:"prog",b:"—",v:"na"},
       {n:665,t:"Top bar translucide (PR #688)",c:"PR conflictée (FlagsSearchAppBar.kt) à résoudre + dogfood",e:"redo",b:"—",v:"na"},
       {n:676,t:"Sheet appui-long F2",c:"liste verticale supprimée à tort → garder liste + ajouter rangée",e:"redo",b:"v194",v:"no"},
       {n:661,t:"Découvrabilité « +lus »",c:"dropdown rejeté ; pas de nouvelle direction",e:"redo",b:"v194",v:"no"},
