@@ -88,25 +88,24 @@
     <p class="eyebrow">Redface 2 · vue:drapeaux · #603</p>
     <h1>Phase de finition Drapeaux — suivi</h1>
     <p class="sub">Issues ouvertes triées par <b style="color:var(--ink)">qui débloque</b> : ce que je peux coder seul, ce qui attend ta décision, le différé, le bloqué.</p>
-    <p class="updated">maj 2026-06-27 · dernier build dev <b>0.17.15 / app-v195</b> · milestone <b>Vue · Drapeaux</b> 14 ouverts / 7 fermés · priorisation <b>gate Codex GO</b></p>
+    <p class="updated">maj 2026-06-27 · dernier build dev <b>0.17.16 / app-v196</b> · milestone <b>Vue · Drapeaux</b> · #251 + #690 <b>shippés</b> (clôture GitHub en attente) · priorisation <b>gate Codex GO</b></p>
   </header>
 
   <div class="stats">
-    <div class="stat act"><div class="n">4</div><div class="l">actionnable</div></div>
+    <div class="stat act"><div class="n">2</div><div class="l">actionnable</div></div>
     <div class="stat warn"><div class="n">5</div><div class="l">attend XaTriX</div></div>
     <div class="stat mute"><div class="n">3</div><div class="l">différé</div></div>
     <div class="stat info"><div class="n">2</div><div class="l">bloqué capture</div></div>
-    <div class="stat ok"><div class="n">7</div><div class="l">résolus</div></div>
+    <div class="stat ok"><div class="n">9</div><div class="l">résolus</div></div>
   </div>
 
   <div class="wait">
     <h2>▶ Sujets à traiter — sans décision de ta part</h2>
-    <p class="k">Ordre validé par le gate Codex (gpt-5.5 xhigh). #251 + #690 dans le même train.</p>
+    <p class="k">#251 + #690 shippés en v196 (gate Codex GO + code review xhigh). Reste actionnable :</p>
     <ol>
-      <li><b>#251 cyan manquant</b> — bug de données (topics flaggés invisibles), root cause documentée + gatée Codex. <b>Fix prêt à coder.</b></li>
-      <li><b>#690 favori vert→jaune</b> — régression qu'on a introduite, visible en dev 0.17.15. 1 ligne. À bundler avec #251.</li>
       <li><b>#695 bug #1</b> — scroll partagé entre onglets (l'état de défilement bave). Bug d'état découplé de l'animation #660.</li>
       <li><b>#665 / PR #688</b> — <b>conflit réel</b> à résoudre (FlagsSearchAppBar.kt) + dogfood visuel + merge. Sinon on la ferme et on rebranche propre.</li>
+      <li><b>#662</b> — décidé (C en option, défaut A, smiley <code>[:eric le looser]</code>) : <b>en implémentation</b>, prochain train.</li>
     </ol>
   </div>
 
@@ -157,14 +156,12 @@
   const R="https://github.com/ForumHFR/redface2/issues/";
   const D={
     act:[
-      {n:251,t:"Cyan manquant (REST global tronqué par récence)",badge:["b-ready","fix prêt"],tag:"P1 · bug données · status:ready",c:"Root cause H2 validée Codex : loadCategories() capture le cache cats PÉRIMÉ → une cat récente (ex. 32 IA) absente de l'énumération per-cat → ses cyans invisibles. Fix : refresh-if-stale + fallback exhaustif."},
-      {n:690,t:"Couleur du drapeau favori vire au vert",badge:["b-p","P2"],tag:"régression auto · 1 ligne",c:"FlagPalette.Favorite = Lime 500 (0xFFCDDC39). Visible dans le dev 0.17.15 shippé. À bundler dans le même train que #251. Teinte super-favori aussi à arrêter."},
-      {n:695,t:"Audit swipe — bug #1 : scroll partagé entre onglets",badge:["b-p","P3"],tag:"bug d'état · découplé de #660",c:"flagsListState partagé Cyan/Favori/Rouge → le défilement bave d'un onglet à l'autre. Indépendant du choix d'animation : à fixer sans attendre #660 (state saveable par onglet)."},
-      {n:665,t:"Top bar translucide — PR #688",badge:["b-conf","conflit"],tag:"P4 · résoudre + dogfood + merge",c:"PR ouverte mais CONFLICTING (conflit réel dans FlagsSearchAppBar.kt avec le preset bandes #671). Code + Codex GO faits, jamais validé visuellement. Résoudre + dogfood 6 points + merger — ou fermer et rebrancher propre."}
+      {n:695,t:"Audit swipe — bug #1 : scroll partagé entre onglets",badge:["b-p","P1"],tag:"bug d'état · découplé de #660",c:"flagsListState partagé Cyan/Favori/Rouge → le défilement bave d'un onglet à l'autre. Indépendant du choix d'animation : à fixer sans attendre #660 (state saveable par onglet)."},
+      {n:665,t:"Top bar translucide — PR #688",badge:["b-conf","conflit"],tag:"P2 · résoudre + dogfood + merge",c:"PR ouverte mais CONFLICTING (conflit réel dans FlagsSearchAppBar.kt avec le preset bandes #671). Code + Codex GO faits, jamais validé visuellement. Résoudre + dogfood 6 points + merger — ou fermer et rebrancher propre."}
     ],
     warn:[
       {n:660,t:"Animation de swipe arrive du mauvais côté",badge:["b-wait","ton choix"],tag:"status:gated · prototype posté",c:"snapTo(0) → l'onglet « pop » centré sans glissé. Prototype 4 variantes publié (reco « slide au commit »). #695 bug #1+2 = prérequis. À implémenter une fois la variante choisie."},
-      {n:662,t:"Homogénéiser les états vides des listes",badge:["b-wait","ton choix"],tag:"status:gated · quick-win",c:"Galerie de styles publiée. Tu penchais « C » sur HFR — à confirmer puis j'implémente (rapide)."},
+      {n:662,t:"Homogénéiser les états vides des listes",badge:["b-dog","décidé"],tag:"C en option · défaut A · prochain train",c:"DÉCIDÉ : style C (smiley) en option derrière un réglage, défaut A (icône+message), smiley [:eric le looser]. En implémentation (DataStore + réglage + rendu + Roborazzi)."},
       {n:676,t:"Sheet F2 (appui long) — boutons + métadonnées",badge:["b-wait","à refaire"],tag:"design rejeté · pts 3-4 déférés",c:"Livré en v194 PUIS rejeté : j'avais SUPPRIMÉ la liste verticale. Correct = GARDER la liste + AJOUTER la rangée de boutons. Sous-titre retiré = OK. Sous-catégorie (que l'ID dispo) + vues (hors REST) = déférés."},
       {n:661,t:"Découvrabilité du menu d'affichage / « +lus »",badge:["b-wait","direction ?"],tag:"réouverte · dropdown rejeté",c:"La solution dropdown (livrée v194) ne convient pas. Réouverte, aucune nouvelle direction donnée."},
       {n:328,t:"Liste topics : appui long = menu d'actions",badge:["b-wait","gated"],tag:"status:gated · community",c:"Complémentaire de #676 (le sheet d'actions). En attente d'une décision de design."}
@@ -179,6 +176,8 @@
       {n:297,t:"Poser/afficher des drapeaux depuis un listing de catégorie",badge:["b-dog","capture"],tag:"status:blocked-capture",c:"Bloqué sur la même fixture authentifiée à produire (contrat HFR pose de drapeau hors-topic)."}
     ],
     ok:[
+      {n:251,t:"Cyan manquant d'une catégorie récente",badge:["b-ready","v196"],tag:"bug données · shippé",c:"getCategories(forceRefreshIfStale=true) one-shot : catalogue frais si cache périmé → la cat ajoutée après le warm (ex. 32 IA) est énumérée, ses cyans réapparaissent. Dégradation last-known-good si l'endpoint cats échoue. Gate Codex + code review xhigh. (Clôture GitHub en attente.)"},
+      {n:690,t:"Couleur du drapeau favori repassée au jaune",badge:["b-ready","v196"],tag:"design · shippé",c:"FlagPalette.Favorite Lime 500 (vert) → Yellow 600 #FDD835 (jaune franc, pas l'ambre). Cyan/rouge inchangés. (Clôture GitHub en attente.)"},
       {n:671,t:"Barre de chargement décalait le contenu + bandes preset C",badge:["b-ready","v186/v195"],tag:"slot fixe + preset C",c:"Slot de hauteur fixe (v186) ; espacement bandes preset D→C (v195, PR #692)."},
       {n:679,t:"Menu réglages rapides s'ouvrait seul au retour",badge:["b-ready","v194"],tag:"fix selon profondeur de pile",c:"Re-tap onglet armait le menu même depuis un sous-écran. Fix = racine arme / sous-écran pop-to-root (flagsAtRoot)."},
       {n:666,t:"Barre du bas trop haute sans libellés",badge:["b-ready","v195"],tag:"item custom 52 dp + a11y",c:"CompactBarItem custom 52 dp (NavigationBarItem abandonné, garde 80 dp interne). Fix a11y : contentDescription en mode icon-only."},
