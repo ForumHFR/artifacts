@@ -107,13 +107,13 @@
   const VL={todo:["v-todo","⏳ à valider"],ok:["v-ok","✅ validé"],no:["v-no","❌ rejeté"],na:["v-na","—"]};
   const SECTIONS=[
     {h:"Shippé — attend ta validation", rows:[
-      {n:251,t:"Cyan manquant d'une catégorie récente",c:"getCategories one-shot frais si cache périmé ; clôture GitHub en attente",e:"ship",b:"v196",v:"todo"},
-      {n:690,t:"Drapeau favori repassé au jaune (#FDD835)",c:"Lime 500 (vert) → Yellow 600 ; clôture GitHub en attente",e:"ship",b:"v196",v:"todo"},
-      {n:671,t:"Bandes catégorie — preset C",c:"réglage de densité dédié à venir (#691)",e:"ship",b:"v195",v:"todo"},
+      {n:690,t:"Drapeau favori — teinte à refixer",c:"#FDD835 (v196) se noyait sur clair ; préférence D #FFB300 + micro-bordure noire (inspecteurs v2/v3) ; à reteindre",e:"ship",b:"v196",v:"todo"},
+      {n:671,t:"Bandes catégorie — preset C",c:"réglage de densité dédié à venir (#691)",e:"ship",b:"v195",v:"ok"},
       {n:666,t:"Barre du bas 52 dp en icônes seules",c:"« on peut pas descendre plus bas » (#2789472)",e:"ship",b:"v195",v:"ok"},
-      {n:679,t:"Menu rapide ne pop plus au retour",c:"",e:"ship",b:"v194",v:"todo"}
+      {n:679,t:"Menu rapide ne pop plus au retour",c:"",e:"ship",b:"v194",v:"ok"}
     ]},
     {h:"Attend ta décision / en cours", rows:[
+      {n:251,t:"Cyan manquant — vrai bug API confirmé",c:"l'API REST drapeaux EXCLUT les stickies flaggés (sticky cat32 flag_owntopic=1 non-lu : absent REST, présent HTML owntopic). Fix Codex = REST + backfill HTML forum1f. v196 insuffisant.",e:"prog",b:"v196 KO",v:"no"},
       {n:660,t:"Animation swipe arrive du mauvais côté",c:"proto 4 variantes ; styx42 = slide au commit, nicko = page-turn → ton arbitrage",e:"gate",b:"—",v:"na"},
       {n:662,t:"Homogénéiser les états vides",c:"décidé : C en option, défaut A, smiley [:eric le looser] ; en implémentation",e:"prog",b:"—",v:"na"},
       {n:695,t:"Audit swipe — scroll partagé entre onglets",c:"bug d'état, prérequis de #660",e:"prog",b:"—",v:"na"},
