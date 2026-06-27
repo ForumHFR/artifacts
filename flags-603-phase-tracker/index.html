@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Drapeaux #603 — suivi de phase</title>
-<meta name="description" content="Tableau de suivi des issues de la phase de finition Drapeaux : statut, build, validation XaTriX, commentaires.">
+<meta name="description" content="Tableau de suivi des issues de la phase de finition Drapeaux : actionnable, en attente de décision, différé, bloqué — priorisé (gate Codex).">
 <style>
   :root{
     --ground:#15100f;--panel:#1f1817;--panel-2:#291f1e;--line:#3a2c2a;
@@ -15,6 +15,7 @@
     --info:#7fb6e8;--info-bg:#15293a40;--info-line:#2a4a5f;
     --mute:#9a8b87;--mute-bg:#2a201f;--mute-line:#3a2c2a;
     --bad:#e88a8a;--bad-bg:#3a191940;--bad-line:#5f2a2a;
+    --act:#e8868c;--act-bg:#3a191e40;--act-line:#7a2f38;
     --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;--sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
   }
   *{box-sizing:border-box}
@@ -25,49 +26,60 @@
   h1{font-size:clamp(22px,3.4vw,30px);margin:0 0 6px;font-weight:650;text-wrap:balance}
   .sub{color:var(--ink-dim);margin:0;font-size:14px}
   .updated{color:var(--ink-faint);font-family:var(--mono);font-size:12px;margin-top:6px}
+  .updated b{color:var(--ink-dim);font-weight:600}
 
   /* stat strip */
-  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin:22px 0}
-  .stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
-  .stat .n{font-size:26px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1}
-  .stat .l{font-size:11.5px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.06em;margin-top:6px;font-family:var(--mono)}
-  .stat.ok .n{color:var(--ok)} .stat.warn .n{color:var(--warn)} .stat.info .n{color:var(--info)} .stat.acc .n{color:var(--accent)}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(112px,1fr));gap:10px;margin:22px 0}
+  .stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:13px 15px}
+  .stat .n{font-size:25px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1}
+  .stat .l{font-size:11px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.05em;margin-top:6px;font-family:var(--mono)}
+  .stat.act .n{color:var(--act)} .stat.warn .n{color:var(--warn)} .stat.mute .n{color:var(--mute)} .stat.info .n{color:var(--info)} .stat.ok .n{color:var(--ok)}
 
-  /* waiting callout */
-  .wait{background:linear-gradient(180deg,var(--warn-bg),transparent);border:1px solid var(--warn-line);border-radius:12px;padding:16px 18px;margin-bottom:26px}
-  .wait h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--warn);margin:0 0 10px;font-family:var(--mono)}
-  .wait ol{margin:0;padding-left:20px;color:var(--ink);font-size:14px}
-  .wait li{margin:5px 0}
+  /* callout priorisation */
+  .wait{background:linear-gradient(180deg,var(--act-bg),transparent);border:1px solid var(--act-line);border-radius:12px;padding:16px 18px;margin-bottom:14px}
+  .wait h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);margin:0 0 4px;font-family:var(--mono)}
+  .wait p.k{margin:0 0 10px;font-size:12.5px;color:var(--ink-faint)}
+  .wait ol{margin:0;padding-left:22px;color:var(--ink);font-size:14px}
+  .wait li{margin:6px 0}
   .wait a{color:var(--accent)}
+  .wait b{color:var(--ink)}
+
+  .decide{background:linear-gradient(180deg,var(--warn-bg),transparent);border:1px solid var(--warn-line);border-radius:12px;padding:16px 18px;margin-bottom:26px}
+  .decide h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--warn);margin:0 0 10px;font-family:var(--mono)}
+  .decide ul{margin:0;padding-left:20px;color:var(--ink);font-size:14px}
+  .decide li{margin:5px 0}
+  .decide a{color:var(--accent)}
 
   .group{margin:26px 0 10px}
   .group h2{font-size:14px;margin:0;font-weight:650;display:flex;align-items:center;gap:10px}
-  .group .cnt{font-family:var(--mono);font-size:12px;color:var(--ink-faint);font-weight:400}
+  .group .gs{font-size:12.5px;color:var(--ink-faint);font-weight:400}
+  .group .cnt{font-family:var(--mono);font-size:12px;color:var(--ink-faint);font-weight:400;margin-left:auto}
 
   .rows{display:flex;flex-direction:column;gap:8px;margin-top:12px}
-  .r{display:grid;grid-template-columns:6px 64px 1fr auto;gap:14px;align-items:start;background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:13px 15px 13px 0;overflow:hidden}
+  .r{display:grid;grid-template-columns:6px 58px 1fr auto;gap:13px;align-items:start;background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:12px 15px 12px 0;overflow:hidden}
   .stripe{align-self:stretch;border-radius:11px 0 0 11px}
   .num{font-family:var(--mono);font-size:13px;font-weight:700;padding-top:1px}
   .num a{color:var(--ink);text-decoration:none;border-bottom:1px dotted var(--ink-faint)}
   .main .t{font-size:14.5px;font-weight:600;margin:0 0 3px}
   .main .c{font-size:12.5px;color:var(--ink-dim);margin:0;line-height:1.45}
+  .main .c a{color:var(--accent)}
   .meta{display:flex;flex-direction:column;align-items:flex-end;gap:6px;white-space:nowrap}
   .badge{font-family:var(--mono);font-size:11px;padding:3px 9px;border-radius:999px;border:1px solid;font-weight:600}
-  .b-oui{color:var(--ok);background:var(--ok-bg);border-color:var(--ok-line)}
-  .b-non{color:var(--bad);background:var(--bad-bg);border-color:var(--bad-line)}
+  .b-p{color:var(--act);background:var(--act-bg);border-color:var(--act-line)}
+  .b-ready{color:var(--ok);background:var(--ok-bg);border-color:var(--ok-line)}
+  .b-conf{color:var(--bad);background:var(--bad-bg);border-color:var(--bad-line)}
   .b-dog{color:var(--info);background:var(--info-bg);border-color:var(--info-line)}
+  .b-wait{color:var(--warn);background:var(--warn-bg);border-color:var(--warn-line)}
   .b-na{color:var(--mute);background:var(--mute-bg);border-color:var(--mute-line)}
-  .build{font-family:var(--mono);font-size:11px;color:var(--ink-faint)}
+  .tag{font-family:var(--mono);font-size:10.5px;color:var(--ink-faint)}
 
-  .legend{display:flex;flex-wrap:wrap;gap:14px;margin:8px 0 0;font-size:12px;color:var(--ink-faint);font-family:var(--mono)}
-  .legend span{display:flex;align-items:center;gap:6px}
-  .legend i{width:10px;height:10px;border-radius:3px;display:inline-block}
   .rel{margin-top:30px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;font-size:13px;color:var(--ink-dim)}
   .rel b{color:var(--ink)} .rel code{font-family:var(--mono);font-size:.9em;background:var(--panel-2);padding:1px 5px;border-radius:4px;color:var(--accent)}
   .links{margin-top:14px;display:flex;flex-wrap:wrap;gap:10px}
   .links a{font-family:var(--mono);font-size:12px;color:var(--accent);text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:6px 12px}
   .links a:hover{border-color:var(--accent)}
-  @media(max-width:620px){.r{grid-template-columns:6px 1fr;padding-right:12px}.num{grid-column:2}.main{grid-column:2}.meta{grid-column:2;align-items:flex-start;flex-direction:row}}
+  a:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:3px}
+  @media(max-width:620px){.r{grid-template-columns:6px 1fr;padding-right:12px}.num{grid-column:2}.main{grid-column:2}.meta{grid-column:2;align-items:flex-start;flex-direction:row;flex-wrap:wrap}}
 </style>
 </head>
 <body>
@@ -75,51 +87,68 @@
   <header>
     <p class="eyebrow">Redface 2 · vue:drapeaux · #603</p>
     <h1>Phase de finition Drapeaux — suivi</h1>
-    <p class="sub">Statut, build de livraison, validation XaTriX et commentaires par issue.</p>
-    <p class="updated">maj 2026-06-27 · dernier build dev 0.17.14 / app-v194 · preset C (#691) sur dev, non releasé</p>
+    <p class="sub">Issues ouvertes triées par <b style="color:var(--ink)">qui débloque</b> : ce que je peux coder seul, ce qui attend ta décision, le différé, le bloqué.</p>
+    <p class="updated">maj 2026-06-27 · dernier build dev <b>0.17.15 / app-v195</b> · milestone <b>Vue · Drapeaux</b> 14 ouverts / 7 fermés · priorisation <b>gate Codex GO</b></p>
   </header>
 
   <div class="stats">
-    <div class="stat ok"><div class="n">8</div><div class="l">résolus validés</div></div>
-    <div class="stat warn"><div class="n">6</div><div class="l">à reprendre</div></div>
-    <div class="stat info"><div class="n">4</div><div class="l">à creuser / noté</div></div>
-    <div class="stat"><div class="n">3</div><div class="l">différés</div></div>
-    <div class="stat acc"><div class="n">4</div><div class="l">attendent XaTriX</div></div>
+    <div class="stat act"><div class="n">4</div><div class="l">actionnable</div></div>
+    <div class="stat warn"><div class="n">5</div><div class="l">attend XaTriX</div></div>
+    <div class="stat mute"><div class="n">3</div><div class="l">différé</div></div>
+    <div class="stat info"><div class="n">2</div><div class="l">bloqué capture</div></div>
+    <div class="stat ok"><div class="n">7</div><div class="l">résolus</div></div>
   </div>
 
   <div class="wait">
-    <h2>⏳ En attente de toi</h2>
+    <h2>▶ Sujets à traiter — sans décision de ta part</h2>
+    <p class="k">Ordre validé par le gate Codex (gpt-5.5 xhigh). #251 + #690 dans le même train.</p>
     <ol>
-      <li><b>Hauteur de la barre du bas</b> sans libellés — fixe la valeur dans l'<a href="https://claude.ai/code/artifact/2b710756-737d-44f5-8d4e-a9f7d36132be">inspecteur</a> (je code ensuite l'item custom).</li>
-      <li><b>#665</b> top bar translucide — dogfood la PR #688 puis merge.</li>
-      <li><b>#662</b> état vide — choisis le(s) style(s) dans la <a href="https://claude.ai/code/artifact/49cdb349-e20e-480f-8402-2d166008de9f">galerie</a>.</li>
-      <li><b>#251</b> cyan manquant (API) — go pour creuser les 2 causes code-vérifiables ?</li>
+      <li><b>#251 cyan manquant</b> — bug de données (topics flaggés invisibles), root cause documentée + gatée Codex. <b>Fix prêt à coder.</b></li>
+      <li><b>#690 favori vert→jaune</b> — régression qu'on a introduite, visible en dev 0.17.15. 1 ligne. À bundler avec #251.</li>
+      <li><b>#695 bug #1</b> — scroll partagé entre onglets (l'état de défilement bave). Bug d'état découplé de l'animation #660.</li>
+      <li><b>#665 / PR #688</b> — <b>conflit réel</b> à résoudre (FlagsSearchAppBar.kt) + dogfood visuel + merge. Sinon on la ferme et on rebranche propre.</li>
     </ol>
   </div>
 
-  <!-- RÉSOLUS VALIDÉS -->
-  <div class="group"><h2><span style="color:var(--ok)">✅</span> Résolus &amp; validés <span class="cnt">8</span></h2></div>
-  <div class="rows" id="g-ok"></div>
+  <div class="decide">
+    <h2>⏳ En attente de ta décision (gated)</h2>
+    <ul>
+      <li><b>#660</b> animation swipe — choisis la variante dans la <a href="https://forumhfr.github.io/artifacts/flags-603-swipe-anim/">galerie 4 variantes</a> (reco = « slide au commit »).</li>
+      <li><b>#662</b> états vides — confirme le style dans la <a href="https://forumhfr.github.io/artifacts/flags-603-empty-states/">galerie</a> (tu penchais « C »).</li>
+      <li><b>#676</b> sheet appui-long — on rediscute : garder la liste verticale ET ajouter la rangée de boutons (j'avais supprimé la liste à tort).</li>
+      <li><b>#661</b> découvrabilité « +lus » — le dropdown ne t'a pas convenu : quelle direction ?</li>
+    </ul>
+  </div>
 
-  <!-- À REPRENDRE -->
-  <div class="group"><h2><span style="color:var(--warn)">🔄</span> À reprendre / en cours <span class="cnt">6</span></h2></div>
+  <!-- ACTIONNABLE -->
+  <div class="group"><h2><span style="color:var(--act)">▶</span> Actionnable maintenant <span class="gs">je code, pas de décision requise</span><span class="cnt" id="c-act"></span></h2></div>
+  <div class="rows" id="g-act"></div>
+
+  <!-- GATED -->
+  <div class="group"><h2><span style="color:var(--warn)">⏳</span> Attend une décision XaTriX <span class="gs">prototypes / galeries postés</span><span class="cnt" id="c-warn"></span></h2></div>
   <div class="rows" id="g-warn"></div>
 
-  <!-- À INVESTIGUER / NOTÉ -->
-  <div class="group"><h2><span style="color:var(--info)">🔍</span> À investiguer / noté <span class="cnt">3</span></h2></div>
-  <div class="rows" id="g-info"></div>
-
-  <!-- DIFFÉRÉS -->
-  <div class="group"><h2><span style="color:var(--mute)">⏸️</span> Différés <span class="cnt">3</span></h2></div>
+  <!-- DIFFÉRÉ -->
+  <div class="group"><h2><span style="color:var(--mute)">⏸</span> Différé / futur <span class="gs">post-MVP ou repro on-device</span><span class="cnt" id="c-mute"></span></h2></div>
   <div class="rows" id="g-mute"></div>
 
+  <!-- BLOQUÉ -->
+  <div class="group"><h2><span style="color:var(--info)">⛔</span> Bloqué — capture session HFR <span class="gs">dépend d'une fixture authentifiée à produire</span><span class="cnt" id="c-info"></span></h2></div>
+  <div class="rows" id="g-info"></div>
+
+  <!-- RÉSOLUS -->
+  <div class="group"><h2><span style="color:var(--ok)">✅</span> Résolus &amp; validés <span class="gs">de v185 à v195</span><span class="cnt" id="c-ok"></span></h2></div>
+  <div class="rows" id="g-ok"></div>
+
   <div class="rel">
-    <b>Releases dev de la phase :</b> v185 → v186 → v187 → v188 → v189 → v190 → v191 → v192 → v193 (0.17.13, barre courte #666) → <b>v194 (0.17.14, #661+#679+#676)</b>.
-    Prochaine : batch <b>hauteur barre du bas</b> + <b>preset C #691</b> (déjà sur <code>dev</code>) + <b>#665</b> après dogfood.
+    <b>Releases dev de la phase :</b> v185 → … → v193 (0.17.13, barre du bas 56 dp) → v194 (0.17.14, #661+#679+#676) → <b>v195 (0.17.15, barre du bas 52 dp #666 + bandes preset C #671)</b>.
+    Prochaine cible : <b>#251 + #690</b> (un train), puis <b>#695 bug #1</b>, puis <b>#665</b> après résolution conflit + dogfood.
     <div class="links">
-      <a href="https://claude.ai/code/artifact/2b710756-737d-44f5-8d4e-a9f7d36132be">📏 inspecteur hauteur barre</a>
-      <a href="https://claude.ai/code/artifact/49cdb349-e20e-480f-8402-2d166008de9f">🫥 galerie états vides</a>
-      <a href="https://forumhfr.github.io/artifacts/flags-603-band-spacing/">↕ inspecteur espacement bandes</a>
+      <a href="https://forumhfr.github.io/artifacts/flags-603-swipe-anim/">↔ variantes swipe #660</a>
+      <a href="https://forumhfr.github.io/artifacts/flags-603-empty-states/">🫥 états vides #662</a>
+      <a href="https://forumhfr.github.io/artifacts/flags-603-favori-jaune/">🟡 favori jaune #690</a>
+      <a href="https://forumhfr.github.io/artifacts/flags-603-band-spacing/">↕ espacement bandes #691</a>
+      <a href="https://github.com/ForumHFR/redface2/issues/603">🧵 umbrella #603</a>
     </div>
   </div>
 </div>
@@ -127,54 +156,54 @@
 <script>
   const R="https://github.com/ForumHFR/redface2/issues/";
   const D={
-    ok:[
-      {n:659,t:"Pull-to-refresh — rond redondant",b:"v185",v:"oui",c:"Indicateur custom au tirage, rien pendant le refresh."},
-      {n:663,t:"Swipe cyclique entre onglets",b:"v189",v:"oui",c:"Dernier ↔ premier."},
-      {n:664,t:"Icônes catégorie + pastille",b:"v189/v192",v:"oui",c:"Icône cat 32 IA + pastille agrandie."},
-      {n:666,t:"Toggle libellés barre du bas",b:"v190",v:"oui",c:"Passe Codex : pas de bug. ⚠️ reste : a11y icon-only (pas de contentDescription) + hauteur encore trop haute → rework item custom."},
-      {n:667,t:"Back Réglages quittait l'appli",b:"v189",v:"oui",c:"Cause : back stack onglet à 1 entrée, onBack ne pop pas. Fix = TabRootBackHandler (→ onglet précédent, historique MRU)."},
-      {n:671,t:"Barre chargement décalait le contenu",b:"v186",v:"oui",c:"Slot de hauteur fixe. (La hauteur des bandes mélangée → #691.)"},
-      {n:673,t:"Sheet réglages ne défilait pas",b:"v187",v:"oui",c:"verticalScroll sur le sheet."},
-      {n:679,t:"Menu réglages rapides s'ouvrait seul au retour",b:"v194",v:"oui",c:"Renommé. Cause : re-tap onglet armait le menu même depuis un sous-écran. Fix = décision selon profondeur de pile (racine arme / sous-écran pop-to-root)."}
+    act:[
+      {n:251,t:"Cyan manquant (REST global tronqué par récence)",badge:["b-ready","fix prêt"],tag:"P1 · bug données · status:ready",c:"Root cause H2 validée Codex : loadCategories() capture le cache cats PÉRIMÉ → une cat récente (ex. 32 IA) absente de l'énumération per-cat → ses cyans invisibles. Fix : refresh-if-stale + fallback exhaustif."},
+      {n:690,t:"Couleur du drapeau favori vire au vert",badge:["b-p","P2"],tag:"régression auto · 1 ligne",c:"FlagPalette.Favorite = Lime 500 (0xFFCDDC39). Visible dans le dev 0.17.15 shippé. À bundler dans le même train que #251. Teinte super-favori aussi à arrêter."},
+      {n:695,t:"Audit swipe — bug #1 : scroll partagé entre onglets",badge:["b-p","P3"],tag:"bug d'état · découplé de #660",c:"flagsListState partagé Cyan/Favori/Rouge → le défilement bave d'un onglet à l'autre. Indépendant du choix d'animation : à fixer sans attendre #660 (state saveable par onglet)."},
+      {n:665,t:"Top bar translucide — PR #688",badge:["b-conf","conflit"],tag:"P4 · résoudre + dogfood + merge",c:"PR ouverte mais CONFLICTING (conflit réel dans FlagsSearchAppBar.kt avec le preset bandes #671). Code + Codex GO faits, jamais validé visuellement. Résoudre + dogfood 6 points + merger — ou fermer et rebrancher propre."}
     ],
     warn:[
-      {n:660,t:"Animation de swipe entre onglets",b:"v189",v:"non",c:"« l'animation est mauvaise » — le snapTo(0) centré n'est pas le rendu attendu. À revoir."},
-      {n:662,t:"État vide des onglets",b:"v186",v:"non",c:"« je vois pas de changement ». Galerie 4 styles faite (A icône+message / B illustration / C+D smileys option). → attend ton choix."},
-      {n:661,t:"Découvrabilité menu / « +lus »",b:"v194",v:"non",c:"La solution dropdown ne convient pas. À reprendre plus tard."},
-      {n:676,t:"Sheet F2 (appui long)",b:"v194 partiel",v:"non",c:"Mal compris : il faut GARDER la liste verticale ET AJOUTER la rangée de boutons (les deux). Sous-titre retiré = OK. À refaire. Pts sous-cat/vues différés."},
-      {n:null,t:"Hauteur barre du bas sans libellés (suite #666)",b:"—",v:"non",c:"Toujours trop haute. Codex confirme : NavigationBarItem bloque → item custom. Attend ta valeur (inspecteur)."},
-      {n:665,t:"Top bar translucide au défilement",b:"PR #688",v:"dog",c:"Codée + Codex GO, non mergée. Attend validation visuelle dogfood (6 points dans la PR)."}
-    ],
-    info:[
-      {n:691,t:"Hauteur des bandes catégorie (densité)",b:"sur dev",v:"na",c:"Preset D→C appliqué (PR #692, bandes 34→38). Réglage utilisateur de densité = option future."},
-      {n:690,t:"Couleur favori verte → jaune",b:"—",v:"na",c:"FlagPalette.Favorite = Lime 500, vire au vert. Régression, à corriger. Teinte super-favori aussi à trouver."},
-      {n:681,t:"Barre chargement « déroule » à l'ouverture du sheet",b:"—",v:"na",c:"Réfuté comme bug d'état (analyse sur l'issue). Repro on-device nécessaire."},
-      {n:251,t:"Cyan manquant (API REST tronquée)",b:"—",v:"na",c:"Pas investigué. 2 causes (cache cats / cap pagination) vérifiables côté code sans le topic manquant."}
+      {n:660,t:"Animation de swipe arrive du mauvais côté",badge:["b-wait","ton choix"],tag:"status:gated · prototype posté",c:"snapTo(0) → l'onglet « pop » centré sans glissé. Prototype 4 variantes publié (reco « slide au commit »). #695 bug #1+2 = prérequis. À implémenter une fois la variante choisie."},
+      {n:662,t:"Homogénéiser les états vides des listes",badge:["b-wait","ton choix"],tag:"status:gated · quick-win",c:"Galerie de styles publiée. Tu penchais « C » sur HFR — à confirmer puis j'implémente (rapide)."},
+      {n:676,t:"Sheet F2 (appui long) — boutons + métadonnées",badge:["b-wait","à refaire"],tag:"design rejeté · pts 3-4 déférés",c:"Livré en v194 PUIS rejeté : j'avais SUPPRIMÉ la liste verticale. Correct = GARDER la liste + AJOUTER la rangée de boutons. Sous-titre retiré = OK. Sous-catégorie (que l'ID dispo) + vues (hors REST) = déférés."},
+      {n:661,t:"Découvrabilité du menu d'affichage / « +lus »",badge:["b-wait","direction ?"],tag:"réouverte · dropdown rejeté",c:"La solution dropdown (livrée v194) ne convient pas. Réouverte, aucune nouvelle direction donnée."},
+      {n:328,t:"Liste topics : appui long = menu d'actions",badge:["b-wait","gated"],tag:"status:gated · community",c:"Complémentaire de #676 (le sheet d'actions). En attente d'une décision de design."}
     ],
     mute:[
-      {n:668,t:"Onglets / listes configurables",b:"—",v:"na",c:"Post-MVP."},
-      {n:602,t:"Aide intégrée + tuto",b:"—",v:"na",c:"Sorti de phase → milestone Méta."},
-      {n:328,t:"Appui-long menu liste topics",b:"—",v:"na",c:"Complémentaire de #676."}
+      {n:691,t:"Réglage hauteur des bandes catégorie (densité)",badge:["b-na","futur"],tag:"preset C shippé v195",c:"L'ajustement immédiat (preset D→C, bandes 34→38 dp) est shippé. Reste : exposer un réglage utilisateur de densité, lié à la future section « Affichage unifiée » (#595/#669). Laissée ouverte."},
+      {n:668,t:"Listes / onglets configurables (fusion des sources)",badge:["b-na","post-MVP"],tag:"différé",c:"Configuration des onglets / fusion des sources. Reporté après le MVP de la refonte."},
+      {n:681,t:"Barre de chargement « déroule » à l'ouverture du sheet",badge:["b-na","repro"],tag:"status:blocked-repro",c:"Réfuté comme bug d'état (keepContentDuringRefresh + mapping sur flagsResult ⇒ pas de retour à Loading). Repro on-device nécessaire avant tout fix."}
+    ],
+    info:[
+      {n:413,t:"Favoris de POST HFR (poser / lister / retirer)",badge:["b-dog","spike"],tag:"status:blocked-capture · community",c:"Nécessite une capture de session HFR authentifiée + un spike du contrat serveur. Différent des drapeaux de topic."},
+      {n:297,t:"Poser/afficher des drapeaux depuis un listing de catégorie",badge:["b-dog","capture"],tag:"status:blocked-capture",c:"Bloqué sur la même fixture authentifiée à produire (contrat HFR pose de drapeau hors-topic)."}
+    ],
+    ok:[
+      {n:671,t:"Barre de chargement décalait le contenu + bandes preset C",badge:["b-ready","v186/v195"],tag:"slot fixe + preset C",c:"Slot de hauteur fixe (v186) ; espacement bandes preset D→C (v195, PR #692)."},
+      {n:679,t:"Menu réglages rapides s'ouvrait seul au retour",badge:["b-ready","v194"],tag:"fix selon profondeur de pile",c:"Re-tap onglet armait le menu même depuis un sous-écran. Fix = racine arme / sous-écran pop-to-root (flagsAtRoot)."},
+      {n:666,t:"Barre du bas trop haute sans libellés",badge:["b-ready","v195"],tag:"item custom 52 dp + a11y",c:"CompactBarItem custom 52 dp (NavigationBarItem abandonné, garde 80 dp interne). Fix a11y : contentDescription en mode icon-only."},
+      {n:664,t:"Icônes de catégorie + pastille agrandie",badge:["b-ready","v189/v192"],tag:"pastille tonale",c:"Icône cat (dont 32 IA) + pastille agrandie, tous modes."},
+      {n:673,t:"Sheet réglages rapides ne défilait pas",badge:["b-ready","v187"],tag:"verticalScroll",c:"verticalScroll ajouté au sheet."},
+      {n:663,t:"Swipe cyclique entre onglets",badge:["b-ready","v189"],tag:"dernier ↔ premier",c:"Cycle dernier ↔ premier onglet."},
+      {n:659,t:"Pull-to-refresh manuel — rond redondant",badge:["b-ready","v185"],tag:"indicateur custom",c:"Indicateur custom au tirage, rien pendant le refresh."}
     ]
   };
-  const STRIPE={ok:"var(--ok)",warn:"var(--warn)",info:"var(--info)",mute:"var(--mute)"};
-  const BADGE={oui:["b-oui","validé"],non:["b-non","non validé"],dog:["b-dog","dogfood"],na:["b-na","—"]};
+  const STRIPE={act:"var(--act)",warn:"var(--warn)",mute:"var(--mute)",info:"var(--info)",ok:"var(--ok)"};
   function row(it,key){
     const num=it.n?`<a href="${R}${it.n}">#${it.n}</a>`:"—";
-    const [bc,bt]=BADGE[it.v];
-    const build=it.b&&it.b!=="—"?`<span class="build">${it.b}</span>`:"";
+    const [bc,bt]=it.badge;
+    const tag=it.tag?`<span class="tag">${it.tag}</span>`:"";
     return `<div class="r">
       <div class="stripe" style="background:${STRIPE[key]}"></div>
       <div class="num">${num}</div>
       <div class="main"><p class="t">${it.t}</p><p class="c">${it.c}</p></div>
-      <div class="meta"><span class="badge ${bc}">${bt}</span>${build}</div>
+      <div class="meta"><span class="badge ${bc}">${bt}</span>${tag}</div>
     </div>`;
   }
-  for(const k of ["ok","warn","info","mute"]){
+  for(const k of ["act","warn","mute","info","ok"]){
     document.getElementById("g-"+k).innerHTML=D[k].map(it=>row(it,k)).join("");
+    document.getElementById("c-"+k).textContent=D[k].length;
   }
-  // fix group counts
-  document.querySelectorAll('.group').forEach((g,i)=>{const k=["ok","warn","info","mute"][i];g.querySelector('.cnt').textContent=D[k].length;});
 </script>
 
 </body>
