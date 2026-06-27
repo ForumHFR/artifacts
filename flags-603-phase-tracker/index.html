@@ -4,205 +4,166 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Drapeaux #603 — suivi de phase</title>
-<meta name="description" content="Tableau de suivi des issues de la phase de finition Drapeaux : actionnable, en attente de décision, différé, bloqué — priorisé (gate Codex).">
+<meta name="description" content="Tableau de suivi des issues de la phase Drapeaux : état, build, et colonne Validation XaTriX (le shippé/fermé n'est validé que par XaTriX).">
 <style>
   :root{
     --ground:#15100f;--panel:#1f1817;--panel-2:#291f1e;--line:#3a2c2a;
-    --ink:#f4ecea;--ink-dim:#bcaaa6;--ink-faint:#8b7873;--accent:#e8868c;--accent-deep:#8E1D24;
-    /* sémantiques (distinctes de l'accent) */
-    --ok:#7ed3a2;--ok-bg:#16352440;--ok-line:#2f5f47;
-    --warn:#e6b768;--warn-bg:#3a2c1640;--warn-line:#5f4a2a;
-    --info:#7fb6e8;--info-bg:#15293a40;--info-line:#2a4a5f;
+    --ink:#f4ecea;--ink-dim:#bcaaa6;--ink-faint:#8b7873;--accent:#e8868c;
+    --ok:#7ed3a2;--ok-bg:#1635241f;--ok-line:#2f5f47;
+    --warn:#e6b768;--warn-bg:#3a2c161f;--warn-line:#5f4a2a;
+    --info:#7fb6e8;--info-bg:#15293a1f;--info-line:#2a4a5f;
     --mute:#9a8b87;--mute-bg:#2a201f;--mute-line:#3a2c2a;
-    --bad:#e88a8a;--bad-bg:#3a191940;--bad-line:#5f2a2a;
-    --act:#e8868c;--act-bg:#3a191e40;--act-line:#7a2f38;
+    --bad:#e88a8a;--bad-bg:#3a19191f;--bad-line:#5f2a2a;
+    --act:#e8868c;--act-bg:#3a191e1f;--act-line:#7a2f38;
     --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;--sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
   }
   *{box-sizing:border-box}
   body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);line-height:1.5;-webkit-font-smoothing:antialiased}
-  .wrap{max-width:1000px;margin:0 auto;padding:32px 20px 64px}
-  header{margin-bottom:22px}
+  .wrap{max-width:1080px;margin:0 auto;padding:30px 18px 64px}
+  header{margin-bottom:18px}
   .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin:0 0 8px}
-  h1{font-size:clamp(22px,3.4vw,30px);margin:0 0 6px;font-weight:650;text-wrap:balance}
-  .sub{color:var(--ink-dim);margin:0;font-size:14px}
+  h1{font-size:clamp(21px,3.2vw,29px);margin:0 0 6px;font-weight:650;text-wrap:balance}
+  .sub{color:var(--ink-dim);margin:0;font-size:14px;max-width:74ch}
+  .sub b{color:var(--ink)}
   .updated{color:var(--ink-faint);font-family:var(--mono);font-size:12px;margin-top:6px}
   .updated b{color:var(--ink-dim);font-weight:600}
 
-  /* stat strip */
-  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(112px,1fr));gap:10px;margin:22px 0}
-  .stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:13px 15px}
-  .stat .n{font-size:25px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1}
-  .stat .l{font-size:11px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.05em;margin-top:6px;font-family:var(--mono)}
-  .stat.act .n{color:var(--act)} .stat.warn .n{color:var(--warn)} .stat.mute .n{color:var(--mute)} .stat.info .n{color:var(--info)} .stat.ok .n{color:var(--ok)}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(116px,1fr));gap:9px;margin:18px 0}
+  .stat{background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:11px 14px}
+  .stat .n{font-size:23px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1}
+  .stat .l{font-size:10.5px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.05em;margin-top:6px;font-family:var(--mono)}
+  .stat.warn .n{color:var(--warn)} .stat.ok .n{color:var(--ok)} .stat.bad .n{color:var(--bad)} .stat.act .n{color:var(--act)} .stat.mute .n{color:var(--mute)}
 
-  /* callout priorisation */
-  .wait{background:linear-gradient(180deg,var(--act-bg),transparent);border:1px solid var(--act-line);border-radius:12px;padding:16px 18px;margin-bottom:14px}
-  .wait h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);margin:0 0 4px;font-family:var(--mono)}
-  .wait p.k{margin:0 0 10px;font-size:12.5px;color:var(--ink-faint)}
-  .wait ol{margin:0;padding-left:22px;color:var(--ink);font-size:14px}
-  .wait li{margin:6px 0}
-  .wait a{color:var(--accent)}
-  .wait b{color:var(--ink)}
+  .note{background:linear-gradient(180deg,var(--warn-bg),transparent);border:1px solid var(--warn-line);border-radius:11px;padding:13px 16px;margin-bottom:20px;font-size:13.5px;color:var(--ink)}
+  .note b{color:var(--warn)}
 
-  .decide{background:linear-gradient(180deg,var(--warn-bg),transparent);border:1px solid var(--warn-line);border-radius:12px;padding:16px 18px;margin-bottom:26px}
-  .decide h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--warn);margin:0 0 10px;font-family:var(--mono)}
-  .decide ul{margin:0;padding-left:20px;color:var(--ink);font-size:14px}
-  .decide li{margin:5px 0}
-  .decide a{color:var(--accent)}
+  .tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+  table{border-collapse:collapse;width:100%;min-width:680px;font-size:13px}
+  thead th{position:sticky;top:0;background:var(--panel-2);color:var(--ink-faint);font-family:var(--mono);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);white-space:nowrap}
+  th.valcol,td.valcol{background:#241a1c;border-left:1px solid var(--line);border-right:1px solid var(--line)}
+  thead th.valcol{color:var(--accent)}
+  tbody tr{border-bottom:1px solid #2a201f}
+  tbody tr:last-child{border-bottom:0}
+  td{padding:9px 12px;vertical-align:top}
+  td.num{font-family:var(--mono);font-weight:700;white-space:nowrap}
+  td.num a{color:var(--ink);text-decoration:none;border-bottom:1px dotted var(--ink-faint)}
+  td.subj{min-width:230px}
+  td.subj .t{font-weight:600}
+  td.subj .c{color:var(--ink-faint);font-size:11.5px;margin-top:2px;line-height:1.4}
+  td.build{font-family:var(--mono);font-size:11.5px;color:var(--ink-faint);white-space:nowrap}
+  .sec td{background:var(--panel-2);font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-faint);padding:7px 12px;font-weight:600}
+  .chip{display:inline-block;font-family:var(--mono);font-size:10.5px;padding:2px 8px;border-radius:999px;border:1px solid;font-weight:600;white-space:nowrap}
+  .c-ship{color:var(--ok);background:var(--ok-bg);border-color:var(--ok-line)}
+  .c-prog{color:var(--info);background:var(--info-bg);border-color:var(--info-line)}
+  .c-redo{color:var(--bad);background:var(--bad-bg);border-color:var(--bad-line)}
+  .c-gate{color:var(--warn);background:var(--warn-bg);border-color:var(--warn-line)}
+  .c-defer{color:var(--mute);background:var(--mute-bg);border-color:var(--mute-line)}
+  .c-block{color:var(--mute);background:var(--mute-bg);border-color:var(--mute-line)}
+  /* validation */
+  .v{font-weight:700;white-space:nowrap;font-size:12.5px}
+  .v-todo{color:var(--warn)} .v-ok{color:var(--ok)} .v-no{color:var(--bad)} .v-na{color:var(--ink-faint)}
 
-  .group{margin:26px 0 10px}
-  .group h2{font-size:14px;margin:0;font-weight:650;display:flex;align-items:center;gap:10px}
-  .group .gs{font-size:12.5px;color:var(--ink-faint);font-weight:400}
-  .group .cnt{font-family:var(--mono);font-size:12px;color:var(--ink-faint);font-weight:400;margin-left:auto}
-
-  .rows{display:flex;flex-direction:column;gap:8px;margin-top:12px}
-  .r{display:grid;grid-template-columns:6px 58px 1fr auto;gap:13px;align-items:start;background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:12px 15px 12px 0;overflow:hidden}
-  .stripe{align-self:stretch;border-radius:11px 0 0 11px}
-  .num{font-family:var(--mono);font-size:13px;font-weight:700;padding-top:1px}
-  .num a{color:var(--ink);text-decoration:none;border-bottom:1px dotted var(--ink-faint)}
-  .main .t{font-size:14.5px;font-weight:600;margin:0 0 3px}
-  .main .c{font-size:12.5px;color:var(--ink-dim);margin:0;line-height:1.45}
-  .main .c a{color:var(--accent)}
-  .meta{display:flex;flex-direction:column;align-items:flex-end;gap:6px;white-space:nowrap}
-  .badge{font-family:var(--mono);font-size:11px;padding:3px 9px;border-radius:999px;border:1px solid;font-weight:600}
-  .b-p{color:var(--act);background:var(--act-bg);border-color:var(--act-line)}
-  .b-ready{color:var(--ok);background:var(--ok-bg);border-color:var(--ok-line)}
-  .b-conf{color:var(--bad);background:var(--bad-bg);border-color:var(--bad-line)}
-  .b-dog{color:var(--info);background:var(--info-bg);border-color:var(--info-line)}
-  .b-wait{color:var(--warn);background:var(--warn-bg);border-color:var(--warn-line)}
-  .b-na{color:var(--mute);background:var(--mute-bg);border-color:var(--mute-line)}
-  .tag{font-family:var(--mono);font-size:10.5px;color:var(--ink-faint)}
-
-  .rel{margin-top:30px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;font-size:13px;color:var(--ink-dim)}
-  .rel b{color:var(--ink)} .rel code{font-family:var(--mono);font-size:.9em;background:var(--panel-2);padding:1px 5px;border-radius:4px;color:var(--accent)}
-  .links{margin-top:14px;display:flex;flex-wrap:wrap;gap:10px}
-  .links a{font-family:var(--mono);font-size:12px;color:var(--accent);text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:6px 12px}
-  .links a:hover{border-color:var(--accent)}
+  .foot{margin-top:18px;font-size:12.5px;color:var(--ink-faint)}
+  .foot a{color:var(--accent);text-decoration:none}
   a:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:3px}
-  @media(max-width:620px){.r{grid-template-columns:6px 1fr;padding-right:12px}.num{grid-column:2}.main{grid-column:2}.meta{grid-column:2;align-items:flex-start;flex-direction:row;flex-wrap:wrap}}
 </style>
 </head>
 <body>
 <div class="wrap">
   <header>
     <p class="eyebrow">Redface 2 · vue:drapeaux · #603</p>
-    <h1>Phase de finition Drapeaux — suivi</h1>
-    <p class="sub">Issues ouvertes triées par <b style="color:var(--ink)">qui débloque</b> : ce que je peux coder seul, ce qui attend ta décision, le différé, le bloqué.</p>
-    <p class="updated">maj 2026-06-27 · dernier build dev <b>0.17.16 / app-v196</b> · milestone <b>Vue · Drapeaux</b> · #251 + #690 <b>shippés</b> (clôture GitHub en attente) · priorisation <b>gate Codex GO</b></p>
+    <h1>Phase Drapeaux — suivi</h1>
+    <p class="sub">Une ligne par issue. La colonne <b>Validation</b> appartient à XaTriX : <b>« shippé » ou « issue fermée » ne veut pas dire validé</b> — c'est XaTriX qui valide en dernier ressort.</p>
+    <p class="updated">maj 2026-06-27 · dernier build dev <b>0.17.16 / app-v196</b> · milestone <b>Vue · Drapeaux</b></p>
   </header>
 
   <div class="stats">
-    <div class="stat act"><div class="n">2</div><div class="l">actionnable</div></div>
-    <div class="stat warn"><div class="n">5</div><div class="l">attend XaTriX</div></div>
-    <div class="stat mute"><div class="n">3</div><div class="l">différé</div></div>
-    <div class="stat info"><div class="n">2</div><div class="l">bloqué capture</div></div>
-    <div class="stat ok"><div class="n">9</div><div class="l">résolus</div></div>
+    <div class="stat warn"><div class="n" id="s-todo">0</div><div class="l">⏳ à valider</div></div>
+    <div class="stat ok"><div class="n" id="s-ok">0</div><div class="l">✅ validé</div></div>
+    <div class="stat bad"><div class="n" id="s-no">0</div><div class="l">❌ rejeté</div></div>
+    <div class="stat act"><div class="n" id="s-prog">0</div><div class="l">en cours / gated</div></div>
+    <div class="stat mute"><div class="n" id="s-rest">0</div><div class="l">différé / bloqué</div></div>
   </div>
 
-  <div class="wait">
-    <h2>▶ Sujets à traiter — sans décision de ta part</h2>
-    <p class="k">#251 + #690 shippés en v196 (gate Codex GO + code review xhigh). Reste actionnable :</p>
-    <ol>
-      <li><b>#695 bug #1</b> — scroll partagé entre onglets (l'état de défilement bave). Bug d'état découplé de l'animation #660.</li>
-      <li><b>#665 / PR #688</b> — <b>conflit réel</b> à résoudre (FlagsSearchAppBar.kt) + dogfood visuel + merge. Sinon on la ferme et on rebranche propre.</li>
-      <li><b>#662</b> — décidé (C en option, défaut A, smiley <code>[:eric le looser]</code>) : <b>en implémentation</b>, prochain train.</li>
-    </ol>
+  <div class="note"><b>Validation</b> = à toi. <code>⏳ à valider</code> (fait/shippé, attend ton OK dogfood) · <code>✅ validé</code> (tu as confirmé) · <code>❌ rejeté</code> (à refaire) · <code>—</code> (rien à valider encore). Source éditable : <code>/work/xaat/SUIVI-603.md</code>.</div>
+
+  <div class="tablewrap">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th><th>Sujet</th><th>État</th><th>Build</th><th class="valcol">Validation XaTriX</th>
+        </tr>
+      </thead>
+      <tbody id="tb"></tbody>
+    </table>
   </div>
 
-  <div class="decide">
-    <h2>⏳ En attente de ta décision (gated)</h2>
-    <ul>
-      <li><b>#660</b> animation swipe — choisis la variante dans la <a href="https://forumhfr.github.io/artifacts/flags-603-swipe-anim/">galerie 4 variantes</a> (reco = « slide au commit »).</li>
-      <li><b>#662</b> états vides — confirme le style dans la <a href="https://forumhfr.github.io/artifacts/flags-603-empty-states/">galerie</a> (tu penchais « C »).</li>
-      <li><b>#676</b> sheet appui-long — on rediscute : garder la liste verticale ET ajouter la rangée de boutons (j'avais supprimé la liste à tort).</li>
-      <li><b>#661</b> découvrabilité « +lus » — le dropdown ne t'a pas convenu : quelle direction ?</li>
-    </ul>
-  </div>
-
-  <!-- ACTIONNABLE -->
-  <div class="group"><h2><span style="color:var(--act)">▶</span> Actionnable maintenant <span class="gs">je code, pas de décision requise</span><span class="cnt" id="c-act"></span></h2></div>
-  <div class="rows" id="g-act"></div>
-
-  <!-- GATED -->
-  <div class="group"><h2><span style="color:var(--warn)">⏳</span> Attend une décision XaTriX <span class="gs">prototypes / galeries postés</span><span class="cnt" id="c-warn"></span></h2></div>
-  <div class="rows" id="g-warn"></div>
-
-  <!-- DIFFÉRÉ -->
-  <div class="group"><h2><span style="color:var(--mute)">⏸</span> Différé / futur <span class="gs">post-MVP ou repro on-device</span><span class="cnt" id="c-mute"></span></h2></div>
-  <div class="rows" id="g-mute"></div>
-
-  <!-- BLOQUÉ -->
-  <div class="group"><h2><span style="color:var(--info)">⛔</span> Bloqué — capture session HFR <span class="gs">dépend d'une fixture authentifiée à produire</span><span class="cnt" id="c-info"></span></h2></div>
-  <div class="rows" id="g-info"></div>
-
-  <!-- RÉSOLUS -->
-  <div class="group"><h2><span style="color:var(--ok)">✅</span> Résolus &amp; validés <span class="gs">de v185 à v195</span><span class="cnt" id="c-ok"></span></h2></div>
-  <div class="rows" id="g-ok"></div>
-
-  <div class="rel">
-    <b>Releases dev de la phase :</b> v185 → … → v193 (0.17.13, barre du bas 56 dp) → v194 (0.17.14, #661+#679+#676) → <b>v195 (0.17.15, barre du bas 52 dp #666 + bandes preset C #671)</b>.
-    Prochaine cible : <b>#251 + #690</b> (un train), puis <b>#695 bug #1</b>, puis <b>#665</b> après résolution conflit + dogfood.
-    <div class="links">
-      <a href="https://forumhfr.github.io/artifacts/flags-603-swipe-anim/">↔ variantes swipe #660</a>
-      <a href="https://forumhfr.github.io/artifacts/flags-603-empty-states/">🫥 états vides #662</a>
-      <a href="https://forumhfr.github.io/artifacts/flags-603-favori-jaune/">🟡 favori jaune #690</a>
-      <a href="https://forumhfr.github.io/artifacts/flags-603-band-spacing/">↕ espacement bandes #691</a>
-      <a href="https://github.com/ForumHFR/redface2/issues/603">🧵 umbrella #603</a>
-    </div>
-  </div>
+  <p class="foot">Umbrella <a href="https://github.com/ForumHFR/redface2/issues/603">#603</a> · miroir <a href="https://forumhfr.github.io/artifacts/flags-603-phase-tracker/">forumhfr.github.io</a> · proto swipe <a href="https://forumhfr.github.io/artifacts/flags-603-swipe-anim/">#660</a> · états vides <a href="https://forumhfr.github.io/artifacts/flags-603-empty-states/">#662</a></p>
 </div>
 
 <script>
   const R="https://github.com/ForumHFR/redface2/issues/";
-  const D={
-    act:[
-      {n:695,t:"Audit swipe — bug #1 : scroll partagé entre onglets",badge:["b-p","P1"],tag:"bug d'état · découplé de #660",c:"flagsListState partagé Cyan/Favori/Rouge → le défilement bave d'un onglet à l'autre. Indépendant du choix d'animation : à fixer sans attendre #660 (state saveable par onglet)."},
-      {n:665,t:"Top bar translucide — PR #688",badge:["b-conf","conflit"],tag:"P2 · résoudre + dogfood + merge",c:"PR ouverte mais CONFLICTING (conflit réel dans FlagsSearchAppBar.kt avec le preset bandes #671). Code + Codex GO faits, jamais validé visuellement. Résoudre + dogfood 6 points + merger — ou fermer et rebrancher propre."}
-    ],
-    warn:[
-      {n:660,t:"Animation de swipe arrive du mauvais côté",badge:["b-wait","ton choix"],tag:"status:gated · prototype posté",c:"snapTo(0) → l'onglet « pop » centré sans glissé. Prototype 4 variantes publié (reco « slide au commit »). #695 bug #1+2 = prérequis. À implémenter une fois la variante choisie."},
-      {n:662,t:"Homogénéiser les états vides des listes",badge:["b-dog","décidé"],tag:"C en option · défaut A · prochain train",c:"DÉCIDÉ : style C (smiley) en option derrière un réglage, défaut A (icône+message), smiley [:eric le looser]. En implémentation (DataStore + réglage + rendu + Roborazzi)."},
-      {n:676,t:"Sheet F2 (appui long) — boutons + métadonnées",badge:["b-wait","à refaire"],tag:"design rejeté · pts 3-4 déférés",c:"Livré en v194 PUIS rejeté : j'avais SUPPRIMÉ la liste verticale. Correct = GARDER la liste + AJOUTER la rangée de boutons. Sous-titre retiré = OK. Sous-catégorie (que l'ID dispo) + vues (hors REST) = déférés."},
-      {n:661,t:"Découvrabilité du menu d'affichage / « +lus »",badge:["b-wait","direction ?"],tag:"réouverte · dropdown rejeté",c:"La solution dropdown (livrée v194) ne convient pas. Réouverte, aucune nouvelle direction donnée."},
-      {n:328,t:"Liste topics : appui long = menu d'actions",badge:["b-wait","gated"],tag:"status:gated · community",c:"Complémentaire de #676 (le sheet d'actions). En attente d'une décision de design."}
-    ],
-    mute:[
-      {n:691,t:"Réglage hauteur des bandes catégorie (densité)",badge:["b-na","futur"],tag:"preset C shippé v195",c:"L'ajustement immédiat (preset D→C, bandes 34→38 dp) est shippé. Reste : exposer un réglage utilisateur de densité, lié à la future section « Affichage unifiée » (#595/#669). Laissée ouverte."},
-      {n:668,t:"Listes / onglets configurables (fusion des sources)",badge:["b-na","post-MVP"],tag:"différé",c:"Configuration des onglets / fusion des sources. Reporté après le MVP de la refonte."},
-      {n:681,t:"Barre de chargement « déroule » à l'ouverture du sheet",badge:["b-na","repro"],tag:"status:blocked-repro",c:"Réfuté comme bug d'état (keepContentDuringRefresh + mapping sur flagsResult ⇒ pas de retour à Loading). Repro on-device nécessaire avant tout fix."}
-    ],
-    info:[
-      {n:413,t:"Favoris de POST HFR (poser / lister / retirer)",badge:["b-dog","spike"],tag:"status:blocked-capture · community",c:"Nécessite une capture de session HFR authentifiée + un spike du contrat serveur. Différent des drapeaux de topic."},
-      {n:297,t:"Poser/afficher des drapeaux depuis un listing de catégorie",badge:["b-dog","capture"],tag:"status:blocked-capture",c:"Bloqué sur la même fixture authentifiée à produire (contrat HFR pose de drapeau hors-topic)."}
-    ],
-    ok:[
-      {n:251,t:"Cyan manquant d'une catégorie récente",badge:["b-ready","v196"],tag:"bug données · shippé",c:"getCategories(forceRefreshIfStale=true) one-shot : catalogue frais si cache périmé → la cat ajoutée après le warm (ex. 32 IA) est énumérée, ses cyans réapparaissent. Dégradation last-known-good si l'endpoint cats échoue. Gate Codex + code review xhigh. (Clôture GitHub en attente.)"},
-      {n:690,t:"Couleur du drapeau favori repassée au jaune",badge:["b-ready","v196"],tag:"design · shippé",c:"FlagPalette.Favorite Lime 500 (vert) → Yellow 600 #FDD835 (jaune franc, pas l'ambre). Cyan/rouge inchangés. (Clôture GitHub en attente.)"},
-      {n:671,t:"Barre de chargement décalait le contenu + bandes preset C",badge:["b-ready","v186/v195"],tag:"slot fixe + preset C",c:"Slot de hauteur fixe (v186) ; espacement bandes preset D→C (v195, PR #692)."},
-      {n:679,t:"Menu réglages rapides s'ouvrait seul au retour",badge:["b-ready","v194"],tag:"fix selon profondeur de pile",c:"Re-tap onglet armait le menu même depuis un sous-écran. Fix = racine arme / sous-écran pop-to-root (flagsAtRoot)."},
-      {n:666,t:"Barre du bas trop haute sans libellés",badge:["b-ready","v195"],tag:"item custom 52 dp + a11y",c:"CompactBarItem custom 52 dp (NavigationBarItem abandonné, garde 80 dp interne). Fix a11y : contentDescription en mode icon-only."},
-      {n:664,t:"Icônes de catégorie + pastille agrandie",badge:["b-ready","v189/v192"],tag:"pastille tonale",c:"Icône cat (dont 32 IA) + pastille agrandie, tous modes."},
-      {n:673,t:"Sheet réglages rapides ne défilait pas",badge:["b-ready","v187"],tag:"verticalScroll",c:"verticalScroll ajouté au sheet."},
-      {n:663,t:"Swipe cyclique entre onglets",badge:["b-ready","v189"],tag:"dernier ↔ premier",c:"Cycle dernier ↔ premier onglet."},
-      {n:659,t:"Pull-to-refresh manuel — rond redondant",badge:["b-ready","v185"],tag:"indicateur custom",c:"Indicateur custom au tirage, rien pendant le refresh."}
-    ]
-  };
-  const STRIPE={act:"var(--act)",warn:"var(--warn)",mute:"var(--mute)",info:"var(--info)",ok:"var(--ok)"};
-  function row(it,key){
-    const num=it.n?`<a href="${R}${it.n}">#${it.n}</a>`:"—";
-    const [bc,bt]=it.badge;
-    const tag=it.tag?`<span class="tag">${it.tag}</span>`:"";
-    return `<div class="r">
-      <div class="stripe" style="background:${STRIPE[key]}"></div>
-      <div class="num">${num}</div>
-      <div class="main"><p class="t">${it.t}</p><p class="c">${it.c}</p></div>
-      <div class="meta"><span class="badge ${bc}">${bt}</span>${tag}</div>
-    </div>`;
+  const ET={ship:["c-ship","shippé"],prog:["c-prog","en cours"],redo:["c-redo","à refaire"],gate:["c-gate","gated"],defer:["c-defer","différé"],block:["c-block","bloqué"]};
+  const VL={todo:["v-todo","⏳ à valider"],ok:["v-ok","✅ validé"],no:["v-no","❌ rejeté"],na:["v-na","—"]};
+  const SECTIONS=[
+    {h:"Shippé — attend ta validation", rows:[
+      {n:251,t:"Cyan manquant d'une catégorie récente",c:"getCategories one-shot frais si cache périmé ; clôture GitHub en attente",e:"ship",b:"v196",v:"todo"},
+      {n:690,t:"Drapeau favori repassé au jaune (#FDD835)",c:"Lime 500 (vert) → Yellow 600 ; clôture GitHub en attente",e:"ship",b:"v196",v:"todo"},
+      {n:671,t:"Bandes catégorie — preset C",c:"réglage de densité dédié à venir (#691)",e:"ship",b:"v195",v:"todo"},
+      {n:666,t:"Barre du bas 52 dp en icônes seules",c:"« on peut pas descendre plus bas » (#2789472)",e:"ship",b:"v195",v:"ok"},
+      {n:679,t:"Menu rapide ne pop plus au retour",c:"",e:"ship",b:"v194",v:"todo"}
+    ]},
+    {h:"Attend ta décision / en cours", rows:[
+      {n:660,t:"Animation swipe arrive du mauvais côté",c:"proto 4 variantes ; styx42 = slide au commit, nicko = page-turn → ton arbitrage",e:"gate",b:"—",v:"na"},
+      {n:662,t:"Homogénéiser les états vides",c:"décidé : C en option, défaut A, smiley [:eric le looser] ; en implémentation",e:"prog",b:"—",v:"na"},
+      {n:695,t:"Audit swipe — scroll partagé entre onglets",c:"bug d'état, prérequis de #660",e:"prog",b:"—",v:"na"},
+      {n:665,t:"Top bar translucide (PR #688)",c:"PR conflictée (FlagsSearchAppBar.kt) à résoudre + dogfood",e:"redo",b:"—",v:"na"},
+      {n:676,t:"Sheet appui-long F2",c:"liste verticale supprimée à tort → garder liste + ajouter rangée",e:"redo",b:"v194",v:"no"},
+      {n:661,t:"Découvrabilité « +lus »",c:"dropdown rejeté ; pas de nouvelle direction",e:"redo",b:"v194",v:"no"},
+      {n:328,t:"Appui-long = menu d'actions (liste topics)",c:"complémentaire de #676",e:"gate",b:"—",v:"na"}
+    ]},
+    {h:"Différé / futur", rows:[
+      {n:691,t:"Réglage densité des bandes catégorie",c:"preset C shippé v195 ; réglage utilisateur plus tard",e:"defer",b:"—",v:"na"},
+      {n:668,t:"Listes / onglets configurables",c:"post-MVP",e:"defer",b:"—",v:"na"},
+      {n:681,t:"Barre chargement « déroule » à l'ouverture du sheet",c:"besoin repro on-device",e:"defer",b:"—",v:"na"}
+    ]},
+    {h:"Bloqué — capture session HFR auth", rows:[
+      {n:413,t:"Favoris de POST HFR",c:"spike, dépend d'une fixture authentifiée",e:"block",b:"—",v:"na"},
+      {n:297,t:"Drapeaux depuis un listing de catégorie",c:"même dépendance",e:"block",b:"—",v:"na"}
+    ]},
+    {h:"Historique — lot finition antérieur (fermé)", rows:[
+      {n:673,t:"Sheet réglages rapides ne défilait pas",c:"",e:"ship",b:"v187",v:"ok"},
+      {n:664,t:"Icônes catégorie + pastille agrandie",c:"",e:"ship",b:"v189/v192",v:"ok"},
+      {n:663,t:"Swipe cyclique entre onglets",c:"",e:"ship",b:"v189",v:"ok"},
+      {n:659,t:"Pull-to-refresh — rond redondant",c:"",e:"ship",b:"v185",v:"ok"}
+    ]}
+  ];
+  const tb=document.getElementById("tb");
+  const count={todo:0,ok:0,no:0,prog:0,rest:0};
+  let html="";
+  for(const sec of SECTIONS){
+    html+=`<tr class="sec"><td colspan="5">${sec.h}</td></tr>`;
+    for(const r of sec.rows){
+      const [ec,et]=ET[r.e], [vc,vt]=VL[r.v];
+      const desc=r.c?`<div class="c">${r.c}</div>`:"";
+      html+=`<tr>
+        <td class="num"><a href="${R}${r.n}">#${r.n}</a></td>
+        <td class="subj"><div class="t">${r.t}</div>${desc}</td>
+        <td><span class="chip ${ec}">${et}</span></td>
+        <td class="build">${r.b}</td>
+        <td class="valcol"><span class="v ${vc}">${vt}</span></td>
+      </tr>`;
+      if(r.v==="todo")count.todo++; else if(r.v==="ok")count.ok++; else if(r.v==="no")count.no++;
+      if(r.e==="prog"||r.e==="gate"||r.e==="redo")count.prog++;
+      if(r.e==="defer"||r.e==="block")count.rest++;
+    }
   }
-  for(const k of ["act","warn","mute","info","ok"]){
-    document.getElementById("g-"+k).innerHTML=D[k].map(it=>row(it,k)).join("");
-    document.getElementById("c-"+k).textContent=D[k].length;
-  }
+  tb.innerHTML=html;
+  document.getElementById("s-todo").textContent=count.todo;
+  document.getElementById("s-ok").textContent=count.ok;
+  document.getElementById("s-no").textContent=count.no;
+  document.getElementById("s-prog").textContent=count.prog;
+  document.getElementById("s-rest").textContent=count.rest;
 </script>
 
 </body>
