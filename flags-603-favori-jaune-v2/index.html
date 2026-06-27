@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Drapeaux #690 — favori jaune v2 (lisibilité clair/sombre)</title>
+<meta name="description" content="Inspecteur : le jaune du drapeau favori rendu sur les vraies surfaces claire et sombre de l'app, avec ratios de contraste, theme-aware et anneau de contour.">
+<style>
+  :root{
+    --bg:#15100f;--panel:#1f1817;--panel-2:#291f1e;--line:#3a2c2a;
+    --ink:#f4ecea;--ink-dim:#bcaaa6;--ink-faint:#8b7873;--accent:#e8868c;
+    --ok:#7ed3a2;--warn:#e6b768;--bad:#e88a8a;
+    --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;--sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    /* vraies surfaces de l'app */
+    --lt-surface:#FFF8F7;--lt-container:#FCEBEA;--lt-onsurface:#231919;--lt-dim:#6f5f5e;--lt-edge:#ecdad9;
+    --dk-surface:#1A1111;--dk-container:#271D1D;--dk-onsurface:#F0DEDC;--dk-dim:#b9a9a6;--dk-edge:#3a2c2a;
+    --cyan:#00BCD4;--red:#D32F2F;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.5;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1100px;margin:0 auto;padding:30px 18px 72px}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin:0 0 8px}
+  h1{font-size:clamp(21px,3.3vw,30px);margin:0 0 8px;font-weight:650;text-wrap:balance}
+  .lede{color:var(--ink-dim);max-width:74ch;margin:0 0 6px;font-size:14.5px}
+  .lede b{color:var(--ink)}
+  .key{color:var(--ink-faint);font-size:13px;max-width:74ch;margin:10px 0 0}
+  .controls{display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin:22px 0 8px;padding:12px 16px;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+  .controls label{display:flex;align-items:center;gap:8px;font-size:13.5px;cursor:pointer}
+  .controls input{width:16px;height:16px;accent-color:var(--accent)}
+  .controls .hint{color:var(--ink-faint);font-size:12px;font-family:var(--mono)}
+
+  .cards{display:flex;flex-direction:column;gap:12px;margin-top:14px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:13px;overflow:hidden}
+  .card.reco{border-color:rgba(126,211,162,.5);box-shadow:0 0 0 1px rgba(126,211,162,.16)}
+  .card.bad{opacity:.92}
+  .chead{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:11px 16px;border-bottom:1px solid var(--line)}
+  .chead .nm{font-weight:650;font-size:14.5px}
+  .chead .hex{font-family:var(--mono);font-size:12px;color:var(--ink-dim)}
+  .tag{margin-left:auto;font-family:var(--mono);font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:3px 9px;border-radius:6px;white-space:nowrap}
+  .tag.reco{color:#10240f;background:var(--ok)} .tag.bad{color:#3a1919;background:var(--bad)} .tag.alt{color:var(--ink-dim);border:1px solid var(--line)}
+  .twin{display:grid;grid-template-columns:1fr 1fr;gap:0}
+  @media(max-width:640px){.twin{grid-template-columns:1fr}}
+  .pane{padding:16px 18px}
+  .pane.lt{background:var(--lt-surface)}
+  .pane.dk{background:var(--dk-surface);border-left:1px solid var(--dk-edge)}
+  @media(max-width:640px){.pane.dk{border-left:0;border-top:1px solid var(--dk-edge)}}
+  .plabel{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;margin:0 0 12px}
+  .pane.lt .plabel{color:var(--lt-dim)} .pane.dk .plabel{color:var(--dk-dim)}
+
+  /* mini sélecteur d'onglet (dropdown) */
+  .picker{border-radius:12px;padding:10px 12px;max-width:240px}
+  .pane.lt .picker{background:var(--lt-container)}
+  .pane.dk .picker{background:var(--dk-container)}
+  .prow{display:flex;align-items:center;gap:14px;padding:7px 4px}
+  .dot{width:18px;height:18px;border-radius:50%;flex:0 0 auto}
+  .prow .lbl{font-size:15px}
+  .pane.lt .prow .lbl{color:var(--lt-onsurface)} .pane.dk .prow .lbl{color:var(--dk-onsurface)}
+
+  /* mini ligne de liste (barre + titre + pastille) */
+  .listrow{display:grid;grid-template-columns:5px 1fr auto;gap:11px;align-items:center;margin-top:16px;border-radius:10px;padding:10px 12px 10px 0;overflow:hidden;max-width:300px}
+  .pane.lt .listrow{background:var(--lt-surface);border:1px solid var(--lt-edge)}
+  .pane.dk .listrow{background:var(--dk-surface);border:1px solid var(--dk-edge)}
+  .bar{align-self:stretch;border-radius:10px 0 0 10px;min-height:34px}
+  .rtitle{font-size:13.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .pane.lt .rtitle{color:var(--lt-onsurface)} .pane.dk .rtitle{color:var(--dk-onsurface)}
+  .rsub{font-size:11px;margin-top:2px}
+  .pane.lt .rsub{color:var(--lt-dim)} .pane.dk .rsub{color:var(--dk-dim)}
+  .pill{font-size:12px;font-weight:700;padding:2px 9px;border-radius:8px;white-space:nowrap}
+
+  .cr{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;margin-top:14px;padding:3px 9px;border-radius:999px;border:1px solid}
+  .cr.good{color:var(--ok);border-color:#2f5f47;background:#16352420}
+  .cr.mid{color:var(--warn);border-color:#5f4a2a;background:#3a2c1620}
+  .cr.poor{color:var(--bad);border-color:#5f2a2a;background:#3a191920}
+  .crnote{font-size:11px;color:var(--ink-faint);margin-top:8px}
+  .pane.lt .crnote{color:var(--lt-dim)}
+
+  .reco-box{margin-top:28px;background:linear-gradient(180deg,#16352418,transparent);border:1px solid #2f5f47;border-radius:13px;padding:18px 20px}
+  .reco-box h2{margin:0 0 8px;font-size:15px;color:var(--ok)}
+  .reco-box p{margin:6px 0;font-size:13.5px;color:var(--ink-dim)} .reco-box b{color:var(--ink)}
+  .reco-box code{font-family:var(--mono);font-size:.9em;background:var(--panel-2);padding:1px 5px;border-radius:4px;color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="eyebrow">Redface 2 · #690 · favori · v2</p>
+  <h1>Le jaune du favori — lisibilité clair / sombre</h1>
+  <p class="lede">Le <b>#FDD835</b> shippé (v196) est parfait sur sombre mais <b>se noie sur le thème clair</b> (fond crème). Réalité du contraste : un jaune ne peut pas atteindre le seuil UI de <b>3:1</b> sur un crème quasi-blanc en restant « jaune » — le meilleur or plafonne à ~2,3:1. Les deux vraies sorties : <b>theme-aware</b> (vif sur sombre, or sur clair) et/ou <b>anneau de contour</b> (donne la définition au point sans assombrir le jaune). Chaque candidat est rendu ci-dessous sur les <b>vraies surfaces</b> de l'app, avec le ratio de contraste réel.</p>
+  <p class="key">Le ratio affiché = marqueur vs surface du dropdown clair (<code style="font-family:var(--mono)">#FCEBEA</code>), là où le bât blesse.</p>
+
+  <div class="controls">
+    <label><input type="checkbox" id="ring"> Anneau de contour sur le point/pastille</label>
+    <span class="hint">coche pour voir l'effet « définition par le contour » sur clair</span>
+  </div>
+
+  <div class="cards" id="cards"></div>
+
+  <div class="reco-box">
+    <h2>Ma reco (gate Codex gpt-5.5 xhigh — à confirmer par toi)</h2>
+    <p><b>B · theme-aware (candidat recommandé).</b> Sur sombre/AMOLED on garde le jaune vif <code>#FDD835</code> (identité intacte). Sur clair on passe à un or profond <code>#9C7300</code> qui atteint <b>~3,7:1</b> sur le crème (réellement lisible) tout en restant un jaune/or. L'or n'est ici <b>que</b> la variante claire — sur sombre ça reste franchement jaune, donc l'identité « favori jaune » tient. Codex : « l'identité n'est pas un hex immuable, c'est : le favori HFR est jaune ». Variante plus chaude possible : <code>#A06400</code> (C).</p>
+    <p>Si tu refuses le theme-aware (un seul hex, comme cyan/rouge) : soit <b>A + anneau</b> (garder <code>#FDD835</code> et cocher l'anneau ci-dessus — la définition vient du contour, pas du remplissage), soit <b>D</b> <code>#FFB300</code> (compromis, encore un peu faible sur clair sans anneau). Codex déconseille un or moyen comme <code>#F9A825</code> seul (toujours trop faible sur crème, déjà perçu ambre).</p>
+    <p class="" style="color:var(--ink-faint);font-size:12.5px">Piège relevé : sur petite surface le jaune clair a besoin de plus que le contraste théorique — et garder une teinte franchement jaune/or, pas orange (ne pas rapprocher du rouge).</p>
+  </div>
+</div>
+
+<script>
+  // luminance + contraste WCAG (réel)
+  function lin(c){c/=255;return c<=0.03928?c/12.92:Math.pow((c+0.055)/1.055,2.4);}
+  function lum(hex){const h=hex.replace('#','');const r=parseInt(h.slice(0,2),16),g=parseInt(h.slice(2,4),16),b=parseInt(h.slice(4,6),16);return 0.2126*lin(r)+0.7152*lin(g)+0.0722*lin(b);}
+  function cr(a,b){const la=lum(a),lb=lum(b),hi=Math.max(la,lb),lo=Math.min(la,lb);return (hi+0.05)/(lo+0.05);}
+  const LT_CONTAINER="#FCEBEA";
+
+  // candidats : lt = fill clair, dk = fill sombre (theme-aware si lt!=dk)
+  const C=[
+    {nm:"A · Actuel (shippé v196)", hex:"#FDD835 — coche l'anneau pour le sauver sur clair", lt:"#FDD835", dk:"#FDD835", tag:["bad","se noie sur clair"]},
+    {nm:"B · Theme-aware — or profond sur clair, jaune vif sur sombre", hex:"clair #9C7300 / sombre #FDD835", lt:"#9C7300", dk:"#FDD835", tag:["reco","reco"], reco:true},
+    {nm:"C · Theme-aware, variante plus chaude", hex:"clair #A06400 / sombre #FDD835", lt:"#A06400", dk:"#FDD835", tag:["alt","variante"]},
+    {nm:"D · Or mono (un seul hex, pas de theme-aware)", hex:"#FFB300 (Amber 600) — compromis", lt:"#FFB300", dk:"#FFB300", tag:["alt","mono-hex"]},
+  ];
+
+  function ringCss(on, theme){
+    if(!on) return "";
+    // anneau or foncé sur clair (chaud, intentionnel), anneau clair discret sur sombre
+    const c = theme==="lt" ? "rgba(138,101,0,.6)" : "rgba(240,222,220,.28)";
+    return `box-shadow: inset 0 0 0 1.5px ${c};`;
+  }
+  function tonal(hex, theme){
+    // pastille tonale : fill à faible alpha sur la surface (approx du rendu app)
+    return theme==="lt" ? hex+"33" : hex+"3a";
+  }
+  function pill(hex){return hex;}
+
+  function pane(theme, cand, ring){
+    const fill = theme==="lt" ? cand.lt : cand.dk;
+    const isLt = theme==="lt";
+    const ringS = ringCss(ring, theme);
+    return `<div class="pane ${theme}">
+      <p class="plabel">${isLt?"Thème clair":"Thème sombre"}</p>
+      <div class="picker">
+        <div class="prow"><span class="dot" style="background:${fill};${ringS}"></span><span class="lbl">Favoris</span></div>
+      </div>
+      <div class="listrow">
+        <span class="bar" style="background:${fill};${ring?ringCss(ring,theme):''}"></span>
+        <div><div class="rtitle">Le topic des jeux indé</div><div class="rsub">tinc · 17:07</div></div>
+        <span class="pill" style="color:${fill};background:${tonal(fill,theme)};${ring?'outline:1px solid '+(isLt?'rgba(35,25,25,.18)':'rgba(240,222,220,.18)')+';outline-offset:-1px;':''}">+8</span>
+      </div>
+      ${isLt?crBadge(fill):''}
+    </div>`;
+  }
+  function crBadge(fill){
+    const ratio=cr(fill,LT_CONTAINER);
+    const cls = ratio>=3?"good":(ratio>=1.9?"mid":"poor");
+    const verdict = ratio>=3?"lisible":(ratio>=1.9?"limite":"trop faible");
+    return `<div class="cr ${cls}">contraste vs crème : ${ratio.toFixed(2)}:1 · ${verdict}</div>
+      <div class="crnote">seuil UI recommandé ≥ 3:1 · avec l'anneau, la définition ne dépend plus du seul contraste de remplissage</div>`;
+  }
+
+  function render(){
+    const ring=document.getElementById("ring").checked;
+    document.getElementById("cards").innerHTML = C.map(c=>{
+      const cls = "card"+(c.reco?" reco":"")+(c.tag[0]==="bad"?" bad":"");
+      const [tc,tt]=c.tag;
+      return `<div class="${cls}">
+        <div class="chead"><span class="nm">${c.nm}</span><span class="hex">${c.hex}</span><span class="tag ${tc}">${tt}</span></div>
+        <div class="twin">${pane("lt",c,ring)}${pane("dk",c,ring)}</div>
+      </div>`;
+    }).join("");
+  }
+  document.getElementById("ring").addEventListener("change",render);
+  render();
+</script>
+
+</body>
+</html>
