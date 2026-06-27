@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Redface 2 — états vides des onglets Drapeaux (#662)</title>
+<meta name="description" content="Maquettes de plusieurs styles d'état vide pour les onglets Drapeaux, du sobre au fun (carrousel de smileys en option).">
+<style>
+  :root{
+    --ground:#171012;--panel:#211a1c;--panel-2:#2b2224;--line:#3a2e31;
+    --ink:#f3eceb;--ink-dim:#b9a9ab;--ink-faint:#8c7b7e;--accent:#e8868c;--accent-deep:#8E1D24;
+    /* écran (thème clair de l'app) */
+    --scr:#fbf6f6;--scr-edge:#e2d2d3;--scr-ink:#2a2123;--scr-dim:#6f6064;--scr-faint:#a4969a;
+    --cyan:#00BCD4;--red:#D32F2F;--fav:#CDDC39;--dt:#D500F9;--app-red:#8E1D24;
+    --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;--sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);line-height:1.5;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1080px;margin:0 auto;padding:34px 20px 72px}
+  header{border-bottom:1px solid var(--line);padding-bottom:22px;margin-bottom:30px}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin:0 0 8px}
+  h1{font-size:clamp(22px,3.4vw,31px);line-height:1.13;margin:0 0 10px;font-weight:650;text-wrap:balance}
+  .lede{color:var(--ink-dim);max-width:66ch;margin:0;font-size:15px}
+  h2{font-size:15px;margin:34px 0 4px;color:var(--ink);font-weight:650;display:flex;align-items:baseline;gap:10px}
+  h2 .tag{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:2px 8px;border-radius:999px;border:1px solid var(--line);color:var(--ink-faint)}
+  h2 .tag.def{color:#8fd9b0;border-color:#2f5f47}
+  h2 .tag.opt{color:#e0b46b;border-color:#5f4a2a}
+  .sub{color:var(--ink-faint);font-size:13.5px;margin:0 0 16px;max-width:66ch}
+
+  .row{display:flex;gap:18px;flex-wrap:wrap}
+  /* faux téléphone : zone de contenu d'un onglet vide */
+  .scr{width:236px;background:var(--scr);border:1px solid var(--scr-edge);border-radius:20px;overflow:hidden;flex:0 0 auto}
+  .bar{display:flex;align-items:center;gap:8px;padding:10px 12px;border-bottom:1px solid var(--scr-edge)}
+  .glyph{width:22px;height:22px;flex:0 0 auto}
+  .pill{flex:1;height:30px;border-radius:999px;background:#efe3e4;display:flex;align-items:center;padding:0 10px;gap:6px}
+  .pill svg{width:15px;height:15px;color:var(--scr-faint)}
+  .pill span{font-size:12px;color:var(--scr-faint)}
+  .body{min-height:230px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:26px 22px;gap:12px}
+  .et{font-size:14.5px;color:var(--scr-ink);font-weight:600;margin:0}
+  .es{font-size:12.5px;color:var(--scr-dim);margin:0;line-height:1.45}
+  .cap{font-family:var(--mono);font-size:11px;color:var(--ink-faint);margin:10px 0 0;text-align:center;width:236px}
+
+  .mi{width:40px;height:40px;color:var(--scr-faint)}
+  .illus{width:96px;height:96px}
+  .btn{margin-top:4px;font-size:12.5px;color:var(--app-red);border:1px solid #e3c9cb;background:#fff;border-radius:999px;padding:7px 16px;font-weight:600;cursor:default}
+
+  /* smileys (placeholder concept, pas les vrais GIF HFR) */
+  .smy{width:46px;height:46px;border-radius:10px;background:#fff;border:1px solid var(--scr-edge);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:10px;color:var(--scr-dim);position:relative}
+  .face{width:30px;height:30px;border-radius:50%;border:2px solid var(--app-red);position:relative}
+  .face::before,.face::after{content:"";position:absolute;width:3px;height:3px;border-radius:50%;background:var(--app-red);top:9px}
+  .face::before{left:7px}.face::after{right:7px}
+  .mouth{position:absolute;left:8px;right:8px;bottom:8px;height:5px;border-bottom:2px solid var(--app-red);border-radius:0 0 8px 8px}
+  .mouth.sad{bottom:6px;border-bottom:none;border-top:2px solid var(--app-red);border-radius:8px 8px 0 0}
+  .carou{display:flex;gap:8px;align-items:center;justify-content:center}
+  .carou .smy{transition:transform .3s,opacity .3s}
+  .dots{display:flex;gap:5px;justify-content:center;margin-top:4px}
+  .dots i{width:5px;height:5px;border-radius:50%;background:var(--scr-faint);opacity:.4}
+  .dots i.on{opacity:1;background:var(--app-red)}
+
+  .note{font-size:13px;color:var(--ink-dim);border-left:2px solid var(--line);padding-left:12px;margin:14px 0 0;max-width:70ch}
+  .note b{color:var(--ink)}
+  .legend{display:flex;gap:18px;flex-wrap:wrap;font-size:12.5px;color:var(--ink-faint);margin-top:8px}
+  .legend b{color:var(--ink-dim);font-weight:600}
+  @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Redface 2 · #662 · vue:drapeaux</p>
+    <h1>États vides des onglets Drapeaux — propositions</h1>
+    <p class="lede">Aujourd'hui un onglet sans élément n'affiche qu'une ligne de texte (« je vois pas de
+      changement »). Voici plusieurs styles, du sobre (par défaut) au fun (en option). Idées cadrées avec Codex.
+      Dis-moi le(s) style(s) à retenir et je les implémente — les styles « fun » derrière un réglage.</p>
+    <div class="legend">
+      <span><b>Contraintes</b> : la zone reste tirable (pull-to-refresh) · texte lu par TalkBack même sans image · M3 sobre.</span>
+    </div>
+  </header>
+
+  <!-- STYLE 1 -->
+  <h2>A · Icône + message contextuel <span class="tag def">défaut proposé</span></h2>
+  <p class="sub">Une icône fine + un titre court + un sous-texte <b>propre à l'onglet</b> qui dit quoi faire.
+    Accessible, sobre, zéro risque. Remplace le simple « Aucun… » actuel.</p>
+  <div class="row">
+    <div>
+      <div class="scr">
+        <div class="bar"><svg class="glyph" viewBox="0 0 24 24" fill="none" stroke="var(--fav)" stroke-width="1.8" stroke-linejoin="round"><path d="M5 3v18M5 4h11l-2 4 2 4H5"/></svg><div class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><span>Rechercher…</span></div></div>
+        <div class="body">
+          <svg class="mi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M12 4l2.2 4.5 5 .7-3.6 3.5.9 5-4.5-2.4L7.6 17.7l.9-5L4.9 9.2l5-.7z"/></svg>
+          <p class="et">Aucun favori</p>
+          <p class="es">Touche l'étoile sur un sujet pour le retrouver ici.</p>
+        </div>
+      </div>
+      <p class="cap">onglet Favoris</p>
+    </div>
+    <div>
+      <div class="scr">
+        <div class="bar"><svg class="glyph" viewBox="0 0 24 24" fill="none" stroke="var(--dt)" stroke-width="1.8" stroke-linejoin="round"><path d="M5 3v18M5 4h11l-2 4 2 4H5"/></svg><div class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><span>Rechercher…</span></div></div>
+        <div class="body">
+          <svg class="mi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M4 5h16v11H8l-4 4z"/></svg>
+          <p class="et">Aucune conversation</p>
+          <p class="es">Tes discussions multi-destinataires récentes apparaîtront ici.</p>
+        </div>
+      </div>
+      <p class="cap">onglet DT</p>
+    </div>
+  </div>
+
+  <!-- STYLE 2 -->
+  <h2>B · Illustration line-art monochrome <span class="tag">sobre+</span></h2>
+  <p class="sub">Un petit visuel au trait, rouge Redface, <b>différent par onglet</b> (drapeau, étoile,
+    bulle, pile vide). Vrai changement visuel sans humour ni distraction.</p>
+  <div class="row">
+    <div>
+      <div class="scr">
+        <div class="bar"><svg class="glyph" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="1.8" stroke-linejoin="round"><path d="M5 3v18M5 4h11l-2 4 2 4H5"/></svg><div class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><span>Rechercher…</span></div></div>
+        <div class="body">
+          <svg class="illus" viewBox="0 0 120 120" fill="none" stroke="var(--app-red)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M34 18v84"/><path d="M34 22h54l-12 16 12 16H34" fill="#8E1D2412"/>
+            <circle cx="86" cy="92" r="15" stroke-dasharray="3 6" opacity=".5"/>
+          </svg>
+          <p class="et">Aucun sujet suivi</p>
+          <p class="es">Pose un drapeau sur un sujet pour le suivre depuis ici.</p>
+        </div>
+      </div>
+      <p class="cap">onglet Mes sujets (Cyan)</p>
+    </div>
+    <div>
+      <div class="scr">
+        <div class="bar"><svg class="glyph" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="1.8" stroke-linejoin="round"><path d="M5 3v18M5 4h11l-2 4 2 4H5"/></svg><div class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><span>Rechercher…</span></div></div>
+        <div class="body">
+          <svg class="illus" viewBox="0 0 120 120" fill="none" stroke="var(--app-red)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="26" y="34" width="68" height="46" rx="6"/><path d="M40 50h40M40 62h26"/><path d="M44 80l-6 12 0 0"/>
+            <path d="M84 24l4 8 8 1-6 6 1 8-7-4-7 4 1-8-6-6 8-1z" opacity=".55"/>
+          </svg>
+          <p class="et">Rien de lu récemment</p>
+          <p class="es">Les sujets que tu as lus s'afficheront ici.</p>
+        </div>
+      </div>
+      <p class="cap">onglet Lu (Rouge)</p>
+    </div>
+  </div>
+
+  <!-- STYLE 3 -->
+  <h2>C · Clin d'œil — un smiley HFR <span class="tag opt">option (réglage)</span></h2>
+  <p class="sub">Un seul smiley perso HFR + un texte normal. Registre forum, léger. Activable via un réglage
+    « états vides humoristiques » — jamais imposé, le texte reste lu sans l'image.</p>
+  <div class="row">
+    <div>
+      <div class="scr">
+        <div class="bar"><svg class="glyph" viewBox="0 0 24 24" fill="none" stroke="var(--fav)" stroke-width="1.8" stroke-linejoin="round"><path d="M5 3v18M5 4h11l-2 4 2 4H5"/></svg><div class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><span>Rechercher…</span></div></div>
+        <div class="body">
+          <div class="smy" style="width:54px;height:54px"><div class="face"><div class="mouth sad"></div></div></div>
+          <p class="et">C'est vide par ici</p>
+          <p class="es">Aucun favori… pour l'instant.</p>
+        </div>
+      </div>
+      <p class="cap">smiley perso « [:vide] » (concept)</p>
+    </div>
+    <div>
+      <p class="note" style="margin-top:0;max-width:34ch"><b>Note :</b> les vignettes sont des
+        <b>concepts</b> dessinés — l'app afficherait de vrais smileys perso HFR (<code style="font-family:var(--mono);font-size:.9em">[:nom]</code>),
+        mis en cache, taille bornée. Le choix exact des smileys serait à toi.</p>
+    </div>
+  </div>
+
+  <!-- STYLE 4 -->
+  <h2>D · Carrousel de smileys <span class="tag opt">option (réglage), « pour les habitués »</span></h2>
+  <p class="sub">3 à 5 smileys max sur le thème « mais c'est vide / l'attente / la solitude », rotation lente.
+    Tasteful : pas d'autoplay agressif, pas de gif lourd, pas de texte moqueur par défaut. Le geste vertical
+    (pull-to-refresh) reste libre — le carrousel ne capture que l'horizontal.</p>
+  <div class="row">
+    <div>
+      <div class="scr">
+        <div class="bar"><svg class="glyph" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="1.8" stroke-linejoin="round"><path d="M5 3v18M5 4h11l-2 4 2 4H5"/></svg><div class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><span>Rechercher…</span></div></div>
+        <div class="body">
+          <div class="carou" id="carou"></div>
+          <div class="dots" id="dots"></div>
+          <p class="et" style="margin-top:8px">Mais c'est vide !</p>
+          <p class="es">Aucun sujet suivi.</p>
+        </div>
+      </div>
+      <p class="cap">rotation lente · swipe horizontal</p>
+    </div>
+    <div>
+      <p class="note" style="margin-top:0;max-width:34ch"><b>Recommandation Codex+moi :</b> garder <b>A</b>
+        (icône + message contextuel) comme <b>défaut</b> sobre et accessible, et proposer <b>C/D</b> (smileys)
+        derrière un réglage opt-in. <b>B</b> (illustration) si tu veux du visuel sans humour.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  // carrousel concept : 3 visages "vide"
+  const faces=[
+    '<div class="face"><div class="mouth sad"></div></div>',
+    '<div class="face" style="border-style:dashed"><div class="mouth" style="border-bottom:2px solid var(--app-red);width:10px;left:10px;right:auto"></div></div>',
+    '<div class="face"><div class="mouth" style="height:3px;bottom:11px;border-bottom:2px solid var(--app-red);border-radius:0"></div></div>'
+  ];
+  const carou=document.getElementById('carou'), dots=document.getElementById('dots');
+  function build(active){
+    carou.innerHTML=faces.map((f,i)=>`<div class="smy" style="width:${i===active?54:42}px;height:${i===active?54:42}px;opacity:${i===active?1:.5}">${f}</div>`).join('');
+    dots.innerHTML=faces.map((_,i)=>`<i class="${i===active?'on':''}"></i>`).join('');
+  }
+  let a=0; build(a);
+  const reduce=window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  if(!reduce){ setInterval(()=>{a=(a+1)%faces.length; build(a);}, 2200); }
+</script>
+
+</body>
+</html>

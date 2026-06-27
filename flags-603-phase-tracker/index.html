@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Drapeaux #603 — suivi de phase</title>
+<meta name="description" content="Tableau de suivi des issues de la phase de finition Drapeaux : statut, build, validation XaTriX, commentaires.">
+<style>
+  :root{
+    --ground:#15100f;--panel:#1f1817;--panel-2:#291f1e;--line:#3a2c2a;
+    --ink:#f4ecea;--ink-dim:#bcaaa6;--ink-faint:#8b7873;--accent:#e8868c;--accent-deep:#8E1D24;
+    /* sémantiques (distinctes de l'accent) */
+    --ok:#7ed3a2;--ok-bg:#16352440;--ok-line:#2f5f47;
+    --warn:#e6b768;--warn-bg:#3a2c1640;--warn-line:#5f4a2a;
+    --info:#7fb6e8;--info-bg:#15293a40;--info-line:#2a4a5f;
+    --mute:#9a8b87;--mute-bg:#2a201f;--mute-line:#3a2c2a;
+    --bad:#e88a8a;--bad-bg:#3a191940;--bad-line:#5f2a2a;
+    --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;--sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);line-height:1.5;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1000px;margin:0 auto;padding:32px 20px 64px}
+  header{margin-bottom:22px}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin:0 0 8px}
+  h1{font-size:clamp(22px,3.4vw,30px);margin:0 0 6px;font-weight:650;text-wrap:balance}
+  .sub{color:var(--ink-dim);margin:0;font-size:14px}
+  .updated{color:var(--ink-faint);font-family:var(--mono);font-size:12px;margin-top:6px}
+
+  /* stat strip */
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin:22px 0}
+  .stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+  .stat .n{font-size:26px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1}
+  .stat .l{font-size:11.5px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.06em;margin-top:6px;font-family:var(--mono)}
+  .stat.ok .n{color:var(--ok)} .stat.warn .n{color:var(--warn)} .stat.info .n{color:var(--info)} .stat.acc .n{color:var(--accent)}
+
+  /* waiting callout */
+  .wait{background:linear-gradient(180deg,var(--warn-bg),transparent);border:1px solid var(--warn-line);border-radius:12px;padding:16px 18px;margin-bottom:26px}
+  .wait h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--warn);margin:0 0 10px;font-family:var(--mono)}
+  .wait ol{margin:0;padding-left:20px;color:var(--ink);font-size:14px}
+  .wait li{margin:5px 0}
+  .wait a{color:var(--accent)}
+
+  .group{margin:26px 0 10px}
+  .group h2{font-size:14px;margin:0;font-weight:650;display:flex;align-items:center;gap:10px}
+  .group .cnt{font-family:var(--mono);font-size:12px;color:var(--ink-faint);font-weight:400}
+
+  .rows{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+  .r{display:grid;grid-template-columns:6px 64px 1fr auto;gap:14px;align-items:start;background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:13px 15px 13px 0;overflow:hidden}
+  .stripe{align-self:stretch;border-radius:11px 0 0 11px}
+  .num{font-family:var(--mono);font-size:13px;font-weight:700;padding-top:1px}
+  .num a{color:var(--ink);text-decoration:none;border-bottom:1px dotted var(--ink-faint)}
+  .main .t{font-size:14.5px;font-weight:600;margin:0 0 3px}
+  .main .c{font-size:12.5px;color:var(--ink-dim);margin:0;line-height:1.45}
+  .meta{display:flex;flex-direction:column;align-items:flex-end;gap:6px;white-space:nowrap}
+  .badge{font-family:var(--mono);font-size:11px;padding:3px 9px;border-radius:999px;border:1px solid;font-weight:600}
+  .b-oui{color:var(--ok);background:var(--ok-bg);border-color:var(--ok-line)}
+  .b-non{color:var(--bad);background:var(--bad-bg);border-color:var(--bad-line)}
+  .b-dog{color:var(--info);background:var(--info-bg);border-color:var(--info-line)}
+  .b-na{color:var(--mute);background:var(--mute-bg);border-color:var(--mute-line)}
+  .build{font-family:var(--mono);font-size:11px;color:var(--ink-faint)}
+
+  .legend{display:flex;flex-wrap:wrap;gap:14px;margin:8px 0 0;font-size:12px;color:var(--ink-faint);font-family:var(--mono)}
+  .legend span{display:flex;align-items:center;gap:6px}
+  .legend i{width:10px;height:10px;border-radius:3px;display:inline-block}
+  .rel{margin-top:30px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;font-size:13px;color:var(--ink-dim)}
+  .rel b{color:var(--ink)} .rel code{font-family:var(--mono);font-size:.9em;background:var(--panel-2);padding:1px 5px;border-radius:4px;color:var(--accent)}
+  .links{margin-top:14px;display:flex;flex-wrap:wrap;gap:10px}
+  .links a{font-family:var(--mono);font-size:12px;color:var(--accent);text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:6px 12px}
+  .links a:hover{border-color:var(--accent)}
+  @media(max-width:620px){.r{grid-template-columns:6px 1fr;padding-right:12px}.num{grid-column:2}.main{grid-column:2}.meta{grid-column:2;align-items:flex-start;flex-direction:row}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Redface 2 · vue:drapeaux · #603</p>
+    <h1>Phase de finition Drapeaux — suivi</h1>
+    <p class="sub">Statut, build de livraison, validation XaTriX et commentaires par issue.</p>
+    <p class="updated">maj 2026-06-27 · dernier build dev 0.17.14 / app-v194 · preset C (#691) sur dev, non releasé</p>
+  </header>
+
+  <div class="stats">
+    <div class="stat ok"><div class="n">8</div><div class="l">résolus validés</div></div>
+    <div class="stat warn"><div class="n">6</div><div class="l">à reprendre</div></div>
+    <div class="stat info"><div class="n">4</div><div class="l">à creuser / noté</div></div>
+    <div class="stat"><div class="n">3</div><div class="l">différés</div></div>
+    <div class="stat acc"><div class="n">4</div><div class="l">attendent XaTriX</div></div>
+  </div>
+
+  <div class="wait">
+    <h2>⏳ En attente de toi</h2>
+    <ol>
+      <li><b>Hauteur de la barre du bas</b> sans libellés — fixe la valeur dans l'<a href="https://claude.ai/code/artifact/2b710756-737d-44f5-8d4e-a9f7d36132be">inspecteur</a> (je code ensuite l'item custom).</li>
+      <li><b>#665</b> top bar translucide — dogfood la PR #688 puis merge.</li>
+      <li><b>#662</b> état vide — choisis le(s) style(s) dans la <a href="https://claude.ai/code/artifact/49cdb349-e20e-480f-8402-2d166008de9f">galerie</a>.</li>
+      <li><b>#251</b> cyan manquant (API) — go pour creuser les 2 causes code-vérifiables ?</li>
+    </ol>
+  </div>
+
+  <!-- RÉSOLUS VALIDÉS -->
+  <div class="group"><h2><span style="color:var(--ok)">✅</span> Résolus &amp; validés <span class="cnt">8</span></h2></div>
+  <div class="rows" id="g-ok"></div>
+
+  <!-- À REPRENDRE -->
+  <div class="group"><h2><span style="color:var(--warn)">🔄</span> À reprendre / en cours <span class="cnt">6</span></h2></div>
+  <div class="rows" id="g-warn"></div>
+
+  <!-- À INVESTIGUER / NOTÉ -->
+  <div class="group"><h2><span style="color:var(--info)">🔍</span> À investiguer / noté <span class="cnt">3</span></h2></div>
+  <div class="rows" id="g-info"></div>
+
+  <!-- DIFFÉRÉS -->
+  <div class="group"><h2><span style="color:var(--mute)">⏸️</span> Différés <span class="cnt">3</span></h2></div>
+  <div class="rows" id="g-mute"></div>
+
+  <div class="rel">
+    <b>Releases dev de la phase :</b> v185 → v186 → v187 → v188 → v189 → v190 → v191 → v192 → v193 (0.17.13, barre courte #666) → <b>v194 (0.17.14, #661+#679+#676)</b>.
+    Prochaine : batch <b>hauteur barre du bas</b> + <b>preset C #691</b> (déjà sur <code>dev</code>) + <b>#665</b> après dogfood.
+    <div class="links">
+      <a href="https://claude.ai/code/artifact/2b710756-737d-44f5-8d4e-a9f7d36132be">📏 inspecteur hauteur barre</a>
+      <a href="https://claude.ai/code/artifact/49cdb349-e20e-480f-8402-2d166008de9f">🫥 galerie états vides</a>
+      <a href="https://forumhfr.github.io/artifacts/flags-603-band-spacing/">↕ inspecteur espacement bandes</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  const R="https://github.com/ForumHFR/redface2/issues/";
+  const D={
+    ok:[
+      {n:659,t:"Pull-to-refresh — rond redondant",b:"v185",v:"oui",c:"Indicateur custom au tirage, rien pendant le refresh."},
+      {n:663,t:"Swipe cyclique entre onglets",b:"v189",v:"oui",c:"Dernier ↔ premier."},
+      {n:664,t:"Icônes catégorie + pastille",b:"v189/v192",v:"oui",c:"Icône cat 32 IA + pastille agrandie."},
+      {n:666,t:"Toggle libellés barre du bas",b:"v190",v:"oui",c:"Passe Codex : pas de bug. ⚠️ reste : a11y icon-only (pas de contentDescription) + hauteur encore trop haute → rework item custom."},
+      {n:667,t:"Back Réglages quittait l'appli",b:"v189",v:"oui",c:"Cause : back stack onglet à 1 entrée, onBack ne pop pas. Fix = TabRootBackHandler (→ onglet précédent, historique MRU)."},
+      {n:671,t:"Barre chargement décalait le contenu",b:"v186",v:"oui",c:"Slot de hauteur fixe. (La hauteur des bandes mélangée → #691.)"},
+      {n:673,t:"Sheet réglages ne défilait pas",b:"v187",v:"oui",c:"verticalScroll sur le sheet."},
+      {n:679,t:"Menu réglages rapides s'ouvrait seul au retour",b:"v194",v:"oui",c:"Renommé. Cause : re-tap onglet armait le menu même depuis un sous-écran. Fix = décision selon profondeur de pile (racine arme / sous-écran pop-to-root)."}
+    ],
+    warn:[
+      {n:660,t:"Animation de swipe entre onglets",b:"v189",v:"non",c:"« l'animation est mauvaise » — le snapTo(0) centré n'est pas le rendu attendu. À revoir."},
+      {n:662,t:"État vide des onglets",b:"v186",v:"non",c:"« je vois pas de changement ». Galerie 4 styles faite (A icône+message / B illustration / C+D smileys option). → attend ton choix."},
+      {n:661,t:"Découvrabilité menu / « +lus »",b:"v194",v:"non",c:"La solution dropdown ne convient pas. À reprendre plus tard."},
+      {n:676,t:"Sheet F2 (appui long)",b:"v194 partiel",v:"non",c:"Mal compris : il faut GARDER la liste verticale ET AJOUTER la rangée de boutons (les deux). Sous-titre retiré = OK. À refaire. Pts sous-cat/vues différés."},
+      {n:null,t:"Hauteur barre du bas sans libellés (suite #666)",b:"—",v:"non",c:"Toujours trop haute. Codex confirme : NavigationBarItem bloque → item custom. Attend ta valeur (inspecteur)."},
+      {n:665,t:"Top bar translucide au défilement",b:"PR #688",v:"dog",c:"Codée + Codex GO, non mergée. Attend validation visuelle dogfood (6 points dans la PR)."}
+    ],
+    info:[
+      {n:691,t:"Hauteur des bandes catégorie (densité)",b:"sur dev",v:"na",c:"Preset D→C appliqué (PR #692, bandes 34→38). Réglage utilisateur de densité = option future."},
+      {n:690,t:"Couleur favori verte → jaune",b:"—",v:"na",c:"FlagPalette.Favorite = Lime 500, vire au vert. Régression, à corriger. Teinte super-favori aussi à trouver."},
+      {n:681,t:"Barre chargement « déroule » à l'ouverture du sheet",b:"—",v:"na",c:"Réfuté comme bug d'état (analyse sur l'issue). Repro on-device nécessaire."},
+      {n:251,t:"Cyan manquant (API REST tronquée)",b:"—",v:"na",c:"Pas investigué. 2 causes (cache cats / cap pagination) vérifiables côté code sans le topic manquant."}
+    ],
+    mute:[
+      {n:668,t:"Onglets / listes configurables",b:"—",v:"na",c:"Post-MVP."},
+      {n:602,t:"Aide intégrée + tuto",b:"—",v:"na",c:"Sorti de phase → milestone Méta."},
+      {n:328,t:"Appui-long menu liste topics",b:"—",v:"na",c:"Complémentaire de #676."}
+    ]
+  };
+  const STRIPE={ok:"var(--ok)",warn:"var(--warn)",info:"var(--info)",mute:"var(--mute)"};
+  const BADGE={oui:["b-oui","validé"],non:["b-non","non validé"],dog:["b-dog","dogfood"],na:["b-na","—"]};
+  function row(it,key){
+    const num=it.n?`<a href="${R}${it.n}">#${it.n}</a>`:"—";
+    const [bc,bt]=BADGE[it.v];
+    const build=it.b&&it.b!=="—"?`<span class="build">${it.b}</span>`:"";
+    return `<div class="r">
+      <div class="stripe" style="background:${STRIPE[key]}"></div>
+      <div class="num">${num}</div>
+      <div class="main"><p class="t">${it.t}</p><p class="c">${it.c}</p></div>
+      <div class="meta"><span class="badge ${bc}">${bt}</span>${build}</div>
+    </div>`;
+  }
+  for(const k of ["ok","warn","info","mute"]){
+    document.getElementById("g-"+k).innerHTML=D[k].map(it=>row(it,k)).join("");
+  }
+  // fix group counts
+  document.querySelectorAll('.group').forEach((g,i)=>{const k=["ok","warn","info","mute"][i];g.querySelector('.cnt').textContent=D[k].length;});
+</script>
+
+</body>
+</html>

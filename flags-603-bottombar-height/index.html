@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Redface 2 — hauteur barre du bas (sans libellés)</title>
+<meta name="description" content="Inspecteur interactif : padding symétrique icône → hauteur de la barre de navigation sans libellés (#666 follow-up).">
+<style>
+  :root{
+    /* Palette dérivée du thème Redface (seed rouge #A62C2C, primary #8E1D24) + neutres biaisés rouge */
+    --ground:#171012;          /* near-black, légère teinte rouge */
+    --panel:#211a1c;
+    --panel-2:#2b2224;
+    --line:#3a2e31;
+    --ink:#f3eceb;
+    --ink-dim:#b9a9ab;
+    --ink-faint:#8c7b7e;
+    --accent:#e8868c;          /* rouge Redface éclairci pour fond sombre */
+    --accent-deep:#8E1D24;
+    /* Surfaces de la barre rendue (claires, comme l'app en thème clair) */
+    --bar:#f1e7e7;             /* ~surfaceContainer */
+    --bar-edge:#d8c7c8;
+    --bar-ink:#4a3e40;         /* onSurfaceVariant */
+    --bar-sel:#8E1D24;         /* item sélectionné */
+    --bar-pill:#ffd9d9;        /* secondaryContainer (indicateur) */
+    --inset:#cdbabb;           /* zone système (gesture nav) */
+    --measure:#e8868c;
+    --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);
+       line-height:1.5;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:980px;margin:0 auto;padding:32px 20px 64px}
+  header{border-bottom:1px solid var(--line);padding-bottom:20px;margin-bottom:28px}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+           color:var(--accent);margin:0 0 8px}
+  h1{font-size:clamp(22px,3.4vw,30px);line-height:1.15;margin:0 0 10px;text-wrap:balance;font-weight:650}
+  .lede{color:var(--ink-dim);max-width:64ch;margin:0;font-size:15px}
+  .lede code{font-family:var(--mono);font-size:.88em;background:var(--panel-2);padding:1px 6px;border-radius:5px;color:var(--ink)}
+
+  .grid{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:28px;align-items:start}
+  @media(max-width:760px){.grid{grid-template-columns:1fr}}
+
+  /* ---- preview stage ---- */
+  .stage{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px;display:flex;flex-direction:column;gap:26px}
+  .device{max-width:380px;margin:0 auto;width:100%}
+  .barlabel{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);margin:0 0 8px;display:flex;justify-content:space-between;align-items:baseline}
+  .barlabel b{color:var(--ink-dim);font-weight:600}
+  .barlabel .h{color:var(--accent);font-weight:700;font-variant-numeric:tabular-nums}
+
+  .bar{background:var(--bar);border:1px solid var(--bar-edge);border-bottom:none;
+       border-radius:18px 18px 0 0;display:flex;overflow:hidden;position:relative}
+  .bar .inset{background:var(--inset)}
+  .item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;position:relative;gap:4px}
+  .pill{display:flex;align-items:center;justify-content:center;border-radius:999px;transition:background .12s}
+  .item.sel .pill{background:var(--bar-pill)}
+  .ic{width:24px;height:24px;display:block;color:var(--bar-ink)}
+  .item.sel .ic{color:var(--bar-sel)}
+  .lab{font-size:11px;line-height:1;color:var(--bar-ink);font-family:var(--sans)}
+  .item.sel .lab{color:var(--bar-sel);font-weight:600}
+
+  /* measurement guides */
+  .gap-guide{position:absolute;left:-2px;width:2px;background:var(--measure);opacity:.9}
+  .gap-tag{position:absolute;left:6px;font-family:var(--mono);font-size:10px;color:var(--measure);background:var(--panel);padding:1px 4px;border-radius:4px;white-space:nowrap}
+
+  /* ---- controls ---- */
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;position:sticky;top:20px;display:flex;flex-direction:column;gap:20px}
+  .ctl label{display:block;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:8px;font-family:var(--mono)}
+  .val{font-variant-numeric:tabular-nums;color:var(--accent);font-weight:700}
+  input[type=range]{width:100%;accent-color:var(--accent);height:24px}
+  input[type=checkbox]{accent-color:var(--accent);width:16px;height:16px;vertical-align:-2px;margin-right:8px}
+  .readout{background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:14px;font-family:var(--mono);font-size:13px;line-height:1.9}
+  .readout .row{display:flex;justify-content:space-between;gap:12px}
+  .readout .row span:last-child{color:var(--ink);font-variant-numeric:tabular-nums}
+  .readout .tot{border-top:1px solid var(--line);margin-top:8px;padding-top:8px}
+  .readout .tot span:last-child{color:var(--accent);font-weight:700}
+  .presets{display:flex;flex-wrap:wrap;gap:8px}
+  .presets button{font-family:var(--mono);font-size:12px;background:var(--panel-2);color:var(--ink-dim);
+                  border:1px solid var(--line);border-radius:999px;padding:6px 12px;cursor:pointer;transition:.12s}
+  .presets button:hover{border-color:var(--accent);color:var(--ink)}
+  .presets button.on{background:var(--accent-deep);border-color:var(--accent);color:#fff}
+  .note{font-size:13px;color:var(--ink-dim);border-left:2px solid var(--line);padding-left:12px;margin:0}
+  .note b{color:var(--ink)}
+  button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Redface 2 · #666 follow-up · vue:reglages</p>
+    <h1>Hauteur de la barre du bas sans libellés</h1>
+    <p class="lede">Quand les libellés sont masqués, la barre garde une hauteur de barre <em>avec</em> libellés.
+      Règle voulue : reprendre le <b>gap icône → haut de barre</b> de la barre avec libellés, et l'appliquer
+      <b>en haut ET en bas</b> de l'icône. Ajuste le padding ci-contre pour fixer la bonne hauteur ; je code la
+      valeur retenue dans <code>IconOnlyBottomBar</code>.</p>
+  </header>
+
+  <div class="grid">
+    <div class="stage">
+      <div class="device">
+        <p class="barlabel"><b>Référence — AVEC libellés</b><span>80&nbsp;dp (M3 standard)</span></p>
+        <div id="barLabeled" class="bar"></div>
+      </div>
+      <div class="device">
+        <p class="barlabel"><b>SANS libellés — proposé</b><span class="h" id="hOut">— dp</span></p>
+        <div id="barCompact" class="bar"></div>
+      </div>
+      <p class="note" id="cmp"></p>
+    </div>
+
+    <aside class="panel">
+      <div class="ctl">
+        <label>Padding symétrique icône <span class="val" id="padOut">12 dp</span></label>
+        <input id="pad" type="range" min="2" max="22" value="12" step="1">
+      </div>
+      <div class="presets" id="presets"></div>
+      <div class="readout">
+        <div class="row"><span>padding haut</span><span id="rTop">12 dp</span></div>
+        <div class="row"><span>icône</span><span>24 dp</span></div>
+        <div class="row"><span>padding bas</span><span id="rBot">12 dp</span></div>
+        <div class="row tot"><span>hauteur barre</span><span id="rTot">48 dp</span></div>
+      </div>
+      <div class="ctl">
+        <label><input id="showInset" type="checkbox"> zone système (gesture nav, ~24 dp)</label>
+      </div>
+      <p class="note">La référence avec libellés place le groupe <b>icône+libellé</b> centré dans 80 dp.
+        Sans libellé, l'icône doit être centrée avec un padding symétrique — c'est ce padding qui fixe la
+        hauteur. La zone système s'ajoute en plus (identique sur les deux barres).</p>
+    </aside>
+  </div>
+</div>
+
+<script>
+  // 5 destinations top-level de l'app (ordre réel).
+  const ITEMS = [
+    {name:"Drapeaux", sel:true,  d:"M5 3v18M5 4h11l-2 4 2 4H5"},                 // flag
+    {name:"Forum",    sel:false, d:"M4 5h16v10H8l-4 4z"},                        // forum
+    {name:"Recherche",sel:false, d:"M11 4a7 7 0 105.2 11.7L21 20M11 4a7 7 0 010 14"},// search
+    {name:"Messages", sel:false, d:"M4 5h16v12H7l-3 3z"},                        // mail/chat
+    {name:"Réglages", sel:false, d:"M12 8a4 4 0 100 8 4 4 0 000-8zM12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"} // gear (simplifié)
+  ];
+  const ICON=24, LABELED_H=80, INSET=24;
+  // Référence avec libellés : groupe (indicateur 32 + 4 + libellé ~16 = 52) centré dans 80 → gap haut ~14dp.
+  const LABELED_TOPGAP=14, LABEL_LINE=16, IND_PAD=4; // indicateur = icône + 4 de part et d'autre (32dp)
+
+  function svg(d){
+    return `<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${d}"/></svg>`;
+  }
+
+  function renderLabeled(){
+    const bar=document.getElementById('barLabeled');
+    const inset=document.getElementById('showInset').checked?INSET:0;
+    bar.style.height=(LABELED_H+inset)+'px';
+    bar.innerHTML = ITEMS.map(it=>`
+      <div class="item ${it.sel?'sel':''}" style="padding-top:${LABELED_TOPGAP}px">
+        <div class="pill" style="padding:${IND_PAD}px 14px">${svg(it.d)}</div>
+        <div class="lab">${it.name}</div>
+      </div>`).join('')
+      + (inset?`<div class="inset" style="position:absolute;left:0;right:0;bottom:0;height:${inset}px"></div>`:'');
+    // guide du gap de référence sur le 1er item
+    const g=document.createElement('div'); g.className='gap-guide';
+    g.style.cssText+=`top:0;height:${LABELED_TOPGAP}px`;
+    const t=document.createElement('div'); t.className='gap-tag'; t.textContent=`gap ${LABELED_TOPGAP} dp`;
+    t.style.top='2px'; bar.appendChild(g); bar.appendChild(t);
+  }
+
+  function renderCompact(pad){
+    const bar=document.getElementById('barCompact');
+    const inset=document.getElementById('showInset').checked?INSET:0;
+    const h=pad*2+ICON;
+    bar.style.height=(h+inset)+'px';
+    bar.innerHTML = ITEMS.map(it=>`
+      <div class="item ${it.sel?'sel':''}" style="justify-content:center">
+        <div class="pill" style="padding:${IND_PAD}px 14px">${svg(it.d)}</div>
+      </div>`).join('')
+      + (inset?`<div class="inset" style="position:absolute;left:0;right:0;bottom:0;height:${inset}px"></div>`:'');
+    document.getElementById('hOut').textContent=h+' dp';
+    document.getElementById('rTop').textContent=pad+' dp';
+    document.getElementById('rBot').textContent=pad+' dp';
+    document.getElementById('rTot').textContent=h+' dp';
+    document.getElementById('padOut').textContent=pad+' dp';
+    const diff=LABELED_H-h;
+    document.getElementById('cmp').innerHTML=
+      `À <b>${pad} dp</b> de padding symétrique, la barre fait <b>${h} dp</b> — soit <b>${diff} dp</b> de moins `+
+      `que la barre avec libellés (80 dp). ${pad===LABELED_TOPGAP?'(= le gap exact de la référence.)':''}`;
+    document.querySelectorAll('.presets button').forEach(b=>b.classList.toggle('on', +b.dataset.p===pad));
+  }
+
+  function render(){renderLabeled(); renderCompact(+document.getElementById('pad').value);}
+
+  // presets : valeur padding → hauteur résultante
+  const PRESETS=[{p:8,l:"8 → 40 dp"},{p:12,l:"12 → 48 dp"},{p:14,l:"14 → 52 dp (gap réf.)"},{p:16,l:"16 → 56 dp (actuel)"}];
+  document.getElementById('presets').innerHTML=PRESETS.map(x=>`<button data-p="${x.p}">${x.l}</button>`).join('');
+  document.querySelectorAll('.presets button').forEach(b=>b.onclick=()=>{document.getElementById('pad').value=b.dataset.p;render();});
+  document.getElementById('pad').addEventListener('input',render);
+  document.getElementById('showInset').addEventListener('change',render);
+  render();
+</script>
+
+</body>
+</html>
