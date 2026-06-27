@@ -74,7 +74,7 @@
     <p class="eyebrow">Redface 2 · vue:drapeaux · #603</p>
     <h1>Phase Drapeaux — suivi</h1>
     <p class="sub">Une ligne par issue. La colonne <b>Validation</b> appartient à XaTriX : <b>« shippé » ou « issue fermée » ne veut pas dire validé</b> — c'est XaTriX qui valide en dernier ressort.</p>
-    <p class="updated">maj 2026-06-27 · dernier build dev <b>0.17.18 / app-v198</b> · milestone <b>Vue · Drapeaux</b></p>
+    <p class="updated">maj 2026-06-27 · dernier build dev <b>0.17.19 / app-v199</b> · milestone <b>Vue · Drapeaux</b></p>
   </header>
 
   <div class="stats">
@@ -108,8 +108,8 @@
   const SECTIONS=[
     {h:"Shippé — attend ta validation", rows:[
       {n:251,t:"Cyan manquant — sticky récupéré",c:"buckets REST excluaient les stickies flaggés des cats sans sous-cat (cat 32 IA). Fix REST-only : supplément topics/last p.1, route flag_owntopic, dédup+merge, best-effort. PAS de fallback HTML. Fixture réelle + 4 tests, Codex GO.",e:"ship",b:"v198",v:"todo"},
-      {n:662,t:"États vides Drapeaux refaits",c:"défaut style A (icône + titre + sous-texte par onglet) + option opt-in « états vides humoristiques » = smiley [:eric le looser] (style C). Vue groupée filtrée garde un message factuel. Codex GO.",e:"ship",b:"v198",v:"todo"},
-      {n:690,t:"Drapeau favori — couleur D shippée",c:"ambre #FFB300 (variante D, vote CharLee/thibw/XaTriX) ; lisible aussi sur clair. Micro-bordure noire = option séparée non shippée (inspecteur v3)",e:"ship",b:"v197",v:"todo"},
+      {n:662,t:"États vides Drapeaux refaits",c:"défaut style A (icône + titre + sous-texte) + option opt-in style C smiley [:eric le looser]. v199 : étendu aux onglets DT + Super Favoris ; smiley dé-pixelisé (taille réduite + filtrage lissé, l'upscale « net » était rejeté). DT « aucune non-lue » garde le caveat de balayage en sous-texte. Codex GO.",e:"ship",b:"v199",v:"todo"},
+      {n:690,t:"Drapeau favori — D #FFB300 + option contour",c:"ambre #FFB300 (variante D, vote CharLee/thibw/XaTriX). v199 : option « Contour du marqueur » (liseré sombre 0,5 dp, opt-in, réglages d'affichage Drapeaux) — « essaie 0.5px » XaTriX, à eyeballer on-device (barre/pastille/point, tous onglets).",e:"ship",b:"v199",v:"todo"},
       {n:695,t:"Scroll indépendant par onglet",c:"un LazyListState par bucket ; plus de bave d'un onglet à l'autre. Reste : suite audit swipe (#660 prereq)",e:"ship",b:"v197",v:"todo"},
       {n:671,t:"Bandes catégorie — preset C",c:"réglage de densité dédié à venir (#691)",e:"ship",b:"v195",v:"ok"},
       {n:666,t:"Barre du bas 52 dp en icônes seules",c:"« on peut pas descendre plus bas » (#2789472)",e:"ship",b:"v195",v:"ok"},
