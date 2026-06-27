@@ -4,68 +4,66 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Drapeaux #603 — suivi de phase</title>
-<meta name="description" content="Tableau de suivi des issues de la phase Drapeaux : état, build, et colonne Validation XaTriX (le shippé/fermé n'est validé que par XaTriX).">
+<meta name="description" content="Suivi des issues de la phase Drapeaux : état, build, et validation XaTriX (shippé/fermé ne vaut pas validé). Lisible sur mobile, sans défilement horizontal.">
 <style>
   :root{
     --ground:#15100f;--panel:#1f1817;--panel-2:#291f1e;--line:#3a2c2a;
     --ink:#f4ecea;--ink-dim:#bcaaa6;--ink-faint:#8b7873;--accent:#e8868c;
-    --ok:#7ed3a2;--ok-bg:#1635241f;--ok-line:#2f5f47;
-    --warn:#e6b768;--warn-bg:#3a2c161f;--warn-line:#5f4a2a;
-    --info:#7fb6e8;--info-bg:#15293a1f;--info-line:#2a4a5f;
+    --ok:#7ed3a2;--ok-bg:#16352433;--ok-line:#2f5f47;
+    --warn:#e6b768;--warn-bg:#3a2c1633;--warn-line:#5f4a2a;
+    --info:#7fb6e8;--info-bg:#15293a33;--info-line:#2a4a5f;
     --mute:#9a8b87;--mute-bg:#2a201f;--mute-line:#3a2c2a;
-    --bad:#e88a8a;--bad-bg:#3a19191f;--bad-line:#5f2a2a;
-    --act:#e8868c;--act-bg:#3a191e1f;--act-line:#7a2f38;
+    --bad:#e88a8a;--bad-bg:#3a191933;--bad-line:#5f2a2a;
     --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;--sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
   }
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);line-height:1.5;-webkit-font-smoothing:antialiased}
-  .wrap{max-width:1080px;margin:0 auto;padding:30px 18px 64px}
-  header{margin-bottom:18px}
-  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin:0 0 8px}
-  h1{font-size:clamp(21px,3.2vw,29px);margin:0 0 6px;font-weight:650;text-wrap:balance}
-  .sub{color:var(--ink-dim);margin:0;font-size:14px;max-width:74ch}
+  *{box-sizing:border-box;min-width:0}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);line-height:1.5;-webkit-font-smoothing:antialiased;overflow-wrap:anywhere}
+  .wrap{max-width:760px;margin:0 auto;padding:26px 14px 56px}
+  header{margin-bottom:16px}
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin:0 0 7px}
+  h1{font-size:clamp(20px,5.5vw,28px);margin:0 0 6px;font-weight:650;text-wrap:balance;line-height:1.15}
+  .sub{color:var(--ink-dim);margin:0;font-size:13.5px}
   .sub b{color:var(--ink)}
-  .updated{color:var(--ink-faint);font-family:var(--mono);font-size:12px;margin-top:6px}
+  .updated{color:var(--ink-faint);font-family:var(--mono);font-size:11.5px;margin-top:7px;line-height:1.5}
   .updated b{color:var(--ink-dim);font-weight:600}
 
-  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(116px,1fr));gap:9px;margin:18px 0}
-  .stat{background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:11px 14px}
-  .stat .n{font-size:23px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1}
-  .stat .l{font-size:10.5px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.05em;margin-top:6px;font-family:var(--mono)}
-  .stat.warn .n{color:var(--warn)} .stat.ok .n{color:var(--ok)} .stat.bad .n{color:var(--bad)} .stat.act .n{color:var(--act)} .stat.mute .n{color:var(--mute)}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(92px,1fr));gap:8px;margin:16px 0}
+  .stat{background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:10px 12px}
+  .stat .n{font-size:22px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1}
+  .stat .l{font-size:10px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.04em;margin-top:5px;font-family:var(--mono);line-height:1.3}
+  .stat.warn .n{color:var(--warn)} .stat.ok .n{color:var(--ok)} .stat.bad .n{color:var(--bad)} .stat.act .n{color:var(--accent)} .stat.mute .n{color:var(--mute)}
 
-  .note{background:linear-gradient(180deg,var(--warn-bg),transparent);border:1px solid var(--warn-line);border-radius:11px;padding:13px 16px;margin-bottom:20px;font-size:13.5px;color:var(--ink)}
+  .note{background:linear-gradient(180deg,var(--warn-bg),transparent);border:1px solid var(--warn-line);border-radius:11px;padding:12px 14px;margin-bottom:22px;font-size:13px;color:var(--ink)}
   .note b{color:var(--warn)}
 
-  .tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
-  table{border-collapse:collapse;width:100%;min-width:680px;font-size:13px}
-  thead th{position:sticky;top:0;background:var(--panel-2);color:var(--ink-faint);font-family:var(--mono);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);white-space:nowrap}
-  th.valcol,td.valcol{background:#241a1c;border-left:1px solid var(--line);border-right:1px solid var(--line)}
-  thead th.valcol{color:var(--accent)}
-  tbody tr{border-bottom:1px solid #2a201f}
-  tbody tr:last-child{border-bottom:0}
-  td{padding:9px 12px;vertical-align:top}
-  td.num{font-family:var(--mono);font-weight:700;white-space:nowrap}
-  td.num a{color:var(--ink);text-decoration:none;border-bottom:1px dotted var(--ink-faint)}
-  td.subj{min-width:230px}
-  td.subj .t{font-weight:600}
-  td.subj .c{color:var(--ink-faint);font-size:11.5px;margin-top:2px;line-height:1.4}
-  td.build{font-family:var(--mono);font-size:11.5px;color:var(--ink-faint);white-space:nowrap}
-  .sec td{background:var(--panel-2);font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-faint);padding:7px 12px;font-weight:600}
-  .chip{display:inline-block;font-family:var(--mono);font-size:10.5px;padding:2px 8px;border-radius:999px;border:1px solid;font-weight:600;white-space:nowrap}
+  .sech{font-family:var(--mono);font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-faint);font-weight:600;margin:22px 2px 9px;display:flex;align-items:center;gap:9px}
+  .sech::after{content:"";flex:1;height:1px;background:var(--line)}
+
+  .cards{display:flex;flex-direction:column;gap:9px}
+  .card{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--vc,var(--line));border-radius:12px;padding:12px 14px}
+  .card .top{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:5px}
+  .num{font-family:var(--mono);font-weight:700;font-size:13px;text-decoration:none;color:var(--ink)}
+  .num:hover{color:var(--accent)}
+  .build{font-family:var(--mono);font-size:11px;color:var(--ink-faint);margin-left:auto;white-space:nowrap}
+  .title{font-weight:600;font-size:14.5px;line-height:1.3;margin:0}
+  .desc{color:var(--ink-faint);font-size:12px;margin-top:5px;line-height:1.45}
+
+  .chip{display:inline-block;font-family:var(--mono);font-size:10px;padding:2px 8px;border-radius:999px;border:1px solid;font-weight:600;white-space:nowrap}
   .c-ship{color:var(--ok);background:var(--ok-bg);border-color:var(--ok-line)}
   .c-prog{color:var(--info);background:var(--info-bg);border-color:var(--info-line)}
   .c-redo{color:var(--bad);background:var(--bad-bg);border-color:var(--bad-line)}
   .c-gate{color:var(--warn);background:var(--warn-bg);border-color:var(--warn-line)}
-  .c-defer{color:var(--mute);background:var(--mute-bg);border-color:var(--mute-line)}
-  .c-block{color:var(--mute);background:var(--mute-bg);border-color:var(--mute-line)}
-  /* validation */
-  .v{font-weight:700;white-space:nowrap;font-size:12.5px}
-  .v-todo{color:var(--warn)} .v-ok{color:var(--ok)} .v-no{color:var(--bad)} .v-na{color:var(--ink-faint)}
+  .c-defer,.c-block{color:var(--mute);background:var(--mute-bg);border-color:var(--mute-line)}
+  .val{display:inline-block;font-family:var(--mono);font-size:10px;padding:2px 8px;border-radius:999px;font-weight:700;white-space:nowrap;border:1px solid}
+  .v-todo{color:var(--warn);background:var(--warn-bg);border-color:var(--warn-line)}
+  .v-ok{color:var(--ok);background:var(--ok-bg);border-color:var(--ok-line)}
+  .v-no{color:var(--bad);background:var(--bad-bg);border-color:var(--bad-line)}
+  .v-na{color:var(--ink-faint);background:var(--mute-bg);border-color:var(--mute-line)}
 
-  .foot{margin-top:18px;font-size:12.5px;color:var(--ink-faint)}
+  .foot{margin-top:24px;font-size:12px;color:var(--ink-faint);line-height:1.7}
   .foot a{color:var(--accent);text-decoration:none}
-  a:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:3px}
+  a:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
 </style>
 </head>
 <body>
@@ -73,87 +71,89 @@
   <header>
     <p class="eyebrow">Redface 2 · vue:drapeaux · #603</p>
     <h1>Phase Drapeaux — suivi</h1>
-    <p class="sub">Une ligne par issue. La colonne <b>Validation</b> appartient à XaTriX : <b>« shippé » ou « issue fermée » ne veut pas dire validé</b> — c'est XaTriX qui valide en dernier ressort.</p>
-    <p class="updated">maj 2026-06-27 · dernier build dev <b>0.17.19 / app-v199</b> · milestone <b>Vue · Drapeaux</b></p>
+    <p class="sub">Une carte par issue. Le liseré gauche et la pastille <b>Validation</b> appartiennent à XaTriX : <b>shippé / fermé ne veut pas dire validé</b>.</p>
+    <p class="updated">maj 2026-06-27 · dernier build dev <b>0.17.20 / app-v200</b> · milestone <b>Vue · Drapeaux</b></p>
   </header>
 
   <div class="stats">
-    <div class="stat warn"><div class="n" id="s-todo">0</div><div class="l">⏳ à valider</div></div>
     <div class="stat ok"><div class="n" id="s-ok">0</div><div class="l">✅ validé</div></div>
+    <div class="stat warn"><div class="n" id="s-todo">0</div><div class="l">⏳ à valider</div></div>
     <div class="stat bad"><div class="n" id="s-no">0</div><div class="l">❌ rejeté</div></div>
-    <div class="stat act"><div class="n" id="s-prog">0</div><div class="l">en cours / gated</div></div>
-    <div class="stat mute"><div class="n" id="s-rest">0</div><div class="l">différé / bloqué</div></div>
+    <div class="stat act"><div class="n" id="s-prog">0</div><div class="l">en cours</div></div>
+    <div class="stat mute"><div class="n" id="s-rest">0</div><div class="l">bloqué</div></div>
   </div>
 
-  <div class="note"><b>Validation</b> = à toi. <code>⏳ à valider</code> (fait/shippé, attend ton OK dogfood) · <code>✅ validé</code> (tu as confirmé) · <code>❌ rejeté</code> (à refaire) · <code>—</code> (rien à valider encore). Source éditable : <code>/work/xaat/SUIVI-603.md</code>.</div>
+  <div class="note"><b>Validation</b> = à toi. Liseré + pastille : <b>⏳ à valider</b> (shippé, attend ton OK dogfood) · <b>✅ validé</b> · <b>❌ rejeté</b> (à refaire) · <b>—</b> (rien à valider encore). Source éditable : <code>SUIVI-603.md</code>.</div>
 
-  <div class="tablewrap">
-    <table>
-      <thead>
-        <tr>
-          <th>#</th><th>Sujet</th><th>État</th><th>Build</th><th class="valcol">Validation XaTriX</th>
-        </tr>
-      </thead>
-      <tbody id="tb"></tbody>
-    </table>
-  </div>
+  <div id="list"></div>
 
-  <p class="foot">Umbrella <a href="https://github.com/ForumHFR/redface2/issues/603">#603</a> · miroir <a href="https://forumhfr.github.io/artifacts/flags-603-phase-tracker/">forumhfr.github.io</a> · proto swipe <a href="https://forumhfr.github.io/artifacts/flags-603-swipe-anim/">#660</a> · états vides <a href="https://forumhfr.github.io/artifacts/flags-603-empty-states/">#662</a></p>
+  <p class="foot">
+    Umbrella <a href="https://github.com/ForumHFR/redface2/issues/603">#603</a> ·
+    proto swipe <a href="https://forumhfr.github.io/artifacts/flags-603-swipe-anim/">#660</a> ·
+    états vides <a href="https://forumhfr.github.io/artifacts/flags-603-empty-states/">#662</a>
+  </p>
 </div>
 
 <script>
   const R="https://github.com/ForumHFR/redface2/issues/";
   const ET={ship:["c-ship","shippé"],prog:["c-prog","en cours"],redo:["c-redo","à refaire"],gate:["c-gate","gated"],defer:["c-defer","différé"],block:["c-block","bloqué"]};
-  const VL={todo:["v-todo","⏳ à valider"],ok:["v-ok","✅ validé"],no:["v-no","❌ rejeté"],na:["v-na","—"]};
+  // validation → [pill class, label, left-border color var]
+  const VL={todo:["v-todo","⏳ à valider","var(--warn)"],ok:["v-ok","✅ validé","var(--ok)"],no:["v-no","❌ rejeté","var(--bad)"],na:["v-na","—","var(--line)"]};
   const SECTIONS=[
-    {h:"Shippé — attend ta validation", rows:[
-      {n:251,t:"Cyan manquant — sticky récupéré",c:"buckets REST excluaient les stickies flaggés des cats sans sous-cat (cat 32 IA). Fix REST-only : supplément topics/last p.1, route flag_owntopic, dédup+merge, best-effort. PAS de fallback HTML. Fixture réelle + 4 tests, Codex GO.",e:"ship",b:"v198",v:"todo"},
-      {n:662,t:"États vides Drapeaux refaits",c:"défaut style A (icône + titre + sous-texte) + option opt-in style C smiley [:eric le looser]. v199 : étendu aux onglets DT + Super Favoris ; smiley dé-pixelisé (taille réduite + filtrage lissé, l'upscale « net » était rejeté). DT « aucune non-lue » garde le caveat de balayage en sous-texte. Codex GO.",e:"ship",b:"v199",v:"todo"},
-      {n:690,t:"Drapeau favori — D #FFB300 + option contour",c:"ambre #FFB300 (variante D, vote CharLee/thibw/XaTriX). v199 : option « Contour du marqueur » (liseré sombre 0,5 dp, opt-in, réglages d'affichage Drapeaux) — « essaie 0.5px » XaTriX, à eyeballer on-device (barre/pastille/point, tous onglets).",e:"ship",b:"v199",v:"todo"},
-      {n:695,t:"Scroll indépendant par onglet",c:"un LazyListState par bucket ; plus de bave d'un onglet à l'autre. Reste : suite audit swipe (#660 prereq)",e:"ship",b:"v197",v:"todo"},
-      {n:671,t:"Bandes catégorie — preset C",c:"réglage de densité dédié à venir (#691)",e:"ship",b:"v195",v:"ok"},
-      {n:666,t:"Barre du bas 52 dp en icônes seules",c:"« on peut pas descendre plus bas » (#2789472)",e:"ship",b:"v195",v:"ok"},
+    {h:"Shippé", rows:[
+      {n:251,t:"Cyan manquant — sticky récupéré",c:"L'API REST excluait les sujets épinglés flaggés des catégories sans sous-catégorie (cat IA). Supplément REST-only topics/last p.1 + dédup/merge, zéro fallback HTML. Validé XaTriX on-device.",e:"ship",b:"v198",v:"ok"},
+      {n:662,t:"États vides Drapeaux refaits",c:"Style A (icône + titre + sous-texte) + option C smiley [:eric le looser] ; étendu aux onglets DT et Super Favoris ; smiley dé-pixelisé. Validé XaTriX. Suite v0.17.20 : texte explicatif DT déplacé de la vue vers la description du réglage « Section DT ».",e:"ship",b:"v199→200",v:"ok"},
+      {n:690,t:"Drapeau favori — D #FFB300 + contour",c:"Ambre #FFB300 (vote CharLee/thibw/XaTriX) + option « Contour du marqueur » (liseré 0,5 dp opt-in, toutes formes/onglets). Validé XaTriX.",e:"ship",b:"v199",v:"ok"},
+      {n:695,t:"Scroll indépendant par onglet",c:"Un état de défilement par onglet ; plus de bave d'un onglet à l'autre. Protocole de test posté sur le fil — XaTriX attend les retours avant de trancher.",e:"ship",b:"v197",v:"todo"},
+      {n:671,t:"Bandes catégorie — preset C",c:"",e:"ship",b:"v195",v:"ok"},
+      {n:666,t:"Barre du bas 52 dp en icônes seules",c:"« On peut pas descendre plus bas. »",e:"ship",b:"v195",v:"ok"},
       {n:679,t:"Menu rapide ne pop plus au retour",c:"",e:"ship",b:"v194",v:"ok"}
     ]},
-    {h:"Attend ta décision / en cours", rows:[
-      {n:660,t:"Animation swipe arrive du mauvais côté",c:"proto 4 variantes ; styx42 = slide au commit, nicko = page-turn → ton arbitrage",e:"gate",b:"—",v:"na"},
-      {n:665,t:"Top bar translucide (PR #688)",c:"PR conflictée (FlagsSearchAppBar.kt) à résoudre + dogfood",e:"redo",b:"—",v:"na"},
-      {n:676,t:"Sheet appui-long F2",c:"liste verticale supprimée à tort → garder liste + ajouter rangée",e:"redo",b:"v194",v:"no"},
-      {n:661,t:"Découvrabilité « +lus »",c:"dropdown rejeté ; pas de nouvelle direction",e:"redo",b:"v194",v:"no"},
-      {n:328,t:"Appui-long = menu d'actions (liste topics)",c:"complémentaire de #676",e:"gate",b:"—",v:"na"}
+    {h:"Attend ta décision / à refaire", rows:[
+      {n:660,t:"Animation swipe arrive du mauvais côté",c:"Proto 4 variantes (slide au commit = reco). Attend ton arbitrage du ressenti.",e:"gate",b:"—",v:"na"},
+      {n:665,t:"Top bar translucide (PR #688)",c:"PR codée, attend résolution conflit + dogfood. NB : refonte top bar en cours de design — pourra remplacer cette PR.",e:"redo",b:"—",v:"na"},
+      {n:676,t:"Sheet appui-long F2",c:"Liste verticale supprimée à tort → garder la liste ET ajouter la rangée de boutons.",e:"redo",b:"v194",v:"no"},
+      {n:661,t:"Découvrabilité « +lus »",c:"Dropdown rejeté ; pas de nouvelle direction. Sera reprise avec la refonte top bar (indicateur +lus).",e:"redo",b:"v194",v:"no"},
+      {n:328,t:"Appui-long = menu d'actions (liste topics)",c:"Complémentaire de #676.",e:"gate",b:"—",v:"na"}
+    ]},
+    {h:"En préparation", rows:[
+      {n:603,t:"Refonte top bar Drapeaux",c:"Nouvelle barre : loupe rétractable + avatar rond M3 dans un container à droite, container gauche (drapal + nom court + indicateur +lus), centre vide, loader amorce expressif central. Mockups en cours (bouclés avec Codex).",e:"prog",b:"design",v:"na"}
     ]},
     {h:"Bloqué — capture session HFR auth", rows:[
-      {n:413,t:"Favoris de POST HFR",c:"spike, dépend d'une fixture authentifiée",e:"block",b:"—",v:"na"},
-      {n:297,t:"Drapeaux depuis un listing de catégorie",c:"même dépendance",e:"block",b:"—",v:"na"}
+      {n:413,t:"Favoris de POST HFR",c:"Spike, dépend d'une fixture authentifiée.",e:"block",b:"—",v:"na"},
+      {n:297,t:"Drapeaux depuis un listing de catégorie",c:"Même dépendance.",e:"block",b:"—",v:"na"}
     ]},
     {h:"Historique — lot finition antérieur (fermé)", rows:[
       {n:673,t:"Sheet réglages rapides ne défilait pas",c:"",e:"ship",b:"v187",v:"ok"},
-      {n:664,t:"Icônes catégorie + pastille agrandie",c:"",e:"ship",b:"v189/v192",v:"ok"},
+      {n:664,t:"Icônes catégorie + pastille agrandie",c:"",e:"ship",b:"v189/192",v:"ok"},
       {n:663,t:"Swipe cyclique entre onglets",c:"",e:"ship",b:"v189",v:"ok"},
       {n:659,t:"Pull-to-refresh — rond redondant",c:"",e:"ship",b:"v185",v:"ok"}
     ]}
   ];
-  const tb=document.getElementById("tb");
   const count={todo:0,ok:0,no:0,prog:0,rest:0};
   let html="";
   for(const sec of SECTIONS){
-    html+=`<tr class="sec"><td colspan="5">${sec.h}</td></tr>`;
+    html+=`<div class="sech">${sec.h}</div><div class="cards">`;
     for(const r of sec.rows){
-      const [ec,et]=ET[r.e], [vc,vt]=VL[r.v];
-      const desc=r.c?`<div class="c">${r.c}</div>`:"";
-      html+=`<tr>
-        <td class="num"><a href="${R}${r.n}">#${r.n}</a></td>
-        <td class="subj"><div class="t">${r.t}</div>${desc}</td>
-        <td><span class="chip ${ec}">${et}</span></td>
-        <td class="build">${r.b}</td>
-        <td class="valcol"><span class="v ${vc}">${vt}</span></td>
-      </tr>`;
+      const [ec,et]=ET[r.e], [vc,vt,vcol]=VL[r.v];
+      const desc=r.c?`<p class="desc">${r.c}</p>`:"";
+      html+=`<div class="card" style="--vc:${vcol}">
+        <div class="top">
+          <a class="num" href="${R}${r.n}">#${r.n}</a>
+          <span class="chip ${ec}">${et}</span>
+          <span class="val ${vc}">${vt}</span>
+          <span class="build">${r.b}</span>
+        </div>
+        <p class="title">${r.t}</p>
+        ${desc}
+      </div>`;
       if(r.v==="todo")count.todo++; else if(r.v==="ok")count.ok++; else if(r.v==="no")count.no++;
       if(r.e==="prog"||r.e==="gate"||r.e==="redo")count.prog++;
       if(r.e==="defer"||r.e==="block")count.rest++;
     }
+    html+=`</div>`;
   }
-  tb.innerHTML=html;
+  document.getElementById("list").innerHTML=html;
   document.getElementById("s-todo").textContent=count.todo;
   document.getElementById("s-ok").textContent=count.ok;
   document.getElementById("s-no").textContent=count.no;
