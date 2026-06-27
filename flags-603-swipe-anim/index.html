@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vue Drapeaux — animation de swipe entre onglets (#660)</title>
+<meta name="description" content="Prototype interactif : 4 variantes d'animation de swipe entre onglets de la vue Drapeaux, pour trancher le rendu attendu (#660).">
+<style>
+  :root{
+    --ground:#15121A; --surface:#1E1925; --surface2:#241E2C; --line:#352C42;
+    --text:#ECE4DE; --muted:#9C8FA6; --faint:#6E6478;
+    --red:#E23A4E; --cyan:#00BCD4; --dt:#D500F9; --fav:#C7D63B;
+    --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--ground);color:var(--text);font-family:var(--sans);line-height:1.5;
+    background-image:radial-gradient(900px 460px at 86% -12%,rgba(226,58,78,.12),transparent 60%);}
+  .wrap{max-width:760px;margin:0 auto;padding:clamp(24px,5vw,56px) clamp(14px,4vw,32px) 72px;}
+  .eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.3em;text-transform:uppercase;color:var(--red);font-weight:600;margin:0 0 12px}
+  h1{font-size:clamp(26px,5vw,40px);line-height:1.04;letter-spacing:-.025em;font-weight:800;margin:0 0 12px;text-wrap:balance}
+  .lede{color:var(--muted);max-width:62ch;margin:0 0 28px;font-size:15px}
+  .stage{display:flex;flex-direction:column;align-items:center;gap:22px}
+
+  /* phone */
+  .phone{width:300px;max-width:88vw;height:520px;background:#0D0B11;border:1px solid var(--line);
+    border-radius:30px;padding:10px;box-shadow:0 30px 70px -30px rgba(0,0,0,.8);position:relative}
+  .screen{position:relative;width:100%;height:100%;border-radius:22px;overflow:hidden;background:var(--ground);
+    display:flex;flex-direction:column}
+  /* top app bar */
+  .appbar{flex:0 0 auto;height:52px;display:flex;align-items:center;gap:10px;padding:0 12px;
+    background:var(--surface);border-bottom:1px solid var(--line);z-index:3}
+  .flagdot{width:22px;height:22px;border-radius:6px;flex:0 0 auto;transition:background .25s}
+  .searchpill{flex:1;height:30px;border-radius:16px;background:var(--surface2);border:1px solid var(--line)}
+  .gear{width:20px;height:20px;border-radius:50%;border:2px solid var(--faint);flex:0 0 auto}
+  /* viewport that clips the moving panels */
+  .viewport{position:relative;flex:1;overflow:hidden;touch-action:pan-y}
+  .panel{position:absolute;inset:0;will-change:transform,opacity;display:flex;flex-direction:column}
+  .band{flex:0 0 auto;padding:9px 14px 5px;font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--muted)}
+  .rows{flex:1;overflow:hidden;padding:2px 0}
+  .row{display:flex;align-items:center;gap:10px;padding:9px 14px;border-bottom:1px solid rgba(53,44,66,.5)}
+  .stripe{width:4px;align-self:stretch;border-radius:3px;flex:0 0 auto}
+  .rmeta{flex:1;min-width:0}
+  .rtitle{height:9px;border-radius:4px;background:#3a3343;margin-bottom:7px}
+  .rsub{height:7px;width:52%;border-radius:4px;background:#2a2532}
+  .pill{flex:0 0 auto;width:26px;height:15px;border-radius:8px;background:#2a2532}
+  /* bottom bar */
+  .navbar{flex:0 0 auto;height:50px;display:flex;background:var(--surface);border-top:1px solid var(--line);z-index:3}
+  .navitem{flex:1;display:flex;align-items:center;justify-content:center;position:relative}
+  .navicon{width:20px;height:20px;border-radius:5px;background:var(--faint);opacity:.7}
+  .navitem.on .navicon{opacity:1;background:var(--text)}
+  .navpill{position:absolute;width:42px;height:24px;border-radius:14px;background:rgba(226,58,78,.18);opacity:0;transition:opacity .2s}
+  .navitem.on .navpill{opacity:1}
+
+  /* controls */
+  .controls{width:300px;max-width:88vw;display:flex;flex-direction:column;gap:14px}
+  .variants{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .vbtn{appearance:none;cursor:pointer;text-align:left;background:var(--surface);border:1px solid var(--line);
+    border-radius:12px;padding:10px 12px;color:var(--text);transition:border-color .15s,background .15s}
+  .vbtn:hover{border-color:var(--muted)}
+  .vbtn.sel{border-color:var(--red);background:#251820}
+  .vbtn b{display:block;font-size:13.5px;margin-bottom:2px}
+  .vbtn span{display:block;font-size:11px;color:var(--muted);line-height:1.35}
+  .vbtn .tag{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--red);margin-top:5px}
+  .nav{display:flex;gap:8px;align-items:center;justify-content:center}
+  .nbtn{appearance:none;cursor:pointer;background:var(--surface2);border:1px solid var(--line);color:var(--text);
+    border-radius:10px;padding:9px 16px;font-size:14px;font-weight:600;font-family:var(--mono)}
+  .nbtn:active{transform:translateY(1px)}
+  .hint{font-size:12px;color:var(--faint);text-align:center;font-family:var(--mono)}
+  .speed{display:flex;align-items:center;gap:10px;justify-content:center;font-family:var(--mono);font-size:11px;color:var(--muted)}
+  .speed input{accent-color:var(--red)}
+
+  .notes{margin-top:40px;border-top:1px solid var(--line);padding-top:22px}
+  .notes h2{font-size:16px;margin:0 0 12px;letter-spacing:-.01em}
+  .notes ul{margin:0;padding-left:18px;color:var(--muted);font-size:13.5px}
+  .notes li{margin-bottom:8px}
+  .notes code{font-family:var(--mono);font-size:12px;color:var(--text);background:var(--surface);padding:1px 5px;border-radius:5px}
+  footer{margin-top:34px;font-family:var(--mono);font-size:11px;color:var(--faint)}
+  .reco{color:var(--fav)}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+  <p class="eyebrow">ForumHFR · Redface 2 · #660</p>
+  <h1>Animation de swipe entre onglets</h1>
+  <p class="lede">Le rendu actuel (le nouvel onglet « pop » centré au lâcher) ne convient pas. Voici
+  4 manières d'animer le changement d'onglet — touche une variante, puis <b>glisse l'écran</b> ou
+  utilise les flèches pour la sentir. Le but : trancher le feel attendu.</p>
+
+  <div class="stage">
+    <div class="phone">
+      <div class="screen">
+        <div class="appbar">
+          <div class="flagdot" id="flagdot"></div>
+          <div class="searchpill"></div>
+          <div class="gear"></div>
+        </div>
+        <div class="viewport" id="viewport"></div>
+        <div class="navbar">
+          <div class="navitem on"><div class="navpill"></div><div class="navicon"></div></div>
+          <div class="navitem"><div class="navicon"></div></div>
+          <div class="navitem"><div class="navicon"></div></div>
+          <div class="navitem"><div class="navicon"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <div class="variants" id="variants"></div>
+      <div class="nav">
+        <button class="nbtn" id="prev">‹ onglet</button>
+        <span class="hint" id="tablabel">Cyan</span>
+        <button class="nbtn" id="next">onglet ›</button>
+      </div>
+      <div class="speed">
+        lent <input type="range" id="speed" min="0.5" max="2" step="0.1" value="1"> rapide
+      </div>
+      <p class="hint">Glisse horizontalement sur l'écran pour swiper.</p>
+    </div>
+  </div>
+
+  <div class="notes">
+    <h2>Ce que disent les variantes</h2>
+    <ul>
+      <li><b>Pop centré (actuel)</b> — l'ancien contenu suit le doigt, le nouveau apparaît d'un coup,
+      centré. C'est le rendu rejeté : pas d'effet de continuité.</li>
+      <li><b class="reco">Slide au commit</b> — au lâcher, le nouvel onglet entre depuis le côté vers
+      lequel tu swipes, l'ancien sort. <span class="reco">Reco Codex par défaut</span> :
+      <code>AnimatedContent</code> + <code>slideIn/slideOut</code>, léger, corrige le « pop ».</li>
+      <li><b>Page-turn (pager)</b> — entrant et sortant visibles <i>pendant</i> le glissé, le contenu
+      suit le doigt comme un carrousel. Le plus naturel ; implique <code>HorizontalPager</code>.</li>
+      <li><b>Fondu</b> — l'ancien s'efface, le nouveau apparaît. Doux mais ce n'est pas « une page qui
+      tourne » — sans doute hors cible pour ce retour.</li>
+    </ul>
+    <p class="hint" style="text-align:left;margin-top:14px">Décision Codex : prototyper les 4, défaut =
+    <span class="reco">slide au commit</span> ; si tu veux explicitement voir la page suivante sous le
+    doigt dès le drag → on tranche pour <code>HorizontalPager</code>.</p>
+  </div>
+
+  <footer>github.com/ForumHFR/artifacts · prototype interactif · données fictives</footer>
+</div>
+
+<script>
+(function(){
+  const TABS=[
+    {name:'Cyan',  color:'var(--cyan)', band:'Mes sujets · non lus'},
+    {name:'DT',    color:'var(--dt)',   band:'Discussions à thème'},
+    {name:'Super', color:'var(--fav)',  band:'Super favoris'},
+  ];
+  const VARIANTS=[
+    {id:'pop',   title:'Pop centré',  desc:'Actuel — le nouveau apparaît net, centré.', tag:'témoin'},
+    {id:'slide', title:'Slide au commit', desc:'Le nouveau entre du bon côté.', tag:'reco', reco:true},
+    {id:'pager', title:'Page-turn',   desc:'Suivi continu type carrousel.', tag:'pager'},
+    {id:'fade',  title:'Fondu',       desc:'Crossfade doux.', tag:'crossfade'},
+  ];
+  let variant='slide', cur=0, animating=false, speed=1;
+  const vp=document.getElementById('viewport');
+  const flagdot=document.getElementById('flagdot');
+  const tablabel=document.getElementById('tablabel');
+
+  function buildPanel(i){
+    const t=TABS[i];
+    const p=document.createElement('div');
+    p.className='panel';
+    const band=document.createElement('div'); band.className='band'; band.textContent=t.band;
+    const rows=document.createElement('div'); rows.className='rows';
+    const n=6;
+    for(let r=0;r<n;r++){
+      const row=document.createElement('div'); row.className='row';
+      const s=document.createElement('div'); s.className='stripe'; s.style.background=t.color;
+      const m=document.createElement('div'); m.className='rmeta';
+      const ti=document.createElement('div'); ti.className='rtitle'; ti.style.width=(58+((r*13+i*7)%34))+'%';
+      const su=document.createElement('div'); su.className='rsub';
+      m.appendChild(ti); m.appendChild(su);
+      const pl=document.createElement('div'); pl.className='pill';
+      row.appendChild(s); row.appendChild(m); row.appendChild(pl);
+      rows.appendChild(row);
+    }
+    p.appendChild(band); p.appendChild(rows);
+    return p;
+  }
+  function setFlag(i){ flagdot.style.background=TABS[i].color; tablabel.textContent=TABS[i].name; }
+
+  // initial
+  (function init(){
+    const p=buildPanel(cur); p.style.transform='translateX(0)'; vp.appendChild(p); setFlag(cur);
+  })();
+
+  function dur(ms){ return Math.round(ms/speed); }
+
+  function transition(dir){ // dir +1 next, -1 prev
+    if(animating) return;
+    const tgt=(cur+dir+TABS.length)%TABS.length;
+    if(tgt===cur) return;
+    animating=true;
+    const oldP=vp.querySelector('.panel');
+    const newP=buildPanel(tgt);
+    const W=vp.clientWidth;
+    setFlag(tgt);
+
+    if(variant==='pop'){
+      // old slides out with momentum, new pops centered after
+      oldP.style.transition=`transform ${dur(180)}ms ease-in`;
+      oldP.style.transform=`translateX(${-dir*W*0.5}px)`;
+      oldP.style.opacity='1';
+      newP.style.transform='translateX(0)'; newP.style.opacity='0';
+      vp.appendChild(newP);
+      setTimeout(()=>{
+        oldP.remove();
+        newP.style.transition=`opacity ${dur(60)}ms linear`;
+        requestAnimationFrame(()=>{ newP.style.opacity='1'; });
+        setTimeout(()=>{ newP.style.transition=''; animating=false; }, dur(80));
+      }, dur(190));
+    }
+    else if(variant==='slide'){
+      newP.style.transform=`translateX(${dir*W}px)`;
+      vp.appendChild(newP);
+      requestAnimationFrame(()=>{
+        const e=`transform ${dur(280)}ms cubic-bezier(.2,.8,.2,1)`;
+        oldP.style.transition=e; newP.style.transition=e;
+        oldP.style.transform=`translateX(${-dir*W}px)`;
+        newP.style.transform='translateX(0)';
+      });
+      setTimeout(()=>{ oldP.remove(); newP.style.transition=''; animating=false; }, dur(300));
+    }
+    else if(variant==='pager'){
+      newP.style.transform=`translateX(${dir*W}px)`;
+      vp.appendChild(newP);
+      requestAnimationFrame(()=>{
+        const e=`transform ${dur(340)}ms cubic-bezier(.25,.46,.45,.94)`;
+        oldP.style.transition=e; newP.style.transition=e;
+        oldP.style.transform=`translateX(${-dir*W}px)`;
+        newP.style.transform='translateX(0)';
+      });
+      setTimeout(()=>{ oldP.remove(); newP.style.transition=''; animating=false; }, dur(360));
+    }
+    else if(variant==='fade'){
+      newP.style.transform='translateX(0)'; newP.style.opacity='0';
+      vp.appendChild(newP);
+      requestAnimationFrame(()=>{
+        oldP.style.transition=`opacity ${dur(220)}ms linear`;
+        newP.style.transition=`opacity ${dur(220)}ms linear`;
+        oldP.style.opacity='0'; newP.style.opacity='1';
+      });
+      setTimeout(()=>{ oldP.remove(); newP.style.transition=''; animating=false; }, dur(240));
+    }
+    cur=tgt;
+  }
+
+  // drag support
+  let startX=null, dragging=false;
+  vp.addEventListener('pointerdown',e=>{ if(animating)return; startX=e.clientX; dragging=true; vp.setPointerCapture(e.pointerId);});
+  vp.addEventListener('pointermove',e=>{
+    if(!dragging||startX===null)return;
+    const dx=e.clientX-startX;
+    if(variant==='pager'||variant==='slide'||variant==='pop'){
+      const p=vp.querySelector('.panel'); if(p) p.style.transform=`translateX(${dx*0.4}px)`;
+    }
+  });
+  vp.addEventListener('pointerup',e=>{
+    if(!dragging)return; dragging=false;
+    const dx=e.clientX-(startX||0); startX=null;
+    const p=vp.querySelector('.panel');
+    if(p){ p.style.transition='transform 160ms ease'; p.style.transform='translateX(0)';
+      setTimeout(()=>{ if(p)p.style.transition=''; },170); }
+    if(Math.abs(dx)>40){ transition(dx<0?1:-1); }
+  });
+  vp.addEventListener('pointercancel',()=>{ dragging=false; startX=null;
+    const p=vp.querySelector('.panel'); if(p) p.style.transform='translateX(0)'; });
+
+  document.getElementById('next').onclick=()=>transition(1);
+  document.getElementById('prev').onclick=()=>transition(-1);
+  document.getElementById('speed').oninput=e=>{ speed=parseFloat(e.target.value); };
+
+  // variant buttons
+  const vc=document.getElementById('variants');
+  VARIANTS.forEach(v=>{
+    const b=document.createElement('button');
+    b.className='vbtn'+(v.id===variant?' sel':'');
+    b.innerHTML=`<b>${v.title}</b><span>${v.desc}</span><span class="tag">${v.tag}</span>`;
+    b.onclick=()=>{ variant=v.id; [...vc.children].forEach(c=>c.classList.remove('sel')); b.classList.add('sel'); };
+    vc.appendChild(b);
+  });
+})();
+</script>
+
+</body>
+</html>
