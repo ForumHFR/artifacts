@@ -78,6 +78,18 @@
   .notes code{font-family:var(--mono);font-size:12px;color:var(--text);background:var(--surface);padding:1px 5px;border-radius:5px}
   footer{margin-top:34px;font-family:var(--mono);font-size:11px;color:var(--faint)}
   .reco{color:var(--fav)}
+
+  .refs{margin-top:30px;border-top:1px solid var(--line);padding-top:22px}
+  .refs h2{font-size:16px;margin:0 0 6px;letter-spacing:-.01em}
+  .refs p.sub{color:var(--faint);font-size:12.5px;margin:0 0 16px}
+  .refgrid{display:grid;gap:12px}
+  @media(min-width:680px){.refgrid{grid-template-columns:1fr 1fr}}
+  .refcard{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+  .refcard h3{margin:0 0 3px;font-size:13.5px}
+  .refcard .pat{font-family:var(--mono);font-size:10.5px;color:var(--muted);margin:0 0 9px;line-height:1.4}
+  .refcard a{display:inline-block;color:#9ecbff;text-decoration:none;font-size:12.5px;margin:0 12px 6px 0;border-bottom:1px solid transparent}
+  .refcard a:hover,.refcard a:focus-visible{border-bottom-color:#9ecbff}
+  .refcard a.vid::before{content:"\25B6\FE0E  ";color:var(--red)}
 </style>
 
 </head>
@@ -137,6 +149,38 @@
     <p class="hint" style="text-align:left;margin-top:14px">Décision Codex : prototyper les 4, défaut =
     <span class="reco">slide au commit</span> ; si tu veux explicitement voir la page suivante sous le
     doigt dès le drag → on tranche pour <code>HorizontalPager</code>.</p>
+  </div>
+
+  <div class="refs">
+    <h2>Voir le vrai effet (références Material)</h2>
+    <p class="sub">Chaque variante correspond à un pattern de motion documenté. Compare le proto ci-dessus avec ces exemples réels avant de trancher.</p>
+    <div class="refgrid">
+      <div class="refcard">
+        <h3 class="reco">Slide au commit → Material « Shared Axis X »</h3>
+        <p class="pat">translation + fondu, direction = sens de navigation (avant = vers la gauche)</p>
+        <a href="https://m3.material.io/styles/motion/transitions/applying-transitions">m3 · transitions (exemples animés)</a>
+        <a href="https://blog.stylingandroid.com/material-motion-shared-axis/">Styling Android · GIFs shared axis</a>
+        <a href="https://developer.android.com/reference/com/google/android/material/transition/MaterialSharedAxis">API MaterialSharedAxis</a>
+        <a href="https://medium.com/androiddevelopers/customizing-animatedcontent-in-jetpack-compose-629c67b45894">AnimatedContent (Compose)</a>
+      </div>
+      <div class="refcard">
+        <h3>Page-turn → HorizontalPager (suivi du doigt)</h3>
+        <p class="pat">entrant/sortant visibles pendant le glissé, type carrousel</p>
+        <a class="vid" href="https://www.youtube.com/watch?v=inrGyNJbZaI">Vidéo · Swipe between composables (HorizontalPager)</a>
+        <a href="https://developer.android.com/develop/ui/compose/layouts/pager">Officiel · Pager in Compose</a>
+        <a href="https://www.sinasamaki.com/pager-animations/">sinasamaki · pager animations (offsetFraction)</a>
+      </div>
+      <div class="refcard">
+        <h3>Fondu → Material « Fade through »</h3>
+        <p class="pat">fondu sortant puis entrant + léger scale ; pour contenus sans relation forte</p>
+        <a href="https://m3.material.io/styles/motion/transitions/applying-transitions">m3 · transitions (section Fade through)</a>
+        <a href="https://developer.android.com/codelabs/material-motion-android">Codelab · Material Motion (Android)</a>
+      </div>
+      <div class="refcard">
+        <h3 style="color:var(--faint)">Pop centré → anti-pattern</h3>
+        <p class="pat">le rendu actuel rejeté : aucune continuité directionnelle, pas d'équivalent Material recommandé</p>
+      </div>
+    </div>
   </div>
 
   <footer>github.com/ForumHFR/artifacts · prototype interactif · données fictives</footer>

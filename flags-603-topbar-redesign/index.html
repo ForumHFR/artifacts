@@ -116,6 +116,12 @@
   .foot a{color:var(--accent);text-decoration:none}
   button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:6px}
   @media(prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;transition-duration:.001ms!important}}
+  .refrow{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
+  .refc{background:var(--card-2);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+  .refc .nm{font-size:12px;color:var(--ink);font-weight:600;margin-bottom:7px}
+  .refc a{display:block;color:#9ecbff;text-decoration:none;font-size:12px;margin-bottom:5px}
+  .refc a:hover,.refc a:focus-visible{text-decoration:underline}
+  .refc a.vid::before{content:"\25B6\FE0E  ";color:var(--accent)}
 </style>
 </head>
 <body>
@@ -195,6 +201,30 @@
     <h3>Comparer les 4 loaders amorce</h3>
     <p>Vignettes animées en boucle (état « refreshing »). Codex recommande <b>1 (redface qui roule)</b>, repli <b>3 (anneau)</b>. Tous faisables en Compose stable (pas d'API Expressive interne).</p>
     <div class="chips" id="loadcompare"></div>
+  </div>
+
+  <div class="strip">
+    <h3>Voir le vrai effet (références Material)</h3>
+    <p>Le loader amorce s'inspire du <b>M3 Expressive Loading Indicator</b> (morph de 7 formes, conteneur à fond clair en pull-to-refresh) ; le « feel » de la descente = le <b>système de ressorts</b> M3 Expressive. À réimplémenter en Compose stable (l'API expressive est interne dans notre BOM).</p>
+    <div class="refrow">
+      <div class="refc">
+        <div class="nm">Loader amorce → M3E Loading Indicator</div>
+        <a href="https://m3.material.io/components/loading-indicator">m3 · loading indicator (aperçu animé)</a>
+        <a href="https://m3.material.io/components/loading-indicator/guidelines">m3 · guidelines (conteneur PTR)</a>
+        <a class="vid" href="https://www.youtube.com/watch?v=lag_takit_k">Vidéo · toutes les variantes expliquées</a>
+        <a class="vid" href="https://www.youtube.com/shorts/AC07tVTyOkw">Démo vrai-monde (Play Store)</a>
+        <a href="https://9to5google.com/2025/05/16/material-3-expressive-loading-indicator/">Article + GIF (9to5Google)</a>
+      </div>
+      <div class="refc">
+        <div class="nm">Descente / rebond → motion à ressorts</div>
+        <a class="vid" href="https://www.youtube.com/watch?v=wZJZcoPVagk">Vidéo · M3 Expressive Motion Physics</a>
+        <a href="https://m3.material.io/styles/motion/overview/how-it-works">m3 · motion (springs : stiffness/damping)</a>
+      </div>
+      <div class="refc">
+        <div class="nm">Pull-to-refresh → Compose</div>
+        <a href="https://developer.android.com/develop/ui/compose/components/pull-to-refresh">Officiel · PullToRefreshBox + custom indicator</a>
+      </div>
+    </div>
   </div>
 
   <p class="foot">
