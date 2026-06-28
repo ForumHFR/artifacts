@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Drapeaux #603 — suivi de phase</title>
-<meta name="description" content="Suivi des issues de la phase Drapeaux : état, build, et validation XaTriX (shippé/fermé ne vaut pas validé). Lisible sur mobile, sans défilement horizontal.">
+<meta name="description" content="Suivi des issues de la phase Drapeaux : état, build, et validation XaTriX. Tout est validé sauf le loader redface (à refaire). Lisible sur mobile, sans défilement horizontal.">
 <style>
   :root{
     --ground:#15100f;--panel:#1f1817;--panel-2:#291f1e;--line:#3a2c2a;
@@ -34,8 +34,9 @@
   .stat .l{font-size:10px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.04em;margin-top:5px;font-family:var(--mono);line-height:1.3}
   .stat.warn .n{color:var(--warn)} .stat.ok .n{color:var(--ok)} .stat.bad .n{color:var(--bad)} .stat.act .n{color:var(--accent)} .stat.mute .n{color:var(--mute)}
 
-  .note{background:linear-gradient(180deg,var(--warn-bg),transparent);border:1px solid var(--warn-line);border-radius:11px;padding:12px 14px;margin-bottom:22px;font-size:13px;color:var(--ink)}
-  .note b{color:var(--warn)}
+  .note{background:linear-gradient(180deg,var(--bad-bg),transparent);border:1px solid var(--bad-line);border-radius:11px;padding:12px 14px;margin-bottom:22px;font-size:13px;color:var(--ink)}
+  .note b{color:var(--bad)}
+  .note code{background:#0000003d;padding:1px 5px;border-radius:4px;font-family:var(--mono);font-size:11.5px}
 
   .sech{font-family:var(--mono);font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-faint);font-weight:600;margin:22px 2px 9px;display:flex;align-items:center;gap:9px}
   .sech::after{content:"";flex:1;height:1px;background:var(--line)}
@@ -71,26 +72,26 @@
   <header>
     <p class="eyebrow">Redface 2 · vue:drapeaux · #603</p>
     <h1>Phase Drapeaux — suivi</h1>
-    <p class="sub">Une carte par issue. Le liseré gauche et la pastille <b>Validation</b> appartiennent à XaTriX : <b>shippé / fermé ne veut pas dire validé</b>.</p>
-    <p class="updated">maj 2026-06-28 · dernier build dev <b>0.17.27 / app-v207</b> · milestone <b>Vue · Drapeaux</b></p>
+    <p class="sub">Une carte par chantier. Le liseré gauche et la pastille <b>Validation</b> appartiennent à XaTriX.</p>
+    <p class="updated">maj 2026-06-28 · dernier build dev <b>0.17.27 / app-v207</b> · validation dogfood intégrée : <b>tout ✅ sauf le loader redface</b></p>
   </header>
 
   <div class="stats">
     <div class="stat ok"><div class="n" id="s-ok">0</div><div class="l">✅ validé</div></div>
+    <div class="stat bad"><div class="n" id="s-no">0</div><div class="l">❌ à refaire</div></div>
     <div class="stat warn"><div class="n" id="s-todo">0</div><div class="l">⏳ à valider</div></div>
-    <div class="stat bad"><div class="n" id="s-no">0</div><div class="l">❌ rejeté</div></div>
-    <div class="stat act"><div class="n" id="s-prog">0</div><div class="l">en cours</div></div>
-    <div class="stat mute"><div class="n" id="s-rest">0</div><div class="l">bloqué</div></div>
+    <div class="stat act"><div class="n" id="s-prog">0</div><div class="l">gated / à faire</div></div>
+    <div class="stat mute"><div class="n" id="s-rest">0</div><div class="l">différé / bloqué</div></div>
   </div>
 
-  <div class="note"><b>Validation</b> = à toi. Liseré + pastille : <b>⏳ à valider</b> (shippé, attend ton OK dogfood) · <b>✅ validé</b> · <b>❌ rejeté</b> (à refaire) · <b>—</b> (rien à valider encore). Source éditable : <code>SUIVI-603.md</code>.</div>
+  <div class="note"><b>Seul point rejeté : le loader redface.</b> Tout le reste du lot dogfood (0.17.22 → 0.17.27) est validé. ✅ Numéros d'issues assainis : issues propres créées — <code>#728</code> (loader, à refaire), <code>#729</code> (pages + poster, remplace le faux <code>#15</code> = HfrParser Phase 1), <code>#730</code> (recherche DT). Source éditable : <code>SUIVI-603.md</code>.</div>
 
   <div id="list"></div>
 
   <p class="foot">
     Umbrella <a href="https://github.com/ForumHFR/redface2/issues/603">#603</a> ·
-    proto swipe <a href="https://forumhfr.github.io/artifacts/flags-603-swipe-anim/">#660</a> ·
-    états vides <a href="https://forumhfr.github.io/artifacts/flags-603-empty-states/">#662</a>
+    contrat loader (à viser) <a href="https://forumhfr.github.io/artifacts/flags-603-redface-loader/">redface-loader</a> ·
+    exploration top bar <a href="https://forumhfr.github.io/artifacts/flags-603-topbar-redesign/">topbar-redesign</a>
   </p>
 </div>
 
@@ -98,35 +99,37 @@
   const R="https://github.com/ForumHFR/redface2/issues/";
   const ET={ship:["c-ship","shippé"],prog:["c-prog","en cours"],redo:["c-redo","à refaire"],gate:["c-gate","gated"],defer:["c-defer","différé"],block:["c-block","bloqué"]};
   // validation → [pill class, label, left-border color var]
-  const VL={todo:["v-todo","⏳ à valider","var(--warn)"],ok:["v-ok","✅ validé","var(--ok)"],no:["v-no","❌ rejeté","var(--bad)"],na:["v-na","—","var(--line)"]};
+  const VL={todo:["v-todo","⏳ à valider","var(--warn)"],ok:["v-ok","✅ validé","var(--ok)"],no:["v-no","❌ à refaire","var(--bad)"],na:["v-na","—","var(--line)"]};
+  // n = real issue number (link target + label) ; lbl/href override the display label / link when a
+  // chantier has no dedicated issue (it then points to the #603 umbrella, no broken/wrong link).
   const SECTIONS=[
-    {h:"Shippé 0.17.22–0.17.27 — attend ta validation (dogfood)", rows:[
-      {n:"603·loader",t:"Loader « redface » à l'amorce du pull",c:"Tête redface dessinée (Compose Canvas, pas le GIF HFR) qui émerge sous la barre et roule sur elle-même selon la distance de tirage, dans une pastille. « Amorce seule » : disparaît au refresh (la fine barre du haut prend le relais). Respecte reduce-motion. Choix XaTriX : amorce-only + tête dessinée. PR #727, Codex GO, vérifié émulateur.",e:"ship",b:"0.17.27",v:"todo"},
-      {n:"603·DT",t:"Recherche sur l'onglet DT (loupe harmonisée)",c:"La loupe manquait sur DT (gatée flagType≠null). Désormais offerte sur DT (filtre les conversations par sujet) ; Super (sans liste) reste sans. flagsSearchEnabled + filterDtItemsByQuery (purs, 11 tests). PR #726, Codex GO, vérifié émulateur.",e:"ship",b:"0.17.26",v:"todo"},
-      {n:665,t:"Top bar overlay translucide — contenu sous barre + scrim",c:"Root Box overlay : la barre est mesurée et survole la liste (LocalFlagsContentTopPadding) ; au scroll le contenu glisse SOUS la barre avec un scrim dégradé (opaque derrière la status bar → transparent au bas ; couleur surface, theme-agnostic AMOLED inclus). PR #725, Codex GO (réserves traitées), CI verte, vérifié émulateur.",e:"ship",b:"0.17.25",v:"todo"},
-      {n:603,t:"Top bar — refonte + finitions + passe review",c:"Container gauche en 2 zones, menu rapide restylé, recherche à hauteur constante, avatar rond. Passe review 0.17.23 : noms courts Cyan/Lurk/Fav/DT/Super, avatar qui épouse le container (fond container, SANS bordure), « Réglages d'affichage » sur tous les onglets (dont DT/Super), tap propre des 2 zones (demi-pilules).",e:"ship",b:"0.17.23",v:"todo"},
-      {n:721,t:"+lus = anneau autour du glyphe (variante A)",c:"Choix XaTriX sur artefact (reco Codex A). Anneau zone 1 (Flag+Dot), nouveau défaut ; œil legacy zone 2 ; pas de double repère. Gate Codex APPROVE, vérifié émulateur.",e:"ship",b:"0.17.24",v:"todo"},
-      {n:722,t:"Avatar — taille standard 32 dp",c:"40→32 dp (taille avatar de barre du haut, pas de liste). Confirmé Codex. Cible tactile 48 dp inchangée.",e:"ship",b:"0.17.24",v:"todo"},
-      {n:15,t:"Sheet — aller à une page + Poster",c:"Dialog saisie page (validé 1..N, isError) + « Poster un message » (éditeur réponse, dernière page). UX + gate Codex APPROVE. Vérifié émulateur (page 5/35, éditeur).",e:"ship",b:"0.17.24",v:"todo"},
-      {n:717,t:"Option drapeau / pastille (glyphe zone 1)",c:"Pref FlagGlyphStyle{Flag,Dot} (défaut Drapeau), réglage « Repère du type actif ». Gate Codex APPROVE, vérifié émulateur.",e:"ship",b:"0.17.23",v:"todo"},
-      {n:661,t:"Indicateur « +lus » configurable",c:"Œil (défaut) ou anneau coloré, dans les réglages d'affichage. Vit dans la zone type du container gauche.",e:"ship",b:"0.17.22",v:"todo"},
-      {n:676,t:"Sheet appui-long v2 — actions distinctes",c:"Rangée rapide (Ouvrir · 1er non-lu · Super favori · Partager) ≠ liste (dernière page · copier · navigateur · retirer). Fini le doublon. « Lu » / « Marquer cat. lue » écartés (pas d'endpoint HFR → sourdine #714).",e:"ship",b:"0.17.22",v:"todo"}
+    {h:"❌ Rejeté au dogfood — à refaire", rows:[
+      {n:728,t:"Loader « redface » (pull-to-refresh)",c:"Shippé (PR #727) = une tête corail DESSINÉE à la main en Compose Canvas (RedfaceFace), PAS le vrai smiley redface.gif HFR (écarté pour la licence GPL-3.0). XaTriX : « on en est loin » → la cible reste le VRAI redface qui roule (cf. artefact flags-603-redface-loader). Tension à trancher : tête originale plus fidèle vs vrai sprite (licence). À re-cadrer Codex.",e:"redo",b:"0.17.27",v:"no"}
     ]},
-    {h:"Shippé — validé XaTriX", rows:[
-      {n:660,t:"Swipe « slide au commit » + ombre retirée",c:"Shared Axis X directionnel (wrap OK) ; cadre d'ombre gris parasite supprimé. Validé XaTriX (dogfood 0.17.22).",e:"ship",b:"0.17.22",v:"ok"},
-      {n:251,t:"Cyan manquant — sticky récupéré",c:"Supplément REST-only topics/last p.1 + dédup/merge, zéro fallback HTML. Validé on-device.",e:"ship",b:"v198",v:"ok"},
+    {h:"✅ Validé — lot dogfood 0.17.22 → 0.17.27", rows:[
+      {n:603,t:"Top bar — refonte + finitions + passe review",c:"Container gauche en 2 zones, menu rapide restylé, recherche à hauteur constante, avatar rond. Passe review : noms courts Cyan/Lurk/Fav/DT/Super, avatar qui épouse le container (sans bordure), « Réglages d'affichage » sur tous les onglets, tap propre des 2 demi-pilules.",e:"ship",b:"0.17.23",v:"ok"},
+      {n:665,t:"Top bar overlay translucide — contenu sous barre + scrim",c:"Root Box overlay : la barre est mesurée et survole la liste ; au scroll le contenu glisse SOUS la barre avec un scrim dégradé (couleur surface, theme-agnostic, AMOLED inclus). PR #725, Codex GO.",e:"ship",b:"0.17.25",v:"ok"},
+      {n:730,t:"Recherche sur l'onglet DT (loupe harmonisée)",c:"La loupe manquait sur DT (gatée flagType≠null) ; désormais offerte (filtre les conversations par sujet). flagsSearchEnabled + filterDtItemsByQuery (purs, 11 tests). PR #726.",e:"ship",b:"0.17.26",v:"ok"},
+      {n:721,t:"« +lus » = anneau autour du glyphe (variante A)",c:"Choix XaTriX sur artefact (reco Codex A). Anneau zone 1 (Flag+Dot), nouveau défaut ; œil legacy zone 2 ; pas de double repère.",e:"ship",b:"0.17.24",v:"ok"},
+      {n:722,t:"Avatar — taille standard 32 dp",c:"40→32 dp (taille d'avatar de barre du haut, pas de liste). Cible tactile 48 dp inchangée.",e:"ship",b:"0.17.24",v:"ok"},
+      {n:729,t:"Sheet — aller à une page + Poster",c:"Dialog saisie page (validé 1..N, isError) + « Poster un message » (éditeur réponse, dernière page). PR #723. ⚠️ Le commit la référençait (#15) = HfrParser Phase 1 ; vraie issue = #729.",e:"ship",b:"0.17.24",v:"ok"},
+      {n:717,t:"Option drapeau / pastille (glyphe zone 1)",c:"Pref FlagGlyphStyle{Flag,Dot} (défaut Drapeau), réglage « Repère du type actif ».",e:"ship",b:"0.17.23",v:"ok"},
+      {n:661,t:"Indicateur « +lus » configurable",c:"Anneau (défaut) ou œil legacy, dans les réglages d'affichage. Vit dans la zone type du container gauche.",e:"ship",b:"0.17.22",v:"ok"},
+      {n:676,t:"Sheet appui-long v2 — actions distinctes",c:"Rangée rapide (Ouvrir · 1er non-lu · Super favori · Partager) ≠ liste (dernière page · copier · navigateur · retirer). Fini le doublon. « Marquer lu » écarté (pas d'endpoint HFR → sourdine #714).",e:"ship",b:"0.17.22",v:"ok"},
+      {n:695,t:"Scroll indépendant par onglet",c:"Un état de défilement par onglet ; plus de bave d'un onglet à l'autre.",e:"ship",b:"v197",v:"ok"}
+    ]},
+    {h:"✅ Validé — antérieur", rows:[
+      {n:660,t:"Swipe « slide au commit » + ombre retirée",c:"Shared Axis X directionnel (wrap OK) ; cadre d'ombre gris parasite supprimé.",e:"ship",b:"0.17.22",v:"ok"},
+      {n:251,t:"Cyan manquant — sticky récupéré",c:"Supplément REST-only topics/last p.1 + dédup/merge, zéro fallback HTML.",e:"ship",b:"v198",v:"ok"},
       {n:662,t:"États vides Drapeaux refaits",c:"Style A + option C smiley ; DT + Super Favoris ; texte DT déplacé vers le réglage « Section DT ».",e:"ship",b:"v199→200",v:"ok"},
       {n:690,t:"Drapeau favori — D #FFB300 + contour",c:"Ambre #FFB300 + option « Contour du marqueur » (0,5 dp opt-in).",e:"ship",b:"v199",v:"ok"},
       {n:671,t:"Bandes catégorie — preset C",c:"",e:"ship",b:"v195",v:"ok"},
       {n:666,t:"Barre du bas 52 dp en icônes seules",c:"",e:"ship",b:"v195",v:"ok"},
       {n:679,t:"Menu rapide ne pop plus au retour",c:"",e:"ship",b:"v194",v:"ok"}
     ]},
-    {h:"Shippé — attend retours du fil", rows:[
-      {n:695,t:"Scroll indépendant par onglet",c:"Un état de défilement par onglet ; plus de bave. Protocole de test posté — XaTriX attend les retours.",e:"ship",b:"v197",v:"todo"}
-    ]},
     {h:"Suite top bar — en cours / à faire", rows:[
       {n:718,t:"Avatar — options bordure / fond",c:"Avatar borderless + fond container + 32 dp livrés. Options chiffrées (~3 h 30) + placeholders grisés dans le sheet. Attend go pour dégriser.",e:"gate",b:"—",v:"na"},
-      {n:17,t:"Sous-cat dans la description de la ligne",c:"BLOQUÉ : Flag.subcat = ID seulement (pas de nom dans le payload drapeaux ; flagCategoryName ne couvre que les cats racines). Afficher le NOM demande une résolution dédiée (liste sous-cats par cat).",e:"defer",b:"—",v:"na"},
+      {n:17,t:"Sous-cat dans la description de la ligne",c:"BLOQUÉ : Flag.subcat = ID seulement (pas de nom dans le payload drapeaux). Afficher le NOM demande une résolution dédiée (liste sous-cats par cat).",e:"defer",b:"—",v:"na"},
       {n:328,t:"Appui-long = menu d'actions (liste topics)",c:"Complémentaire de #676.",e:"gate",b:"—",v:"na"},
       {n:714,t:"Mettre en sourdine un sujet",c:"Vraie feature (DataStore + filtrage), sortie du sheet #676 (pas de faux bouton sans backend). Chantier séparé.",e:"defer",b:"—",v:"na"}
     ]},
@@ -144,9 +147,10 @@
     for(const r of sec.rows){
       const [ec,et]=ET[r.e], [vc,vt,vcol]=VL[r.v];
       const desc=r.c?`<p class="desc">${r.c}</p>`:"";
+      const href=r.href||(R+r.n), lbl=r.lbl||("#"+r.n);
       html+=`<div class="card" style="--vc:${vcol}">
         <div class="top">
-          <a class="num" href="${R}${r.n}">#${r.n}</a>
+          <a class="num" href="${href}">${lbl}</a>
           <span class="chip ${ec}">${et}</span>
           <span class="val ${vc}">${vt}</span>
           <span class="build">${r.b}</span>
@@ -155,7 +159,7 @@
         ${desc}
       </div>`;
       if(r.v==="todo")count.todo++; else if(r.v==="ok")count.ok++; else if(r.v==="no")count.no++;
-      if(r.e==="prog"||r.e==="gate"||r.e==="redo")count.prog++;
+      if(r.e==="prog"||r.e==="gate")count.prog++;
       if(r.e==="defer"||r.e==="block")count.rest++;
     }
     html+=`</div>`;
