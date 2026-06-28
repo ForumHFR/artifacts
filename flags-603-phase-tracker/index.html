@@ -72,7 +72,7 @@
     <p class="eyebrow">Redface 2 · vue:drapeaux · #603</p>
     <h1>Phase Drapeaux — suivi</h1>
     <p class="sub">Une carte par issue. Le liseré gauche et la pastille <b>Validation</b> appartiennent à XaTriX : <b>shippé / fermé ne veut pas dire validé</b>.</p>
-    <p class="updated">maj 2026-06-28 · dernier build dev <b>0.17.24 / app-v204</b> · milestone <b>Vue · Drapeaux</b></p>
+    <p class="updated">maj 2026-06-28 · dernier build dev <b>0.17.25 / app-v205</b> · milestone <b>Vue · Drapeaux</b></p>
   </header>
 
   <div class="stats">
@@ -100,7 +100,8 @@
   // validation → [pill class, label, left-border color var]
   const VL={todo:["v-todo","⏳ à valider","var(--warn)"],ok:["v-ok","✅ validé","var(--ok)"],no:["v-no","❌ rejeté","var(--bad)"],na:["v-na","—","var(--line)"]};
   const SECTIONS=[
-    {h:"Shippé 0.17.22–0.17.24 — attend ta validation (dogfood)", rows:[
+    {h:"Shippé 0.17.22–0.17.25 — attend ta validation (dogfood)", rows:[
+      {n:665,t:"Top bar overlay translucide — contenu sous barre + scrim",c:"Root Box overlay : la barre est mesurée et survole la liste (LocalFlagsContentTopPadding) ; au scroll le contenu glisse SOUS la barre avec un scrim dégradé (opaque derrière la status bar → transparent au bas ; couleur surface, theme-agnostic AMOLED inclus). PR #725, Codex GO (réserves traitées), CI verte, vérifié émulateur. Loader « redface » = suivi séparé (#7).",e:"ship",b:"0.17.25",v:"todo"},
       {n:603,t:"Top bar — refonte + finitions + passe review",c:"Container gauche en 2 zones, menu rapide restylé, recherche à hauteur constante, avatar rond. Passe review 0.17.23 : noms courts Cyan/Lurk/Fav/DT/Super, avatar qui épouse le container (fond container, SANS bordure), « Réglages d'affichage » sur tous les onglets (dont DT/Super), tap propre des 2 zones (demi-pilules).",e:"ship",b:"0.17.23",v:"todo"},
       {n:721,t:"+lus = anneau autour du glyphe (variante A)",c:"Choix XaTriX sur artefact (reco Codex A). Anneau zone 1 (Flag+Dot), nouveau défaut ; œil legacy zone 2 ; pas de double repère. Gate Codex APPROVE, vérifié émulateur.",e:"ship",b:"0.17.24",v:"todo"},
       {n:722,t:"Avatar — taille standard 32 dp",c:"40→32 dp (taille avatar de barre du haut, pas de liste). Confirmé Codex. Cible tactile 48 dp inchangée.",e:"ship",b:"0.17.24",v:"todo"},
@@ -122,7 +123,7 @@
       {n:695,t:"Scroll indépendant par onglet",c:"Un état de défilement par onglet ; plus de bave. Protocole de test posté — XaTriX attend les retours.",e:"ship",b:"v197",v:"todo"}
     ]},
     {h:"Suite top bar — en cours / à faire", rows:[
-      {n:665,t:"Top bar translucide — contenu sous barre + loader",c:"Le socle (look + 2 zones) est livré ; le cœur (Box overlay + contenu sous scroll + scrim) + le loader « redface » à l'amorce du pull restent à implémenter (Codex à fond, reviews croisées).",e:"prog",b:"—",v:"na"},
+      {n:7,t:"Loader « redface » (Concept 1) + choreography pull",c:"Indicateur de pull-to-refresh custom (redface qui roule, repli en anneau ; reco Codex Concept 1). Construit sur l'amorce #665 déjà décalée sous la barre. À cadrer Codex AVANT impl.",e:"prog",b:"—",v:"na"},
       {n:718,t:"Avatar — options bordure / fond",c:"Avatar borderless + fond container + 32 dp livrés. Options chiffrées (~3 h 30) + placeholders grisés dans le sheet. Attend go pour dégriser.",e:"gate",b:"—",v:"na"},
       {n:17,t:"Sous-cat dans la description de la ligne",c:"BLOQUÉ : Flag.subcat = ID seulement (pas de nom dans le payload drapeaux ; flagCategoryName ne couvre que les cats racines). Afficher le NOM demande une résolution dédiée (liste sous-cats par cat).",e:"defer",b:"—",v:"na"},
       {n:328,t:"Appui-long = menu d'actions (liste topics)",c:"Complémentaire de #676.",e:"gate",b:"—",v:"na"},
