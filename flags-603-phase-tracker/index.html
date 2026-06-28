@@ -72,7 +72,7 @@
     <p class="eyebrow">Redface 2 · vue:drapeaux · #603</p>
     <h1>Phase Drapeaux — suivi</h1>
     <p class="sub">Une carte par issue. Le liseré gauche et la pastille <b>Validation</b> appartiennent à XaTriX : <b>shippé / fermé ne veut pas dire validé</b>.</p>
-    <p class="updated">maj 2026-06-28 · dernier build dev <b>0.17.23 / app-v203</b> · milestone <b>Vue · Drapeaux</b></p>
+    <p class="updated">maj 2026-06-28 · dernier build dev <b>0.17.24 / app-v204</b> · milestone <b>Vue · Drapeaux</b></p>
   </header>
 
   <div class="stats">
@@ -100,8 +100,11 @@
   // validation → [pill class, label, left-border color var]
   const VL={todo:["v-todo","⏳ à valider","var(--warn)"],ok:["v-ok","✅ validé","var(--ok)"],no:["v-no","❌ rejeté","var(--bad)"],na:["v-na","—","var(--line)"]};
   const SECTIONS=[
-    {h:"Shippé 0.17.22–0.17.23 — attend ta validation (dogfood)", rows:[
+    {h:"Shippé 0.17.22–0.17.24 — attend ta validation (dogfood)", rows:[
       {n:603,t:"Top bar — refonte + finitions + passe review",c:"Container gauche en 2 zones, menu rapide restylé, recherche à hauteur constante, avatar rond. Passe review 0.17.23 : noms courts Cyan/Lurk/Fav/DT/Super, avatar qui épouse le container (fond container, SANS bordure), « Réglages d'affichage » sur tous les onglets (dont DT/Super), tap propre des 2 zones (demi-pilules).",e:"ship",b:"0.17.23",v:"todo"},
+      {n:721,t:"+lus = anneau autour du glyphe (variante A)",c:"Choix XaTriX sur artefact (reco Codex A). Anneau zone 1 (Flag+Dot), nouveau défaut ; œil legacy zone 2 ; pas de double repère. Gate Codex APPROVE, vérifié émulateur.",e:"ship",b:"0.17.24",v:"todo"},
+      {n:722,t:"Avatar — taille standard 32 dp",c:"40→32 dp (taille avatar de barre du haut, pas de liste). Confirmé Codex. Cible tactile 48 dp inchangée.",e:"ship",b:"0.17.24",v:"todo"},
+      {n:15,t:"Sheet — aller à une page + Poster",c:"Dialog saisie page (validé 1..N, isError) + « Poster un message » (éditeur réponse, dernière page). UX + gate Codex APPROVE. Vérifié émulateur (page 5/35, éditeur).",e:"ship",b:"0.17.24",v:"todo"},
       {n:717,t:"Option drapeau / pastille (glyphe zone 1)",c:"Pref FlagGlyphStyle{Flag,Dot} (défaut Drapeau), réglage « Repère du type actif ». Gate Codex APPROVE, vérifié émulateur.",e:"ship",b:"0.17.23",v:"todo"},
       {n:661,t:"Indicateur « +lus » configurable",c:"Œil (défaut) ou anneau coloré, dans les réglages d'affichage. Vit dans la zone type du container gauche.",e:"ship",b:"0.17.22",v:"todo"},
       {n:676,t:"Sheet appui-long v2 — actions distinctes",c:"Rangée rapide (Ouvrir · 1er non-lu · Super favori · Partager) ≠ liste (dernière page · copier · navigateur · retirer). Fini le doublon. « Lu » / « Marquer cat. lue » écartés (pas d'endpoint HFR → sourdine #714).",e:"ship",b:"0.17.22",v:"todo"}
@@ -120,10 +123,8 @@
     ]},
     {h:"Suite top bar — en cours / à faire", rows:[
       {n:665,t:"Top bar translucide — contenu sous barre + loader",c:"Le socle (look + 2 zones) est livré ; le cœur (Box overlay + contenu sous scroll + scrim) + le loader « redface » à l'amorce du pull restent à implémenter (Codex à fond, reviews croisées).",e:"prog",b:"—",v:"na"},
-      {n:'+lus',t:"Repère « +lus » sur l'icône drapeau",c:"Reprise de l'idée « anneau » en zone 1 autour du glyphe (Flag+Dot). Artefact comparatif publié (A anneau / B fond teinté / C badge / E statu quo) ; reco Codex = A. Attend choix XaTriX.",e:"gate",b:"—",v:"na"},
-      {n:718,t:"Avatar — options bordure / fond / centrage",c:"Avatar sans bordure + fond container livré (0.17.23). Options chiffrées (~3 h 30) + placeholders grisés dans le sheet. Attend go pour dégriser.",e:"gate",b:"—",v:"na"},
-      {n:15,t:"Sheet — aller à une page + Poster",c:"Dialog saisie page (validation 1..totalPages) → onOpen(page) ; Poster → PostEditorRoute(Reply). Cadrer dialog UX avec Codex.",e:"prog",b:"—",v:"na"},
-      {n:17,t:"Sous-cat dans la description de la ligne",c:"Flag.subcat dispo (REST) ; la ligne affiche auteur·date ; vérifier dispo d'un NOM de sous-cat (que des IDs aujourd'hui).",e:"prog",b:"—",v:"na"},
+      {n:718,t:"Avatar — options bordure / fond",c:"Avatar borderless + fond container + 32 dp livrés. Options chiffrées (~3 h 30) + placeholders grisés dans le sheet. Attend go pour dégriser.",e:"gate",b:"—",v:"na"},
+      {n:17,t:"Sous-cat dans la description de la ligne",c:"BLOQUÉ : Flag.subcat = ID seulement (pas de nom dans le payload drapeaux ; flagCategoryName ne couvre que les cats racines). Afficher le NOM demande une résolution dédiée (liste sous-cats par cat).",e:"defer",b:"—",v:"na"},
       {n:328,t:"Appui-long = menu d'actions (liste topics)",c:"Complémentaire de #676.",e:"gate",b:"—",v:"na"},
       {n:714,t:"Mettre en sourdine un sujet",c:"Vraie feature (DataStore + filtrage), sortie du sheet #676 (pas de faux bouton sans backend). Chantier séparé.",e:"defer",b:"—",v:"na"}
     ]},
