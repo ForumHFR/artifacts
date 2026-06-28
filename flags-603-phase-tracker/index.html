@@ -72,7 +72,7 @@
     <p class="eyebrow">Redface 2 · vue:drapeaux · #603</p>
     <h1>Phase Drapeaux — suivi</h1>
     <p class="sub">Une carte par issue. Le liseré gauche et la pastille <b>Validation</b> appartiennent à XaTriX : <b>shippé / fermé ne veut pas dire validé</b>.</p>
-    <p class="updated">maj 2026-06-27 · dernier build dev <b>0.17.20 / app-v200</b> · milestone <b>Vue · Drapeaux</b></p>
+    <p class="updated">maj 2026-06-28 · dernier build dev <b>0.17.22 / app-v202</b> · milestone <b>Vue · Drapeaux</b></p>
   </header>
 
   <div class="stats">
@@ -100,24 +100,27 @@
   // validation → [pill class, label, left-border color var]
   const VL={todo:["v-todo","⏳ à valider","var(--warn)"],ok:["v-ok","✅ validé","var(--ok)"],no:["v-no","❌ rejeté","var(--bad)"],na:["v-na","—","var(--line)"]};
   const SECTIONS=[
-    {h:"Shippé", rows:[
-      {n:251,t:"Cyan manquant — sticky récupéré",c:"L'API REST excluait les sujets épinglés flaggés des catégories sans sous-catégorie (cat IA). Supplément REST-only topics/last p.1 + dédup/merge, zéro fallback HTML. Validé XaTriX on-device.",e:"ship",b:"v198",v:"ok"},
-      {n:662,t:"États vides Drapeaux refaits",c:"Style A (icône + titre + sous-texte) + option C smiley [:eric le looser] ; étendu aux onglets DT et Super Favoris ; smiley dé-pixelisé. Validé XaTriX. Suite v0.17.20 : texte explicatif DT déplacé de la vue vers la description du réglage « Section DT ».",e:"ship",b:"v199→200",v:"ok"},
-      {n:690,t:"Drapeau favori — D #FFB300 + contour",c:"Ambre #FFB300 (vote CharLee/thibw/XaTriX) + option « Contour du marqueur » (liseré 0,5 dp opt-in, toutes formes/onglets). Validé XaTriX.",e:"ship",b:"v199",v:"ok"},
-      {n:695,t:"Scroll indépendant par onglet",c:"Un état de défilement par onglet ; plus de bave d'un onglet à l'autre. Protocole de test posté sur le fil — XaTriX attend les retours avant de trancher.",e:"ship",b:"v197",v:"todo"},
+    {h:"Shippé 0.17.22 — attend ta validation (dogfood)", rows:[
+      {n:603,t:"Top bar — refonte + finitions",c:"Container gauche en 2 zones (drapeau → menu rapide | nom du type + « +lus » → toggle direct), menu rapide restylé (drapeaux colorés à droite, « Afficher les lus » retiré), recherche à hauteur constante (plus de saut), avatar du compte rond (M3). Option drapeau/pastille du glyphe à venir.",e:"ship",b:"0.17.22",v:"todo"},
+      {n:661,t:"Indicateur « +lus » configurable",c:"Œil (défaut) ou anneau coloré, dans les réglages d'affichage. Vit dans la zone type du container gauche.",e:"ship",b:"0.17.22",v:"todo"},
+      {n:676,t:"Sheet appui-long v2 — actions distinctes",c:"Rangée rapide (Ouvrir · 1er non-lu · Super favori · Partager) ≠ liste (dernière page · copier · navigateur · retirer). Fini le doublon. « Lu » / « Marquer cat. lue » écartés (pas d'endpoint HFR → sourdine #714).",e:"ship",b:"0.17.22",v:"todo"},
+      {n:660,t:"Swipe « slide au commit » + ombre retirée",c:"Shared Axis X directionnel (wrap OK) ; le cadre d'ombre gris parasite autour du panneau pendant le swipe est supprimé.",e:"ship",b:"0.17.22",v:"todo"}
+    ]},
+    {h:"Shippé — validé XaTriX", rows:[
+      {n:251,t:"Cyan manquant — sticky récupéré",c:"Supplément REST-only topics/last p.1 + dédup/merge, zéro fallback HTML. Validé on-device.",e:"ship",b:"v198",v:"ok"},
+      {n:662,t:"États vides Drapeaux refaits",c:"Style A + option C smiley ; DT + Super Favoris ; texte DT déplacé vers le réglage « Section DT ».",e:"ship",b:"v199→200",v:"ok"},
+      {n:690,t:"Drapeau favori — D #FFB300 + contour",c:"Ambre #FFB300 + option « Contour du marqueur » (0,5 dp opt-in).",e:"ship",b:"v199",v:"ok"},
       {n:671,t:"Bandes catégorie — preset C",c:"",e:"ship",b:"v195",v:"ok"},
-      {n:666,t:"Barre du bas 52 dp en icônes seules",c:"« On peut pas descendre plus bas. »",e:"ship",b:"v195",v:"ok"},
+      {n:666,t:"Barre du bas 52 dp en icônes seules",c:"",e:"ship",b:"v195",v:"ok"},
       {n:679,t:"Menu rapide ne pop plus au retour",c:"",e:"ship",b:"v194",v:"ok"}
     ]},
-    {h:"Attend ta décision / à refaire", rows:[
-      {n:660,t:"Animation swipe arrive du mauvais côté",c:"Proto 4 variantes (slide au commit = reco). Attend ton arbitrage du ressenti.",e:"gate",b:"—",v:"na"},
-      {n:665,t:"Top bar translucide (PR #688)",c:"PR codée, attend résolution conflit + dogfood. NB : refonte top bar en cours de design — pourra remplacer cette PR.",e:"redo",b:"—",v:"na"},
-      {n:676,t:"Sheet appui-long F2",c:"Liste verticale supprimée à tort → garder la liste ET ajouter la rangée de boutons.",e:"redo",b:"v194",v:"no"},
-      {n:661,t:"Découvrabilité « +lus »",c:"Dropdown rejeté ; pas de nouvelle direction. Sera reprise avec la refonte top bar (indicateur +lus).",e:"redo",b:"v194",v:"no"},
-      {n:328,t:"Appui-long = menu d'actions (liste topics)",c:"Complémentaire de #676.",e:"gate",b:"—",v:"na"}
+    {h:"Shippé — attend retours du fil", rows:[
+      {n:695,t:"Scroll indépendant par onglet",c:"Un état de défilement par onglet ; plus de bave. Protocole de test posté — XaTriX attend les retours.",e:"ship",b:"v197",v:"todo"}
     ]},
-    {h:"En préparation", rows:[
-      {n:603,t:"Refonte top bar Drapeaux",c:"Nouvelle barre : loupe rétractable + avatar rond M3 dans un container à droite, container gauche (drapal + nom court + indicateur +lus), centre vide, loader amorce expressif central. Mockups en cours (bouclés avec Codex).",e:"prog",b:"design",v:"na"}
+    {h:"Suite top bar — en cours / à faire", rows:[
+      {n:665,t:"Top bar translucide — contenu sous barre + loader",c:"Le socle (look + 2 zones) est livré ; le cœur (Box overlay + contenu sous scroll + scrim) + le loader « redface » à l'amorce du pull restent à implémenter (Codex à fond, reviews croisées).",e:"prog",b:"—",v:"na"},
+      {n:328,t:"Appui-long = menu d'actions (liste topics)",c:"Complémentaire de #676.",e:"gate",b:"—",v:"na"},
+      {n:714,t:"Mettre en sourdine un sujet",c:"Vraie feature (DataStore + filtrage), sortie du sheet #676 (pas de faux bouton sans backend). Chantier séparé.",e:"defer",b:"—",v:"na"}
     ]},
     {h:"Historique — lot finition antérieur (fermé)", rows:[
       {n:673,t:"Sheet réglages rapides ne défilait pas",c:"",e:"ship",b:"v187",v:"ok"},
