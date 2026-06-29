@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Drapeaux #603 — suivi de phase</title>
-<meta name="description" content="Suivi des issues de la phase Drapeaux : état, build, et validation XaTriX. Loader redface corrigé (repositionné) ; release dev 0.17.28 en cours (barre de chargement + options avatar #718). Lisible sur mobile, sans défilement horizontal.">
+<meta name="description" content="Suivi de la phase Drapeaux #603 : PHASE CLÔTURÉE → bêta publique 0.18.0 / app-v211 (Play + F-Droid). Audit de clôture (Claude Opus + Codex) : 13 findings corrigés, 4 issues de suivi. Lisible sur mobile, sans défilement horizontal.">
 <style>
   :root{
     --ground:#15100f;--panel:#1f1817;--panel-2:#291f1e;--line:#3a2c2a;
@@ -73,7 +73,7 @@
     <p class="eyebrow">Redface 2 · vue:drapeaux · #603</p>
     <h1>Phase Drapeaux — suivi</h1>
     <p class="sub">Une carte par chantier. Le liseré gauche et la pastille <b>Validation</b> appartiennent à XaTriX.</p>
-    <p class="updated">maj 2026-06-28 · dernier build dev shippé <b>0.17.27 / app-v207</b> · <b>release dev 0.17.28 shippée — app-v208</b> (loader repositionné + barre de chargement + options avatar) · loader <b>corrigé</b>, look validé</p>
+    <p class="updated">maj 2026-06-29 · <b>PHASE CLÔTURÉE → bêta publique 0.18.0 / app-v211</b> (dev→main PR #734, Play « test ouvert » + F-Droid) · audit de clôture : <b>13 findings corrigés</b> (PR #735) · à valider en dogfood</p>
   </header>
 
   <div class="stats">
@@ -84,7 +84,7 @@
     <div class="stat mute"><div class="n" id="s-rest">0</div><div class="l">différé / bloqué</div></div>
   </div>
 
-  <div class="note"><b>Loader redface corrigé.</b> Le rejet portait sur le placement (puck trop bas + gap fantôme au reload auto) → repositionné sur la <b>rangée des pastilles</b> du top bar, gap supprimé, look validé. Release dev <b>0.17.28</b> shippée (app-v208, PR #731) : loader repositionné + nouveau réglage <b>« Barre de chargement »</b> + options avatar <b>#718</b> (bordure / fond). Sortis de la phase : <code>#17</code> (sous-cat) et <code>#714</code> (sourdine) ; <code>#328</code> fermé (doublon de #676). Source éditable : <code>SUIVI-603.md</code>.</div>
+  <div class="note" style="background:linear-gradient(180deg,var(--ok-bg),transparent);border-color:var(--ok-line)"><b style="color:var(--ok)">Phase clôturée → bêta publique 0.18.0 / app-v211.</b> <code>dev→main</code> (PR #734) shippée sur Play « test ouvert » + F-Droid (canal bêta). Audit de clôture multi-agent (Claude Opus 3 reviewers + Codex gpt-5.5 xhigh) : <b>13 findings corrigés</b> (PR #735), 2 faux positifs réfutés, dogfood émulateur OK. Reste : valider en dogfood, 4 issues de suivi <code>#737–740</code>, titre du topic bêta public à passer en 0.18.0. Source éditable : <code>SUIVI-603.md</code>.</div>
 
   <div id="list"></div>
 
@@ -103,10 +103,17 @@
   // n = real issue number (link target + label) ; lbl/href override the display label / link when a
   // chantier has no dedicated issue (it then points to the #603 umbrella, no broken/wrong link).
   const SECTIONS=[
-    {h:"✅ Corrigé / en cours — release dev 0.17.28 (PR #731)", rows:[
-      {n:728,t:"Loader « redface » — repositionné",c:"Le rejet portait sur le PLACEMENT (puck trop bas, sous toute la barre + gap fantôme au reload auto), pas l'animation. Corrigé : vrai redface (asset vectoriel), puck déplacé sur la RANGÉE DES PASTILLES du top bar (centré entre les 2 containers). Geste → le contenu descend ; refresh → le contenu revient à ras + puck hero (anneau). Gap fantôme tué (holdProgress fuyait au changement d'onglet → push piloté par distanceFraction per-body). Look validé XaTriX (« ok c'est bon »). Codex GO.",e:"prog",b:"0.17.28",v:"ok"},
-      {n:728,t:"Réglage « Barre de chargement »",lbl:"#728 · barre",c:"Pref GLOBALE showLoadingBar (défaut ON, pattern markerBorder). Off = la fine barre ne s'affiche plus (auto/cold) ; le puck reste le repère du pull manuel. Dans « Réglages d'affichage ». Tests DataStore. Codex GO.",e:"prog",b:"0.17.28",v:"todo"},
-      {n:718,t:"Avatar — options bordure / fond",c:"DÉGRISÉ + implémenté. Pref GLOBALE dédiée AvatarAppearance{border, background} (Option B Codex, hors FlagsViewSettings car l'avatar est global). Bordure = liseré 1 dp outlineVariant (défaut off) ; fond = Container / Transparent. Appliqué au badge « PP » sur tous les écrans (lu par AppAccountViewModel). Édité dans le sheet Drapeaux. Tests + Fakes. Codex GO. Vérifié émulateur.",e:"prog",b:"0.17.28",v:"todo"}
+    {h:"🔍 Audit de clôture — bêta 0.18.0 (Claude Opus + Codex, 2026-06-29)", rows:[
+      {n:603,t:"13 findings corrigés avant bêta (PR #735, gate Codex GO)",lbl:"#603 · audit",c:"3 reviewers indépendants Opus (workflow 12 dimensions → 54 confirmés + skill code-review → 30) + Codex gpt-5.5 (2 BLOCKER réfutés = faux positifs IO-dispatcher). Corrigé : prefs GLOBALES (glyphe / +lus / barre de chargement) réinitialisées sur les onglets DT/Super ; recall-en-haut #695 qui effaçait le scroll au changement d'onglet (≈ retour nicko « descend brutalement ») ; retour système referme la recherche ; a11y TalkBack ; gardes CI fail-open ; uppercase(Locale.ROOT). Dogfood émulateur OK. ADR-017 + SUIVI recalés.",e:"ship",b:"0.18.0",v:"todo"},
+      {n:737,t:"Onglet Super = cul-de-sac super-favoris",c:"L'action « super favori » persiste mais l'onglet Super reste un placeholder → rien ne s'affiche. Câbler la liste, ou masquer l'action ; + trancher la clé (topicId vs (cat, topicId)).",e:"prog",b:"suivi",v:"na"},
+      {n:738,t:"Perf — recompositions par frame (pull / scroll)",c:"Scrim animé + puck (progress en Float) + FlagItem IntrinsicSize.Min recomposent à chaque frame. Lectures différées / layout custom.",e:"prog",b:"suivi",v:"na"},
+      {n:739,t:"Recherche insensible aux accents",c:"contains(ignoreCase) sans normalisation NFD → « cafe » ne trouve pas « café ».",e:"prog",b:"suivi",v:"na"},
+      {n:740,t:"GIF des états vides chargé en réseau",c:"AsyncImage distant pour une décoration opt-in → embarquer l'asset localement ou repli strict.",e:"prog",b:"suivi",v:"na"}
+    ]},
+    {h:"✅ Shippé en bêta 0.18.0 — releases dev 0.17.28 → 0.17.30", rows:[
+      {n:728,t:"Loader « redface » — repositionné",c:"Rejet sur le PLACEMENT (puck trop bas + gap fantôme au reload auto), pas l'animation. Corrigé : vrai redface (asset vectoriel), puck sur la RANGÉE DES PASTILLES (centré entre les 2 containers) ; geste → contenu descend ; refresh → contenu à ras + puck hero. Gap fantôme tué. Puck rond au tirer lent (fix squircle ModulateAlpha, 0.17.30). Codex GO.",e:"ship",b:"0.17.28→30",v:"ok"},
+      {n:728,t:"Réglage « Barre de chargement »",lbl:"#728 · barre",c:"Pref GLOBALE showLoadingBar (défaut ON). Off = la fine barre ne s'affiche plus (auto / cold) ; le puck reste le repère du pull manuel. Dans « Réglages d'affichage ».",e:"ship",b:"0.17.28",v:"todo"},
+      {n:718,t:"Avatar — option bordure",c:"Pref GLOBALE AvatarAppearance.border (liseré 1 dp, défaut off). ⚠️ « fond transparent » retiré (no-op au dogfood) ; fond = container codé en dur. Lu par AppAccountViewModel.",e:"ship",b:"0.17.28→29",v:"todo"}
     ]},
     {h:"✅ Validé — lot dogfood 0.17.22 → 0.17.27", rows:[
       {n:603,t:"Top bar — refonte + finitions + passe review",c:"Container gauche en 2 zones, menu rapide restylé, recherche à hauteur constante, avatar rond. Passe review : noms courts Cyan/Lurk/Fav/DT/Super, avatar qui épouse le container (sans bordure), « Réglages d'affichage » sur tous les onglets, tap propre des 2 demi-pilules.",e:"ship",b:"0.17.23",v:"ok"},
