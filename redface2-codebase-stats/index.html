@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Redface 2 — anatomie de la base de code</title>
+<meta name="description" content="79 jours, 481 commits, 104 603 lignes de Kotlin, 1 980 tests : l'ampleur du projet Redface 2 en chiffres. Base de code mesurée au 2026-06-29 (bêta 0.18.0). Lisible sur mobile, sans défilement horizontal.">
+<style>
+  :root{
+    --ground:#15100f;--panel:#1f1817;--panel-2:#291f1e;--line:#3a2c2a;
+    --ink:#f4ecea;--ink-dim:#bcaaa6;--ink-faint:#8b7873;--accent:#e8868c;
+    --prod:#e8868c;--prod-soft:#e8868c22;
+    --test:#7ed3a2;--test-soft:#7ed3a222;
+    --doc:#7fb6e8;--doc-soft:#7fb6e822;
+    --gold:#e6b768;--mute:#9a8b87;
+    --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  }
+  *{box-sizing:border-box;min-width:0}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);line-height:1.5;-webkit-font-smoothing:antialiased;overflow-wrap:anywhere}
+  .wrap{max-width:840px;margin:0 auto;padding:26px 14px 56px}
+  a{color:var(--accent);text-decoration:none}
+  a:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+
+  /* ---- header / build readout ---- */
+  header{margin-bottom:20px}
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin:0 0 9px}
+  h1{font-size:clamp(23px,6vw,34px);margin:0 0 8px;font-weight:680;text-wrap:balance;line-height:1.1;letter-spacing:-.01em}
+  .sub{color:var(--ink-dim);margin:0;font-size:14px;max-width:60ch}
+  .sub b{color:var(--ink);font-weight:600}
+  .readout{margin-top:14px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-family:var(--mono);font-size:11.5px;color:var(--ink-faint);line-height:1.7;overflow-x:auto}
+  .readout .p{color:var(--test)}
+  .readout .v{color:var(--ink)}
+  .readout .c{color:var(--ink-faint)}
+
+  /* ---- hero KPIs ---- */
+  .hero{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin:18px 0 6px}
+  @media(max-width:560px){.hero{grid-template-columns:repeat(2,1fr)}}
+  .kpi{background:linear-gradient(170deg,var(--panel-2),var(--panel));border:1px solid var(--line);border-radius:13px;padding:14px 14px 13px}
+  .kpi .n{font-family:var(--mono);font-size:clamp(24px,6.4vw,32px);font-weight:700;font-variant-numeric:tabular-nums;line-height:1;color:var(--accent);letter-spacing:-.02em;white-space:nowrap}
+  .kpi .u{font-family:var(--mono);font-size:12px;color:var(--ink-dim);font-weight:600;margin-top:3px}
+  .kpi .l{font-size:11px;color:var(--ink-faint);margin-top:6px;line-height:1.35}
+
+  /* ---- sections ---- */
+  .sech{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-faint);font-weight:600;margin:30px 2px 12px;display:flex;align-items:center;gap:10px}
+  .sech::after{content:"";flex:1;height:1px;background:var(--line)}
+  .sech .hint{text-transform:none;letter-spacing:0;color:var(--ink-faint);font-weight:400;font-size:10.5px}
+
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:15px 16px}
+
+  /* ---- composition stacked bar ---- */
+  .stack{display:flex;height:30px;border-radius:8px;overflow:hidden;border:1px solid var(--line);margin-bottom:12px}
+  .stack span{display:block;height:100%;transition:width 1.1s cubic-bezier(.22,1,.36,1)}
+  .legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px 16px}
+  .lg{display:flex;align-items:baseline;gap:8px;font-size:12.5px}
+  .lg .dot{width:10px;height:10px;border-radius:3px;flex:none;transform:translateY(1px)}
+  .lg .nm{color:var(--ink-dim)}
+  .lg .vl{margin-left:auto;font-family:var(--mono);font-variant-numeric:tabular-nums;color:var(--ink);font-size:12px;white-space:nowrap}
+  .lg .pc{font-family:var(--mono);font-size:10.5px;color:var(--ink-faint);min-width:34px;text-align:right;white-space:nowrap}
+
+  /* ---- module bars ---- */
+  .mods{display:flex;flex-direction:column;gap:7px}
+  .mrow{display:grid;grid-template-columns:118px 1fr auto;align-items:center;gap:10px}
+  @media(max-width:560px){.mrow{grid-template-columns:96px 1fr;gap:7px}.mrow .mtot{grid-column:2;justify-self:end;margin-top:-3px}}
+  .mname{font-family:var(--mono);font-size:11.5px;color:var(--ink-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .mname b{color:var(--ink)}
+  .mbar{display:flex;height:16px;border-radius:5px;overflow:hidden;background:#0000002e}
+  .mbar i{display:block;height:100%;transition:width 1s cubic-bezier(.22,1,.36,1)}
+  .mbar .ip{background:var(--prod)}
+  .mbar .it{background:var(--test)}
+  .mtot{font-family:var(--mono);font-size:11px;font-variant-numeric:tabular-nums;color:var(--ink-faint);white-space:nowrap}
+  .mtot b{color:var(--ink)}
+  .mkey{display:flex;gap:16px;margin:0 0 13px;font-size:12px;color:var(--ink-dim)}
+  .mkey .dot{width:10px;height:10px;border-radius:3px;display:inline-block;margin-right:6px;transform:translateY(1px)}
+
+  /* ---- velocity ---- */
+  .velo{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;align-items:end;height:140px;margin-bottom:4px}
+  .vbar{display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;gap:7px}
+  .vbar .bar{width:100%;max-width:90px;background:linear-gradient(180deg,var(--accent),#e8868c66);border-radius:7px 7px 0 0;transition:height 1.1s cubic-bezier(.22,1,.36,1);min-height:3px}
+  .vbar .vn{font-family:var(--mono);font-size:14px;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .vbar .vm{font-family:var(--mono);font-size:10.5px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.05em}
+
+  /* ---- ratio gauge ---- */
+  .gauge{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+  .ring{--p:79;position:relative;width:96px;height:96px;border-radius:50%;flex:none;
+    background:conic-gradient(var(--test) calc(var(--p)*1%), #0000002e 0);
+    display:grid;place-items:center}
+  .ring::before{content:"";position:absolute;width:70px;height:70px;border-radius:50%;background:var(--panel)}
+  .ring .gv{position:relative;font-family:var(--mono);font-weight:700;font-size:19px;color:var(--test);font-variant-numeric:tabular-nums}
+  .gtxt{font-size:13px;color:var(--ink-dim);max-width:42ch}
+  .gtxt b{color:var(--ink)}
+
+  /* ---- mini stat grid ---- */
+  .mini{display:grid;grid-template-columns:repeat(auto-fit,minmax(96px,1fr));gap:8px}
+  .ms{background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:11px 12px}
+  .ms .n{font-family:var(--mono);font-size:19px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1;white-space:nowrap}
+  .ms .l{font-size:10.5px;color:var(--ink-faint);margin-top:6px;line-height:1.3}
+  .ms.t .n{color:var(--test)} .ms.d .n{color:var(--doc)} .ms.a .n{color:var(--accent)} .ms.g .n{color:var(--gold)}
+
+  /* ---- AI roster ---- */
+  .roster{display:flex;flex-wrap:wrap;gap:7px;margin-top:13px}
+  .tag{font-family:var(--mono);font-size:11px;padding:4px 10px;border-radius:999px;border:1px solid var(--line);background:var(--panel-2);color:var(--ink-dim)}
+  .tag b{color:var(--ink)}
+  .tag.h{border-color:#5f4a2a;background:var(--gold-soft,#3a2c1633);color:var(--gold)}
+  .tag.cdx{border-color:#2f5f47;color:var(--test)}
+  .splitbar{display:flex;height:22px;border-radius:7px;overflow:hidden;border:1px solid var(--line);margin:13px 0 6px}
+  .splitbar i{display:block;height:100%;display:grid;place-items:center;font-family:var(--mono);font-size:10.5px;font-weight:600;transition:width 1.1s cubic-bezier(.22,1,.36,1);white-space:nowrap;overflow:hidden}
+
+  /* ---- timeline / phases ---- */
+  .phases{display:flex;flex-direction:column;gap:0}
+  .ph{display:grid;grid-template-columns:auto 1fr;gap:13px;padding-bottom:16px;position:relative}
+  .ph:not(:last-child)::before{content:"";position:absolute;left:6px;top:16px;bottom:-2px;width:2px;background:var(--line)}
+  .ph .dot{width:14px;height:14px;border-radius:50%;border:3px solid var(--accent);background:var(--ground);margin-top:3px;z-index:1}
+  .ph.done .dot{background:var(--accent)}
+  .ph .pt{font-weight:600;font-size:14px;display:flex;flex-wrap:wrap;gap:8px;align-items:baseline}
+  .ph .pv{font-family:var(--mono);font-size:11px;color:var(--ink-faint)}
+  .ph .pd{color:var(--ink-faint);font-size:12.5px;margin-top:3px;line-height:1.45}
+
+  .foot{margin-top:30px;padding-top:16px;border-top:1px solid var(--line);font-size:12px;color:var(--ink-faint);line-height:1.7}
+  .foot b{color:var(--ink-dim)}
+  .foot code{background:#0000003d;padding:1px 5px;border-radius:4px;font-family:var(--mono);font-size:11px}
+
+  @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Redface 2 · anatomie de la base de code</p>
+    <h1>79 jours, une base de code de A à Z</h1>
+    <p class="sub">Un client Android moderne du forum HFR, parti de zéro le 11 avril 2026, mené par <b>un seul humain épaulé d'une flotte d'IA</b>. Voici l'ampleur du chantier, en chiffres mesurés sur l'arbre git.</p>
+    <div class="readout">
+      <span class="c">$</span> <span class="p">git</span> <span class="v">log</span> --since=2026-04-11 --oneline | wc -l<br>
+      <span class="v">481</span> <span class="c"># commits · du 11 avr. au 29 juin 2026 · bêta publique 0.18.0 (app-v211)</span>
+    </div>
+  </header>
+
+  <div class="hero">
+    <div class="kpi"><div class="n">104 603</div><div class="u">lignes Kotlin</div><div class="l">le cœur de l'app, sur 515 fichiers</div></div>
+    <div class="kpi"><div class="n">481</div><div class="u">commits</div><div class="l">~6 par jour, sans interruption</div></div>
+    <div class="kpi"><div class="n">1 980</div><div class="u">tests</div><div class="l">annotations <code style="font-family:var(--mono);font-size:11px">@Test</code> exécutées en CI</div></div>
+    <div class="kpi"><div class="n">79</div><div class="u">jours</div><div class="l">de la 1<sup>re</sup> ligne à la bêta publique</div></div>
+  </div>
+
+  <!-- ============ COMPOSITION ============ -->
+  <p class="sech">Composition <span class="hint">— 157 681 lignes versionnées</span></p>
+  <div class="panel">
+    <div class="stack" id="stack"></div>
+    <div class="legend" id="legend"></div>
+  </div>
+
+  <!-- ============ MODULES ============ -->
+  <p class="sech">Les 19 modules <span class="hint">— code applicatif Kotlin, prod + test</span></p>
+  <div class="panel">
+    <div class="mkey">
+      <span><span class="dot" style="background:var(--prod)"></span>production</span>
+      <span><span class="dot" style="background:var(--test)"></span>tests</span>
+    </div>
+    <div class="mods" id="mods"></div>
+  </div>
+
+  <!-- ============ TESTS ============ -->
+  <p class="sech">L'effort de test</p>
+  <div class="panel" style="margin-bottom:9px">
+    <div class="gauge">
+      <div class="ring"><span class="gv">79%</span></div>
+      <div class="gtxt"><b>46 318 lignes de test pour 58 285 de production</b> : presque autant de code pour vérifier que pour produire. Le parseur HFR et la couche données — les plus risqués — sont les plus testés.</div>
+    </div>
+  </div>
+  <div class="mini">
+    <div class="ms t"><div class="n">1 980</div><div class="l">fonctions de test</div></div>
+    <div class="ms d"><div class="n">107</div><div class="l">fixtures HFR réelles</div></div>
+    <div class="ms g"><div class="n">14</div><div class="l">migrations Room versionnées</div></div>
+    <div class="ms"><div class="n">171</div><div class="l">fichiers de test Kotlin</div></div>
+  </div>
+
+  <!-- ============ RYTHME ============ -->
+  <p class="sech">Le rythme <span class="hint">— commits par mois</span></p>
+  <div class="panel">
+    <div class="velo" id="velo"></div>
+    <p style="margin:14px 0 0;font-size:12.5px;color:var(--ink-dim);line-height:1.5">Juin concentre <b style="color:var(--ink)">63 %</b> des commits : la cadence s'est accélérée sur les phases « Messages » puis « Drapeaux ». En tout, <b style="color:var(--ink)">165 builds</b> signés et publiés, et un versionName qui a grimpé de <code style="font-family:var(--mono);font-size:11px;background:#0000003d;padding:1px 5px;border-radius:4px">0.2.0</code> à <code style="font-family:var(--mono);font-size:11px;background:#0000003d;padding:1px 5px;border-radius:4px">0.18.0</code>.</p>
+  </div>
+
+  <!-- ============ CO-DEV IA ============ -->
+  <p class="sech">Le co-développement IA <span class="hint">— qui a signé les commits</span></p>
+  <div class="panel">
+    <div class="splitbar" id="splitbar"></div>
+    <p style="margin:2px 0 0;font-size:13px;color:var(--ink-dim);line-height:1.5"><b style="color:var(--ink)">379 des 481 commits</b> (79 %) sont co-signés par au moins une IA — 326 avec Claude, 79 avec Codex, <b style="color:var(--ink)">31 par les deux à la fois</b> (Claude rédige, Codex audite). Les 102 restants sont surtout des merges, bumps et commits dependabot.</p>
+    <div class="roster">
+      <span class="tag h"><b>Clément XaT</b> · humain</span>
+      <span class="tag"><b>Claude Opus</b> 4.6</span>
+      <span class="tag"><b>Claude Opus</b> 4.7</span>
+      <span class="tag"><b>Claude Opus</b> 4.8</span>
+      <span class="tag"><b>Claude Fable 5</b></span>
+      <span class="tag cdx"><b>GPT-5 Codex</b> · gate</span>
+    </div>
+  </div>
+
+  <!-- ============ SURFACE ============ -->
+  <p class="sech">Surface du projet</p>
+  <div class="mini">
+    <div class="ms a"><div class="n">422</div><div class="l">pull requests</div></div>
+    <div class="ms"><div class="n">317</div><div class="l">issues <span style="color:var(--test)">· 233 résolues</span></div></div>
+    <div class="ms d"><div class="n">15</div><div class="l">décisions d'archi (ADR)</div></div>
+    <div class="ms"><div class="n">52</div><div class="l">dépendances déclarées</div></div>
+    <div class="ms g"><div class="n">7 160</div><div class="l">lignes de specs & docs</div></div>
+    <div class="ms"><div class="n">2</div><div class="l">workflows CI</div></div>
+  </div>
+
+  <!-- ============ PARCOURS ============ -->
+  <p class="sech">Le parcours en 4 phases</p>
+  <div class="panel">
+    <div class="phases">
+      <div class="ph done"><div class="dot"></div><div><div class="pt">Phase 1 · Navigation forum <span class="pv">0.2 → 0.8</span></div><div class="pd">Socle multi-module, parseur HFR + API REST, navigation catégories/sujets, rendu des posts (smileys, citations, médias).</div></div></div>
+      <div class="ph done"><div class="dot"></div><div><div class="pt">Phase 2 · Lecture & écriture <span class="pv">0.8 → 0.13</span></div><div class="pd">Vue sujet, pagination, éditeur de réponse et de citation, création de topic, authentification HFR.</div></div></div>
+      <div class="ph done"><div class="dot"></div><div><div class="pt">Phase 3 · Messages privés <span class="pv">0.14 → 0.16</span></div><div class="pd">Boîte MP, conversations, état lu/non-lu, DT/MultiMP, contrats serveur reverse-engineerés.</div></div></div>
+      <div class="ph done"><div class="dot"></div><div><div class="pt">Phase 4 · Vue Drapeaux <span class="pv">0.17 → 0.18 · actuel</span></div><div class="pd">Refonte complète de la top bar, scroll par onglet, pull-to-refresh « redface », overlay translucide. <b style="color:var(--ink-dim)">Clôturée en bêta publique 0.18.0.</b></div></div></div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <b>Méthode.</b> Lignes physiques comptées sur l'arbre git versionné (<code>git ls-files</code> + <code>wc -l</code>, blancs et commentaires inclus) ; instantané au <b>2026-06-29</b>, commit de la bêta <code>0.18.0</code> / <code>app-v211</code>. Le « Kotlin » exclut les fixtures HTML/JSON (données de test). Co-signatures IA comptées par commit distinct via les en-têtes <code>Co-authored-by</code>. PRs / issues lues sur l'API GitHub.<br>
+    <span style="color:var(--ink-faint)">Dépôt <a href="https://github.com/ForumHFR/redface2">ForumHFR/redface2</a> · suivi de phase <a href="https://forumhfr.github.io/artifacts/flags-603-phase-tracker/">Drapeaux #603</a></span>
+  </div>
+</div>
+
+<script>
+  const fmt = n => n.toLocaleString('fr-FR').replace(/ /g,' ');
+
+  // ---- composition ----
+  const TOTAL_TXT = 157681;
+  const COMP = [
+    {nm:'Kotlin', v:104603, c:'var(--prod)'},
+    {nm:'Fixtures HTML (HFR)', v:22618, c:'var(--doc)'},
+    {nm:'Markdown (docs/specs)', v:14673, c:'var(--gold)'},
+    {nm:'JSON (schémas + fixtures)', v:9765, c:'var(--test)'},
+    {nm:'Config & scripts', v:6022, c:'var(--mute)'},
+  ];
+  const stack = document.getElementById('stack'), legend = document.getElementById('legend');
+  COMP.forEach(d=>{
+    const s=document.createElement('span'); s.style.background=d.c; s.style.width='0'; s.title=d.nm; stack.appendChild(s); d._el=s;
+    const pc=Math.round(d.v/TOTAL_TXT*100);
+    const row=document.createElement('div'); row.className='lg';
+    row.innerHTML=`<span class="dot" style="background:${d.c}"></span><span class="nm">${d.nm}</span><span class="vl">${fmt(d.v)}</span><span class="pc">${pc}%</span>`;
+    legend.appendChild(row);
+  });
+
+  // ---- modules (prod, test) ----
+  const MODS = [
+    ['core/data',8599,11112],['core/ui',7059,5143],['feature/flags',6144,3569],
+    ['core/parser',3808,5333],['feature/settings',5361,3255],['feature/editor',3551,3858],
+    ['feature/topic',4607,2744],['feature/messages',4191,2209],['app',3512,2056],
+    ['core/network',1761,1657],['core/database',1264,1960],['feature/forum',1588,1524],
+    ['core/domain',2591,245],['core/model',1819,287],['feature/search',1014,768],
+    ['feature/profile',888,365],['feature/auth',321,233],['build-logic',207,0],
+  ];
+  const maxTot = Math.max(...MODS.map(m=>m[1]+m[2]));
+  const mods = document.getElementById('mods');
+  MODS.forEach(([nm,p,t])=>{
+    const tot=p+t, seg=nm.split('/');
+    const label = seg.length>1 ? `${seg[0]}/<b>${seg[1]}</b>` : `<b>${nm}</b>`;
+    const row=document.createElement('div'); row.className='mrow';
+    row.innerHTML=`<div class="mname" title="${nm}">${label}</div>
+      <div class="mbar"><i class="ip" data-w="${p/maxTot*100}" style="width:0"></i><i class="it" data-w="${t/maxTot*100}" style="width:0"></i></div>
+      <div class="mtot"><b>${fmt(tot)}</b></div>`;
+    mods.appendChild(row);
+  });
+
+  // ---- velocity ----
+  const VELO=[['avr.',91],['mai',87],['juin',303]];
+  const vmax=Math.max(...VELO.map(v=>v[1]));
+  const velo=document.getElementById('velo');
+  VELO.forEach(([m,n])=>{
+    const col=document.createElement('div'); col.className='vbar';
+    col.innerHTML=`<span class="vn">${n}</span><div class="bar" data-h="${n/vmax*100}" style="height:0"></div><span class="vm">${m}</span>`;
+    velo.appendChild(col);
+  });
+
+  // ---- split bar (commits) ----
+  const SPLIT=[
+    {l:'IA · 379', v:379, c:'var(--accent)', fg:'#2a1414'},
+    {l:'humain · 102', v:102, c:'var(--panel-2)', fg:'var(--ink-dim)'},
+  ];
+  const stot=481, sb=document.getElementById('splitbar');
+  SPLIT.forEach(d=>{const i=document.createElement('i'); i.style.background=d.c; i.style.color=d.fg; i.textContent=d.l; i.dataset.w=d.v/stot*100; i.style.width='0'; sb.appendChild(i);});
+
+  // ---- animate on load ----
+  function animate(){
+    COMP.forEach(d=>d._el.style.width=(d.v/TOTAL_TXT*100)+'%');
+    document.querySelectorAll('.mbar i,.splitbar i').forEach(i=>i.style.width=i.dataset.w+'%');
+    document.querySelectorAll('.velo .bar').forEach(b=>b.style.height=b.dataset.h+'%');
+  }
+  requestAnimationFrame(()=>requestAnimationFrame(animate));
+</script>
+</body>
+</html>
