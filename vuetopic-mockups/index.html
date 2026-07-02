@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Redface 2 — mockups Vue Topic</title>
-<meta name="description" content="Exploration de maquettes pour la phase « Vue Topic » de Redface 2 : écran de chargement, vue lecture, interface de postage. Material 3 / M3 Expressive, variantes badgées Stable/Aspiration, thème clair et sombre. Cadré avec Codex.">
+<meta name="description" content="Mockups v2 de la phase « Vue Topic » de Redface 2 : composer hybride bottom-sheet→plein-écran jugé clavier ouvert, frontières de page lisibles, chargement skeleton. Material 3, badges Stable/Aspiration, thème clair et sombre. Cadré avec Codex, retours du fil intégrés.">
 <style>
   /* ============ PRESENTATION CHROME (studio braise) ============ */
   :root{
@@ -12,6 +12,7 @@
     --ink:#efe7e4;--dim:#b8aaa5;--faint:#8b7d78;--accent:#e8868c;
     --stable:#7ed3a2;--stable-bg:#16352433;--stable-li:#2f5f47;
     --aspir:#9db4f0;--aspir-bg:#1a233a33;--aspir-li:#3a4a6f;
+    --warn:#e6b768;--warn-bg:#3a2c1633;--warn-li:#5f4a2a;
     --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
     --sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
   }
@@ -24,13 +25,14 @@
   header{margin-bottom:8px}
   .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:0 0 9px}
   h1{font-size:clamp(24px,5vw,38px);margin:0 0 8px;font-weight:680;letter-spacing:-.02em;line-height:1.08;text-wrap:balance}
-  .thesis{color:var(--dim);margin:0;font-size:15px;max-width:66ch}
+  .thesis{color:var(--dim);margin:0;font-size:15px;max-width:68ch}
   .thesis b{color:var(--ink);font-weight:600}
   .direction{margin:16px 0 0;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:13px 15px;font-size:13px;color:var(--dim);line-height:1.6}
   .direction b{color:var(--ink)}
   .direction .src{font-family:var(--mono);font-size:11px;color:var(--faint);text-transform:uppercase;letter-spacing:.08em}
+  .direction ul{margin:6px 0 0;padding-left:18px}
+  .direction li{margin:2px 0}
 
-  /* sticky controls */
   .controls{position:sticky;top:0;z-index:20;display:flex;flex-wrap:wrap;gap:10px;align-items:center;
     margin:20px 0 8px;padding:10px 12px;background:#161311e8;backdrop-filter:blur(8px);border:1px solid var(--line);border-radius:13px}
   .tabs{display:flex;gap:6px;flex-wrap:wrap}
@@ -41,32 +43,39 @@
   .badge{font-family:var(--mono);font-size:10px;font-weight:700;padding:3px 9px;border-radius:999px;border:1px solid;white-space:nowrap}
   .badge.stable{color:var(--stable);background:var(--stable-bg);border-color:var(--stable-li)}
   .badge.aspir{color:var(--aspir);background:var(--aspir-bg);border-color:var(--aspir-li)}
-  .themebtn{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--ink);background:var(--panel2);border:1px solid var(--line);
+  .badge.caveat{color:var(--warn);background:var(--warn-bg);border-color:var(--warn-li)}
+  .ctlbtn{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--ink);background:var(--panel2);border:1px solid var(--line);
     border-radius:999px;padding:7px 13px;cursor:pointer}
 
   .sech{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);font-weight:600;margin:30px 2px 6px;display:flex;align-items:center;gap:10px}
   .sech b{color:var(--ink);font-weight:700}
   .sech::after{content:"";flex:1;height:1px;background:var(--line)}
-  .secsub{color:var(--dim);font-size:13px;margin:0 2px 16px;max-width:80ch}
+  .secsub{color:var(--dim);font-size:13px;margin:0 2px 16px;max-width:82ch}
+  .secsub b{color:var(--ink)}
   .secsub code{font-family:var(--mono);font-size:11.5px;background:#0000003d;padding:1px 5px;border-radius:4px;color:var(--dim)}
 
-  .row{display:flex;flex-wrap:wrap;gap:22px}
+  .row{display:flex;flex-wrap:wrap;gap:22px;align-items:flex-start}
   .item{width:300px}
+  .flow{align-self:center;display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--faint);padding:0 2px;min-width:74px}
+  .flow .ar{font-size:22px;color:var(--accent);line-height:1}
+  .flow .lb{font-family:var(--mono);font-size:10px;text-align:center;line-height:1.4;max-width:90px}
+  @media(max-width:740px){.flow{width:100%;flex-direction:row;justify-content:center;min-width:0}.flow .ar{transform:rotate(90deg)}}
   .cap{margin:12px 2px 0}
   .cap .t{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:5px}
   .cap .t .nm{font-weight:650;font-size:14.5px}
   .cap .why{color:var(--dim);font-size:12.5px;line-height:1.5}
+  .cap .why b{color:var(--ink)}
+  .cap .why code{font-family:var(--mono);font-size:11px;background:#0000003d;padding:1px 4px;border-radius:4px}
   .cap .iss{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}
   .cap .iss span{font-family:var(--mono);font-size:10px;color:var(--faint);background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:1px 6px}
 
-  /* ============ PHONE FRAME + M3 TOKENS ============ */
+  /* ============ PHONE FRAME + M3 TOKENS (Redface) ============ */
   .phone{
-    /* default = DARK Redface M3 */
     --m-surface:#1a1110;--m-surf-low:#1f1413;--m-surf:#271d1c;--m-surf-hi:#322827;--m-surf-hier:#3d3231;
     --m-surfvar:#534341;--m-on:#f0dedd;--m-onvar:#d6c2bf;--m-outline:#a08c8a;--m-outvar:#534341;
     --m-prim:#ffb3b1;--m-onprim:#561d20;--m-primc:#73333a;--m-onprimc:#ffdad8;
     --m-sec:#e6bdb9;--m-secc:#5d3f3c;--m-tert:#e2c28c;--m-tertc:#574419;--m-ontertc:#f5dfb0;
-    --m-scrim:#00000099;
+    --m-key:#382d2c;--m-keytxt:#e8d8d6;--m-scrim:#00000099;
     width:300px;height:624px;background:var(--m-surface);border-radius:30px;overflow:hidden;
     border:7px solid #0c0a09;box-shadow:0 12px 40px -12px #000,0 0 0 1px var(--line);
     display:flex;flex-direction:column;position:relative;color:var(--m-on);
@@ -76,17 +85,16 @@
     --m-surfvar:#f4dddb;--m-on:#231918;--m-onvar:#534341;--m-outline:#857371;--m-outvar:#d8c2bf;
     --m-prim:#8e1d24;--m-onprim:#ffffff;--m-primc:#ffdad7;--m-onprimc:#3b0709;
     --m-sec:#775653;--m-secc:#ffdad7;--m-tert:#735b2e;--m-tertc:#ffdea6;--m-ontertc:#271900;
-    --m-scrim:#00000066;border-color:#d8c2bf;box-shadow:0 12px 40px -12px #0007,0 0 0 1px var(--line)}
-
+    --m-key:#ffffff;--m-keytxt:#3a2c2b;--m-scrim:#00000066;border-color:#d8c2bf;box-shadow:0 12px 40px -12px #0007,0 0 0 1px var(--line)}
   .phone *{box-sizing:border-box}
   .phone svg{width:16px;height:16px;flex:none}
+
   .sbar{height:24px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 14px;font-size:10px;font-weight:600;color:var(--m-on);font-family:var(--mono)}
   .sbar .r{display:flex;gap:4px;opacity:.8;letter-spacing:1px}
   .scr{flex:1;overflow:hidden;position:relative;display:flex;flex-direction:column}
   .scroll{overflow:hidden;flex:1;display:flex;flex-direction:column}
   .pad{padding:10px 12px;display:flex;flex-direction:column;gap:10px;overflow:hidden}
 
-  /* app bar */
   .ab{display:flex;align-items:center;gap:8px;padding:8px 8px 8px 10px;min-height:50px;flex:none;background:var(--m-surface)}
   .ab .ic{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;color:var(--m-onvar);flex:none}
   .ab .ic svg{width:21px;height:21px}
@@ -94,13 +102,9 @@
   .ab .ttl .l1{font-weight:600;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--m-on)}
   .ab .ttl .l2{font-size:11px;color:var(--m-onvar);font-family:var(--mono)}
   .pill{font-family:var(--mono);font-size:11px;font-weight:600;background:var(--m-surf-hi);color:var(--m-onvar);border-radius:999px;padding:4px 9px;white-space:nowrap;font-variant-numeric:tabular-nums}
-  .ablarge{padding:6px 12px 14px;background:var(--m-surface)}
-  .ablarge .big{font-size:21px;font-weight:680;letter-spacing:-.01em;line-height:1.12;color:var(--m-on)}
-  .ablarge .meta{font-size:11px;color:var(--m-onvar);font-family:var(--mono);margin-top:4px}
 
   /* post card */
-  .post{background:var(--m-surf-low);border-radius:16px;padding:0;overflow:hidden;border:1px solid color-mix(in srgb,var(--m-outvar) 50%,transparent)}
-  .post.anchor{box-shadow:inset 0 0 0 1.5px var(--m-prim)}
+  .post{background:var(--m-surf-low);border-radius:16px;overflow:hidden;border:1px solid color-mix(in srgb,var(--m-outvar) 50%,transparent)}
   .phead{display:flex;align-items:center;gap:8px;padding:9px 11px;background:var(--m-surf)}
   .av{width:30px;height:30px;border-radius:50%;background:var(--m-secc);color:var(--m-on);display:grid;place-items:center;font-weight:700;font-size:13px;flex:none}
   .pwho{flex:1;min-width:0}
@@ -109,43 +113,42 @@
   .pwho .dt{font-size:10.5px;color:var(--m-onvar);font-family:var(--mono)}
   .pno{font-family:var(--mono);font-size:10.5px;color:var(--m-onvar);font-variant-numeric:tabular-nums}
   .pbody{padding:10px 11px;font-size:12.5px;color:var(--m-on);display:flex;flex-direction:column;gap:7px}
-  .quote{background:var(--m-surf-hi);border-left:3px solid var(--m-outline);border-radius:0 9px 9px 0;padding:7px 9px;font-size:11.5px;color:var(--m-onvar)}
+  .quote{background:var(--m-surf-hi);border-left:3px solid color-mix(in srgb,var(--m-prim) 55%,var(--m-outvar));border-radius:0 9px 9px 0;padding:7px 9px;font-size:11.5px;color:var(--m-onvar)}
   .quote .qh{font-size:10px;font-family:var(--mono);color:var(--m-prim);margin-bottom:3px;font-weight:600}
-  .quote.calm{border-left-color:color-mix(in srgb,var(--m-prim) 55%,var(--m-outvar))}
   .qlink{color:var(--m-prim);font-size:10.5px;font-family:var(--mono);margin-top:4px;display:inline-flex;align-items:center;gap:3px}
   .smy{display:inline-grid;place-items:center;width:18px;height:18px;border-radius:4px;background:var(--m-tertc);color:var(--m-ontertc);font-size:10px;vertical-align:-4px}
-  .pimg{height:84px;border-radius:9px;background:linear-gradient(135deg,var(--m-surfvar),var(--m-surf-hi));display:grid;place-items:center;color:var(--m-onvar)}
-  .pimg svg{width:26px;height:26px;opacity:.5}
   .pacts{display:flex;gap:4px;padding:5px 7px;border-top:1px solid color-mix(in srgb,var(--m-outvar) 45%,transparent)}
-  .tbtn{flex:0 0 auto;display:flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;color:var(--m-prim);padding:6px 9px;border-radius:999px}
+  .tbtn{display:flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;color:var(--m-prim);padding:6px 9px;border-radius:999px}
   .tbtn svg{width:15px;height:15px}
   .tbtn.mut{color:var(--m-onvar);margin-left:auto}
 
-  /* last-read marker */
   .lastread{display:flex;align-items:center;gap:9px;padding:2px 4px}
   .lastread .ln{flex:1;height:2px;border-radius:2px;background:var(--m-prim);opacity:.55}
   .lastread .lab{font-family:var(--mono);font-size:10px;font-weight:700;color:var(--m-onprim);background:var(--m-prim);border-radius:999px;padding:3px 10px;letter-spacing:.03em}
 
-  /* poll */
-  .poll{background:var(--m-surf-low);border:1px solid var(--m-outvar);border-radius:16px;padding:11px 12px;display:flex;flex-direction:column;gap:8px}
-  .poll .ph{font-weight:600;font-size:12.5px;display:flex;align-items:center;gap:6px}
-  .poll .opt{font-size:11px;color:var(--m-onvar)}
-  .poll .bar{height:18px;border-radius:6px;background:var(--m-surf-hi);overflow:hidden;margin-top:3px;position:relative}
-  .poll .bar i{position:absolute;inset:0;width:var(--w);background:var(--m-primc);border-radius:6px}
-  .poll .bar b{position:absolute;right:7px;top:0;line-height:18px;font-size:10px;color:var(--m-on);font-family:var(--mono)}
+  /* page boundary cards */
+  .boundary{background:var(--m-primc);color:var(--m-onprimc);border-radius:14px;padding:11px 13px;display:flex;align-items:center;gap:10px}
+  .boundary .bi{width:26px;height:26px;border-radius:50%;border:2.5px solid var(--m-onprimc);border-top-color:transparent;animation:spin 1s linear infinite;flex:none;opacity:.85}
+  .boundary .bt{flex:1;min-width:0}
+  .boundary .bt .b1{font-weight:700;font-size:12.5px}
+  .boundary .bt .b2{font-size:10.5px;font-family:var(--mono);opacity:.75;margin-top:1px}
+  .boundary .chev{font-size:18px;font-weight:700}
+  @keyframes spin{100%{transform:rotate(360deg)}}
+  .endcard{border:1px dashed var(--m-outline);border-radius:14px;padding:11px 13px;text-align:center;color:var(--m-onvar)}
+  .endcard .e1{font-weight:650;font-size:12.5px;color:var(--m-on)}
+  .endcard .e2{font-size:10.5px;font-family:var(--mono);margin-top:2px}
+  .endcard .ebtn{display:inline-flex;align-items:center;gap:6px;margin-top:8px;background:var(--m-prim);color:var(--m-onprim);font-weight:600;font-size:11.5px;padding:7px 14px;border-radius:999px}
+  .endcard .ebtn svg{width:14px;height:14px}
 
   /* fab */
   .fab{position:absolute;right:14px;bottom:16px;height:48px;min-width:48px;padding:0 16px;border-radius:16px;background:var(--m-primc);color:var(--m-onprimc);
     display:flex;align-items:center;gap:8px;font-weight:600;font-size:13px;box-shadow:0 6px 18px -6px #0009;z-index:5}
   .fab svg{width:20px;height:20px}
-  .fab.small{padding:0;width:48px;justify-content:center}
-  .fabmenu{position:absolute;right:14px;bottom:16px;display:flex;flex-direction:column;align-items:flex-end;gap:9px;z-index:5}
-  .fabmenu .mi{display:flex;align-items:center;gap:8px}
-  .fabmenu .mi .t{font-size:10.5px;font-weight:600;background:var(--m-surf-hier);color:var(--m-on);padding:4px 8px;border-radius:7px;box-shadow:0 3px 8px -3px #0007}
-  .fabmenu .mi .b{width:38px;height:38px;border-radius:13px;background:var(--m-surf-hier);color:var(--m-prim);display:grid;place-items:center;box-shadow:0 4px 12px -4px #0008}
-  .fabmenu .mi .b svg{width:18px;height:18px}
-  .fabmenu .main{width:52px;height:52px;border-radius:17px;background:var(--m-prim);color:var(--m-onprim);display:grid;place-items:center;box-shadow:0 8px 20px -6px #000a}
-  .fabmenu .main svg{width:23px;height:23px}
+  .fabrow{position:absolute;right:14px;bottom:16px;display:flex;gap:8px;z-index:5}
+  .fabrow .f{width:44px;height:44px;border-radius:14px;background:var(--m-surf-hier);color:var(--m-prim);display:grid;place-items:center;box-shadow:0 4px 12px -4px #0008}
+  .fabrow .f.ghost{background:transparent;border:1.5px dashed var(--m-outline);box-shadow:none;color:var(--m-outline)}
+  .fabrow .f.main{background:var(--m-primc);color:var(--m-onprimc)}
+  .fabrow .f svg{width:19px;height:19px}
 
   /* skeleton + loaders */
   .sk{background:var(--m-surf-hi);border-radius:7px;position:relative;overflow:hidden}
@@ -157,46 +160,53 @@
   .loader{width:46px;height:46px;border-radius:50%;background:conic-gradient(var(--m-prim) 0 75%,transparent 0);
     -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 5px),#000 0);mask:radial-gradient(farthest-side,transparent calc(100% - 5px),#000 0);
     animation:spin 1s linear infinite}
-  @keyframes spin{100%{transform:rotate(360deg)}}
   .morph{width:50px;height:50px;background:var(--m-prim);animation:morph 3s ease-in-out infinite,spin 4s linear infinite}
   @keyframes morph{0%,100%{border-radius:42% 58% 63% 37%/41% 44% 56% 59%}50%{border-radius:58% 42% 34% 66%/57% 62% 38% 43%}}
-  .loadwrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:var(--m-onvar);font-size:12px}
+  .loadwrap{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:var(--m-onvar);font-size:12px}
 
-  /* editor / composer */
-  .cmpr{flex:1;display:flex;flex-direction:column;background:var(--m-surface)}
-  .qpills{display:flex;flex-wrap:wrap;gap:6px;padding:8px 11px}
-  .qpill{display:flex;align-items:center;gap:6px;background:var(--m-surf-hi);border-radius:999px;padding:4px 6px 4px 10px;font-size:11px;color:var(--m-onvar)}
-  .qpill b{color:var(--m-on);font-weight:600}
-  .qpill .x{width:18px;height:18px;border-radius:50%;background:var(--m-surfvar);color:var(--m-on);display:grid;place-items:center;font-size:11px}
-  .field{flex:1;margin:2px 11px;padding:10px 12px;background:var(--m-surf-low);border-radius:12px;font-size:12.5px;color:var(--m-on);overflow:hidden;border:1px solid var(--m-outvar)}
-  .cited{color:var(--m-onvar);opacity:.72;border-left:2px solid var(--m-outline);padding-left:8px;display:block;margin-bottom:6px;font-size:11.5px}
+  /* ============ COMPOSER v2 ============ */
+  .qcard{display:flex;align-items:center;gap:8px;background:var(--m-surf-hi);border-left:3px solid color-mix(in srgb,var(--m-prim) 55%,var(--m-outvar));
+    border-radius:0 10px 10px 0;padding:6px 8px;min-height:34px}
+  .qcard .qa{font-family:var(--mono);font-size:10px;font-weight:700;color:var(--m-prim);flex:none}
+  .qcard .qx{flex:1;min-width:0;font-size:11px;color:var(--m-onvar);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .qcard .qdel{width:20px;height:20px;border-radius:50%;background:var(--m-surfvar);color:var(--m-on);display:grid;place-items:center;font-size:11px;flex:none}
+  .qcard .qdrag{color:var(--m-outline);font-size:13px;flex:none;letter-spacing:-1px}
+  .field2{margin:0 11px;padding:9px 11px;background:var(--m-surf-low);border-radius:12px;font-size:12.5px;color:var(--m-on);border:1px solid var(--m-outvar);overflow:hidden}
   .caret{display:inline-block;width:1.5px;height:14px;background:var(--m-prim);vertical-align:-2px;animation:blink 1s steps(1) infinite}
   @keyframes blink{50%{opacity:0}}
-  .toolbar{display:flex;gap:6px;padding:7px 9px;overflow:hidden;align-items:center;background:var(--m-surface);border-top:1px solid var(--m-outvar)}
-  .chip{font-family:var(--mono);font-weight:700;font-size:12px;width:30px;height:30px;border-radius:9px;background:var(--m-surf-hi);color:var(--m-onvar);display:grid;place-items:center;flex:none}
+  .smystrip{display:flex;gap:6px;padding:6px 11px;overflow:hidden;align-items:center;flex:none}
+  .smystrip .s{width:28px;height:28px;border-radius:8px;background:var(--m-tertc);color:var(--m-ontertc);display:grid;place-items:center;font-size:12px;flex:none}
+  .smystrip .more{font-size:10px;color:var(--m-onvar);font-family:var(--mono);margin-left:2px;white-space:nowrap}
+  .toolbar{display:flex;gap:5px;padding:6px 11px;overflow:hidden;align-items:center;flex:none}
+  .chip{font-family:var(--mono);font-weight:700;font-size:11.5px;width:28px;height:28px;border-radius:9px;background:var(--m-surf-hi);color:var(--m-onvar);display:grid;place-items:center;flex:none}
   .chip.act{background:var(--m-primc);color:var(--m-onprimc)}
-  .smystrip{display:flex;gap:6px;padding:7px 9px;background:var(--m-surf-low);overflow:hidden;align-items:center}
-  .smystrip .s{width:30px;height:30px;border-radius:8px;background:var(--m-tertc);color:var(--m-ontertc);display:grid;place-items:center;font-size:13px;flex:none}
-  .smystrip .more{font-size:10px;color:var(--m-onvar);font-family:var(--mono);margin-left:2px}
-  .urow{display:flex;gap:8px;padding:8px 11px;align-items:center}
-  .obtn{display:flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;padding:8px 12px;border-radius:999px;border:1px solid var(--m-outline);color:var(--m-prim)}
-  .obtn svg{width:16px;height:16px}
-  .ochip{font-size:11px;color:var(--m-onvar);font-family:var(--mono);margin-left:auto;display:flex;align-items:center;gap:5px;white-space:nowrap;flex:none}
-  .sendbar{display:flex;align-items:center;gap:8px;padding:8px 11px;background:var(--m-surf);border-top:1px solid var(--m-outvar);flex:none}
-  .txtb{font-size:12px;font-weight:600;color:var(--m-prim);padding:7px 10px}
-  .send{margin-left:auto;background:var(--m-prim);color:var(--m-onprim);font-weight:600;font-size:12.5px;padding:9px 18px;border-radius:999px;display:flex;align-items:center;gap:6px}
-  .send svg{width:16px;height:16px}
+  .chip.wide{width:auto;padding:0 9px;display:flex;align-items:center;gap:5px}
+  .chip.wide svg{width:14px;height:14px}
+  .sendrow{display:flex;align-items:center;gap:8px;padding:7px 11px;flex:none}
+  .txtb{font-size:11.5px;font-weight:600;color:var(--m-prim);padding:6px 8px;white-space:nowrap}
+  .send{margin-left:auto;background:var(--m-prim);color:var(--m-onprim);font-weight:600;font-size:12px;padding:8px 16px;border-radius:999px;display:flex;align-items:center;gap:6px;flex:none}
+  .send svg{width:15px;height:15px}
+  .ochip{font-size:10.5px;color:var(--m-onvar);font-family:var(--mono);margin-left:auto;display:flex;align-items:center;gap:5px;white-space:nowrap;flex:none}
 
-  /* bottom sheet variant */
   .dim{position:absolute;inset:0;background:var(--m-scrim);z-index:3}
-  .sheet{position:absolute;left:0;right:0;bottom:0;background:var(--m-surf);border-radius:22px 22px 0 0;z-index:4;padding-bottom:6px;box-shadow:0 -8px 30px -8px #000a}
-  .grab{width:32px;height:4px;border-radius:2px;background:var(--m-outvar);margin:8px auto 4px}
+  .sheet{position:absolute;left:0;right:0;bottom:250px;background:var(--m-surf);border-radius:22px 22px 0 0;z-index:4;box-shadow:0 -8px 30px -8px #000a;display:flex;flex-direction:column}
+  body.nokb .sheet{bottom:0}
+  .grab{width:32px;height:4px;border-radius:2px;background:var(--m-outvar);margin:8px auto 2px;flex:none}
+  .expandhint{display:flex;align-items:center;justify-content:center;gap:6px;font-family:var(--mono);font-size:9.5px;color:var(--m-onvar);padding:0 0 4px;flex:none}
+  .expandhint svg{width:12px;height:12px}
 
-  /* expressive segmented toolbar */
-  .seg{display:flex;gap:3px;padding:7px 9px;background:var(--m-surface);border-top:1px solid var(--m-outvar)}
-  .seg .g{display:flex;background:var(--m-surf-hi);border-radius:999px;overflow:hidden}
-  .seg .g .c{font-family:var(--mono);font-weight:700;font-size:12px;padding:7px 11px;color:var(--m-onvar)}
-  .seg .g .c.on{background:var(--m-primc);color:var(--m-onprimc)}
+  /* fake IME — ~40% of the 624px screen */
+  .ime{flex:none;height:250px;background:var(--m-surf-hier);display:flex;flex-direction:column;gap:6px;padding:8px 6px 10px;z-index:6;position:relative}
+  .ime .sugg{display:flex;gap:5px;padding:0 4px 2px}
+  .ime .sugg span{flex:1;text-align:center;font-size:11px;color:var(--m-onvar);background:color-mix(in srgb,var(--m-key) 55%,transparent);border-radius:7px;padding:5px 0;white-space:nowrap;overflow:hidden}
+  .ime .krow{display:flex;gap:4px;justify-content:center;flex:1}
+  .ime .k{flex:1;max-width:30px;background:var(--m-key);color:var(--m-keytxt);border-radius:6px;display:grid;place-items:center;font-size:12px;font-weight:500;box-shadow:0 1px 0 #0003}
+  .ime .k.w{max-width:46px;font-size:10px}
+  .ime .k.space{max-width:130px;flex:4}
+  .ime .k.enter{background:var(--m-primc);color:var(--m-onprimc)}
+  body.nokb .ime{display:none}
+  body.nokb .kbnote{display:none}
+  .kbnote{position:absolute;right:8px;top:-9px;font-family:var(--mono);font-size:9px;font-weight:700;background:var(--warn);color:#241a08;border-radius:999px;padding:2px 8px;z-index:7;letter-spacing:.03em}
 
   .footnote{margin-top:34px;padding-top:16px;border-top:1px solid var(--line);font-size:12px;color:var(--faint);line-height:1.7}
   .footnote b{color:var(--dim)}
@@ -207,12 +217,18 @@
 <body>
 <div class="wrap">
   <header>
-    <p class="eyebrow">Redface 2 · phase Vue Topic · maquettes</p>
-    <h1>Lire un sujet, et y répondre</h1>
-    <p class="thesis">Trois écrans à refondre pour la prochaine phase : le <b>chargement</b> d'un sujet, la <b>lecture</b> des posts, et l'<b>interface de postage</b>. Material 3, des pistes plus expressives quand ça sert — pour trancher avant de coder.</p>
+    <p class="eyebrow">Redface 2 · phase Vue Topic · maquettes v2</p>
+    <h1>Lire un sujet, et y répondre — v2</h1>
+    <p class="thesis">Deuxième itération, construite sur <b>vos retours du fil</b> : le postage devient un <b>composer hybride</b> jugé <b>clavier ouvert</b>, la lecture gagne des <b>frontières de page lisibles</b>, et les positions des boutons flottants sont <b>figées dès le chargement</b>.</p>
     <div class="direction">
-      <span class="src">Direction cadrée avec Codex (gpt-5.5)</span><br>
-      Chaque maquette est badgée <span class="badge stable">Stable</span> (réalisable tel quel en Compose Material 3) ou <span class="badge aspir">Aspiration M3E</span> (esprit Expressive à réimplémenter à la main — l'API M3 Expressive est <b>internal</b> dans la BOM actuelle). Cibles d'implémentation recommandées : <b>Chargement → Skeleton</b>, <b>Lecture → Cartes épurées + header dissous</b>, <b>Postage → Plein écran + composer dense</b>.
+      <span class="src">Ce qui change depuis la v1 — retours du fil DEV + cadrage Codex (gpt-5.5)</span>
+      <ul>
+        <li><b>Postage pivoté</b> (XaTriX, Ayuget, MisterDams) : bottom sheet de réponse rapide par défaut → <b>plein écran</b> au balayage ou en multiquote. Citations <b>rendues</b> en cartes compactes — sans « a écrit » (thibw) — au-dessus d'un champ unique (cible d'implémentation réaliste, le BBCode reste intact à l'envoi).</li>
+        <li><b>Clavier ouvert partout</b> en postage (MisterDams : « la hauteur des pills prend trop de place ») — faux IME à hauteur réaliste (~40 %). Le bouton « Clavier » ci-dessous permet de comparer pour comparer sans clavier.</li>
+        <li><b>Frontière de page</b> (thibw, styx42) : fin de page ≠ fin de sujet, carte de transition avec chargement intégré — pas de défilement infini.</li>
+        <li><b>Boutons flottants figés</b> (antiseptiqueIncolore) : les emplacements sont réservés dès le chargement, plus de décalage → plus de misclics.</li>
+      </ul>
+      Badges inchangés : <span class="badge stable">Stable</span> = réalisable tel quel en Compose M3 stable · <span class="badge aspir">Aspiration M3E</span> = esprit Expressive à recréer main · <span class="badge caveat">Réserve</span> = point d'implémentation connu comme fragile.
     </div>
   </header>
 
@@ -220,21 +236,19 @@
     <div class="tabs">
       <a class="tab" href="#chargement">① Chargement</a>
       <a class="tab" href="#lecture">② Lecture</a>
-      <a class="tab" href="#postage">③ Postage</a>
+      <a class="tab" href="#postage">③ Postage hybride</a>
     </div>
     <div class="legend">
-      <span class="badge stable">Stable</span>
-      <span class="badge aspir">Aspiration M3E</span>
-      <button class="themebtn" id="theme" type="button" aria-label="Basculer le thème">◐ Thème : sombre</button>
+      <button class="ctlbtn" id="kb" type="button" aria-label="Afficher ou masquer le clavier des maquettes">Clavier : affiché</button>
+      <button class="ctlbtn" id="theme" type="button" aria-label="Basculer le thème">◐ Thème : sombre</button>
     </div>
   </div>
 
   <!-- =================== 1. CHARGEMENT =================== -->
   <p class="sech" id="chargement"><b>① Chargement</b> du sujet</p>
-  <p class="secsub">Le sujet doit s'afficher <b>tout de suite</b> (fini le titre « Sujet » générique), un loader centré, et <b>jamais</b> de compteur <code>page X/N</code> tant que la page n'est pas parsée (sinon on rejoue le bug <code>#622</code>). La variante progressive déterminée a été écartée par Codex pour cette raison.</p>
+  <p class="secsub">Le titre réel s'affiche <b>immédiatement</b> (fini « Sujet »), loader centré, et <b>jamais</b> de compteur <code>X/N</code> tant que la page n'est pas parsée (<code>#622</code>). Nouveau : les <b>emplacements des boutons flottants sont déjà réservés</b> pendant le chargement — au chargé, rien ne bouge.</p>
   <div class="row">
 
-    <!-- 1A Skeleton -->
     <div class="item">
       <div class="phone" data-theme="dark">
         <div class="sbar"><span>9:41</span><span class="r">◰ ▾ ▮</span></div>
@@ -250,15 +264,19 @@
           <div class="skcard"><div class="skrow"><div class="sk" style="width:30px;height:30px;border-radius:50%"></div><div style="flex:1"><div class="sk" style="height:10px;width:48%"></div><div class="sk" style="height:8px;width:28%;margin-top:6px"></div></div></div>
             <div class="sk" style="height:9px;width:96%"></div><div class="sk" style="height:9px;width:60%"></div></div>
         </div>
+        <div class="fabrow">
+          <div class="f ghost">${EDITICO}</div>
+          <div class="f">${NEXTICO}</div>
+          <div class="f main">${REPLYICO}</div>
+        </div>
       </div>
       <div class="cap">
         <div class="t"><span class="nm">A · Skeleton</span><span class="badge stable">Stable</span></div>
-        <div class="why">Titre réel immédiat, loader centré M3, squelettes de posts en dessous. État principal « titre connu, posts inconnus » — pas un fallback.</div>
-        <div class="iss"><span>#622 compteur</span><span>titre tardif</span><span>#477 flash</span></div>
+        <div class="why">La base retenue (votée sur le fil). Titre réel immédiat, loader M3, squelettes sobres. <b>Slots flottants réservés</b> : « Modifier » apparaît en fantôme tant que la page n'a pas confirmé — prev/next ne bougent pas.</div>
+        <div class="iss"><span>#622 compteur</span><span>titre tardif</span><span>FAB figés</span><span>#477 flash</span></div>
       </div>
     </div>
 
-    <!-- 1B Loader expressif -->
     <div class="item">
       <div class="phone" data-theme="dark">
         <div class="sbar"><span>9:41</span><span class="r">◰ ▾ ▮</span></div>
@@ -277,7 +295,7 @@
       </div>
       <div class="cap">
         <div class="t"><span class="nm">B · Loader morphant</span><span class="badge aspir">Aspiration M3E</span></div>
-        <div class="why">Même structure que A, mais l'indicateur central est la forme morphante du M3 Expressive Loading Indicator — non disponible en stable, à dessiner main.</div>
+        <div class="why">Même structure, indicateur central = forme morphante du Loading Indicator Expressive — API non accessible en stable, à dessiner main (comme le puck redface des Drapeaux).</div>
         <div class="iss"><span>loader vivant</span><span>réimpl. manuelle</span></div>
       </div>
     </div>
@@ -285,10 +303,9 @@
 
   <!-- =================== 2. LECTURE =================== -->
   <p class="sech" id="lecture"><b>② Lecture</b> d'un sujet</p>
-  <p class="secsub">Tuer le <code>TopicHeaderCard</code> (« top card ») : titre et navigation passent dans une <b>top app bar + pilule de page</b>. Pseudo <b>neutre + rôle en puce discrète</b> (fini le rouge/or criard), citations apaisées et cliquables (« aller au post »), repère <b>dernier-lu</b> traversant, sondage présent (<code>#697</code>), un seul contrôle flottant.</p>
+  <p class="secsub">Base votée : <b>cartes épurées + header dissous</b> (plus de <code>TopicHeaderCard</code>). Nouveau en v2 : la <b>frontière de page</b> vit dans le flux — carte de transition franche avec chargement intégré en fin de page, signal calme + « Répondre » en fin de sujet. Pseudo neutre, rôle en puce ; citations calmes et cliquables ; repère dernier-lu traversant.</p>
   <div class="row">
 
-    <!-- 2A Cartes épurées + header dissous -->
     <div class="item">
       <div class="phone" data-theme="dark">
         <div class="sbar"><span>9:41</span><span class="r">◰ ▾ ▮</span></div>
@@ -303,7 +320,7 @@
             <div class="post">
               <div class="phead"><div class="av">k</div><div class="pwho"><div class="nm">kaloskagatos <span class="dot" style="background:var(--m-tert)" title="modérateur"></span></div><div class="dt">14:25</div></div><span class="pno">#2 781 895</span></div>
               <div class="pbody">
-                <div class="quote calm"><div class="qh">clads92 a écrit</div>Drap pour la V2 (faut la feature couleur du logo !) <span class="qlink">${LINKICO} aller au post</span></div>
+                <div class="quote"><div class="qh">clads92</div>Drap pour la V2 (faut la feature couleur du logo !) <span class="qlink">${LINKICO} aller au post</span></div>
                 <div>Bon courage pour le projet <span class="smy">:)</span> faut faire une version Claude Code <span class="smy">:D</span></div>
               </div>
               <div class="pacts"><div class="tbtn">${QUOTEICO} Citer</div><div class="tbtn">${PLUSICO}</div><div class="tbtn mut">${MOREDOT}</div></div>
@@ -311,191 +328,171 @@
 
             <div class="lastread"><div class="ln"></div><div class="lab">Dernier message lu</div><div class="ln"></div></div>
 
-            <div class="post anchor">
+            <div class="post" style="box-shadow:inset 0 0 0 1.5px var(--m-prim)">
               <div class="phead"><div class="av" style="background:var(--m-primc);color:var(--m-onprimc)">X</div><div class="pwho"><div class="nm">XaTriX <span class="dot" style="background:var(--m-prim)" title="créateur du sujet"></span></div><div class="dt">15:36</div></div><span class="pno">#2 781 907</span></div>
-              <div class="pbody">
-                <div>Objectif livraison de bêta demain soir. Au pire lundi.</div>
-                <div class="pimg">${IMGICO}</div>
-              </div>
-              <div class="pacts"><div class="tbtn">${QUOTEICO} Citer</div><div class="tbtn">${EDITICO} Modifier</div><div class="tbtn mut">${MOREDOT}</div></div>
+              <div class="pbody"><div>Objectif livraison de bêta demain soir. <span class="smy">:o</span></div></div>
             </div>
 
-            <div class="poll">
-              <div class="ph">${POLLICO} Couleur du favori ?</div>
-              <div><div class="opt">A — Lime vif</div><div class="bar" style="--w:34%"><i></i><b>34 %</b></div></div>
-              <div><div class="opt">D — Ambre #FFB300</div><div class="bar" style="--w:58%"><i style="background:var(--m-primc)"></i><b>58 %</b></div></div>
+            <div class="boundary" style="margin-right:56px">
+              <div class="bi"></div>
+              <div class="bt"><div class="b1">Page 12 terminée</div><div class="b2">chargement de la page 13…</div></div>
+              <div class="chev">›</div>
             </div>
           </div>
         </div>
-        <div class="fab">${REPLYICO} Répondre</div>
+        <div class="fab small" style="width:48px;padding:0;justify-content:center">${REPLYICO}</div>
       </div>
       <div class="cap">
-        <div class="t"><span class="nm">A · Cartes épurées + header dissous</span><span class="badge stable">Stable</span></div>
-        <div class="why">La base recommandée. Plus de top card : app bar + pilule page. Headers compacts, rôle en puce, citations calmes &amp; cliquables, repère dernier-lu net, FAB unique.</div>
-        <div class="iss"><span>top card</span><span>#599 FABs</span><span>#600 dernier-lu</span><span>#699 citation</span><span>#697 sondage</span></div>
+        <div class="t"><span class="nm">A · Cartes épurées + frontière de page</span><span class="badge stable">Stable</span></div>
+        <div class="why">En <b>fin de page</b>, une carte de transition franche : « Page 12 terminée », chargement <b>intégré</b> (fini le doute cache/réseau de styx42), chevron vers la suite. Un tap = page suivante ; pas de défilement infini.</div>
+        <div class="iss"><span>top card</span><span>frontière page</span><span>#600 dernier-lu</span><span>#699 citation</span><span>#599 FAB</span></div>
       </div>
     </div>
 
-    <!-- 2B Lecture continue -->
     <div class="item">
       <div class="phone" data-theme="dark">
         <div class="sbar"><span>9:41</span><span class="r">◰ ▾ ▮</span></div>
         <div class="ab">
           <div class="ic">${BACK}</div>
           <div class="ttl"><div class="l1">[VDS] Redface 2 — l'app HFR</div></div>
-          <span class="pill">12 / 87</span>
+          <span class="pill">87 / 87</span>
           <div class="ic">${MORE}</div>
         </div>
         <div class="scroll">
           <div style="padding:0 13px;display:flex;flex-direction:column">
             <div style="padding:11px 0 9px">
-              <div style="display:flex;align-items:center;gap:7px;margin-bottom:5px"><div class="av" style="width:24px;height:24px;font-size:11px">n</div><span style="font-weight:600;font-size:12.5px">nicko</span><span class="dot" style="background:var(--m-outline)"></span><span class="dt" style="font-family:var(--mono);font-size:10px;color:var(--m-onvar)">13:12</span><span class="pno" style="margin-left:auto">#2 789 665</span></div>
+              <div style="display:flex;align-items:center;gap:7px;margin-bottom:5px"><div class="av" style="width:24px;height:24px;font-size:11px">n</div><span style="font-weight:600;font-size:12.5px">nicko</span><span class="dot" style="background:var(--m-outline)"></span><span style="font-family:var(--mono);font-size:10px;color:var(--m-onvar)">13:12</span><span class="pno" style="margin-left:auto">#2 789 665</span></div>
               <div style="font-size:12.5px">Ouais sympa cette petite transparence là ! <span class="smy">:)</span></div>
             </div>
             <div style="height:1px;background:var(--m-outvar);opacity:.5"></div>
             <div style="padding:11px 0 9px">
-              <div style="display:flex;align-items:center;gap:7px;margin-bottom:5px"><div class="av" style="width:24px;height:24px;font-size:11px">t</div><span style="font-weight:600;font-size:12.5px">thibw</span><span class="dot" style="background:var(--m-outline)"></span><span class="dt" style="font-family:var(--mono);font-size:10px;color:var(--m-onvar)">15:08</span><span class="pno" style="margin-left:auto">#2 789 685</span></div>
+              <div style="display:flex;align-items:center;gap:7px;margin-bottom:5px"><div class="av" style="width:24px;height:24px;font-size:11px">t</div><span style="font-weight:600;font-size:12.5px">thibw</span><span class="dot" style="background:var(--m-outline)"></span><span style="font-family:var(--mono);font-size:10px;color:var(--m-onvar)">15:08</span><span class="pno" style="margin-left:auto">#2 789 685</span></div>
               <div style="font-size:12.5px;display:flex;flex-direction:column;gap:6px">
                 <div style="background:var(--m-surf);border-radius:8px;padding:5px 8px;font-size:10.5px;color:var(--m-onvar);display:flex;align-items:center;gap:6px">${CHEVICO} citation de XaTriX — repliée</div>
                 <div>Lel, tu lui laisses un peu trop de liberté. Intègre l'animation aussi dans les topics !</div>
               </div>
             </div>
             <div style="height:1px;background:var(--m-outvar);opacity:.5"></div>
-            <div style="padding:11px 0 9px">
-              <div style="display:flex;align-items:center;gap:7px;margin-bottom:5px"><div class="av" style="width:24px;height:24px;font-size:11px;background:var(--m-primc);color:var(--m-onprimc)">X</div><span style="font-weight:600;font-size:12.5px">XaTriX</span><span class="dot" style="background:var(--m-prim)"></span><span class="dt" style="font-family:var(--mono);font-size:10px;color:var(--m-onvar)">15:29</span><span class="pno" style="margin-left:auto">#2 789 686</span></div>
+            <div style="padding:11px 0 10px">
+              <div style="display:flex;align-items:center;gap:7px;margin-bottom:5px"><div class="av" style="width:24px;height:24px;font-size:11px;background:var(--m-primc);color:var(--m-onprimc)">X</div><span style="font-weight:600;font-size:12.5px">XaTriX</span><span class="dot" style="background:var(--m-prim)"></span><span style="font-family:var(--mono);font-size:10px;color:var(--m-onvar)">15:29</span><span class="pno" style="margin-left:auto">#2 789 686</span></div>
               <div style="font-size:12.5px">Sans déc <span class="smy">:o</span></div>
             </div>
-          </div>
-        </div>
-        <div class="fab small">${REPLYICO}</div>
-      </div>
-      <div class="cap">
-        <div class="t"><span class="nm">B · Lecture continue</span><span class="badge stable">Stable</span></div>
-        <div class="why">Direction dense, sans cartes : séparateurs fins, priorité lisibilité (interlignes <code>#280</code>), citations repliables. Idéale pour les longs sujets &amp; le HFRien compact.</div>
-        <div class="iss"><span>#280 interlignes</span><span>densité</span><span>longues sessions</span></div>
-      </div>
-    </div>
-
-    <!-- 2C Expressive -->
-    <div class="item">
-      <div class="phone" data-theme="dark">
-        <div class="sbar"><span>9:41</span><span class="r">◰ ▾ ▮</span></div>
-        <div class="ablarge">
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><div class="ic" style="margin-left:-6px">${BACK}</div><span class="pill" style="margin-left:auto">12 / 87</span><div class="ic">${MORE}</div></div>
-          <div class="big">Redface 2 — l'app HFR</div>
-          <div class="meta">VDS · 87 pages · 2 580 réponses</div>
-        </div>
-        <div class="scroll">
-          <div class="pad">
-            <div class="post" style="background:var(--m-surf);border:none;border-radius:20px">
-              <div class="phead" style="background:transparent"><div class="av">M</div><div class="pwho"><div class="nm">MisterDams <span class="dot" style="background:var(--m-tert)"></span></div><div class="dt">13:28</div></div><span class="pno">#2 789 671</span></div>
-              <div class="pbody"><div>Tu devrais essayer Redface 2 et son moteur de recherche <span class="smy">:D</span></div></div>
-              <div class="pacts" style="border:none"><div class="tbtn">${QUOTEICO} Citer</div><div class="tbtn mut">${MOREDOT}</div></div>
-            </div>
-            <div class="post" style="background:var(--m-surf);border:none;border-radius:20px">
-              <div class="phead" style="background:transparent"><div class="av" style="background:var(--m-tertc);color:var(--m-ontertc)">S</div><div class="pwho"><div class="nm">Shinseiki</div><div class="dt">18:04</div></div><span class="pno">#2 789 699</span></div>
-              <div class="pbody"><div>Même si j'adore le principe, elle est dégueu ta redface mon cher Claude <span class="smy">:o</span></div></div>
+            <div style="padding:4px 0 12px">
+              <div class="endcard">
+                <div class="e1">Fin du sujet</div>
+                <div class="e2">dernière réponse il y a 4 min · page 87/87</div>
+                <div class="ebtn">${REPLYICO} Répondre</div>
+              </div>
             </div>
           </div>
         </div>
-        <div class="fabmenu">
-          <div class="mi"><span class="t">Page suivante</span><span class="b">${NEXTICO}</span></div>
-          <div class="mi"><span class="t">Aller à une page</span><span class="b">${JUMPICO}</span></div>
-          <div class="main">${REPLYICO}</div>
-        </div>
       </div>
       <div class="cap">
-        <div class="t"><span class="nm">C · Expressive</span><span class="badge aspir">Aspiration M3E</span></div>
-        <div class="why">Large top app bar qui se réduit au scroll, conteneurs tonaux très arrondis, <b>FAB menu</b> qui regroupe page suivante + aller-à-la-page + répondre. App bar large et FAB menu = à réimplémenter (non stable).</div>
-        <div class="iss"><span>#599 FABs unifiés</span><span>esprit M3E</span></div>
+        <div class="t"><span class="nm">B · Lecture continue + fin de sujet</span><span class="badge stable">Stable</span></div>
+        <div class="why">La direction dense (séparateurs fins, rythme unifié <code>#280</code>), avec le <b>signal de fin de sujet</b> : calme, daté, et l'action naturelle — répondre. Impossible à confondre avec une fin de page.</div>
+        <div class="iss"><span>#280 interlignes</span><span>fin de sujet</span><span>densité</span></div>
       </div>
     </div>
   </div>
 
-  <!-- =================== 3. POSTAGE =================== -->
-  <p class="sech" id="postage"><b>③ Postage</b> — éditeur</p>
-  <p class="secsub">Répondre aux vraies douleurs : <b>upload sous le formulaire</b> (plus épinglé), <b>aperçu replié</b> par défaut (fini le 50/50), <b>carrousel de smileys natifs</b> inline, <b>texte cité grisé</b>, curseur toujours visible (autoscroll), barre d'envoi au-dessus du clavier.</p>
+  <!-- =================== 3. POSTAGE HYBRIDE =================== -->
+  <p class="sech" id="postage"><b>③ Postage</b> — composer hybride</p>
+  <p class="secsub">Le pivot du fil : <b>sheet de réponse rapide par défaut</b>, escalade en <b>plein écran</b> au balayage vers le haut ou dès que le multiquote se charge. Citations <b>rendues</b> en cartes d'une ligne (sans « a écrit »), supprimables — le BBCode <code>[quotemsg]</code> reste intact à l'envoi. Tout est jugé <b>clavier ouvert</b> (~40 % de l'écran) : c'est la place qu'il y aura vraiment.</p>
   <div class="row">
 
-    <!-- 3B Plein écran + composer dense (base) -->
-    <div class="item">
-      <div class="phone" data-theme="dark">
-        <div class="sbar"><span>9:41</span><span class="r">◰ ▾ ▮</span></div>
-        <div class="ab" style="min-height:46px"><div class="ic">${CLOSE}</div><div class="ttl"><div class="l1">Répondre</div></div><div class="ochip">${EYEICO} Aperçu</div></div>
-        <div class="cmpr">
-          <div class="qpills">
-            <div class="qpill"><b>↩ XaTriX</b><span class="x">×</span></div>
-            <div class="qpill"><b>↩ nicko</b><span class="x">×</span></div>
-          </div>
-          <div class="field">
-            <span class="cited">XaTriX a écrit : Objectif livraison de bêta demain soir.</span>
-            Hâte de tester le nouveau loader<span class="caret"></span>
-          </div>
-          <div class="smystrip">${SMYSET}<span class="more">perso ›</span></div>
-          <div class="toolbar"><span class="chip act">B</span><span class="chip">I</span><span class="chip">U</span><span class="chip">S</span><span class="chip">❝</span><span class="chip">▦</span><span class="chip">⌗</span></div>
-          <div class="urow"><div class="obtn">${UPLOADICO} Joindre une image</div><span class="ochip">diberie · super-h</span></div>
-          <div class="sendbar"><div class="txtb">Options</div><div class="txtb">Smileys</div><div class="send">${SENDICO} Envoyer</div></div>
-        </div>
-      </div>
-      <div class="cap">
-        <div class="t"><span class="nm">B · Plein écran + composer dense</span><span class="badge stable">Stable</span></div>
-        <div class="why">La base recommandée. Champ dominant, citations en pills supprimables, texte cité grisé, smileys natifs inline, upload sous le champ, aperçu en chip (replié).</div>
-        <div class="iss"><span>upload sous form</span><span>aperçu replié</span><span>#250 smileys</span><span>texte cité</span><span>#447 autoscroll</span></div>
-      </div>
-    </div>
-
-    <!-- 3A Bottom sheet -->
+    <!-- P1 sheet -->
     <div class="item">
       <div class="phone" data-theme="dark">
         <div class="sbar"><span>9:41</span><span class="r">◰ ▾ ▮</span></div>
         <div class="ab"><div class="ic">${BACK}</div><div class="ttl"><div class="l1">[VDS] Redface 2</div></div><span class="pill">87 / 87</span></div>
-        <div class="scroll"><div class="pad"><div class="post" style="opacity:.5"><div class="phead"><div class="av">n</div><div class="pwho"><div class="nm">nicko</div><div class="dt">19:17</div></div></div><div class="pbody"><div>Mais avec ou sans svg, c'est clownesque</div></div></div></div></div>
+        <div class="scroll"><div class="pad"><div class="post" style="opacity:.45"><div class="phead"><div class="av">n</div><div class="pwho"><div class="nm">nicko</div><div class="dt">19:17</div></div></div><div class="pbody"><div>Mais avec ou sans svg, c'est clownesque</div></div></div></div></div>
         <div class="dim"></div>
         <div class="sheet">
           <div class="grab"></div>
-          <div class="field" style="flex:none;height:78px;margin:4px 11px 8px">Réponse rapide<span class="caret"></span></div>
-          <div class="toolbar" style="border:none"><span class="chip">B</span><span class="chip">I</span><span class="chip">❝</span><span class="chip">☺</span><span class="chip">🖼</span><div class="send" style="margin-left:auto">${SENDICO}</div></div>
+          <div class="expandhint">${EXPANDICO} balayer pour agrandir</div>
+          <div style="padding:0 11px 6px"><div class="qcard"><span class="qa">↩ XaTriX</span><span class="qx">Objectif livraison de bêta demain soir. Au pire lundi.</span><span class="qdel">×</span></div></div>
+          <div class="field2" style="margin-bottom:6px">Hâte de tester le nouveau loader<span class="caret"></span></div>
+          <div class="sendrow" style="padding-top:0">
+            <div class="smystrip" style="padding:0;flex:1;min-width:0">${SMYSET}<span class="more">›</span></div>
+            <div class="send">${SENDICO}</div>
+          </div>
+        </div>
+        <div class="ime"><span class="kbnote">clavier ouvert</span>
+          <div class="sugg"><span>loader</span><span>«&nbsp;redface&nbsp;»</span><span>lodeur</span></div>
+          ${KEYS}
         </div>
       </div>
       <div class="cap">
-        <div class="t"><span class="nm">A · Bottom sheet rapide</span><span class="badge stable">Stable</span></div>
-        <div class="why">Pour une <b>réponse courte</b> sans quitter le sujet. À réserver à ce cas : mauvais pour citations longues, aperçu, multi-quote et autoscroll (hauteur instable avec le clavier).</div>
-        <div class="iss"><span>réponse courte</span><span>contexte gardé</span></div>
+        <div class="t"><span class="nm">P1 · Sheet de réponse rapide</span><span class="badge stable">Stable</span><span class="badge caveat">Réserve IME</span></div>
+        <div class="why">Le défaut : répondre <b>sans quitter le sujet</b>. Une citation max en carte, champ court, smileys natifs, envoyer. La cohabitation sheet + clavier est le point fragile connu (hauteur instable) — d'où l'escalade facile.</div>
+        <div class="iss"><span>réponse rapide</span><span>contexte gardé</span><span>citation rendue</span></div>
       </div>
     </div>
 
-    <!-- 3C Expressive toolbar -->
+    <div class="flow"><span class="ar">→</span><span class="lb">balayer ↑<br>ou gros multiquote</span></div>
+
+    <!-- P2 fullscreen -->
     <div class="item">
       <div class="phone" data-theme="dark">
         <div class="sbar"><span>9:41</span><span class="r">◰ ▾ ▮</span></div>
-        <div class="ab" style="min-height:46px"><div class="ic">${CLOSE}</div><div class="ttl"><div class="l1">Répondre</div></div><div class="ochip">${EYEICO} Aperçu</div></div>
-        <div class="cmpr">
-          <div class="qpills"><div class="qpill"><b>↩ XaTriX</b><span class="x">×</span></div></div>
-          <div class="field"><span class="cited">XaTriX a écrit : …</span>Réponse<span class="caret"></span></div>
-          <div class="smystrip">${SMYSET}<span class="more">GIF · perso ›</span></div>
-          <div class="seg">
-            <div class="g"><span class="c on">B</span><span class="c">I</span><span class="c">U</span><span class="c">S</span></div>
-            <div class="g"><span class="c">❝</span><span class="c">▦</span><span class="c">⌗</span></div>
+        <div class="ab" style="min-height:44px"><div class="ic">${CLOSE}</div><div class="ttl"><div class="l1">Répondre</div></div><div class="ochip">${EYEICO} Aperçu</div></div>
+        <div class="scr">
+          <div style="padding:2px 11px 6px;display:flex;flex-direction:column;gap:5px">
+            <div class="qcard"><span class="qa">↩ XaTriX</span><span class="qx">Objectif livraison de bêta demain soir. Au pire lundi.</span><span class="qdel">×</span></div>
           </div>
-          <div class="urow"><div class="obtn">${UPLOADICO} Image</div><span class="ochip">+ GIF · biblio</span></div>
-          <div class="sendbar"><div class="txtb">Options</div><div class="send">${SENDICO} Envoyer</div></div>
+          <div class="field2" style="flex:1;margin-bottom:4px">
+            Hâte de tester le nouveau loader — et le skeleton au chargement, ça change tout <span class="smy">:)</span><span class="caret"></span>
+          </div>
+          <div class="smystrip">${SMYSET}<span class="more">perso ›</span></div>
+          <div class="toolbar"><span class="chip act">B</span><span class="chip">I</span><span class="chip">U</span><span class="chip">S</span><span class="chip">❝</span><span class="chip">⌗</span><span class="chip wide">${UPLOADICO} Image</span></div>
+          <div class="sendrow"><div class="txtb">Options</div><div class="txtb">Smileys</div><div class="send">${SENDICO} Envoyer</div></div>
+        </div>
+        <div class="ime"><span class="kbnote">clavier ouvert</span>
+          <div class="sugg"><span>tout</span><span>vraiment</span><span>beaucoup</span></div>
+          ${KEYS}
         </div>
       </div>
       <div class="cap">
-        <div class="t"><span class="nm">C · Toolbar expressive</span><span class="badge aspir">Aspiration M3E</span></div>
-        <div class="why">Barre d'outils en <b>button groups segmentés</b> expressifs + onglets GIF/bibliothèque (<code>#190</code>). Le button group expressif n'existe pas en stable — à recréer.</div>
-        <div class="iss"><span>#190 médias</span><span>button group M3E</span></div>
+        <div class="t"><span class="nm">P2 · Plein écran</span><span class="badge stable">Stable</span></div>
+        <div class="why">L'état escaladé : champ dominant <b>même clavier ouvert</b>, toolbar BBCode compacte avec upload <b>dans la barre</b> (plus de rangée dédiée qui vole l'espace), aperçu en chip replié.</div>
+        <div class="iss"><span>upload compact</span><span>aperçu replié</span><span>#447 autoscroll</span><span>#555 focus</span></div>
+      </div>
+    </div>
+
+    <!-- P3 multiquote -->
+    <div class="item">
+      <div class="phone" data-theme="dark">
+        <div class="sbar"><span>9:41</span><span class="r">◰ ▾ ▮</span></div>
+        <div class="ab" style="min-height:44px"><div class="ic">${CLOSE}</div><div class="ttl"><div class="l1">Répondre · 3 citations</div></div><div class="ochip">${EYEICO} Aperçu</div></div>
+        <div class="scr">
+          <div style="padding:2px 11px 6px;display:flex;flex-direction:column;gap:5px">
+            <div class="qcard"><span class="qdrag">≡</span><span class="qa">↩ thibw</span><span class="qx">quand tu swipe pour refresh lentement on voit que…</span><span class="qdel">×</span></div>
+            <div class="qcard"><span class="qdrag">≡</span><span class="qa">↩ styx42</span><span class="qx">Ça saute à la fin du refresh</span><span class="qdel">×</span></div>
+            <div class="qcard" style="box-shadow:inset 0 0 0 1.5px var(--m-prim)"><span class="qdrag">≡</span><span class="qa">↩ nicko</span><span class="qx">Franchement non, c'est laid, désolé.</span><span class="qdel">×</span></div>
+          </div>
+          <div class="field2" style="flex:1;margin-bottom:4px">Réponse groupée aux trois<span class="caret"></span></div>
+          <div class="toolbar"><span class="chip">B</span><span class="chip">I</span><span class="chip">❝</span><span class="chip">⌗</span><span class="chip wide">${UPLOADICO} Image</span><span class="ochip">≡ glisser</span></div>
+          <div class="sendrow"><div class="txtb">Tout vider</div><div class="send">${SENDICO} Envoyer</div></div>
+        </div>
+        <div class="ime"><span class="kbnote">clavier ouvert</span>
+          <div class="sugg"><span>aux</span><span>trois</span><span>retours</span></div>
+          ${KEYS}
+        </div>
+      </div>
+      <div class="cap">
+        <div class="t"><span class="nm">P3 · Multiquote</span><span class="badge stable">Stable</span></div>
+        <div class="why">Le cas qui <b>force</b> le plein écran : 3 citations d'une ligne chacune (vs ~15 lignes de BBCode brut aujourd'hui), réordonnables (≡), supprimables (×), « Tout vider » (<code>#436</code>). Le champ reste utilisable clavier ouvert.</div>
+        <div class="iss"><span>#436 multi-quote v2</span><span>#480 citer en header</span><span>panier visible</span></div>
       </div>
     </div>
   </div>
 
   <div class="footnote">
-    Maquettes HTML interactives (thème clair/sombre, contenu HFR réel), pour arbitrage avant implémentation — <b>ne sont pas l'app</b>. Schéma couleur = tokens M3 réels de Redface 2 (primary <b>#8E1D24 / #FFB3B1</b>, tertiary or). Direction cadrée avec Codex gpt-5.5. Phase « Vue Topic » : umbrella <b>#604</b>, jalons <b>Vue · Topic 1</b> &amp; <b>Vue · Éditeur 1</b>.
+    Maquettes HTML (thème clair/sombre, clavier escamotable, contenu HFR réel) pour arbitrage avant implémentation — <b>ne sont pas l'app</b>. Schéma couleur = tokens M3 réels de Redface 2. Cible « citations rendues » = cartes au-dessus d'un champ unique (verrouillé au cadrage Codex : pas de faux WYSIWYG dans le champ). v2 remplace la v1 (même URL) ; historique dans le dépôt. Phase « Vue Topic » : umbrella <b>#604</b>, jalons <b>Vue · Topic 1</b> &amp; <b>Vue · Éditeur 1</b>.
   </div>
 </div>
 
 <script>
-  // shared SVG icons (kept tiny, currentColor)
   const I = {
     BACK:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>',
     SEARCH:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>',
@@ -506,26 +503,36 @@
     PLUSICO:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>',
     REPLYICO:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17v-2a6 6 0 016-6h9"/><path d="M14 4l5 5-5 5"/></svg>',
     LINKICO:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 15l6-6"/><path d="M11 6h4a3 3 0 010 6h-1"/><path d="M13 18H9a3 3 0 010-6h1"/></svg>',
-    IMGICO:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 16l-5-5L5 20"/></svg>',
-    POLLICO:'<svg viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="11" width="3" height="9"/><rect x="10.5" y="6" width="3" height="14"/><rect x="17" y="14" width="3" height="6"/></svg>',
     NEXTICO:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>',
-    JUMPICO:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h10M4 17h16"/></svg>',
     CLOSE:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>',
     EYEICO:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>',
     UPLOADICO:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M5 20h14"/></svg>',
     SENDICO:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 11l18-8-8 18-2-7-8-3z"/></svg>',
     CHEVICO:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>',
+    EXPANDICO:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 14l5-5 5 5"/></svg>',
   };
   I.SMYSET = ':) :D :o ;) :p'.split(' ').map(c=>`<span class="s">${c}</span>`).join('');
+  I.KEYS = (()=>{
+    const row = (chars)=>'<div class="krow">'+chars.split('').map(c=>`<span class="k">${c}</span>`).join('')+'</div>';
+    return row('azertyuiop')+row('qsdfghjklm')+
+      '<div class="krow"><span class="k w">⇧</span>'+ 'wxcvbn'.split('').map(c=>`<span class="k">${c}</span>`).join('') +'<span class="k w">⌫</span></div>'+
+      '<div class="krow"><span class="k w">?123</span><span class="k">,</span><span class="k space"> </span><span class="k">.</span><span class="k w enter">↵</span></div>';
+  })();
   document.body.innerHTML = document.body.innerHTML.replace(/\$\{(\w+)\}/g, (m,k)=> I[k] ?? m);
 
-  // theme toggle
-  const btn = document.getElementById('theme');
+  const themeBtn = document.getElementById('theme');
   let dark = true;
-  btn.addEventListener('click', ()=>{
+  themeBtn.addEventListener('click', ()=>{
     dark = !dark;
     document.querySelectorAll('.phone').forEach(p=>p.setAttribute('data-theme', dark?'dark':'light'));
-    btn.textContent = dark ? '◐ Thème : sombre' : '◑ Thème : clair';
+    themeBtn.textContent = dark ? '◐ Thème : sombre' : '◑ Thème : clair';
+  });
+  const kbBtn = document.getElementById('kb');
+  let kb = true;
+  kbBtn.addEventListener('click', ()=>{
+    kb = !kb;
+    document.body.classList.toggle('nokb', !kb);
+    kbBtn.textContent = kb ? 'Clavier : affiché' : 'Clavier : masqué';
   });
 </script>
 </body>
