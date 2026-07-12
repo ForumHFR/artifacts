@@ -1,0 +1,409 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Redface 2 — mockups sondages &amp; pages</title>
+<style>
+  :root{
+    --bg:#161311;--panel:#211c1a;--line:#37302d;--ink:#efe7e4;--dim:#b8aaa5;--faint:#8b7d78;
+    --accent:#e8868c;
+    --stable:#7ed3a2;--stable-bg:#16352433;--stable-li:#2f5f47;
+    --aspir:#9db4f0;--aspir-bg:#1a233a33;--aspir-li:#3a4a6f;
+    --mono:ui-monospace,'Cascadia Code','JetBrains Mono',Menlo,monospace;
+  }
+  html{color-scheme:dark}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font:15px/1.55 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+    padding:32px 20px 64px}
+  .wrap{max-width:1180px;margin:0 auto}
+  header h1{font-size:26px;margin:0 0 6px;letter-spacing:-.02em;text-wrap:balance}
+  header p{color:var(--dim);max-width:68ch;margin:0}
+  header .meta{font-family:var(--mono);font-size:11.5px;color:var(--faint);margin-top:10px}
+  header .meta a{color:var(--faint)}
+
+  section{margin-top:44px}
+  .sec-head{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:6px}
+  .sec-head h2{font-size:19px;margin:0;letter-spacing:-.01em}
+  .sec-head .ref{font-family:var(--mono);font-size:11.5px;color:var(--faint)}
+  .sec-head button{margin-left:auto;background:var(--panel);color:var(--dim);border:1px solid var(--line);
+    border-radius:99px;padding:5px 14px;font:600 12px var(--mono);cursor:pointer}
+  .sec-head button:hover{color:var(--ink);border-color:var(--faint)}
+  .sec-head button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .sec-note{color:var(--dim);max-width:74ch;margin:8px 0 22px}
+  .sec-note em{color:var(--ink);font-style:normal;font-weight:600}
+
+  .row{display:flex;gap:26px;flex-wrap:wrap;align-items:flex-start}
+  .cell{flex:none;width:300px;display:flex;flex-direction:column;gap:10px}
+  .cell h3{font-size:14px;margin:0;display:flex;align-items:center;gap:8px}
+  .badge{font:700 9.5px var(--mono);letter-spacing:.08em;padding:2px 8px;border-radius:99px;text-transform:uppercase}
+  .badge.st{color:var(--stable);background:var(--stable-bg);border:1px solid var(--stable-li)}
+  .badge.as{color:var(--aspir);background:var(--aspir-bg);border:1px solid var(--aspir-li)}
+  .badge.base{color:var(--faint);background:#0000;border:1px solid var(--line)}
+  .cell .note{font-size:12.5px;color:var(--dim);margin:0}
+  .cell .note b{color:var(--ink)}
+
+  /* ---- cadre téléphone : tokens M3 Redface (mêmes valeurs que vuetopic-mockups) ---- */
+  .phone{width:300px;border-radius:26px;border:1px solid #4a403d;background:var(--m-surface);
+    overflow:hidden;box-shadow:0 12px 40px -12px #000,0 0 0 1px var(--line);
+    display:flex;flex-direction:column;position:relative;color:var(--m-on);
+    font-size:13px;line-height:1.42;
+    --m-surface:#1a1110;--m-surf-low:#1f1413;--m-surf:#271d1c;--m-surf-hi:#322827;--m-surf-hier:#3d3231;
+    --m-surfvar:#534341;--m-on:#f0dedd;--m-onvar:#d6c2bf;--m-outline:#a08c8a;--m-outvar:#534341;
+    --m-prim:#ffb3b1;--m-onprim:#561d20;--m-primc:#73333a;--m-onprimc:#ffdad8;
+    --m-sec:#e6bdb9;--m-secc:#5d3f3c;--m-tert:#e2c28c;--m-tertc:#574419;--m-ontertc:#f5dfb0;
+    --m-scrim:#00000099}
+  .phone[data-theme="light"]{
+    --m-surface:#fff8f7;--m-surf-low:#fff0ef;--m-surf:#fceae8;--m-surf-hi:#f6e4e2;--m-surf-hier:#f0dedd;
+    --m-surfvar:#f4dddb;--m-on:#231918;--m-onvar:#534341;--m-outline:#857371;--m-outvar:#d8c2bf;
+    --m-prim:#8e1d24;--m-onprim:#ffffff;--m-primc:#ffdad7;--m-onprimc:#3b0709;
+    --m-sec:#775653;--m-secc:#ffdad7;--m-tert:#735b2e;--m-tertc:#ffdea6;--m-ontertc:#271900;
+    --m-scrim:#00000066;border-color:#d8c2bf;box-shadow:0 12px 40px -12px #0007,0 0 0 1px var(--line)}
+  .phone *{box-sizing:border-box}
+  .sbar{height:22px;flex:none;display:flex;align-items:center;justify-content:space-between;
+    padding:0 14px;font:600 10px var(--mono);color:var(--m-on);opacity:.85;letter-spacing:1px}
+  .scr{height:430px;position:relative;overflow:hidden;display:flex;flex-direction:column}
+
+  /* topic en fond */
+  .topbar{flex:none;display:flex;align-items:center;gap:8px;padding:10px 12px 8px;background:var(--m-surface)}
+  .topbar .t{flex:1;min-width:0}
+  .topbar .t .tt{font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .pill{font:600 10.5px var(--mono);color:var(--m-prim);background:var(--m-primc);color:var(--m-onprimc);
+    padding:2px 9px;border-radius:99px;white-space:nowrap}
+  .feed{flex:1;overflow:hidden;padding:6px 10px;display:flex;flex-direction:column;gap:8px}
+  .post{background:var(--m-surf-low);border-radius:12px;padding:9px 11px}
+  .post .h{display:flex;gap:7px;align-items:center;margin-bottom:5px}
+  .ava{width:20px;height:20px;border-radius:50%;background:var(--m-surf-hier);flex:none}
+  .post .a{font-weight:600;font-size:12px}
+  .post .d{font-size:10px;color:var(--m-onvar);margin-left:auto}
+  .ln{height:7px;border-radius:4px;background:var(--m-surf-hi)}
+  .ln+.ln{margin-top:5px}
+
+  /* carte sondage (lead item) */
+  .poll{background:var(--m-surf-low);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:8px}
+  .poll .q{font-weight:600;font-size:13px;display:flex;gap:8px}
+  .poll .q .tog{margin-left:auto;color:var(--m-prim);font:600 10px var(--mono);flex:none}
+  .poll .sum{font-size:10.5px;color:var(--m-onvar)}
+  .opt-txt{font-size:12px;color:var(--m-onvar)}
+
+  /* A1 barre à droite */
+  .oR{display:flex;align-items:center;gap:8px;font-size:12px}
+  .oR .lab{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .oR .trk{flex:none;width:96px;height:8px;border-radius:4px;background:var(--m-surf-hi);overflow:hidden}
+  .oR .trk i{display:block;height:100%;border-radius:4px;background:var(--m-sec)}
+  .oR.win .trk i{background:var(--m-prim)}
+  .oR .pc{flex:none;width:56px;text-align:right;font:600 10.5px var(--mono);color:var(--m-onvar);font-variant-numeric:tabular-nums}
+  .oR.win .lab,.oR.win .pc{color:var(--m-on);font-weight:600}
+
+  /* A2 fond de ligne */
+  .oF{position:relative;border-radius:8px;background:var(--m-surf-hi);overflow:hidden;font-size:12px}
+  .oF i{position:absolute;inset:0 auto 0 0;background:var(--m-secc);opacity:.85}
+  .oF.win i{background:var(--m-primc);opacity:1}
+  .oF .in{position:relative;display:flex;justify-content:space-between;gap:8px;padding:6px 10px}
+  .oF .pc{font:600 10.5px var(--mono);color:var(--m-onvar);font-variant-numeric:tabular-nums;flex:none}
+  .oF.win .in{font-weight:600}
+  .oF.win .pc{color:var(--m-on)}
+
+  /* A3 vote */
+  .oV{display:flex;align-items:center;gap:9px;font-size:12.5px;padding:5px 2px}
+  .rad{width:15px;height:15px;border-radius:50%;border:2px solid var(--m-outline);flex:none}
+  .rad.on{border-color:var(--m-prim);box-shadow:inset 0 0 0 3.5px var(--m-prim)}
+  .vote-b{align-self:flex-end;background:var(--m-prim);color:var(--m-onprim);border-radius:99px;
+    padding:6px 16px;font-weight:600;font-size:12px}
+  .vote-b.off{opacity:.45}
+
+  /* feuille pages */
+  .scrim{position:absolute;inset:0;background:var(--m-scrim)}
+  .sheet{position:absolute;left:0;right:0;bottom:0;background:var(--m-surf);border-radius:20px 20px 0 0;
+    padding:8px 14px 16px;display:flex;flex-direction:column;gap:10px}
+  .handle{width:34px;height:4px;border-radius:2px;background:var(--m-outvar);margin:0 auto 2px}
+  .sheet .st{font-weight:600;font-size:12.5px}
+  .btn{border:1px solid var(--m-outline);color:var(--m-prim);border-radius:99px;padding:6px 13px;
+    font-weight:600;font-size:12px;text-align:center}
+  .btn.full{background:var(--m-prim);color:var(--m-onprim);border-color:transparent}
+  .btn.dis{opacity:.4}
+  .btn.sq{border-radius:10px;padding:6px 0;flex:1}
+  .rowx{display:flex;gap:8px;align-items:center}
+  .rowx .mid{flex:1;text-align:center;font-size:12px;color:var(--m-onvar)}
+  .field{flex:1;border:1px solid var(--m-outline);border-radius:8px;padding:7px 10px;font-size:12px;color:var(--m-onvar)}
+  .chip{display:flex;align-items:center;gap:6px;background:var(--m-surf-hi);border-radius:9px;
+    padding:7px 10px;font-weight:600;font-size:11.5px;flex:1;justify-content:center}
+  .chip.hl{background:var(--m-tertc);color:var(--m-ontertc)}
+  .chip svg{width:13px;height:13px;flex:none}
+  .grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+  .pg{border:1px solid var(--m-outvar);border-radius:9px;padding:6px 0;text-align:center;
+    font:600 11.5px var(--mono);color:var(--m-on);position:relative;font-variant-numeric:tabular-nums}
+  .pg.cur{background:var(--m-prim);color:var(--m-onprim);border-color:transparent}
+  .pg.lu{border-color:var(--m-tert)}
+  .pg.lu::after{content:"";position:absolute;top:3px;right:3px;width:5px;height:5px;border-radius:50%;background:var(--m-tert)}
+  .pg.dots{border:none;color:var(--m-onvar)}
+  .legend{display:flex;gap:12px;font-size:10px;color:var(--m-onvar)}
+  .legend .dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--m-tert);margin-right:4px}
+
+  /* slider B2 */
+  .sl{position:relative;height:26px;margin:4px 2px}
+  .sl .tk{position:absolute;left:0;right:0;top:11px;height:4px;border-radius:2px;background:var(--m-surf-hier)}
+  .sl .fl{position:absolute;left:0;top:11px;height:4px;border-radius:2px;background:var(--m-prim);width:26%}
+  .sl .lu{position:absolute;top:8px;width:2.5px;height:10px;border-radius:2px;background:var(--m-tert);left:93%}
+  .sl .th{position:absolute;top:3px;left:26%;width:20px;height:20px;border-radius:50%;background:var(--m-prim);
+    transform:translateX(-10px);box-shadow:0 1px 4px #0006}
+  .sl .bub{position:absolute;top:-26px;left:26%;transform:translateX(-50%);background:var(--m-prim);color:var(--m-onprim);
+    font:700 11px var(--mono);padding:3px 9px;border-radius:9px}
+
+  footer{margin-top:52px;border-top:1px solid var(--line);padding-top:14px;
+    font-family:var(--mono);font-size:11.5px;color:var(--faint)}
+  footer a{color:var(--dim)}
+  @media (prefers-reduced-motion:no-preference){
+    .oR .trk i,.oF i{transition:width .5s ease}
+  }
+</style>
+<div class="wrap">
+<header>
+  <h1>Sondages &amp; menu pages — maquettes v1</h1>
+  <p>Deux explorations demandées par XaTriX sur le fil DEV (<a href="https://forum.hardware.fr/hfr/gsmgpspda/redface-dev-sujet_35421_46.htm#t2790926" style="color:var(--dim)">#2790926</a>, en réponse à la checklist thibw) : le rendu des <em>résultats de sondage</em> — « une barre qui se remplit à droite, ou en fond de chaque ligne » — et le contenu de la <em>feuille de gestion des pages</em> (#849 : accès direct première / dernière / dernier lu). Tokens M3 Redface réels, thème commutable par section.</p>
+  <div class="meta">réfs #697 (lecture) · #779 (vote in-app) · #849 (raccourcis pages) — 2026-07-12 — maquettes : Claude Fable 5, demande XaTriX</div>
+</header>
+
+<section id="polls">
+  <div class="sec-head">
+    <h2>1 · Résultats de sondage</h2>
+    <span class="ref">carte lead item — état déplié — sondage d'exemple 147 votes</span>
+    <button type="button" data-toggle="polls">thème : sombre</button>
+  </div>
+  <p class="sec-note">La carte actuelle (A0) affiche du texte brut. Les deux pistes de XaTriX sont A1 et A2 ; A2 est
+  la plus lisible en un coup d'œil (la longueur EST la donnée, pas un ornement à droite) et absorbe mieux les
+  libellés longs. A3 montre l'état « pas encore voté » avec le vote in-app (#779) — le même gabarit de lignes
+  sert alors de bulletin, ce qui plaide pour A2 : <em>une seule anatomie de carte pour voter et lire</em>.</p>
+  <div class="row">
+
+    <div class="cell">
+      <h3>A0 — Actuel <span class="badge base">baseline</span></h3>
+      <div class="phone" data-theme="dark">
+        <div class="sbar"><span>21:07</span><span>▮▮▮</span></div>
+        <div class="scr">
+          <div class="topbar"><div class="t"><div class="tt">Blind test : le retour</div></div><span class="pill">page 3 / 18</span></div>
+          <div class="feed">
+            <div class="poll">
+              <div class="q">Quel thème utilisez-vous ?<span class="tog">MASQUER</span></div>
+              <div class="opt-txt">Système — 45,6% (67 votes)</div>
+              <div class="opt-txt">Sombre — 30,6% (45 votes)</div>
+              <div class="opt-txt">AMOLED — 15,6% (23 votes)</div>
+              <div class="opt-txt">Clair — 8,2% (12 votes)</div>
+              <div class="sum">147 votes · choix unique</div>
+            </div>
+            <div class="post"><div class="h"><span class="ava"></span><span class="a">nicko</span><span class="d">20:58</span></div><div class="ln" style="width:88%"></div><div class="ln" style="width:64%"></div></div>
+            <div class="post"><div class="h"><span class="ava"></span><span class="a">tinc</span><span class="d">21:02</span></div><div class="ln" style="width:76%"></div></div>
+          </div>
+        </div>
+      </div>
+      <p class="note">Ce qui est shippé (#697 lecture seule). Les nombres se lisent, rien ne se <b>compare</b>.</p>
+    </div>
+
+    <div class="cell">
+      <h3>A1 — Barre à droite <span class="badge st">stable</span></h3>
+      <div class="phone" data-theme="dark">
+        <div class="sbar"><span>21:07</span><span>▮▮▮</span></div>
+        <div class="scr">
+          <div class="topbar"><div class="t"><div class="tt">Blind test : le retour</div></div><span class="pill">page 3 / 18</span></div>
+          <div class="feed">
+            <div class="poll">
+              <div class="q">Quel thème utilisez-vous ?<span class="tog">MASQUER</span></div>
+              <div class="oR win"><span class="lab">Système</span><span class="trk"><i style="width:100%"></i></span><span class="pc">45,6%</span></div>
+              <div class="oR"><span class="lab">Sombre</span><span class="trk"><i style="width:67%"></i></span><span class="pc">30,6%</span></div>
+              <div class="oR"><span class="lab">AMOLED</span><span class="trk"><i style="width:34%"></i></span><span class="pc">15,6%</span></div>
+              <div class="oR"><span class="lab">Clair</span><span class="trk"><i style="width:18%"></i></span><span class="pc">8,2%</span></div>
+              <div class="sum">147 votes · choix unique · barres relatives au 1er</div>
+            </div>
+            <div class="post"><div class="h"><span class="ava"></span><span class="a">nicko</span><span class="d">20:58</span></div><div class="ln" style="width:88%"></div><div class="ln" style="width:64%"></div></div>
+            <div class="post"><div class="h"><span class="ava"></span><span class="a">tinc</span><span class="d">21:02</span></div><div class="ln" style="width:76%"></div></div>
+          </div>
+        </div>
+      </div>
+      <p class="note">Piste XaTriX n°1. Compacte, mais la barre (96&nbsp;dp) compresse les <b>libellés longs</b> —
+      ellipse dès ~18 caractères. Barres normalisées sur le 1er pour rester lisibles quand tout est &lt; 50%.</p>
+    </div>
+
+    <div class="cell">
+      <h3>A2 — Fond de ligne <span class="badge st">stable</span></h3>
+      <div class="phone" data-theme="dark">
+        <div class="sbar"><span>21:07</span><span>▮▮▮</span></div>
+        <div class="scr">
+          <div class="topbar"><div class="t"><div class="tt">Blind test : le retour</div></div><span class="pill">page 3 / 18</span></div>
+          <div class="feed">
+            <div class="poll">
+              <div class="q">Quel thème utilisez-vous ?<span class="tog">MASQUER</span></div>
+              <div class="oF win"><i style="width:45.6%"></i><div class="in"><span>Système</span><span class="pc">45,6% · 67</span></div></div>
+              <div class="oF"><i style="width:30.6%"></i><div class="in"><span>Sombre</span><span class="pc">30,6% · 45</span></div></div>
+              <div class="oF"><i style="width:15.6%"></i><div class="in"><span>AMOLED</span><span class="pc">15,6% · 23</span></div></div>
+              <div class="oF"><i style="width:8.2%"></i><div class="in"><span>Clair</span><span class="pc">8,2% · 12</span></div></div>
+              <div class="sum">147 votes · choix unique</div>
+            </div>
+            <div class="post"><div class="h"><span class="ava"></span><span class="a">nicko</span><span class="d">20:58</span></div><div class="ln" style="width:88%"></div><div class="ln" style="width:64%"></div></div>
+            <div class="post"><div class="h"><span class="ava"></span><span class="a">tinc</span><span class="d">21:02</span></div><div class="ln" style="width:76%"></div></div>
+          </div>
+        </div>
+      </div>
+      <p class="note">Piste XaTriX n°2 — <b>reco</b>. Le libellé garde toute la largeur, le remplissage est en %
+      vrai (pas normalisé), le gagnant ressort en <b>primaryContainer</b>. Pattern connu (Twitter/Discord).</p>
+    </div>
+
+    <div class="cell">
+      <h3>A3 — Vote in-app <span class="badge as">aspiration · #779</span></h3>
+      <div class="phone" data-theme="dark">
+        <div class="sbar"><span>21:07</span><span>▮▮▮</span></div>
+        <div class="scr">
+          <div class="topbar"><div class="t"><div class="tt">Blind test : le retour</div></div><span class="pill">page 3 / 18</span></div>
+          <div class="feed">
+            <div class="poll">
+              <div class="q">Quel thème utilisez-vous ?<span class="tog">MASQUER</span></div>
+              <div class="oV"><span class="rad"></span>Système</div>
+              <div class="oV"><span class="rad on"></span>Sombre</div>
+              <div class="oV"><span class="rad"></span>AMOLED</div>
+              <div class="oV"><span class="rad"></span>Clair</div>
+              <div class="sum">Choix unique · les résultats s'affichent après le vote</div>
+              <span class="vote-b">Voter</span>
+            </div>
+            <div class="post"><div class="h"><span class="ava"></span><span class="a">nicko</span><span class="d">20:58</span></div><div class="ln" style="width:88%"></div><div class="ln" style="width:64%"></div></div>
+          </div>
+        </div>
+      </div>
+      <p class="note">État « formulaire » (#697 : HFR ne donne pas les chiffres tant qu'on n'a pas voté).
+      Même anatomie de lignes que A2 → le vote glisse dans la carte sans 2e layout. POST <b>vote.php</b> à capturer (#779).</p>
+    </div>
+
+  </div>
+</section>
+
+<section id="pages">
+  <div class="sec-head">
+    <h2>2 · Feuille « gestion des pages »</h2>
+    <span class="ref">ouverte par la pilule « page X / Y » — topic 46 pages, dernier lu p.43</span>
+    <button type="button" data-toggle="pages">thème : sombre</button>
+  </div>
+  <p class="sec-note">La feuille actuelle (B0) a hérité du « top bordel » : précédent/suivant + saisie libre.
+  thibw demande (#849) des accès directs <em>première / dernière / dernier post lu</em>. B1 les ajoute en rangée de
+  chips — diff minimal, livrable tout de suite. B2 remplace la saisie par une <em>échelle scrubbable</em> (le pouce
+  balaye 46 pages en un geste, tick ambre = dernier lu). B3 pousse vers une grille fenêtrée autour de la page
+  courante. B1 et B2 se <em>combinent</em> : chips au-dessus, échelle en dessous, saisie supprimée.</p>
+  <div class="row">
+
+    <div class="cell">
+      <h3>B0 — Actuel <span class="badge base">baseline</span></h3>
+      <div class="phone" data-theme="dark">
+        <div class="sbar"><span>21:07</span><span>▮▮▮</span></div>
+        <div class="scr">
+          <div class="topbar"><div class="t"><div class="tt">Redface 2 — DEV (canal de développement)</div></div><span class="pill">page 12 / 46</span></div>
+          <div class="feed">
+            <div class="post"><div class="h"><span class="ava"></span><span class="a">thibw</span><span class="d">19:41</span></div><div class="ln" style="width:90%"></div><div class="ln" style="width:72%"></div><div class="ln" style="width:40%"></div></div>
+            <div class="post"><div class="h"><span class="ava"></span><span class="a">XaTriX</span><span class="d">20:50</span></div><div class="ln" style="width:84%"></div><div class="ln" style="width:66%"></div></div>
+          </div>
+          <div class="scrim"></div>
+          <div class="sheet">
+            <div class="handle"></div>
+            <div class="rowx"><span class="btn">Précédent</span><span class="mid">page 12 / 46</span><span class="btn">Suivant</span></div>
+            <div class="rowx"><span class="field">Aller à la page…</span><span class="btn" style="border:none">ALLER</span></div>
+          </div>
+        </div>
+      </div>
+      <p class="note">PR #771 : la pilule ouvre cette feuille. Saisie clavier obligatoire pour tout saut non adjacent ;
+      ni première/dernière, ni dernier lu.</p>
+    </div>
+
+    <div class="cell">
+      <h3>B1 — Raccourcis directs <span class="badge st">stable · #849</span></h3>
+      <div class="phone" data-theme="dark">
+        <div class="sbar"><span>21:07</span><span>▮▮▮</span></div>
+        <div class="scr">
+          <div class="topbar"><div class="t"><div class="tt">Redface 2 — DEV (canal de développement)</div></div><span class="pill">page 12 / 46</span></div>
+          <div class="feed">
+            <div class="post"><div class="h"><span class="ava"></span><span class="a">thibw</span><span class="d">19:41</span></div><div class="ln" style="width:90%"></div><div class="ln" style="width:72%"></div><div class="ln" style="width:40%"></div></div>
+            <div class="post"><div class="h"><span class="ava"></span><span class="a">XaTriX</span><span class="d">20:50</span></div><div class="ln" style="width:84%"></div><div class="ln" style="width:66%"></div></div>
+          </div>
+          <div class="scrim"></div>
+          <div class="sheet">
+            <div class="handle"></div>
+            <div class="rowx">
+              <span class="chip">⇤ Première</span>
+              <span class="chip hl">● Dernier lu · 43</span>
+              <span class="chip">Dernière ⇥</span>
+            </div>
+            <div class="rowx"><span class="btn sq">Précédent</span><span class="mid">12 / 46</span><span class="btn sq">Suivant</span></div>
+            <div class="rowx"><span class="field">Aller à la page…</span><span class="btn" style="border:none">ALLER</span></div>
+          </div>
+        </div>
+      </div>
+      <p class="note">La demande thibw, telle quelle. « Dernier lu » (tertiaire) n'apparaît que si un drapeau existe
+      sur le sujet — sinon la rangée n'a que les 2 extrémités. <b>Diff minimal sur la feuille actuelle.</b></p>
+    </div>
+
+    <div class="cell">
+      <h3>B2 — Échelle scrubbable <span class="badge as">aspiration</span></h3>
+      <div class="phone" data-theme="dark">
+        <div class="sbar"><span>21:07</span><span>▮▮▮</span></div>
+        <div class="scr">
+          <div class="topbar"><div class="t"><div class="tt">Redface 2 — DEV (canal de développement)</div></div><span class="pill">page 12 / 46</span></div>
+          <div class="feed">
+            <div class="post"><div class="h"><span class="ava"></span><span class="a">thibw</span><span class="d">19:41</span></div><div class="ln" style="width:90%"></div><div class="ln" style="width:72%"></div><div class="ln" style="width:40%"></div></div>
+            <div class="post"><div class="h"><span class="ava"></span><span class="a">XaTriX</span><span class="d">20:50</span></div><div class="ln" style="width:84%"></div><div class="ln" style="width:66%"></div></div>
+          </div>
+          <div class="scrim"></div>
+          <div class="sheet">
+            <div class="rowx">
+              <span class="chip">⇤ Première</span>
+              <span class="chip hl">● Dernier lu · 43</span>
+              <span class="chip">Dernière ⇥</span>
+            </div>
+            <div class="sl"><span class="tk"></span><span class="fl"></span><span class="lu"></span><span class="bub">12</span><span class="th"></span></div>
+            <div class="legend"><span>1</span><span style="margin-left:auto"><span class="dot"></span>dernier lu</span><span style="margin-left:auto">46</span></div>
+            <span class="btn full" style="align-self:stretch;text-align:center">Aller à la page 12</span>
+          </div>
+        </div>
+      </div>
+      <p class="note">Slider M3 : bulle = page visée, tick ambre = dernier lu, relâcher n'ouvre pas — le bouton
+      confirme. Zéro clavier ; la saisie libre disparaît. À combiner avec les chips B1 (montré combiné).</p>
+    </div>
+
+    <div class="cell">
+      <h3>B3 — Grille fenêtrée <span class="badge as">aspiration</span></h3>
+      <div class="phone" data-theme="dark">
+        <div class="sbar"><span>21:07</span><span>▮▮▮</span></div>
+        <div class="scr">
+          <div class="topbar"><div class="t"><div class="tt">Redface 2 — DEV (canal de développement)</div></div><span class="pill">page 12 / 46</span></div>
+          <div class="feed">
+            <div class="post"><div class="h"><span class="ava"></span><span class="a">thibw</span><span class="d">19:41</span></div><div class="ln" style="width:90%"></div><div class="ln" style="width:72%"></div><div class="ln" style="width:40%"></div></div>
+            <div class="post"><div class="h"><span class="ava"></span><span class="a">XaTriX</span><span class="d">20:50</span></div><div class="ln" style="width:84%"></div><div class="ln" style="width:66%"></div></div>
+          </div>
+          <div class="scrim"></div>
+          <div class="sheet">
+            <div class="handle"></div>
+            <div class="grid">
+              <span class="pg">1</span><span class="pg dots">…</span><span class="pg">10</span><span class="pg">11</span><span class="pg cur">12</span>
+              <span class="pg">13</span><span class="pg">14</span><span class="pg dots">…</span><span class="pg lu">43</span><span class="pg">46</span>
+            </div>
+            <div class="legend"><span><span class="dot"></span>dernier lu</span></div>
+            <div class="rowx"><span class="field">Aller à la page…</span><span class="btn" style="border:none">ALLER</span></div>
+          </div>
+        </div>
+      </div>
+      <p class="note">Fenêtre autour de la courante + extrémités + dernier lu (pastille ambre), quel que soit le
+      nombre de pages — remplace la rangée scrollable limitée à 40 pages. Saisie conservée en secours.</p>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  maquettes HTML statiques (aucun code app) — tokens M3 Redface identiques aux mockups Postage v2 ·
+  <a href="https://forumhfr.github.io/artifacts/vuetopic-mockups/">vuetopic-mockups</a> ·
+  réfs GitHub : <a href="https://github.com/ForumHFR/redface2/issues/697">#697</a> ·
+  <a href="https://github.com/ForumHFR/redface2/issues/779">#779</a> ·
+  <a href="https://github.com/ForumHFR/redface2/issues/849">#849</a>
+</footer>
+</div>
+<script>
+document.querySelectorAll('.sec-head button[data-toggle]').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    var sec=document.getElementById(btn.dataset.toggle);
+    var dark=sec.querySelector('.phone').dataset.theme==='dark';
+    sec.querySelectorAll('.phone').forEach(function(p){p.dataset.theme=dark?'light':'dark';});
+    btn.textContent='thème : '+(dark?'clair':'sombre');
+  });
+});
+</script>
