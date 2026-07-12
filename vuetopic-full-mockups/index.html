@@ -1,0 +1,636 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Redface 2 — Vue Topic, mockups complets</title>
+<style>
+  :root{
+    --bg:#131015;--panel:#1c1721;--line:#332b3c;--ink:#ece5f2;--dim:#b3a8c0;--faint:#847a91;
+    --accent:#f0879a;
+    --stable:#84d6a8;--stable-li:#2f5f47;--aspir:#9db4f0;--aspir-li:#3a4a6f;
+    --explo:#e8b168;--explo-li:#6b5226;
+    --mono:ui-monospace,'Cascadia Code','JetBrains Mono',Menlo,monospace;
+  }
+  html{color-scheme:dark;scroll-behavior:smooth}
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font:15px/1.55 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;padding:34px 20px 70px}
+  .wrap{max-width:1240px;margin:0 auto}
+  a{color:var(--dim)}
+
+  header{border-bottom:1px solid var(--line);padding-bottom:18px}
+  header .eyebrow{font:700 11px var(--mono);letter-spacing:.14em;color:var(--accent);text-transform:uppercase;margin:0 0 8px}
+  header h1{font-size:30px;margin:0 0 8px;letter-spacing:-.02em;text-wrap:balance}
+  header p{color:var(--dim);max-width:72ch;margin:0 0 4px}
+  header .meta{font-family:var(--mono);font-size:11.5px;color:var(--faint);margin-top:10px}
+  .toc{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+  .toc a{font:600 12px var(--mono);color:var(--dim);text-decoration:none;border:1px solid var(--line);
+    border-radius:99px;padding:5px 13px}
+  .toc a:hover{color:var(--ink);border-color:var(--faint)}
+  .toc a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+  section{margin-top:52px}
+  .sec-head{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:4px}
+  .sec-head .idx{font:800 22px var(--mono);color:var(--accent)}
+  .sec-head h2{font-size:21px;margin:0;letter-spacing:-.01em}
+  .badge{font:700 9.5px var(--mono);letter-spacing:.08em;padding:2.5px 9px;border-radius:99px;text-transform:uppercase;border:1px solid}
+  .badge.st{color:var(--stable);border-color:var(--stable-li);background:#16352433}
+  .badge.as{color:var(--aspir);border-color:var(--aspir-li);background:#1a233a33}
+  .badge.ex{color:var(--explo);border-color:var(--explo-li);background:#3a2c1633}
+  .sec-head button{margin-left:auto;background:var(--panel);color:var(--dim);border:1px solid var(--line);
+    border-radius:99px;padding:5px 14px;font:600 12px var(--mono);cursor:pointer}
+  .sec-head button:hover{color:var(--ink)}
+  .sec-head button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .hero-line{margin:2px 0 10px;color:var(--accent);font-size:13.5px;font-weight:600}
+  .sec-note{color:var(--dim);max-width:76ch;margin:0 0 24px}
+  .sec-note em{color:var(--ink);font-style:normal;font-weight:600}
+
+  .row{display:flex;gap:28px;flex-wrap:wrap;align-items:flex-start}
+  .cell{flex:none;width:302px;display:flex;flex-direction:column;gap:10px}
+  .cell h3{font-size:14px;margin:0}
+  .cell .note{font-size:12.5px;color:var(--dim);margin:0}
+  .cell .note b{color:var(--ink)}
+
+  /* ===== téléphone — tokens M3 Redface réels ===== */
+  .phone{width:302px;border-radius:26px;border:1px solid #453a4d;background:var(--m-surface);
+    overflow:hidden;box-shadow:0 14px 44px -14px #000,0 0 0 1px var(--line);
+    display:flex;flex-direction:column;position:relative;color:var(--m-on);
+    font-size:12.5px;line-height:1.42;
+    --m-surface:#1a1110;--m-surf-low:#1f1413;--m-surf:#271d1c;--m-surf-hi:#322827;--m-surf-hier:#3d3231;
+    --m-on:#f0dedd;--m-onvar:#d6c2bf;--m-outline:#a08c8a;--m-outvar:#534341;
+    --m-prim:#ffb3b1;--m-onprim:#561d20;--m-primc:#73333a;--m-onprimc:#ffdad8;
+    --m-sec:#e6bdb9;--m-secc:#5d3f3c;--m-onsecc:#ffdad7;--m-tert:#e2c28c;--m-tertc:#574419;--m-ontertc:#f5dfb0;
+    --m-scrim:#00000099;--gold:#e8c46a}
+  .phone[data-theme="light"]{
+    --m-surface:#fff8f7;--m-surf-low:#fff0ef;--m-surf:#fceae8;--m-surf-hi:#f6e4e2;--m-surf-hier:#f0dedd;
+    --m-on:#231918;--m-onvar:#534341;--m-outline:#857371;--m-outvar:#d8c2bf;
+    --m-prim:#8e1d24;--m-onprim:#ffffff;--m-primc:#ffdad7;--m-onprimc:#3b0709;
+    --m-sec:#775653;--m-secc:#ffdad7;--m-onsecc:#3b0709;--m-tert:#735b2e;--m-tertc:#ffdea6;--m-ontertc:#271900;
+    --m-scrim:#00000066;--gold:#8a6d1f;border-color:#d8c2bf}
+  /* #883 : fond légèrement grisé (directions A et B) */
+  .phone.grised{--m-surface:#211b1a;--m-surf-low:#282020;--m-surf-hi:#39302f}
+  .phone.grised[data-theme="light"]{--m-surface:#faf3f1;--m-surf-low:#f3eae8}
+  .phone *{box-sizing:border-box}
+  .sbar{height:22px;flex:none;display:flex;align-items:center;justify-content:space-between;
+    padding:0 14px;font:600 10px var(--mono);opacity:.85;letter-spacing:1px}
+  .scr{height:560px;position:relative;overflow:hidden;display:flex;flex-direction:column;background:var(--m-surface)}
+
+  /* top bar */
+  .tb{flex:none;display:flex;align-items:center;gap:9px;padding:9px 12px 7px;background:var(--m-surface)}
+  .tb .bk{font-size:15px;color:var(--m-on);flex:none}
+  .tb .t{flex:1;min-width:0;font-weight:600;font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .tb .ic{flex:none;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;color:var(--m-on)}
+  .pill{font:600 10px var(--mono);background:var(--m-primc);color:var(--m-onprimc);
+    padding:2.5px 9px;border-radius:99px;white-space:nowrap;flex:none}
+
+  /* posts */
+  .feed{flex:1;overflow:hidden;padding:6px 8px;display:flex;flex-direction:column;gap:7px;position:relative}
+  .post{background:var(--m-surf-low);border-radius:12px;padding:8px 10px;position:relative}
+  .post .h{display:flex;gap:7px;align-items:center;margin-bottom:4px}
+  .ava{width:20px;height:20px;border-radius:50%;background:var(--m-surf-hier);flex:none}
+  .post .a{font-weight:600;font-size:11.5px}
+  .post .a.gold{background:linear-gradient(100deg,var(--gold),#fff2c9 40%,var(--gold));
+    -webkit-background-clip:text;background-clip:text;color:transparent}
+  .post .d{font-size:9.5px;color:var(--m-onvar);margin-left:auto;white-space:nowrap}
+  .tonic{width:12px;height:12px;border-radius:3px;background:var(--m-tertc);flex:none;display:grid;place-items:center;font-size:8px}
+  .bodytxt{font-size:11.5px;color:var(--m-on)}
+  .bodytxt p{margin:0 0 6px}
+  .bodytxt p:last-child{margin:0}
+  .qt{border-left:3px solid var(--m-prim);background:var(--m-surf-hi);border-radius:0 8px 8px 0;
+    padding:5px 8px;font-size:10.5px;color:var(--m-onvar);margin:0 0 6px}
+  .qt b{color:var(--m-on)}
+  .cited{font:600 9.5px var(--mono);color:var(--m-prim)}
+  .ego{position:absolute;inset:0 auto 0 0;width:3px;border-radius:3px 0 0 3px;background:var(--m-tert)}
+  .abar{display:flex;align-items:center;gap:2px;margin-top:6px;height:26px}
+  .abar .ab{font:600 10.5px var(--mono);color:var(--m-prim);padding:4px 9px;border-radius:99px}
+  .abar .ab.done{background:var(--m-primc);color:var(--m-onprimc)}
+  .abar .sp{flex:1}
+  .abar .dots{color:var(--m-onvar);letter-spacing:2px;font-weight:700}
+
+  /* FABs */
+  .fabs{position:absolute;right:10px;bottom:12px;display:flex;flex-direction:column;gap:8px;align-items:flex-end}
+  .fab{width:40px;height:40px;border-radius:14px;background:var(--m-primc);color:var(--m-onprimc);
+    display:grid;place-items:center;font-size:15px;box-shadow:0 3px 10px #0007}
+  .fab.main{background:var(--m-prim);color:var(--m-onprim)}
+  .fab.mq{width:auto;padding:0 13px;font:700 12px var(--mono)}
+  .fab.ghost{background:color-mix(in srgb,var(--m-surf-hi) 62%,transparent);color:var(--m-on);
+    width:34px;height:34px;border-radius:12px;font-size:13px;box-shadow:none}
+  .fabs.left{right:auto;left:10px;align-items:flex-start}
+
+  /* sheets */
+  .scrim{position:absolute;inset:0;background:var(--m-scrim)}
+  .sheet{position:absolute;left:0;right:0;bottom:0;background:var(--m-surf);border-radius:20px 20px 0 0;
+    padding:8px 13px 14px;display:flex;flex-direction:column;gap:9px}
+  .handle{width:34px;height:4px;border-radius:2px;background:var(--m-outvar);margin:0 auto 1px}
+  .sh-title{font-weight:600;font-size:12px;color:var(--m-onvar)}
+  .rowx{display:flex;gap:7px;align-items:center}
+  .chip{display:flex;align-items:center;gap:5px;background:var(--m-surf-hi);border-radius:10px;
+    padding:8px 6px;font-weight:600;font-size:10.5px;flex:1;justify-content:center;text-align:center}
+  .chip.hl{background:var(--m-tertc);color:var(--m-ontertc)}
+  .chip.me{background:var(--m-secc);color:var(--m-onsecc)}
+  .chip small{font:600 9px var(--mono);opacity:.75;display:block}
+  .caro{display:flex;gap:6px;align-items:center;overflow:hidden;padding:2px 0;justify-content:center}
+  .cnum{flex:none;min-width:34px;padding:7px 0;text-align:center;font:600 11.5px var(--mono);
+    color:var(--m-on);border:1px solid var(--m-outvar);border-radius:10px;font-variant-numeric:tabular-nums;position:relative}
+  .cnum.cur{background:var(--m-prim);color:var(--m-onprim);border-color:transparent;min-width:40px;font-size:13px}
+  .cnum.mark::after{content:"";position:absolute;top:3px;right:3px;width:5px;height:5px;border-radius:50%;background:var(--m-tert)}
+  .cnum.mine::after{background:var(--m-sec)}
+  .cnum.edge{border-style:dashed;color:var(--m-onvar)}
+  .field{flex:1;border:1px solid var(--m-outline);border-radius:10px;padding:7px 10px;font-size:11.5px;color:var(--m-onvar)}
+  .btn{border:1px solid var(--m-outline);color:var(--m-prim);border-radius:99px;padding:6px 13px;
+    font-weight:600;font-size:11.5px;text-align:center}
+  .btn.full{background:var(--m-prim);color:var(--m-onprim);border-color:transparent}
+  .legend{display:flex;gap:11px;font-size:9.5px;color:var(--m-onvar);flex-wrap:wrap}
+  .legend i{display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:4px}
+
+  /* menu sujet */
+  .mi{display:flex;align-items:center;gap:11px;padding:9px 4px;font-size:12px;font-weight:500}
+  .mi svg{width:15px;height:15px;flex:none;color:var(--m-onvar)}
+  .mi .sub{margin-left:auto;font:600 9.5px var(--mono);color:var(--m-onvar)}
+  .mi.warn{color:var(--m-prim)}
+  .msep{height:1px;background:var(--m-surf-hier);margin:2px 0}
+
+  /* B — bottom bar expressive */
+  .bbar{position:absolute;left:8px;right:8px;bottom:10px;background:color-mix(in srgb,var(--m-surf-hi) 88%,transparent);
+    border-radius:22px;padding:7px 10px;display:flex;align-items:center;gap:8px;box-shadow:0 6px 20px #0008}
+  .bbar .bi{width:32px;height:32px;border-radius:11px;display:grid;place-items:center;font-size:13px;color:var(--m-on)}
+  .bbar .split{margin-left:auto;display:flex;border-radius:14px;overflow:hidden}
+  .bbar .split span{background:var(--m-prim);color:var(--m-onprim);padding:8px 12px;font-weight:700;font-size:12px}
+  .bbar .split span+span{background:var(--m-primc);color:var(--m-onprimc);border-left:1.5px solid var(--m-surface);font-family:var(--mono)}
+  .wheel{display:flex;align-items:center;gap:5px;justify-content:center;padding:6px 0 2px}
+  .wnum{flex:none;text-align:center;font:600 12px var(--mono);color:var(--m-onvar);width:34px;font-variant-numeric:tabular-nums}
+  .wnum.c1{font-size:14px;color:var(--m-on)}
+  .wnum.cur{font:800 22px var(--mono);color:var(--m-prim);width:52px}
+  .wtick{align-self:stretch;width:1px;background:var(--m-surf-hier)}
+
+  /* C — pleine largeur + rail */
+  .flat{background:transparent;border-radius:0;padding:9px 12px}
+  .flat+.flat{border-top:1px solid var(--m-surf-hier)}
+  .rail{position:absolute;right:2px;top:52px;bottom:70px;width:26px;display:flex;flex-direction:column;align-items:center}
+  .rail .trk{flex:1;width:3px;border-radius:2px;background:var(--m-surf-hier);position:relative}
+  .rail .th{position:absolute;left:50%;transform:translateX(-50%);top:24%;width:14px;height:34px;
+    border-radius:8px;background:var(--m-prim);box-shadow:0 2px 8px #0008}
+  .rail .mk{position:absolute;left:50%;transform:translateX(-50%);width:9px;height:3px;border-radius:2px;background:var(--m-tert)}
+  .rail .mk.me{background:var(--m-sec)}
+  .rbub{position:absolute;right:34px;top:20%;background:var(--m-surf-hi);border-radius:14px;padding:8px 12px;
+    box-shadow:0 6px 18px #0009;text-align:center}
+  .rbub .n{font:800 19px var(--mono);color:var(--m-prim)}
+  .rbub .s{font-size:9px;color:var(--m-onvar)}
+
+  /* tableau de couverture */
+  .cov{overflow-x:auto;margin-top:14px}
+  table{border-collapse:collapse;font-size:12.5px;min-width:640px}
+  th,td{text-align:left;padding:7px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font:700 10.5px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--faint)}
+  td:first-child{font-family:var(--mono);font-size:11.5px;white-space:nowrap;color:var(--accent)}
+  td b{color:var(--ink)}
+
+  footer{margin-top:56px;border-top:1px solid var(--line);padding-top:14px;
+    font-family:var(--mono);font-size:11.5px;color:var(--faint)}
+</style>
+<div class="wrap">
+<header>
+  <p class="eyebrow">Redface 2 · exploration pré-bêta</p>
+  <h1>Vue Topic — maquettes complètes, trois directions</h1>
+  <p>Refonte de l'écran de lecture repensée depuis zéro : la vue elle-même, la feuille de
+  navigation des pages et le menu du sujet. Cahier des charges pages : <em>début · fin · dernier
+  post lu · mon dernier message · aller à la page N · carrousel des pages voisines</em>. Le menu
+  sujet vise la parité RF1 (capture fournie). Chaque direction intègre le backlog ouvert —
+  la carte de couverture en fin de page fait le mapping issue par issue.</p>
+  <p class="meta">tokens M3 Redface réels · thème commutable par section · co-idéation GPT-5.6 Sol ·
+  2026-07-12 · maquettes : Claude Fable 5, demande XaTriX (fil DEV #2790926 + brief du 12/07)</p>
+  <nav class="toc">
+    <a href="#dirA">A · M3 consolidée</a>
+    <a href="#dirB">B · M3 Expressive</a>
+    <a href="#dirC">C · Lecture continue</a>
+    <a href="#cover">Couverture des issues</a>
+  </nav>
+</header>
+
+<!-- ============================ DIRECTION A ============================ -->
+<section id="dirA">
+  <div class="sec-head">
+    <span class="idx">A</span><h2>M3 consolidée</h2><span class="badge st">stable · implémentable telle quelle</span>
+    <button type="button" data-toggle="dirA">thème : sombre</button>
+  </div>
+  <p class="hero-line">Hero : « tout est enfin à sa place » — la feuille pages à 6 accès, tout endroit du sujet à 2 taps.</p>
+  <p class="sec-note">La vue actuelle, consolidée sans rien casser : top bar <em>stable</em> (la loupe ne
+  disparaît plus, la pilule ne flashe plus — #877), fond légèrement grisé esprit RF1 (#883, les cartes
+  se détachent), barre d'actions des posts compactée avec feedback sans layout shift (#882), signaux
+  de citation (« cité ×N » cliquable #783, liseré ambre = ce post me cite #874). La feuille pages
+  répond au cahier des charges complet ; le menu sujet reprend la parité RF1.</p>
+  <div class="row">
+
+    <div class="cell">
+      <h3>A1 · Vue lecture</h3>
+      <div class="phone grised" data-theme="dark">
+        <div class="sbar"><span>09:02</span><span>▮▮▮</span></div>
+        <div class="scr">
+          <div class="tb"><span class="bk">←</span><div class="t">[Topic Unique] La Passat de moomo</div>
+            <span class="ic">⌕</span><span class="pill">3421 / 3489</span><span class="ic">⋮</span></div>
+          <div class="feed">
+            <div class="post">
+              <div class="h"><span class="ava"></span><span class="a">moomo</span><span class="tonic">!</span><span class="d">07:28 · <span class="cited">cité ×3</span></span></div>
+              <div class="bodytxt"><p>Chaque fois que je remonte dans ma Passat uber-équipée choppée à 33k HT neuve, je me demande ce qu'il s'est passé… 360 000 km et toujours sur le pont.</p></div>
+              <div class="abar"><span class="ab">❝ Citer</span><span class="ab done">❝2 Ajouté ✓</span><span class="sp"></span><span class="dots">⋯</span></div>
+            </div>
+            <div class="post">
+              <span class="ego"></span>
+              <div class="h"><span class="ava"></span><span class="a">tinc</span><span class="d">08:11</span></div>
+              <div class="qt"><b>XaTriX</b> — la citation reste lisible en une ligne…</div>
+              <div class="bodytxt"><p>Je plussoie, et le carrousel de pages me sauve la vie sur le topic épargne.</p></div>
+              <div class="abar"><span class="ab">❝ Citer</span><span class="ab">+❝</span><span class="sp"></span><span class="dots">⋯</span></div>
+            </div>
+            <div class="post">
+              <div class="h"><span class="ava"></span><span class="a gold">XaTriX</span><span class="d">08:40</span></div>
+              <div class="bodytxt"><p>Liseré ambre à gauche = ce post vous cite (#874). Le badge « cité ×3 » ouvre la liste des posts citants (#783).</p></div>
+              <div class="abar"><span class="ab">❝ Citer</span><span class="ab">+❝</span><span class="sp"></span><span class="dots">⋯</span></div>
+            </div>
+          </div>
+          <div class="fabs">
+            <span class="fab ghost">↑</span><span class="fab ghost">↓</span>
+            <span class="fab mq">❝2</span><span class="fab main">✎</span>
+          </div>
+        </div>
+      </div>
+      <p class="note">Loupe <b>permanente</b>, pilule sans flash (#877). Fond grisé : les cartes se
+      détachent (#883). Barre d'actions <b>26&nbsp;dp visuels, cibles tactiles 48&nbsp;dp</b> (padding
+      invisible), « Ajouté ✓ » = le chip Citer <b>morphe sur place</b> (#882). Flèches ↑↓
+      semi-transparentes (#875), au-dessus des FAB figés.</p>
+    </div>
+
+    <div class="cell">
+      <h3>A2 · Feuille pages — le cahier des charges</h3>
+      <div class="phone grised" data-theme="dark">
+        <div class="sbar"><span>09:02</span><span>▮▮▮</span></div>
+        <div class="scr">
+          <div class="tb"><span class="bk">←</span><div class="t">[Topic Unique] La Passat de moomo</div>
+            <span class="ic">⌕</span><span class="pill">3421 / 3489</span><span class="ic">⋮</span></div>
+          <div class="feed">
+            <div class="post"><div class="h"><span class="ava"></span><span class="a">moomo</span><span class="d">07:28</span></div>
+              <div class="bodytxt"><p>…360 000 km et toujours sur le pont.</p></div></div>
+          </div>
+          <div class="scrim"></div>
+          <div class="sheet">
+            <div class="handle"></div>
+            <div class="rowx">
+              <span class="chip">⇤<small>Début</small></span>
+              <span class="chip">⇥<small>Fin</small></span>
+              <span style="width:1px;align-self:stretch;background:var(--m-surf-hier)"></span>
+              <span class="chip hl">●<small>Lu · 3488</small></span>
+              <span class="chip me">✎<small>Moi · 3402</small></span>
+            </div>
+            <div class="legend" style="justify-content:flex-end;margin-top:-4px"><span>◀ extrémités · <b style="color:var(--m-on)">mes repères</b> ▶</span></div>
+            <div class="caro">
+              <span class="cnum edge">1</span><span class="cnum">3419</span><span class="cnum">3420</span>
+              <span class="cnum cur">3421</span><span class="cnum">3422</span><span class="cnum">3423</span><span class="cnum edge">3489</span>
+            </div>
+            <div style="position:relative;height:14px;margin:0 6px">
+              <span style="position:absolute;left:0;right:0;top:6px;height:3px;border-radius:2px;background:var(--m-surf-hier)"></span>
+              <span style="position:absolute;left:0;top:6px;width:98%;height:3px;border-radius:2px;background:transparent"></span>
+              <span style="position:absolute;top:3px;left:98%;width:2.5px;height:9px;border-radius:2px;background:var(--m-tert)"></span>
+              <span style="position:absolute;top:3px;left:97.5%;width:2.5px;height:9px;border-radius:2px;background:var(--m-sec)"></span>
+              <span style="position:absolute;top:1px;left:98%;transform:translateX(-10px);width:20px;height:12px;border-radius:7px;background:var(--m-prim)"></span>
+            </div>
+            <div class="legend"><span><i style="background:var(--m-tert)"></i>dernier lu</span>
+              <span><i style="background:var(--m-sec)"></i>mon dernier post</span><span>chips = précision · réglette = distance</span></div>
+            <div class="rowx"><span class="field">Aller à la page…</span><span class="btn full">Aller</span></div>
+          </div>
+        </div>
+      </div>
+      <p class="note">Les <b>6 accès</b>, groupés extrémités / <b>« Mes repères »</b> (verdict Sol) :
+      Dernier lu (ambre, drapeau), Mon dernier post (recherche pseudo inversée — contrat transsearch
+      #879), carrousel de chips <b>+ réglette de distance</b> (reco Sol n°1 : « chips pour la précision,
+      scrubber pour la distance »), extrémités épinglées en pointillés, saisie en secours.</p>
+    </div>
+
+    <div class="cell">
+      <h3>A3 · Menu sujet — parité RF1</h3>
+      <div class="phone grised" data-theme="dark">
+        <div class="sbar"><span>09:02</span><span>▮▮▮</span></div>
+        <div class="scr">
+          <div class="tb"><span class="bk">←</span><div class="t">[Topic Unique] La Passat de moomo</div>
+            <span class="ic">⌕</span><span class="pill">3421 / 3489</span><span class="ic">⋮</span></div>
+          <div class="feed">
+            <div class="post"><div class="h"><span class="ava"></span><span class="a">moomo</span><span class="d">07:28</span></div>
+              <div class="bodytxt"><p>…360 000 km et toujours sur le pont.</p></div></div>
+          </div>
+          <div class="scrim"></div>
+          <div class="sheet">
+            <div class="handle"></div>
+            <div class="sh-title">[Topic Unique] La Passat de moomo</div>
+            <div>
+              <div class="mi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/></svg>Rafraîchir la page</div>
+              <div class="mi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>Afficher tous les spoilers<span class="sub">page</span></div>
+              <div class="msep"></div>
+              <div class="mi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>Partager le sujet…<span class="sub">copier le lien inclus</span></div>
+              <div class="mi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20z"/></svg>Ouvrir dans le navigateur</div>
+              <div class="msep"></div>
+              <div class="mi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 21V8l8-5 8 5v13"/><path d="M12 21v-6"/></svg>Retirer le drapeau<span class="sub">confirmation · = appui long titre</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="note">Le « ⋮ » de la top bar (niveau sujet — distinct du « ⋯ » de chaque post). Parité
+      RF1 <b>épurée sur verdict Sol</b> : première/dernière page → feuille pages ; « Signaler » →
+      menu du post concerné (l'objet du signalement est un post, pas le sujet) ; Partager fusionne la
+      copie de lien (feuille système). « Retirer le drapeau » = section secondaire + confirmation (#809).</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================ DIRECTION B ============================ -->
+<section id="dirB">
+  <div class="sec-head">
+    <span class="idx">B</span><h2>M3 Expressive</h2><span class="badge as">aspiration · surfaces expressive non stables</span>
+    <button type="button" data-toggle="dirB">thème : sombre</button>
+  </div>
+  <p class="hero-line">Hero : « le contexte transforme les commandes » — bottom bar contextuelle, feedback morphé, panier prêt à composer.</p>
+  <p class="sec-note">Même contenu, mais la navigation quitte les coins : une <em>bottom bar flottante</em>
+  remplace la pile de FABs (split-button Répondre/❝N, flèches, pages), et la feuille pages devient une
+  <em>roue</em> — le geste horizontal EST le carrousel, le nombre courant est énorme, les 6 accès
+  restent en chips. Les formes M3 Expressive (coins vifs, tailles contrastées) sont l'aspiration ;
+  chaque composant a un repli stable noté sous la maquette.</p>
+  <div class="row">
+
+    <div class="cell">
+      <h3>B1 · Vue lecture + bottom bar</h3>
+      <div class="phone grised" data-theme="dark">
+        <div class="sbar"><span>09:02</span><span>▮▮▮</span></div>
+        <div class="scr">
+          <div class="tb"><span class="bk">←</span><div class="t">[Topic Unique] La Passat de moomo</div>
+            <span class="ic">⌕</span><span class="ic">⋮</span></div>
+          <div class="feed" style="padding-bottom:64px">
+            <div class="post">
+              <div class="h"><span class="ava"></span><span class="a">moomo</span><span class="d">07:28 · <span class="cited">cité ×3</span></span></div>
+              <div class="bodytxt"><p>360 000 km et toujours sur le pont, vive, confortable, bien insonorisée…</p></div>
+              <div class="abar"><span class="ab">❝ Citer</span><span class="ab">+❝</span><span class="sp"></span><span class="dots">⋯</span></div>
+            </div>
+            <div class="post">
+              <span class="ego"></span>
+              <div class="h"><span class="ava"></span><span class="a">tinc</span><span class="d">08:11</span></div>
+              <div class="bodytxt"><p>La pilule de page a déménagé dans la bottom bar : la top bar ne bouge plus jamais.</p></div>
+              <div class="abar"><span class="ab">❝ Citer</span><span class="ab">+❝</span><span class="sp"></span><span class="dots">⋯</span></div>
+            </div>
+          </div>
+          <div class="bbar">
+            <span class="bi">↑</span><span class="bi">↓</span>
+            <span class="pill" style="font-size:11px">3421 / 3489</span>
+            <span class="split"><span>✎</span><span>❝2</span></span>
+          </div>
+        </div>
+      </div>
+      <p class="note">La bottom bar porte : flèches de défilement (#875), <b>pilule page → roue</b>, et le
+      <b>split-button</b> Répondre&nbsp;/&nbsp;panier « ❝N » (compteur toujours libellé — condition Sol ;
+      #868-870 : un seul objet, plus de FAB fantôme). Elle s'escamote au scroll bas. Le liseré egoquote
+      reste <b>statique</b> (l'animation permanente = gadget, verdict Sol). Repli stable : BottomAppBar M3.</p>
+    </div>
+
+    <div class="cell">
+      <h3>B2 · Roue de pages</h3>
+      <div class="phone grised" data-theme="dark">
+        <div class="sbar"><span>09:02</span><span>▮▮▮</span></div>
+        <div class="scr">
+          <div class="tb"><span class="bk">←</span><div class="t">[Topic Unique] La Passat de moomo</div>
+            <span class="ic">⌕</span><span class="ic">⋮</span></div>
+          <div class="feed">
+            <div class="post"><div class="h"><span class="ava"></span><span class="a">moomo</span><span class="d">07:28</span></div>
+              <div class="bodytxt"><p>…360 000 km et toujours sur le pont.</p></div></div>
+          </div>
+          <div class="scrim"></div>
+          <div class="sheet">
+            <div class="handle"></div>
+            <div class="wheel">
+              <span class="wnum">3419</span><span class="wnum c1">3420</span><span class="wtick"></span>
+              <span class="wnum cur">3421</span><span class="wtick"></span><span class="wnum c1">3422</span><span class="wnum">3423</span>
+            </div>
+            <div class="legend" style="justify-content:center"><span>glisser = parcourir · relâcher = rester · taper le nombre = y aller</span></div>
+            <div class="rowx">
+              <span class="chip">⇤<small>Début</small></span>
+              <span class="chip hl">●<small>Lu · 3488</small></span>
+              <span class="chip me">✎<small>Moi · 3402</small></span>
+              <span class="chip">⇥<small>Fin</small></span>
+            </div>
+            <div class="rowx"><span class="field">Aller à la page…</span><span class="btn full">Aller</span></div>
+          </div>
+        </div>
+      </div>
+      <p class="note">Le carrousel devient une <b>roue à snap</b> (haptique par cran), nombre courant en
+      display XL. Les 6 accès restent identiques à A2. <b>Verdict Sol : démotée</b> — « séduisante en
+      maquette, moins efficace, peu familière sur Android, délicate avec TalkBack ». Montrée pour
+      l'arbitrage ; la reco reste A2 (chips + réglette).</p>
+    </div>
+
+    <div class="cell">
+      <h3>B3 · Détail — barre d'actions & feedback</h3>
+      <div class="phone grised" data-theme="dark">
+        <div class="sbar"><span>09:02</span><span>▮▮▮</span></div>
+        <div class="scr">
+          <div class="tb"><span class="bk">←</span><div class="t">[Topic Unique] La Passat de moomo</div>
+            <span class="ic">⌕</span><span class="ic">⋮</span></div>
+          <div class="feed">
+            <div class="post">
+              <div class="h"><span class="ava"></span><span class="a">nicko</span><span class="d">08:52</span></div>
+              <div class="bodytxt"><p>Avant l'ajout au panier :</p></div>
+              <div class="abar"><span class="ab" style="border:1px solid var(--m-outvar)">❝ Citer</span><span class="ab" style="border:1px solid var(--m-outvar)">+❝ Panier</span><span class="sp"></span><span class="dots">⋯</span></div>
+            </div>
+            <div class="post">
+              <div class="h"><span class="ava"></span><span class="a">nicko</span><span class="d">08:52</span></div>
+              <div class="bodytxt"><p>Après l'ajout — le chip morphe sur place, <b>aucune</b> hauteur ne change (#882) :</p></div>
+              <div class="abar"><span class="ab" style="border:1px solid var(--m-outvar)">❝ Citer</span><span class="ab done">✓ ❝3</span><span class="sp"></span><span class="dots">⋯</span></div>
+            </div>
+            <div class="post">
+              <div class="h"><span class="ava"></span><span class="a">thibw</span><span class="d">09:00</span></div>
+              <div class="bodytxt"><p>Et le badge « cité ×N » ouvre la liste des posts citants, toutes pages (#783/#863) :</p>
+                <div class="qt" style="margin-top:6px"><b>3 posts citent celui-ci</b> — p.3421 tinc · p.3422 moomo · p.3489 XaTriX</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="note">Le feedback « ajouté à la citation » est un <b>morph de chip</b> (contour → tonal,
+      ✓ + compteur), pas un bandeau : hauteur constante, promesse #882 tenue. Popup « posts citants »
+      = liste cliquable qui navigue par saut de page + highlight.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================ DIRECTION C ============================ -->
+<section id="dirC">
+  <div class="sec-head">
+    <span class="idx">C</span><h2>Lecture continue</h2><span class="badge ex">exploration · à dogfooder avant d'y croire</span>
+    <button type="button" data-toggle="dirC">thème : sombre</button>
+  </div>
+  <p class="hero-line">Hero : « traverser 3489 pages sans perdre son repère » — le rail saisi, carte de densité visible, retour instantané.</p>
+  <p class="sec-note">L'hypothèse inverse : et si la « page » n'était plus l'unité de lecture ? Posts
+  <em>pleine largeur</em> séparés par des règles fines (#884), défilement continu au fil des pages
+  (#377) avec frontières inline discrètes, et un <em>rail vertical</em> en bord droit qui porte une
+  <em>carte de densité</em> du sujet (idée Sol) : repères ambre = dernier lu, brique = mes posts,
+  points = posts qui me citent (#874). Cadre posé par Sol et adopté : le rail est un
+  <em>accélérateur optionnel</em> — poignée visible, côté configurable, <em>aucune fonction exclusive
+  au geste</em> (tap pilule = feuille A2 complète), coach mark à la première ouverture.</p>
+  <div class="row">
+
+    <div class="cell">
+      <h3>C1 · Pleine largeur + rail</h3>
+      <div class="phone" data-theme="dark">
+        <div class="sbar"><span>09:02</span><span>▮▮▮</span></div>
+        <div class="scr">
+          <div class="tb"><span class="bk">←</span><div class="t">[Topic Unique] La Passat de moomo</div>
+            <span class="ic">⌕</span><span class="pill">3421</span><span class="ic">⋮</span></div>
+          <div class="feed" style="padding:0;gap:0">
+            <div class="post flat">
+              <div class="h"><span class="ava"></span><span class="a">moomo</span><span class="d">07:28 · <span class="cited">cité ×3</span></span></div>
+              <div class="bodytxt"><p>Plus d'encart : le texte prend toute la largeur, les règles fines séparent les posts (#884).</p></div>
+              <div class="abar"><span class="ab">❝</span><span class="ab">+❝</span><span class="sp"></span><span class="dots">⋯</span></div>
+            </div>
+            <div class="post flat">
+              <span class="ego"></span>
+              <div class="h"><span class="ava"></span><span class="a">tinc</span><span class="d">08:11</span></div>
+              <div class="bodytxt"><p>Fin de la page 3421 juste en dessous — la lecture ne s'arrête plus.</p></div>
+              <div class="abar"><span class="ab">❝</span><span class="ab">+❝</span><span class="sp"></span><span class="dots">⋯</span></div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;padding:7px 12px">
+              <span style="flex:1;height:1px;background:var(--m-outvar)"></span>
+              <span style="font:600 9.5px var(--mono);color:var(--m-onvar)">page 3422</span>
+              <span style="flex:1;height:1px;background:var(--m-outvar)"></span>
+            </div>
+            <div class="post flat">
+              <div class="h"><span class="ava"></span><span class="a gold">XaTriX</span><span class="d">08:40</span></div>
+              <div class="bodytxt"><p>La page suivante charge en silence pendant le scroll (#377).</p></div>
+            </div>
+          </div>
+          <div class="rail">
+            <div class="trk">
+              <span class="mk me" style="top:22%"></span>
+              <span class="mk me" style="top:34%"></span>
+              <span class="mk" style="top:88%"></span>
+              <span class="th"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="note">La pilule n'affiche plus que la page <b>courante</b> (le total vit dans le rail).
+      Densité : ~15&nbsp;% de texte en plus par écran. Les cartes restent une <b>option</b> réglages
+      (#884 « peut-être en option »). Poignée <b>toujours visible</b> (14×34&nbsp;dp, zone tactile 48),
+      côté gauche/droit réglable (#875).</p>
+    </div>
+
+    <div class="cell">
+      <h3>C2 · Rail en drag</h3>
+      <div class="phone" data-theme="dark">
+        <div class="sbar"><span>09:02</span><span>▮▮▮</span></div>
+        <div class="scr">
+          <div class="tb"><span class="bk">←</span><div class="t">[Topic Unique] La Passat de moomo</div>
+            <span class="ic">⌕</span><span class="pill">3421</span><span class="ic">⋮</span></div>
+          <div class="feed" style="opacity:.35">
+            <div class="post flat"><div class="h"><span class="ava"></span><span class="a">moomo</span><span class="d">07:28</span></div>
+              <div class="bodytxt"><p>…360 000 km et toujours sur le pont.</p></div></div>
+            <div class="post flat"><div class="h"><span class="ava"></span><span class="a">tinc</span><span class="d">08:11</span></div>
+              <div class="bodytxt"><p>…</p></div></div>
+          </div>
+          <div class="rail">
+            <div class="trk">
+              <span class="mk me" style="top:34%"></span>
+              <span class="mk" style="top:88%"></span>
+              <span class="th" style="top:56%"></span>
+            </div>
+          </div>
+          <div class="rbub" style="top:48%">
+            <div class="n">p. 2867</div>
+            <div class="s">14 mars 2025 · relâcher pour lire</div>
+          </div>
+          <div style="position:absolute;left:10px;bottom:14px;background:var(--m-surf-hi);border-radius:99px;
+            padding:6px 13px;font:600 10.5px var(--mono);color:var(--m-prim);box-shadow:0 4px 14px #0008">↩ Revenir au post de tinc · p.3421</div>
+        </div>
+      </div>
+      <p class="note">Pendant le drag : bulle <b>page + date</b> (la date situe mieux que le numéro sur
+      un TU de 15 ans), repères <b>magnétisés</b> (relâcher près de l'ambre = pile sur le dernier lu).
+      En bas : la pastille <b>« Revenir »</b> (idée Sol) — après tout saut, le point de départ reste à
+      un tap, extension visible de la pile de sauts déjà shippée (#782).</p>
+    </div>
+
+    <div class="cell">
+      <h3>C3 · Appui long pilule — accès directs</h3>
+      <div class="phone" data-theme="dark">
+        <div class="sbar"><span>09:02</span><span>▮▮▮</span></div>
+        <div class="scr">
+          <div class="tb"><span class="bk">←</span><div class="t">[Topic Unique] La Passat de moomo</div>
+            <span class="ic">⌕</span><span class="pill" style="outline:2px solid var(--m-prim);outline-offset:2px">3421</span><span class="ic">⋮</span></div>
+          <div class="feed" style="opacity:.35">
+            <div class="post flat"><div class="h"><span class="ava"></span><span class="a">moomo</span><span class="d">07:28</span></div>
+              <div class="bodytxt"><p>…</p></div></div>
+          </div>
+          <div style="position:absolute;top:44px;right:8px;background:var(--m-surf-hi);border-radius:16px;
+            padding:8px;box-shadow:0 8px 26px #000a;display:flex;flex-direction:column;gap:2px;width:190px">
+            <div class="mi">⇤ Première page</div>
+            <div class="mi" style="color:var(--m-tert)">● Dernier lu <span class="sub">3488</span></div>
+            <div class="mi" style="color:var(--m-sec)">✎ Mon dernier post <span class="sub">3402</span></div>
+            <div class="mi">⇥ Dernière page</div>
+            <div class="msep"></div>
+            <div class="mi"># Aller à la page…</div>
+          </div>
+        </div>
+      </div>
+      <p class="note"><b>Tap</b> pilule = feuille classique (parité A2) ; <b>appui long</b> = ce menu
+      d'accès directs, cohérent avec le vocabulaire appui-long déjà shippé (titre = drapeau #809,
+      FAB page = première/dernière #822). Zéro coût d'apprentissage pour les 6 accès.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================ COUVERTURE ============================ -->
+<section id="cover">
+  <div class="sec-head"><span class="idx">·</span><h2>Couverture des issues &amp; verdicts d'idéation</h2></div>
+  <p class="sec-note"><em>Co-idéation GPT-5.6 Sol (xhigh), verdicts intégrés :</em> carrousel reco =
+  <em>chips fenêtrées + réglette</em> (roue démotée : TalkBack, familiarité) · « dernier lu / mon
+  dernier post » groupés en « Mes repères » · menu sujet épuré (Signaler → au post, Partager fusionne
+  la copie de lien, drapeau en section secondaire) · rail C = accélérateur optionnel, jamais exclusif ·
+  cibles tactiles 48 dp partout · idées neuves adoptées : <em>carte de densité</em> sur le rail,
+  pastille <em>« Revenir »</em> après saut. Écartés : coins asymétriques généralisés, liseré egoquote
+  animé, roue persistante pendant la lecture.</p>
+  <div class="cov">
+    <table>
+      <tr><th>Issue</th><th>Demande</th><th>Où c'est traité</th></tr>
+      <tr><td>#877</td><td>Loupe qui disparaît + flash pagenum</td><td><b>A1/B1</b> : loupe permanente, pilule réservée (largeur fixe), jamais de flash</td></tr>
+      <tr><td>#849→</td><td>Début / fin / dernier lu (thibw) + <b>mon dernier post</b> + saisie + carrousel (XaTriX)</td><td><b>A2</b> chips + carrousel · <b>B2</b> roue · <b>C2/C3</b> rail + appui long</td></tr>
+      <tr><td>#882</td><td>Barre d'actions : hauteur + feedback sans layout shift</td><td><b>A1/B3</b> : chips 26 dp, morph « ✓ ❝N » sur place</td></tr>
+      <tr><td>#883</td><td>Fond grisé esprit RF1, revoir le jaune</td><td><b>A/B</b> : surface +6 % luminance (`grised`), jaune → ambre tertiaire M3</td></tr>
+      <tr><td>#884</td><td>Posts pleine largeur (option ?)</td><td><b>C1</b> : règles fines, option réglages pour revenir aux cartes</td></tr>
+      <tr><td>#875</td><td>Flèches haut/bas, FAB réglables, transparence</td><td><b>A1</b> ghost-FABs ↑↓ · <b>B1</b> bottom bar (position unique sous le pouce)</td></tr>
+      <tr><td>#783/#863</td><td>« cité ×N » cliquable, toutes pages</td><td><b>A1/B3</b> : badge dans l'en-tête → liste des citants avec saut</td></tr>
+      <tr><td>#874</td><td>Egoquote : repérer les posts qui me citent</td><td><b>A1/B1/C1</b> : liseré ambre bord gauche (+ item filtre dans ⌕, hors planche)</td></tr>
+      <tr><td>#377</td><td>Défilement continu</td><td><b>C1</b> frontière inline + préchargement, rail = ascenseur global</td></tr>
+      <tr><td>#868-870</td><td>Panier multiquote fiable (FAB fantôme, compteurs)</td><td><b>B1</b> : split-button unique ✎/❝N — un seul état visible, plus de désync</td></tr>
+      <tr><td>#340</td><td>Ton du message (lecture)</td><td><b>A1</b> : chip icône à côté du pseudo (post 1, « ! »)</td></tr>
+      <tr><td>#698</td><td>Pseudo créateur doré</td><td>Préservé dans les trois directions (post XaTriX)</td></tr>
+      <tr><td>#182/#831</td><td>Viewer zoom + menu images</td><td>Hors planche (chantier images #876 dédié) — slots réservés dans le « ⋯ » post</td></tr>
+      <tr><td>RF1 ⋮</td><td>Rafraîchir, spoilers, copier, partager, navigateur, signaler, drapeau</td><td><b>A3</b> : parité épurée — pages → feuille A2, Signaler → menu du post, copier ⊂ Partager</td></tr>
+      <tr><td>#782/#784</td><td>Pile de sauts · citations repliées (shippés)</td><td><b>C2</b> pastille « Revenir » = extension visible de #782 ; aperçus repliés conservés partout</td></tr>
+    </table>
+  </div>
+</section>
+
+<footer>
+  maquettes HTML statiques (aucun code app) — tokens M3 Redface réels · direction retenue à arbitrer
+  par XaTriX · co-idéation GPT-5.6 Sol (xhigh) ·
+  réfs : <a href="https://github.com/ForumHFR/redface2/issues/604">#604</a> ·
+  <a href="https://github.com/ForumHFR/redface2/issues/877">#877</a> ·
+  <a href="https://github.com/ForumHFR/redface2/issues/882">#882</a> ·
+  <a href="https://github.com/ForumHFR/redface2/issues/883">#883</a> ·
+  <a href="https://github.com/ForumHFR/redface2/issues/884">#884</a> ·
+  <a href="https://github.com/ForumHFR/redface2/issues/875">#875</a> ·
+  <a href="https://github.com/ForumHFR/redface2/issues/874">#874</a> ·
+  <a href="https://github.com/ForumHFR/redface2/issues/783">#783</a>
+</footer>
+</div>
+<script>
+document.querySelectorAll('.sec-head button[data-toggle]').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    var sec=document.getElementById(btn.dataset.toggle);
+    var dark=sec.querySelector('.phone').dataset.theme==='dark';
+    sec.querySelectorAll('.phone').forEach(function(p){p.dataset.theme=dark?'light':'dark';});
+    btn.textContent='thème : '+(dark?'clair':'sombre');
+  });
+});
+</script>
