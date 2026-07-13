@@ -1,0 +1,174 @@
+<title>Redface 2 — proposition couleurs (#883)</title>
+<style>
+  :root {
+    --page-bg: #f7f6f5; --page-ink: #1e1b1a; --page-sub: #6b6462; --page-line: #dcd7d5;
+    --page-card: #ffffff; --accent: #8e1d24; --mono: ui-monospace, "JetBrains Mono", Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --page-bg: #161413; --page-ink: #ede8e6; --page-sub: #a89f9c; --page-line: #35302e; --page-card: #201d1c; --accent: #ffb3b1; }
+  }
+  :root[data-theme="dark"] { --page-bg: #161413; --page-ink: #ede8e6; --page-sub: #a89f9c; --page-line: #35302e; --page-card: #201d1c; --accent: #ffb3b1; }
+  :root[data-theme="light"] { --page-bg: #f7f6f5; --page-ink: #1e1b1a; --page-sub: #6b6462; --page-line: #dcd7d5; --page-card: #ffffff; --accent: #8e1d24; }
+
+  body { background: var(--page-bg); color: var(--page-ink); font: 15px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+         margin: 0; padding: 28px 20px 60px; }
+  main { max-width: 1060px; margin: 0 auto; }
+  h1 { font-size: 26px; line-height: 1.2; margin: 0 0 4px; text-wrap: balance; }
+  h2 { font-size: 19px; margin: 40px 0 4px; }
+  h3 { font-size: 15px; margin: 22px 0 8px; }
+  p  { max-width: 72ch; margin: 8px 0; }
+  .sub { color: var(--page-sub); font-size: 13.5px; }
+  .eyebrow { text-transform: uppercase; letter-spacing: .08em; font-size: 11.5px; color: var(--accent); font-weight: 600; }
+  code, .hex { font-family: var(--mono); font-size: 12px; }
+  .hex { display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
+  .hex i { width: 11px; height: 11px; border-radius: 3px; display: inline-block; border: 1px solid rgba(128,128,128,.45); }
+
+  .row { display: flex; flex-wrap: wrap; gap: 18px; margin: 14px 0 6px; }
+  .phone { width: 240px; border-radius: 18px; padding: 10px 10px 12px; border: 1px solid var(--page-line);
+           background: var(--s-bg); color: var(--s-on); flex: 0 0 auto; }
+  .phone .cap { font-size: 11px; letter-spacing: .05em; text-transform: uppercase; opacity: .65; margin: 0 0 8px 2px;
+                font-weight: 600; color: var(--s-on); }
+  .tbar { display: flex; justify-content: space-between; align-items: center; font-size: 12px; font-weight: 600;
+          padding: 7px 10px; border-radius: 10px; background: var(--s-c2); margin-bottom: 8px; }
+  .tbar span:last-child { font-weight: 400; opacity: .75; font-size: 11px; }
+  .card { border-radius: 12px; background: var(--s-c1); overflow: hidden; margin-bottom: 8px; }
+  .band { background: var(--s-band); color: var(--s-onband); font-size: 11.5px; font-weight: 600; padding: 5px 10px;
+          display: flex; justify-content: space-between; }
+  .band span:last-child { font-weight: 400; opacity: .7; }
+  .body { padding: 8px 10px 10px; font-size: 12px; line-height: 1.45; }
+  .acts { display: flex; gap: 12px; padding: 0 10px 9px; font-size: 11px; font-weight: 600; color: var(--s-prim); }
+  .lastread { display: flex; align-items: center; gap: 8px; margin: 10px 0; }
+  .lastread::before, .lastread::after { content: ""; height: 2px; flex: 1; background: var(--s-prim); opacity: .55; }
+  .lastread b { font-size: 10.5px; font-weight: 600; color: var(--s-prim); white-space: nowrap; }
+  .anchored .band { background: var(--s-tert); color: var(--s-ontert); }
+  .fabs { display: flex; gap: 8px; justify-content: flex-end; margin-top: 10px; }
+  .fab { width: 34px; height: 34px; border-radius: 11px; background: var(--s-c3); color: var(--s-on);
+         display: grid; place-items: center; font-size: 14px; }
+  .fab.main { background: var(--s-primc); color: var(--s-onprimc); }
+
+  table { border-collapse: collapse; font-size: 12.5px; margin: 10px 0; display: block; overflow-x: auto; }
+  th, td { text-align: left; padding: 4px 12px 4px 0; border-bottom: 1px solid var(--page-line); vertical-align: top; }
+  th { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--page-sub); }
+
+  .note { border-left: 3px solid var(--accent); padding: 8px 12px; background: var(--page-card); border-radius: 0 8px 8px 0;
+          margin: 16px 0; max-width: 76ch; }
+  .grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; }
+
+  /* ===================== Palettes démo (fixes, indépendantes du thème de la page) ===================== */
+  /* ACTUEL */
+  .cur-l  { --s-bg:#FFF8F7; --s-on:#231919; --s-c1:#FCEBEA; --s-c2:#F6E5E4; --s-c3:#F1DFDE; --s-band:#FFDAD9; --s-onband:#2C1515;
+            --s-prim:#8E1D24; --s-primc:#FFDAD9; --s-onprimc:#3B070B; --s-tert:#FFDEA5; --s-ontert:#261900; }
+  .cur-d  { --s-bg:#1A1111; --s-on:#F0DEDC; --s-c1:#271D1D; --s-c2:#322727; --s-c3:#3D3131; --s-band:#5C3F3E; --s-onband:#FFDAD9;
+            --s-prim:#FFB3B1; --s-primc:#733338; --s-onprimc:#FFDAD9; --s-tert:#594319; --s-ontert:#FFDEA5; }
+  /* DIRECTION A — neutre chaleureux (~2 % de teinte, échelle ΔL constante — révision Sol) */
+  .na-l   { --s-bg:#FAF9F8; --s-on:#1D1B1A; --s-c1:#F4F2F1; --s-c2:#EEECEB; --s-c3:#E8E6E5; --s-band:#FFDAD9; --s-onband:#2C1515;
+            --s-prim:#8E1D24; --s-primc:#FFDAD9; --s-onprimc:#3B070B; --s-tert:#FFDEA5; --s-ontert:#261900; }
+  .na-d   { --s-bg:#151414; --s-on:#E8E3E1; --s-c1:#201F1F; --s-c2:#2A2929; --s-c3:#343333; --s-band:#4B4242; --s-onband:#F4DCDA;
+            --s-prim:#FFB3B1; --s-primc:#6E3A3D; --s-onprimc:#FFDAD9; --s-tert:#594319; --s-ontert:#FFDEA5; }
+  /* DIRECTION B — gris RF1 */
+  .gb-l   { --s-bg:#F1F0EF; --s-on:#1C1B1B; --s-c1:#FBFBFA; --s-c2:#E7E6E5; --s-c3:#E0DFDE; --s-band:#FFDAD9; --s-onband:#2C1515;
+            --s-prim:#8E1D24; --s-primc:#FFDAD9; --s-onprimc:#3B070B; --s-tert:#FFDEA5; --s-ontert:#261900; }
+  .gb-d   { --s-bg:#1B1B1B; --s-on:#E6E4E3; --s-c1:#262626; --s-c2:#2E2E2E; --s-c3:#383838; --s-band:#4A4443; --s-onband:#EFDEDC;
+            --s-prim:#FFB3B1; --s-primc:#6E3A3D; --s-onprimc:#FFDAD9; --s-tert:#594319; --s-ontert:#FFDEA5; }
+  /* TERTIAIRE — appliqué sur base direction A */
+  .t1-l { --s-tert:#F2E2C4; --s-ontert:#4A3A16; } .t1-d { --s-tert:#4E4223; --s-ontert:#EFDDB4; }
+  .t2-l { --s-tert:#D8E3F5; --s-ontert:#243A57; } .t2-d { --s-tert:#364A66; --s-ontert:#C9DBF5; }
+</style>
+<main>
+<p class="eyebrow">Redface 2 · issue #883 · proposition à arbitrer</p>
+<h1>Couleurs : surfaces &amp; « jaune » — 2 directions, 2 candidats</h1>
+<p class="sub">Suite au « Propose » de XaTriX (fil DEV #2791014). Constat : les surfaces des thèmes clair/sombre sont
+<em>teintées rouge-rose</em> (héritage du seed #A62C2C — fond clair #FFF8F7 rosé, fond sombre #1A1111 brunâtre), et le
+rôle <em>tertiaire</em> est un moutarde vert-jaune (#FFDEA5 / #594319) — le « jaune » des retours. Les accents (rouge primaire,
+drapeaux, sémantique) ne bougent pas. AMOLED reste noir pur.</p>
+
+<h2>1 · Surfaces — Actuel vs deux directions</h2>
+<p class="sub">Même écran topic factice : top bar, carte de post (bandeau identité), post ancré (bandeau tertiaire #104),
+repère « dernier lu », cluster FAB.</p>
+
+<div class="row">
+  <div class="phone cur-l"><p class="cap">Actuel · clair</p><div class="tbar">Topic — BLABLA@HFR <span>p. 47/47</span></div>
+    <div class="card"><div class="band">tinc <span>hier 22:41</span></div><div class="body">Le fond rosé, on s'y fait… ou pas.</div><div class="acts"><span>Citer</span><span>+ Citer</span></div></div>
+    <div class="lastread"><b>Dernier message lu</b></div>
+    <div class="card anchored"><div class="band">qwazer <span>hier 23:02</span></div><div class="body">Post ancré (bandeau tertiaire).</div><div class="acts"><span>Citer</span></div></div>
+    <div class="fabs"><div class="fab">‹</div><div class="fab">›</div><div class="fab main">✎</div></div></div>
+  <div class="phone cur-d"><p class="cap">Actuel · sombre</p><div class="tbar">Topic — BLABLA@HFR <span>p. 47/47</span></div>
+    <div class="card"><div class="band">tinc <span>hier 22:41</span></div><div class="body">Fond #1A1111 : brun-rouge.</div><div class="acts"><span>Citer</span><span>+ Citer</span></div></div>
+    <div class="lastread"><b>Dernier message lu</b></div>
+    <div class="card anchored"><div class="band">qwazer <span>hier 23:02</span></div><div class="body">Le moutarde sombre #594319.</div><div class="acts"><span>Citer</span></div></div>
+    <div class="fabs"><div class="fab">‹</div><div class="fab">›</div><div class="fab main">✎</div></div></div>
+</div>
+
+<div class="row">
+  <div class="phone na-l"><p class="cap">A · Neutre chaleureux · clair</p><div class="tbar">Topic — BLABLA@HFR <span>p. 47/47</span></div>
+    <div class="card"><div class="band">tinc <span>hier 22:41</span></div><div class="body">Surfaces quasi neutres (~2 % de teinte), le rouge ne vit plus que dans les accents.</div><div class="acts"><span>Citer</span><span>+ Citer</span></div></div>
+    <div class="lastread"><b>Dernier message lu</b></div>
+    <div class="card anchored"><div class="band">qwazer <span>hier 23:02</span></div><div class="body">Post ancré, tertiaire actuel conservé ici.</div><div class="acts"><span>Citer</span></div></div>
+    <div class="fabs"><div class="fab">‹</div><div class="fab">›</div><div class="fab main">✎</div></div></div>
+  <div class="phone na-d"><p class="cap">A · Neutre chaleureux · sombre</p><div class="tbar">Topic — BLABLA@HFR <span>p. 47/47</span></div>
+    <div class="card"><div class="band">tinc <span>hier 22:41</span></div><div class="body">Fond #151313, cartes #232120 : sombre neutre, plus « propre ».</div><div class="acts"><span>Citer</span><span>+ Citer</span></div></div>
+    <div class="lastread"><b>Dernier message lu</b></div>
+    <div class="card anchored"><div class="band">qwazer <span>hier 23:02</span></div><div class="body">Bandeaux identité désaturés d'un cran.</div><div class="acts"><span>Citer</span></div></div>
+    <div class="fabs"><div class="fab">‹</div><div class="fab">›</div><div class="fab main">✎</div></div></div>
+</div>
+
+<div class="row">
+  <div class="phone gb-l"><p class="cap">B · Gris RF1 · clair</p><div class="tbar">Topic — BLABLA@HFR <span>p. 47/47</span></div>
+    <div class="card"><div class="band">tinc <span>hier 22:41</span></div><div class="body">Fond gris franc #F1F0EF, cartes blanches posées dessus — l'esprit RF1/web.</div><div class="acts"><span>Citer</span><span>+ Citer</span></div></div>
+    <div class="lastread"><b>Dernier message lu</b></div>
+    <div class="card anchored"><div class="band">qwazer <span>hier 23:02</span></div><div class="body">Contraste cartes/fond plus marqué.</div><div class="acts"><span>Citer</span></div></div>
+    <div class="fabs"><div class="fab">‹</div><div class="fab">›</div><div class="fab main">✎</div></div></div>
+  <div class="phone gb-d"><p class="cap">B · Gris RF1 · sombre</p><div class="tbar">Topic — BLABLA@HFR <span>p. 47/47</span></div>
+    <div class="card"><div class="band">tinc <span>hier 22:41</span></div><div class="body">Gris pur #1B1B1B / #262626, zéro teinte.</div><div class="acts"><span>Citer</span><span>+ Citer</span></div></div>
+    <div class="lastread"><b>Dernier message lu</b></div>
+    <div class="card anchored"><div class="band">qwazer <span>hier 23:02</span></div><div class="body">Le plus proche du RF1 sombre.</div><div class="acts"><span>Citer</span></div></div>
+    <div class="fabs"><div class="fab">‹</div><div class="fab">›</div><div class="fab main">✎</div></div></div>
+</div>
+
+<h2>2 · Le « jaune » — rôle tertiaire (post ancré, dernier-lu #600, badges)</h2>
+<p class="sub">Rendus sur la direction A. T1 garde la famille chaude en tuant la pointe verdâtre ; T2 sort du jaune.</p>
+<div class="row">
+  <div class="phone na-l t1-l"><p class="cap">T1 · Ambre assagi · clair</p>
+    <div class="card anchored"><div class="band">qwazer <span>post ancré</span></div><div class="body">#F2E2C4 — ambre doux, plus de vert.</div><div class="acts"><span>Citer</span></div></div></div>
+  <div class="phone na-d t1-d"><p class="cap">T1 · sombre</p>
+    <div class="card anchored"><div class="band">qwazer <span>post ancré</span></div><div class="body">#4E4223 — brun-ambre discret.</div><div class="acts"><span>Citer</span></div></div></div>
+  <div class="phone na-l t2-l"><p class="cap">T2 · Ardoise · clair</p>
+    <div class="card anchored"><div class="band">qwazer <span>post ancré</span></div><div class="body">#D8E3F5 — bleu-gris calme, contraste net avec le rouge.</div><div class="acts"><span>Citer</span></div></div></div>
+  <div class="phone na-d t2-d"><p class="cap">T2 · sombre</p>
+    <div class="card anchored"><div class="band">qwazer <span>post ancré</span></div><div class="body">#364A66 — « repère », pas « alerte ».</div><div class="acts"><span>Citer</span></div></div></div>
+</div>
+
+<h2>3 · Tokens (delta seulement)</h2>
+<table>
+<tr><th>Rôle M3</th><th>Actuel clair</th><th>A clair</th><th>B clair</th><th>Actuel sombre</th><th>A sombre</th><th>B sombre</th></tr>
+<tr><td>background / surface</td><td class="hex"><i style="background:#FFF8F7"></i>#FFF8F7</td><td class="hex"><i style="background:#FAF9F8"></i>#FAF9F8</td><td class="hex"><i style="background:#F1F0EF"></i>#F1F0EF</td><td class="hex"><i style="background:#1A1111"></i>#1A1111</td><td class="hex"><i style="background:#151414"></i>#151414</td><td class="hex"><i style="background:#1B1B1B"></i>#1B1B1B</td></tr>
+<tr><td>surfaceContainer</td><td class="hex"><i style="background:#FCEBEA"></i>#FCEBEA</td><td class="hex"><i style="background:#F4F2F1"></i>#F4F2F1</td><td class="hex"><i style="background:#FBFBFA"></i>#FBFBFA*</td><td class="hex"><i style="background:#271D1D"></i>#271D1D</td><td class="hex"><i style="background:#201F1F"></i>#201F1F</td><td class="hex"><i style="background:#262626"></i>#262626</td></tr>
+<tr><td>surfaceContainerHigh</td><td class="hex"><i style="background:#F6E5E4"></i>#F6E5E4</td><td class="hex"><i style="background:#EEECEB"></i>#EEECEB</td><td class="hex"><i style="background:#E7E6E5"></i>#E7E6E5</td><td class="hex"><i style="background:#322727"></i>#322727</td><td class="hex"><i style="background:#2A2929"></i>#2A2929</td><td class="hex"><i style="background:#2E2E2E"></i>#2E2E2E</td></tr>
+<tr><td>tertiaryContainer T1</td><td class="hex"><i style="background:#FFDEA5"></i>#FFDEA5</td><td colspan="2" class="hex"><i style="background:#F2E2C4"></i>#F2E2C4</td><td class="hex"><i style="background:#594319"></i>#594319</td><td colspan="2" class="hex"><i style="background:#4E4223"></i>#4E4223</td></tr>
+<tr><td>tertiaryContainer T2</td><td>—</td><td colspan="2" class="hex"><i style="background:#D8E3F5"></i>#D8E3F5</td><td>—</td><td colspan="2" class="hex"><i style="background:#364A66"></i>#364A66</td></tr>
+</table>
+<p class="sub">* En B clair, le gris #F1F0EF devient le FOND applicatif et #FBFBFA est réservé à un rôle explicite
+de carte (ou à surfaceContainerLowest) — on n'inverse PAS toute l'échelle tonale M3 (hiérarchie d'élévation, états
+pressés et composants imbriqués deviendraient incohérents — revue Sol). Échelles complètes dérivées au même ΔL.</p>
+
+<h2>4 · Ce qui ne change pas / points d'attention</h2>
+<div class="grid2">
+<div class="note"><b>Invariants.</b> Primaire rouge (les 2 accents, défaut + « Rouge RF1 »), sémantique erreur, couleurs de drapeaux,
+clamp de lisibilité des <code>[color]</code> d'auteurs. Contrastes on/container vérifiés AA (T1 : 8,6:1 clair / 7,3:1 sombre ;
+T2 : 9:1 / 6,4:1). AMOLED : fond noir pur conservé, mais les containers restent légèrement relevés (tout à #000000 détruirait
+la hiérarchie).</div>
+<div class="note"><b>À verrouiller à l'implémentation.</b> Position sur le Dynamic Color (remplace tout / surfaces seules /
+désactivé) pour que la palette soit réellement canonique ; vérification des surfaces à élévation réelle (tonal elevation),
+des états pressed/selected/disabled/ripple/scrim ; contour neutre systématique sur les chips de drapeaux (un blanc/rouge/jaune
+peut disparaître selon le fond). Un réglage multi-teintes (3 × 2 accents × 3 modes = 18 rendus) est DÉCONSEILLÉ — matrice de
+test disproportionnée pour une préférence esthétique.</div>
+</div>
+
+<h2>5 · Recommandation</h2>
+<p><b>A + T2</b> (choix aussi de la revue Sol) : le rouge conserve l'identité, l'ardoise élimine franchement le grief « jaune » —
+là où A + T1 risque d'être perçu comme « le même moutarde mieux maquillé ». <b>A + T1</b> reste l'alternative conservatrice.
+<b>B</b> = la parité RF1 assumée, à garder éventuellement pour plus tard comme mode « RF1 gris » expérimental — pas comme
+réglage jour 1.</p>
+<p class="sub">Maquettes indicatives (rendu web ≈, pas du Compose). Implémentation : Color.kt seul + captures avant/après
+par écran clé ; aucun composant à toucher (tout passe par les rôles M3).</p>
+</main>
