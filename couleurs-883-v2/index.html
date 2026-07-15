@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>#883 · Couleurs V2 — screenshots réels</title>
+<style>
+  :root{--ground:#15121A;--surface:#1E1925;--line:#352C42;--text:#ECE4DE;--muted:#9C8FA6;--faint:#6E6478;--red:#E23A4E;--cyan:#34C0CE;--blue:#6FA8DC;--mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;--sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--ground);color:var(--text);font-family:var(--sans);line-height:1.5}
+  .wrap{max-width:1080px;margin:0 auto;padding:clamp(24px,5vw,56px) clamp(12px,3vw,32px) 72px}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.32em;text-transform:uppercase;color:var(--red);font-weight:600;margin:0 0 12px}
+  h1{font-size:clamp(26px,5vw,42px);line-height:1.05;letter-spacing:-.02em;font-weight:800;margin:0 0 10px}
+  .sub{color:var(--muted);max-width:70ch;margin:0 0 28px;font-size:15px}
+  h2{font-size:19px;margin:40px 0 12px;letter-spacing:-.01em}
+  table{border-collapse:collapse;width:100%;font-size:13.5px;margin:0 0 8px}
+  th,td{text-align:left;padding:7px 10px;border:1px solid var(--line);vertical-align:top}
+  th{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  .sw{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:5px;vertical-align:-1px;border:1px solid rgba(255,255,255,.25)}
+  .cols{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+  .cols figure{margin:0}
+  .cols img{width:100%;height:auto;border-radius:10px;border:1px solid var(--line);display:block}
+  .cols figcaption{font-family:var(--mono);font-size:11px;color:var(--muted);text-align:center;padding:5px 0 0}
+  .cols a{display:block}
+  .hint{font-size:12.5px;color:var(--faint);margin:6px 0 0}
+  footer{margin-top:48px;border-top:1px solid var(--line);padding-top:14px;font-family:var(--mono);font-size:11.5px;color:var(--faint)}
+  footer a{color:var(--cyan)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="eyebrow">Redface 2 · issue #883</p>
+  <h1>Couleurs V2 — screenshots réels</h1>
+  <p class="sub">Suite aux retours sur les mockups HTML : cette fois ce sont de <strong>vrais screenshots</strong> de l'app (S10e, build prod-debug 0.30.1, compte réel). Deux candidates contre le Rose actuel en référence. Principe commun aux deux : les surfaces deviennent <strong>neutres</strong> (fini le fond rosé en clair et le brun en sombre — retour à des gris esprit RF1), et le <strong>jaune/ambre disparaît</strong>. Chaque image est cliquable (PNG pleine résolution).</p>
+
+  <table>
+    <tr><th>Variante</th><th>Surfaces</th><th>Couleur principale</th><th>Secondaire</th><th>Remplace le jaune</th></tr>
+    <tr>
+      <td><strong>Rose (actuel)</strong></td>
+      <td><span class="sw" style="background:#FFF8F7"></span>rosé clair · <span class="sw" style="background:#1A1110"></span>brun sombre</td>
+      <td><span class="sw" style="background:#8E1D24"></span>rose/bordeaux</td>
+      <td>—</td>
+      <td><span class="sw" style="background:#735B2E"></span><span class="sw" style="background:#FFDEA5"></span>ambre (inchangé)</td>
+    </tr>
+    <tr>
+      <td><strong>MOCK A « gris + bleu »</strong></td>
+      <td><span class="sw" style="background:#FAF8F5"></span>greige clair · <span class="sw" style="background:#1A1C1E"></span>gris RF1 sombre</td>
+      <td><span class="sw" style="background:#8E1D24"></span>rose <em>conservé</em> (boutons, sélection)</td>
+      <td><span class="sw" style="background:#31628D"></span>bleu HFR (en-têtes de posts, badges)</td>
+      <td><span class="sw" style="background:#56616C"></span>ardoise</td>
+    </tr>
+    <tr>
+      <td><strong>MOCK B « bleu »</strong></td>
+      <td>identiques à A</td>
+      <td><span class="sw" style="background:#2D5D8E"></span>bleu HFR</td>
+      <td><span class="sw" style="background:#545F70"></span>gris-bleu</td>
+      <td><span class="sw" style="background:#8C4A52"></span>rose en rappel discret</td>
+    </tr>
+  </table>
+  <p class="hint">Ordre des colonnes ci-dessous : Rose actuel · MOCK A · MOCK B.</p>
+
+  <h2>Vue Topic — thème clair</h2>
+  <div class="cols">
+    <figure><a href="rose-clair-topic.png"><img src="rose-clair-topic.jpg" alt="Topic clair, Rose actuel"></a><figcaption>Rose actuel</figcaption></figure>
+    <figure><a href="mocka-clair-topic.png"><img src="mocka-clair-topic.jpg" alt="Topic clair, MOCK A"></a><figcaption>MOCK A</figcaption></figure>
+    <figure><a href="mockb-clair-topic.png"><img src="mockb-clair-topic.jpg" alt="Topic clair, MOCK B"></a><figcaption>MOCK B</figcaption></figure>
+  </div>
+
+  <h2>Vue Drapeaux — thème clair</h2>
+  <div class="cols">
+    <figure><a href="rose-clair-flags.png"><img src="rose-clair-flags.jpg" alt="Drapeaux clair, Rose actuel"></a><figcaption>Rose actuel</figcaption></figure>
+    <figure><a href="mocka-clair-flags.png"><img src="mocka-clair-flags.jpg" alt="Drapeaux clair, MOCK A"></a><figcaption>MOCK A</figcaption></figure>
+    <figure><a href="mockb-clair-flags.png"><img src="mockb-clair-flags.jpg" alt="Drapeaux clair, MOCK B"></a><figcaption>MOCK B</figcaption></figure>
+  </div>
+
+  <h2>Vue Topic — thème sombre</h2>
+  <div class="cols">
+    <figure><a href="rose-sombre-topic.png"><img src="rose-sombre-topic.jpg" alt="Topic sombre, Rose actuel"></a><figcaption>Rose actuel</figcaption></figure>
+    <figure><a href="mocka-sombre-topic.png"><img src="mocka-sombre-topic.jpg" alt="Topic sombre, MOCK A"></a><figcaption>MOCK A</figcaption></figure>
+    <figure><a href="mockb-sombre-topic.png"><img src="mockb-sombre-topic.jpg" alt="Topic sombre, MOCK B"></a><figcaption>MOCK B</figcaption></figure>
+  </div>
+
+  <h2>Vue Drapeaux — thème sombre</h2>
+  <div class="cols">
+    <figure><a href="rose-sombre-flags.png"><img src="rose-sombre-flags.jpg" alt="Drapeaux sombre, Rose actuel"></a><figcaption>Rose actuel</figcaption></figure>
+    <figure><a href="mocka-sombre-flags.png"><img src="mocka-sombre-flags.jpg" alt="Drapeaux sombre, MOCK A"></a><figcaption>MOCK A</figcaption></figure>
+    <figure><a href="mockb-sombre-flags.png"><img src="mockb-sombre-flags.jpg" alt="Drapeaux sombre, MOCK B"></a><figcaption>MOCK B</figcaption></figure>
+  </div>
+
+  <p class="sub" style="margin-top:28px">Notes : le thème AMOLED reste inchangé (noir pur, indépendant de l'accent). Le loader visible sur « Rose actuel · Drapeaux sombre » est un rafraîchissement en cours au moment de la capture. Les schémas sont sur une branche de maquette jetable — rien n'est mergé ; on affine la candidate retenue avant toute PR.</p>
+
+  <footer>Généré par Claude (Fable 5) — 15/07/2026 · build 0.30.1+debug · <a href="../index.html">← tous les artefacts</a></footer>
+</div>
+</body>
+</html>
