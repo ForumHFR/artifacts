@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>#882 · Barre d'actions — mesures & propositions</title>
+<style>
+  :root{--ground:#15121A;--surface:#1E1925;--line:#352C42;--text:#ECE4DE;--muted:#9C8FA6;--faint:#6E6478;--red:#E23A4E;--cyan:#34C0CE;--green:#7BC67B;--amber:#E8B54A;--mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;--sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--ground);color:var(--text);font-family:var(--sans);line-height:1.5}
+  .wrap{max-width:1100px;margin:0 auto;padding:clamp(24px,5vw,56px) clamp(12px,3vw,32px) 72px}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.32em;text-transform:uppercase;color:var(--red);font-weight:600;margin:0 0 12px}
+  h1{font-size:clamp(26px,5vw,40px);line-height:1.05;letter-spacing:-.02em;font-weight:800;margin:0 0 10px}
+  h2{font-size:19px;margin:40px 0 12px}
+  .sub{color:var(--muted);max-width:72ch;margin:0 0 24px;font-size:15px}
+  img.shot{width:100%;height:auto;border-radius:10px;border:1px solid var(--line);display:block}
+  table{border-collapse:collapse;width:100%;font-size:13.5px;margin:8px 0}
+  th,td{text-align:left;padding:7px 10px;border:1px solid var(--line)}
+  th{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+  td.num{font-variant-numeric:tabular-nums;text-align:right}
+  .props{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-top:10px}
+  .prop{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px}
+  .prop h3{margin:0 0 4px;font-size:15.5px}
+  .prop .tag{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+  .reco .tag{color:var(--green)} .alt .tag{color:var(--amber)} .ko .tag{color:var(--faint)}
+  .prop p{font-size:13px;color:var(--muted);margin:6px 0}
+  /* mockup de carte de post */
+  .card{border-radius:12px;overflow:hidden;background:#FCEBEA;color:#231919;margin-top:10px;font-size:12px;border:1px solid #0002}
+  .band{background:#FFDAD9;display:flex;align-items:center;gap:8px;padding:6px 12px}
+  .band .avatar{width:28px;height:28px;border-radius:8px;background:#e6bdbc;display:grid;place-items:center;font-weight:700}
+  .band .who b{display:block;font-size:12.5px}.band .who span{font-size:10.5px;color:#775655}
+  .band .dots{margin-left:auto;font-weight:700;letter-spacing:2px}
+  .pillrow{display:flex;gap:6px;padding:6px 12px 2px}
+  .pill{background:#FFDAD9;color:#5c2224;border-radius:6px;padding:2px 8px;font-size:10.5px}
+  .pill.stable{background:#F1DFDE;color:#534342}
+  .bodyz{padding:10px 12px;font-size:12.5px}
+  .foot{display:flex;justify-content:flex-end;gap:14px;color:#8E1D24;font-weight:600}
+  .foot .muted{color:#775655}
+  .foot-old{padding:8px 12px 8px;min-height:48px;align-items:center;display:flex;justify-content:flex-end;gap:14px}
+  .foot-48{padding:0 12px;height:48px;align-items:center;display:flex;justify-content:flex-end;gap:14px}
+  .foot-fused{padding:0 12px;height:48px;align-items:center;display:flex;gap:8px}
+  .foot-fused .right{margin-left:auto;display:flex;gap:14px;color:#8E1D24;font-weight:600}
+  .band-fused{background:#FFDAD9;display:flex;align-items:center;gap:8px;padding:6px 10px}
+  .band-fused .actions{margin-left:auto;display:flex;gap:10px;color:#8E1D24;font-weight:600;font-size:11.5px}
+  .ruler{font-family:var(--mono);font-size:10.5px;color:var(--faint);text-align:right;padding:2px 4px 0}
+  footer{margin-top:48px;border-top:1px solid var(--line);padding-top:14px;font-family:var(--mono);font-size:11.5px;color:var(--faint)}
+  footer a{color:var(--cyan)}
+  .cols2{display:grid;grid-template-columns:1fr;gap:16px}
+  .overx{overflow-x:auto}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="eyebrow">Redface 2 · issue #882</p>
+  <h1>Barre d'actions du post — mesures réelles &amp; propositions</h1>
+  <p class="sub">Analyse au pixel (émulateur 420 dpi, préset Confort) recoupée avec le code, co-cadrée avec GPT-5.6 Sol (xhigh). Deux problèmes : la rangée Citer/+ Citer occupe <strong>64 dp pour 20 dp de texte utile</strong>, et la pill « Ajouté à la citation » <strong>décale tout le contenu de ~25 dp</strong> à chaque tap.</p>
+
+  <h2>1 · Qui fait quoi (anatomie mesurée)</h2>
+  <div class="overx"><img class="shot" src="anat-annotated.png" alt="Anatomie annotée du post : bande 60 dp, corps, rangée d'actions 64 dp"></div>
+  <p class="sub" style="margin-top:8px">La rangée d'actions : 8 dp d'espacement + boutons M3 à cible tactile 48 dp + 8 dp de bas de carte = <strong>64 dp</strong>. Les pointillés = cibles tactiles invisibles ; le texte, lui, fait 20 dp.</p>
+
+  <h2>2 · Le layout shift au tap « + Citer »</h2>
+  <div class="overx"><img class="shot" src="shift-annotated.png" alt="Avant/après : la pill fait descendre le contenu de 25 dp"></div>
+  <p class="sub" style="margin-top:8px">Trois signaux de sélection coexistent : la pill (qui décale), la bordure primaire (aucun décalage) et le bouton qui devient « ✓ Cité » (aucun décalage). TalkBack annonce l'état indépendamment de la pill.</p>
+
+  <h2>3 · Propositions</h2>
+  <div class="props">
+    <div class="prop reco">
+      <span class="tag">P1 · Recommandée (Sol + Claude)</span>
+      <h3>Rangée 48 dp réels + retrait de la pill dynamique</h3>
+      <p>Le footer perd ses 8+8 dp de marges verticales : la rangée FAIT 48 dp (cible tactile = layout, aucun débordement). La pill « Ajouté à la citation » disparaît — bordure + « ✓ Cité » + TalkBack suffisent. « cité N fois » (stable) reste.</p>
+      <p><b>Gain : 16 dp/post (Confort), 9 dp (Compact) ; shift : 0.</b></p>
+      <div class="card">
+        <div class="band"><div class="avatar">S</div><div class="who"><b>Stylken</b><span>13/06/2026 09:23</span></div><div class="dots">⋯</div></div>
+        <div class="bodyz">Reprise du message précédent…</div>
+        <div class="foot foot-48"><span class="muted">✓ Cité</span><span>Citer</span></div>
+      </div>
+      <div class="ruler">rangée = 48 dp pile</div>
+    </div>
+    <div class="prop alt">
+      <span class="tag">P2 · Variante à prototyper</span>
+      <h3>Rangée fusionnée : pills à gauche, actions à droite</h3>
+      <p>Une seule rangée basse de 48 dp porte « cité N fois » à gauche et les actions à droite : le strip conditionnel disparaît complètement (jusqu'à 44 dp gagnés sur un post cité). Risque : collision à faible largeur + grand fontScale avec 3 actions.</p>
+      <p><b>Gain : 16-44 dp ; shift : 0. À valider en largeur mini.</b></p>
+      <div class="card">
+        <div class="band"><div class="avatar">S</div><div class="who"><b>Stylken</b><span>13/06/2026 09:23</span></div><div class="dots">⋯</div></div>
+        <div class="bodyz">Reprise du message précédent…</div>
+        <div class="foot-fused"><span class="pill stable">cité 1 fois</span><div class="right"><span class="muted">+ Citer</span><span>Citer</span></div></div>
+      </div>
+      <div class="ruler">rangée = 48 dp, pills intégrées</div>
+    </div>
+    <div class="prop ko">
+      <span class="tag">P3 · Écartée (montrée pour l'arbitrage)</span>
+      <h3>Actions dans la bande identité</h3>
+      <p>Gain maximal (~56 dp : plus de footer du tout) mais la bande sature : pseudo comprimé, 3 cibles de 48 dp collées au « ⋯ », et « Modifier » n'a plus de place. Sol : mauvais compromis.</p>
+      <p><b>Gain : ~56 dp ; risques UX élevés.</b></p>
+      <div class="card">
+        <div class="band-fused"><div class="avatar">S</div><div class="who"><b>Stylken</b><span>13/06</span></div><div class="actions"><span class="muted">+ Citer</span><span>Citer</span><span style="color:#231919">⋯</span></div></div>
+        <div class="bodyz">Reprise du message précédent…</div>
+      </div>
+      <div class="ruler">plus de footer — tout dans la bande</div>
+    </div>
+  </div>
+
+  <h2>4 · Avant / après (P1, hauteurs hors contenu par post)</h2>
+  <div class="overx">
+  <table>
+    <tr><th>Zone</th><th>Avant (Confort)</th><th>P1 (Confort)</th><th>Avant (Compact)</th><th>P1 (Compact)</th></tr>
+    <tr><td>Bande identité</td><td class="num">60</td><td class="num">60</td><td class="num">56</td><td class="num">56</td></tr>
+    <tr><td>Strip « cité N fois » (si présent)</td><td class="num">28</td><td class="num">28</td><td class="num">~26</td><td class="num">~26</td></tr>
+    <tr><td>Strip sélection (au tap)</td><td class="num">0 → 28</td><td class="num"><b>0</b></td><td class="num">0 → ~26</td><td class="num"><b>0</b></td></tr>
+    <tr><td>Rangée d'actions</td><td class="num">64</td><td class="num"><b>48</b></td><td class="num">57</td><td class="num"><b>48</b></td></tr>
+    <tr><td><b>Total (non cité, sélectionné)</b></td><td class="num">152</td><td class="num"><b>108</b></td><td class="num">~139</td><td class="num"><b>104</b></td></tr>
+  </table>
+  </div>
+  <p class="sub">Garde-fous d'implémentation actés au cadrage : hauteur MINIMALE (pas de max — le grand fontScale ne doit pas clipper) ; cibles ≥ 48 dp réelles sans chevauchement ; tests paramétrés Confort/Compact + « écart exact 0 px avant/après + Citer » + bounds sémantiques des 3 actions.</p>
+
+  <footer>Généré par Claude (Fable 5) + GPT-5.6 Sol — 15/07/2026 · <a href="../index.html">← tous les artefacts</a></footer>
+</div>
+</body>
+</html>
