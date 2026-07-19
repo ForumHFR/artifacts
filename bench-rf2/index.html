@@ -1,0 +1,445 @@
+<title>Bench Gradle — Redface 2</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root {
+    color-scheme: light dark;
+    --bg: #ffffff;
+    --fg: #1a1a1a;
+    --muted: #55555a;
+    --border: #d8d8dc;
+    --card-bg: #f6f6f8;
+    --code-bg: #eeeef1;
+    --accent: #6b4fbb;
+    --accent-fg: #ffffff;
+    --warn-bg: #fff5e6;
+    --warn-border: #d9a441;
+    --ok-bg: #eef7ee;
+    --ok-border: #4c9a53;
+    --example-bg: #fff6e0;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #16161a;
+      --fg: #e8e8ec;
+      --muted: #a5a5ad;
+      --border: #35353c;
+      --card-bg: #1e1e24;
+      --code-bg: #26262e;
+      --accent: #b19fe8;
+      --accent-fg: #16161a;
+      --warn-bg: #2c260f;
+      --warn-border: #b5892e;
+      --ok-bg: #16241a;
+      --ok-border: #3f8a48;
+      --example-bg: #2b2410;
+    }
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    line-height: 1.55;
+  }
+
+  .page {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 2.5rem 1.25rem 4rem;
+  }
+
+  h1 {
+    font-size: 1.7rem;
+    margin: 0 0 0.4rem;
+  }
+  h2 {
+    font-size: 1.25rem;
+    margin: 2.5rem 0 0.8rem;
+    padding-bottom: 0.35rem;
+    border-bottom: 1px solid var(--border);
+  }
+  h3 {
+    font-size: 1.05rem;
+    margin: 1.4rem 0 0.4rem;
+  }
+
+  .subtitle {
+    color: var(--muted);
+    margin: 0 0 1.5rem;
+    font-size: 1.02rem;
+  }
+
+  p { margin: 0.6rem 0; }
+  ul, ol { padding-left: 1.4rem; }
+  li { margin: 0.35rem 0; }
+
+  a { color: var(--accent); }
+
+  code, pre {
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    font-size: 0.88em;
+  }
+  code {
+    background: var(--code-bg);
+    padding: 0.12em 0.4em;
+    border-radius: 4px;
+  }
+  pre {
+    background: var(--code-bg);
+    padding: 0.9rem 1rem;
+    border-radius: 8px;
+    overflow-x: auto;
+    border: 1px solid var(--border);
+  }
+  pre code { background: none; padding: 0; }
+
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem 1.2rem;
+    margin: 1rem 0;
+  }
+
+  .warn {
+    background: var(--warn-bg);
+    border: 1px solid var(--warn-border);
+    border-radius: 10px;
+    padding: 1rem 1.2rem;
+    margin: 1rem 0;
+  }
+  .warn strong { display: block; margin-bottom: 0.3rem; }
+
+  .ok {
+    background: var(--ok-bg);
+    border: 1px solid var(--ok-border);
+    border-radius: 10px;
+    padding: 1rem 1.2rem;
+    margin: 1rem 0;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    font-size: 0.92rem;
+  }
+  th, td {
+    border: 1px solid var(--border);
+    padding: 0.5rem 0.6rem;
+    text-align: left;
+    vertical-align: top;
+  }
+  th {
+    background: var(--card-bg);
+  }
+  .example-row td {
+    background: var(--example-bg);
+    font-style: italic;
+  }
+
+  .table-scroll {
+    overflow-x: auto;
+  }
+
+  .tag {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    padding: 0.12em 0.5em;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    margin-left: 0.4rem;
+  }
+  .tag-actif {
+    background: var(--ok-bg);
+    border-color: var(--ok-border);
+  }
+  .tag-piste {
+    background: var(--warn-bg);
+    border-color: var(--warn-border);
+  }
+
+  .steps li { margin: 0.6rem 0; }
+
+  footer {
+    margin-top: 3rem;
+    padding-top: 1.2rem;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 0.85rem;
+  }
+  footer p { margin: 0.3rem 0; }
+
+  .scenario-block {
+    margin: 1rem 0;
+  }
+  .scenario-block h3 {
+    margin-bottom: 0.2rem;
+  }
+  .scenario-block .reveals {
+    color: var(--muted);
+    font-size: 0.92rem;
+    margin-top: 0.2rem;
+  }
+</style>
+
+<div class="page">
+
+  <h1>Bench Gradle — Redface 2</h1>
+  <p class="subtitle">
+    Mesurez le temps de build/tests de Redface 2 sur votre machine (CPU, RAM, disque)
+    pour aider à identifier les zones lentes du build et le potentiel d'accélération
+    (parallélisme local, cache de build, workload déporté).
+  </p>
+
+  <div class="card">
+    <p>
+      <a href="https://github.com/ForumHFR/redface2">Redface 2</a> est un client Android
+      open source pour un forum, construit avec Kotlin/Compose/Hilt/Gradle multi-module.
+      Ce petit protocole de bench a un but précis : constituer une table comparative
+      « machine → temps de build » à partir de contributions volontaires, pour répondre à
+      trois questions concrètes :
+    </p>
+    <ol>
+      <li>Où le temps de build part-il réellement (configuration Gradle, KSP/Hilt,
+        compilation Kotlin, tests unitaires, lint/detekt) ?</li>
+      <li>Quel est l'effet du cache de build et du parallélisme local sur des machines
+        variées ?</li>
+      <li>Y a-t-il un potentiel réaliste à déporter une partie du travail (cache de build
+        partagé, exécution de tests à distance, CI plus parallèle) ?</li>
+    </ol>
+  </div>
+
+  <h2>Prérequis et avertissements</h2>
+
+  <div class="warn">
+    <strong>À lire avant de lancer le script</strong>
+    <ul>
+      <li><strong>git</strong>, un <strong>JDK 17 ou plus récent</strong>, et un
+        <strong>SDK Android déjà installé</strong> (le script ne l'installe pas — il vérifie
+        <code>ANDROID_HOME</code>/<code>ANDROID_SDK_ROOT</code> ou quelques emplacements par
+        défaut).</li>
+      <li><strong>~10 Go d'espace disque libre</strong> recommandés pour le premier run
+        (paquets SDK éventuellement manquants, cache de dépendances Gradle, artefacts de
+        build). Les runs suivants sont beaucoup plus légers en réseau/disque.</li>
+      <li><strong>Premier run = téléchargements réseau de plusieurs Go</strong> :
+        distribution Gradle (~200 Mo), dépendances du projet (plusieurs centaines de Mo),
+        et éventuellement des paquets SDK Android si votre installation ne les a pas déjà.
+        Comptez une bonne connexion et de la patience.</li>
+      <li><strong>Durée totale estimée</strong> : très variable selon la machine et l'état
+        du cache local — grossièrement de 30 minutes (petite machine, premier run,
+        réseau moyen) à quelques minutes seulement pour un run <code>--full</code> déjà
+        « chaud ». Le script chronomètre chaque étape séparément, ce n'est pas une boîte
+        noire de durée fixe.</li>
+      <li><strong>Ne benchez pas sur batterie</strong> : le throttling thermique/énergie
+        d'un laptop sur batterie fausse complètement la mesure. Branchez la machine,
+        évitez de lancer d'autres charges CPU en parallèle, et si possible désactivez
+        temporairement les gouverneurs d'économie d'énergie agressifs.</li>
+      <li>Les résultats varient d'un run à l'autre (throttling thermique, autres process,
+        état du cache). Une seule mesure est indicative, pas une vérité absolue — voir les
+        limites en fin de page.</li>
+    </ul>
+  </div>
+
+  <h2>Instructions pas-à-pas</h2>
+
+  <ol class="steps">
+    <li>
+      Téléchargez le script, hébergé à côté de cette page :
+      <pre><code>curl -O https://forumhfr.github.io/artifacts/bench-rf2/bench-rf2.sh</code></pre>
+      (ou <a href="bench-rf2.sh">clic droit → enregistrer le lien</a> depuis votre navigateur).
+    </li>
+    <li>
+      <strong>Lisez le script avant de l'exécuter.</strong> C'est une bonne pratique
+      générale avant de lancer n'importe quel script téléchargé sur votre machine — celui-ci
+      est commenté en tête de fichier pour faciliter la relecture. Il ne fait que : cloner
+      une copie dédiée du dépôt sous <code>~/.cache/bench-rf2</code>, lancer des builds
+      Gradle chronométrés, et afficher un résultat en local. Il ne pousse et ne publie rien
+      lui-même.
+    </li>
+    <li>
+      Rendez-le exécutable et lancez-le :
+      <pre><code>chmod +x bench-rf2.sh
+./bench-rf2.sh          # scénarios S1 à S4
+./bench-rf2.sh --full   # ajoute S5 (detekt + lint, comme la CI)</code></pre>
+    </li>
+    <li>
+      À la fin, le script affiche un bloc de résultats en <strong>deux formats</strong>
+      (Markdown et BBCode HFR), avec toutes les infos machine et les temps par scénario.
+      Les fichiers sont aussi écrits sous
+      <code>~/.cache/bench-rf2/results/&lt;horodatage&gt;/</code>.
+    </li>
+    <li>
+      Postez le bloc BBCode (déjà prêt pour un forum HFR, encadré en bloc via
+      <code>[fixed]</code>) sur le
+      <a href="https://forum.hardware.fr/forum2.php?config=hfr.inc&amp;cat=23&amp;post=35421&amp;page=1">topic
+      Redface 2 sur ForumHFR</a>. C'est un copier-coller manuel : le script n'envoie rien
+      lui-même.
+    </li>
+  </ol>
+
+  <h2>Que mesure chaque scénario ?</h2>
+
+  <p>
+    Chaque scénario est précédé d'un <code>./gradlew --stop</code> (démon Gradle frais) et
+    d'un état de cache contrôlé, pour que les temps soient comparables entre machines.
+  </p>
+
+  <div class="scenario-block">
+    <h3>S1 — cold configure</h3>
+    <p><code>./gradlew help</code> après purge du cache de configuration local au projet.</p>
+    <p class="reveals">Révèle : le temps de <strong>configuration pure</strong> du graphe de
+      tâches (évaluation des <code>build.gradle.kts</code>, résolution des plugins de
+      convention <code>build-logic</code>, aucune compilation). Une configuration lente
+      pointe vers un projet Gradle trop chargé en logique de configuration plutôt qu'un
+      problème de compilation.</p>
+  </div>
+
+  <div class="scenario-block">
+    <h3>S2 — clean build</h3>
+    <p><code>./gradlew clean :app:assembleProdDebug --no-build-cache</code>, démon frais,
+      cache de build désactivé.</p>
+    <p class="reveals">Révèle : le coût <strong>complet</strong> d'un build depuis zéro —
+      configuration + KSP/Hilt (génération de code par annotation) + compilation Kotlin de
+      tous les modules dont dépend <code>:app</code> + packaging APK. C'est le pire cas
+      réaliste (nouvelle machine, cache vidé, CI sans cache chaud).</p>
+  </div>
+
+  <div class="scenario-block">
+    <h3>S3 — warm no-op</h3>
+    <p>Même commande que S2, sans <code>clean</code> : <code>./gradlew :app:assembleProdDebug
+      --no-build-cache</code>, exécutée immédiatement après S2.</p>
+    <p class="reveals">Révèle : le coût des <strong>vérifications d'incrémentalité</strong>
+      de Gradle (up-to-date checks) quand rien n'a changé. Un temps élevé ici indique que le
+      graphe de tâches est coûteux à re-vérifier même sans travail réel à faire — un signal
+      utile indépendamment de la vitesse de compilation brute.</p>
+  </div>
+
+  <div class="scenario-block">
+    <h3>S4 — tests unitaires</h3>
+    <p><code>./gradlew test testDebugUnitTest</code> — exactement les tâches utilisées par
+      la CI du projet (voir <code>.github/workflows/ci.yml</code>) : <code>test</code>
+      couvre les modules JVM purs (<code>core:model</code>, <code>core:domain</code>,
+      <code>core:parser</code>, …) et agrège les variantes de <code>:app</code> ;
+      <code>testDebugUnitTest</code> couvre les modules Android non flavorés
+      (<code>core:database</code>, <code>core:ui</code>, <code>core:network</code>,
+      <code>core:data</code>, <code>core:extension</code>, chaque <code>feature:*</code>).</p>
+    <p class="reveals">Révèle : le coût de <strong>tous</strong> les tests unitaires du
+      dépôt, pas seulement ceux de <code>:app</code> — c'est le scénario qui ressemble le
+      plus à ce qu'un contributeur attend avant de pousser une PR.</p>
+  </div>
+
+  <div class="scenario-block">
+    <h3>S5 — detekt + lint <span class="tag tag-piste">optionnel, --full</span></h3>
+    <p><code>./gradlew detektAll</code> puis <code>./gradlew lintDebug :app:lintProdDebug</code>
+      — les deux commandes utilisées par la CI. <code>detektAll</code> est une tâche
+      custom qui lance detekt-cli en une seule passe sur tout le dépôt (pas une agrégation
+      par module) ; <code>lintDebug</code> couvre les modules non flavorés et
+      <code>:app:lintProdDebug</code> est nécessaire en plus car <code>:app</code> a une
+      dimension de flavor (<code>channel</code> : prod/beta/dev) — le
+      <code>lintDebug</code> non qualifié ne résout pas de variante pour ce module.</p>
+    <p class="reveals">Révèle : le coût de l'analyse statique, souvent négligé dans les
+      discussions de perf de build mais bien présent dans la CI réelle du projet (deux des
+      quatre jobs de la matrice CI).</p>
+  </div>
+
+  <h2>Table de résultats de référence</h2>
+
+  <p>Vide pour l'instant — à alimenter avec les contributions de la communauté. La ligne
+    ci-dessous est un <strong>exemple de mise en forme uniquement, aucun chiffre réel</strong>.</p>
+
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th>Contributeur</th>
+          <th>CPU</th>
+          <th>Cœurs (phys/log)</th>
+          <th>RAM</th>
+          <th>Disque</th>
+          <th>OS</th>
+          <th>S1</th>
+          <th>S2</th>
+          <th>S3</th>
+          <th>S4</th>
+          <th>S5</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="example-row">
+          <td>exemple</td>
+          <td>exemple — ex. « Ryzen 7 xxxx »</td>
+          <td>exemple — 8/16</td>
+          <td>exemple — 32 Go</td>
+          <td>exemple — NVMe</td>
+          <td>exemple — Linux</td>
+          <td>exemple</td>
+          <td>exemple</td>
+          <td>exemple</td>
+          <td>exemple</td>
+          <td>exemple</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Pistes d'accélération étudiées</h2>
+
+  <p>État établi en lisant <code>gradle.properties</code>,
+    <code>.github/workflows/ci.yml</code> et <code>settings.gradle.kts</code> du dépôt —
+    pas des suppositions.</p>
+
+  <h3>Actif aujourd'hui <span class="tag tag-actif">actif</span></h3>
+  <ul>
+    <li><code>org.gradle.parallel=true</code> — exécution parallèle des tâches
+      indépendantes entre modules, en local.</li>
+    <li><code>org.gradle.caching=true</code> — cache de build <strong>local</strong>
+      activé (réutilisation des sorties de tâches déjà exécutées sur la même machine).
+      Aucun cache de build <strong>distant/partagé</strong> n'est configuré dans
+      <code>settings.gradle.kts</code> à ce jour.</li>
+    <li><code>org.gradle.configuration-cache=true</code> — cache de configuration activé
+      (évite de re-évaluer les scripts Gradle à chaque invocation quand rien n'a changé en
+      amont).</li>
+    <li><code>org.gradle.jvmargs=-Xmx4g</code> — heap du démon Gradle fixé à 4 Go.</li>
+    <li><strong>Fan-out CI par type de tâche</strong> : la CI (<code>ci.yml</code>) ne lance
+      plus un seul job séquentiel mais 4 jobs en parallèle (assemble / test / lint /
+      detekt), chacun avec son propre cache incrémental via
+      <code>gradle/actions/setup-gradle</code> — un moyen déjà en place de dépasser le
+      plafond de vCPU d'un runner unique.</li>
+  </ul>
+
+  <h3>Pistes non actives, à l'étude <span class="tag tag-piste">piste</span></h3>
+  <ul>
+    <li><strong>Cache de build distant/partagé</strong> (nœud Develocity Build Cache, ou
+      cache HTTP auto-hébergé) : permettrait aux contributeurs et à la CI de partager les
+      sorties de tâches entre machines, au lieu d'un cache local par poste. Impact potentiel
+      le plus net sur S2/S4 pour les modules inchangés d'une PR à l'autre.</li>
+    <li><strong>Exécution de tests déportée</strong> (test distribution / matrice de tests
+      plus fine) : aujourd'hui S4 lance <code>test testDebugUnitTest</code> en un seul
+      appel couvrant tous les modules dans le même job CI ; répartir les tests par module ou
+      groupe de modules sur plusieurs jobs/machines réduirait le temps mur.</li>
+    <li><strong>Fan-out CI plus fin</strong> : la matrice actuelle a 4 entrées ; un
+      découpage plus fin (par exemple par groupe de modules pour les tests) est une piste
+      pour aller plus loin que le fan-out déjà en place.</li>
+    <li><strong>KSP/Hilt</strong> : la génération de code par annotation (Hilt via KSP2) est
+      un point chaud classique des builds Android/Kotlin. Ce bench (en particulier l'écart
+      S2 vs S3) donne une première mesure exploitable ; creuser plus finement demanderait un
+      profil de build dédié (<code>--scan</code> ou équivalent), hors du périmètre de ce
+      script volontairement simple.</li>
+  </ul>
+
+  <footer>
+    <p>Redface 2 est un projet sous licence <strong>GPL-3.0</strong>.</p>
+    <p>Dépôt : <a href="https://github.com/ForumHFR/redface2">github.com/ForumHFR/redface2</a></p>
+    <p>Cette page et le script associé ne collectent ni ne transmettent aucune donnée —
+      toute soumission de résultat est un copier-coller manuel effectué par vous.</p>
+  </footer>
+
+</div>
