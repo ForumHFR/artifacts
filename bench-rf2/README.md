@@ -8,11 +8,14 @@ mainteneur ni rien publier automatiquement.
 ## Contenu du dossier
 
 - `bench-rf2.sh` — script bash (Linux/macOS) qui clone une copie dédiée du dépôt sur un
-  ref fixe, collecte les infos machine, exécute 4 (ou 5 avec `--full`) scénarios Gradle
-  chronométrés, et affiche un bloc de résultats copiable en Markdown et en BBCode HFR.
-  Ne clone/écrit que sous son propre répertoire de travail (`~/.cache/bench-rf2` par
-  défaut, ou `$BENCH_RF2_DIR`) — ne touche jamais un checkout de travail existant. Ne
-  publie/n'uploade rien : la soumission du résultat est un copier-coller manuel.
+  ref fixe, collecte les infos machine, exécute 4 (ou 6 avec `--full` — S5 est scindé
+  en S5a detekt / S5b lint) scénarios Gradle chronométrés, et affiche un bloc de
+  résultats copiable en Markdown et en BBCode HFR. Ne clone/écrit que sous son propre
+  répertoire de travail (`~/.cache/bench-rf2` par défaut, ou `$BENCH_RF2_DIR`) : si ce
+  répertoire (`<dir>/redface2`) existe déjà sans le marqueur `.bench-rf2-clone` posé par
+  le script à son premier clone, il refuse de continuer plutôt que de risquer de
+  toucher un checkout de travail existant. Ne publie/n'uploade rien : la soumission du
+  résultat est un copier-coller manuel.
 - `index.html` — page statique autonome (aucune ressource externe, thème clair/sombre),
   en français, qui explique le protocole et sert de point d'entrée pour un contributeur.
 - `README.md` — ce fichier.
@@ -41,16 +44,20 @@ Aucune opération git/gh mutante n'a été effectuée pour produire ce kit — l
   antivirus/indexeur en tâche de fond peuvent fausser une mesure isolée. Un participant
   motivé peut relancer `./bench-rf2.sh` plusieurs fois (idempotent) et reporter la
   meilleure/l'ensemble des valeurs.
-- **Premier run réseau-dépendant.** Le temps de S1 (et dans une moindre mesure S2)
-  inclut potentiellement le téléchargement de la distribution Gradle et des dépendances
-  si le cache `$GRADLE_USER_HOME` dédié est vide. Les runs suivants sur la même machine
-  n'ont plus ce coût — les résultats d'un tout premier run ne sont donc pas strictement
-  comparables à ceux d'un run répété.
-- **« Cold configure » (S1) n'est pas un cold start complet.** Seul le cache de
-  configuration local au projet (`.gradle/configuration-cache`) est purgé ; le démon
-  Gradle est frais (`--stop`) mais le cache de dépendances reste chaud pour éviter un
-  téléchargement réseau à chaque itération de bench. Un vrai cold start (VM neuve, aucun
-  cache) donnerait des temps S1 plus élevés.
+- **Premier run réseau-dépendant.** La distribution Gradle elle-même est téléchargée en
+  amont par le `./gradlew --version` de la collecte des infos machine (warm-up), donc
+  hors chronométrage des scénarios. En revanche, le temps de S1 (et dans une moindre
+  mesure S2) inclut potentiellement le téléchargement des dépendances du projet (plugins
+  Gradle, artefacts Maven/Google) si le cache `$GRADLE_USER_HOME` dédié est vide. Les
+  runs suivants sur la même machine n'ont plus ce coût — les résultats d'un tout premier
+  run ne sont donc pas strictement comparables à ceux d'un run répété.
+- **« Configuration + build-logic » (S1) n'est pas de la configuration Gradle pure.**
+  `./gradlew help` peut déclencher la recompilation de l'included build `build-logic` si
+  son cache est invalide : ce n'est donc pas un temps de configuration isolé. Seul le
+  cache de configuration local au projet (`.gradle/configuration-cache`) est purgé ; le
+  démon Gradle est frais (`--stop`) mais le cache de dépendances reste chaud pour éviter
+  un téléchargement réseau à chaque itération de bench. Un vrai cold start (VM neuve,
+  aucun cache) donnerait des temps S1 plus élevés.
 - **Variabilité thermique et énergétique.** Sur laptop, le throttling thermique ou une
   exécution sur batterie change fortement les temps mesurés — la page demande de brancher
   la machine, mais rien ne le vérifie techniquement.
@@ -63,8 +70,9 @@ Aucune opération git/gh mutante n'a été effectuée pour produire ce kit — l
 - **Pic RSS optionnel.** La mesure du pic de mémoire résidente utilise `/usr/bin/time -v`
   (GNU time). Absent par défaut sur macOS (installable via `brew install gnu-time`), la
   colonne RSS remonte alors `n/a`.
-- **`detektAll` n'est pas une agrégation par module.** C'est une tâche `JavaExec` custom
-  (définie dans le `build.gradle.kts` racine) qui lance detekt-cli en une seule passe sur
+- **`detektAll` n'est pas une agrégation par module.** C'est une tâche générique
+  (`dependsOn`) qui délègue à `detektCliCheck`, la véritable tâche `JavaExec` (définie
+  dans le `build.gradle.kts` racine), laquelle lance detekt-cli en une seule passe sur
   tout le dépôt — le temps S5a ne se décompose donc pas par module.
 - **Ref benchmarké fixe par défaut, mais paramétrable (`--ref`).** Comparer des résultats
   obtenus avec des `--ref` différents n'a pas de sens : la table de résultats de référence
