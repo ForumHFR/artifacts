@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Largeur des images dans les posts — RF2 #876 / #884</title>
+</head>
+<body>
+<style>
+  :root {
+    --bg:#F3F1ED; --surface:#FFFFFF; --surface-2:#ECE8E1; --ink:#1F1A16;
+    --muted:#6C635B; --line:#DED8CF; --accent:#2E77C2; --accent-ink:#1B5FA6;
+    --pad-col:#C25B4E; --marg-col:#D98E27; --img-col:#2C9E77;
+    --device-bg:#17110F; --device-ink:#ECE4DC; --device-line:#3A2F29; --device-muted:#A99C92;
+    --radius:14px; --maxw:900px;
+    --mono:ui-monospace,"SF Mono","JetBrains Mono",Menlo,Consolas,monospace;
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",sans-serif;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{
+      --bg:#14100E; --surface:#1E1815; --surface-2:#281F1A; --ink:#ECE5DE;
+      --muted:#9E938A; --line:#342A24; --accent:#5AA0E8; --accent-ink:#8CC0F2;
+      --pad-col:#D66E5F; --marg-col:#E5A23F; --img-col:#3BB98A;
+    }
+  }
+  :root[data-theme="light"]{
+    --bg:#F3F1ED; --surface:#FFFFFF; --surface-2:#ECE8E1; --ink:#1F1A16;
+    --muted:#6C635B; --line:#DED8CF; --accent:#2E77C2; --accent-ink:#1B5FA6;
+    --pad-col:#C25B4E; --marg-col:#D98E27; --img-col:#2C9E77;
+  }
+  :root[data-theme="dark"]{
+    --bg:#14100E; --surface:#1E1815; --surface-2:#281F1A; --ink:#ECE5DE;
+    --muted:#9E938A; --line:#342A24; --accent:#5AA0E8; --accent-ink:#8CC0F2;
+    --pad-col:#D66E5F; --marg-col:#E5A23F; --img-col:#3BB98A;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);
+    line-height:1.6;-webkit-font-smoothing:antialiased;
+    background-image:radial-gradient(120% 90% at 50% -10%, color-mix(in srgb, var(--accent) 7%, transparent), transparent 60%);}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:clamp(20px,5vw,56px) clamp(18px,4vw,40px) 80px}
+  a{color:var(--accent-ink);text-decoration:none;border-bottom:1px solid color-mix(in srgb,var(--accent) 40%,transparent)}
+  a:hover{border-bottom-color:var(--accent)}
+  code,.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+  h1,h2,h3{text-wrap:balance;line-height:1.12;margin:0}
+  .eyebrow{font-family:var(--mono);font-size:.74rem;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--accent-ink);font-weight:600}
+
+  /* ---- hero ---- */
+  header.hero{padding:8px 0 34px;border-bottom:1px solid var(--line);margin-bottom:44px}
+  header.hero h1{font-size:clamp(2rem,5.5vw,3.1rem);font-weight:800;letter-spacing:-.02em;margin:14px 0 0}
+  header.hero .lede{font-size:clamp(1.05rem,2.4vw,1.3rem);color:var(--muted);max-width:44ch;margin:16px 0 0}
+  .keyline{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+  .chip{font-family:var(--mono);font-size:.82rem;padding:7px 12px;border-radius:999px;
+    border:1px solid var(--line);background:var(--surface);color:var(--muted)}
+  .chip b{color:var(--ink);font-weight:700}
+  .chip .dot{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:6px;vertical-align:middle}
+
+  section{margin:56px 0 0}
+  h2{font-size:clamp(1.4rem,3.2vw,1.9rem);font-weight:750;letter-spacing:-.01em}
+  h2 .num{font-family:var(--mono);font-size:.7em;color:var(--accent-ink);margin-right:.5em;font-weight:600}
+  section > p{max-width:64ch;color:var(--ink)}
+  section > p.sub{color:var(--muted)}
+
+  /* ---- anatomy bar ---- */
+  .anat{margin-top:24px;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;background:var(--surface)}
+  .anat .bar{display:flex;height:74px;font-family:var(--mono);font-size:.72rem;font-weight:600}
+  .anat .seg{display:flex;align-items:center;justify-content:center;text-align:center;color:#fff;
+    padding:2px;line-height:1.15;position:relative}
+  .anat .seg.pad{background:var(--pad-col)}
+  .anat .seg.marg{background:var(--marg-col);color:#3a2600}
+  .anat .seg.img{background:var(--img-col)}
+  .anat .rail{display:flex;font-family:var(--mono);font-size:.72rem;color:var(--muted);border-top:1px solid var(--line)}
+  .anat .rail span{padding:8px 4px;text-align:center;border-right:1px solid var(--line)}
+  .anat .rail span:last-child{border-right:0}
+  .legend{display:flex;flex-wrap:wrap;gap:16px 24px;margin-top:18px;font-size:.9rem}
+  .legend .it{display:flex;gap:9px;align-items:flex-start;max-width:26ch}
+  .legend .sw{width:15px;height:15px;border-radius:4px;margin-top:4px;flex:0 0 auto}
+
+  /* ---- interactive playground ---- */
+  .play{margin-top:26px;display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:28px;align-items:start}
+  @media(max-width:720px){.play{grid-template-columns:1fr}}
+  .stage{display:flex;justify-content:center}
+  .device{width:100%;max-width:380px;background:var(--device-bg);border-radius:26px;
+    border:1px solid var(--device-line);padding:14px 0 10px;box-shadow:0 18px 50px -24px rgba(0,0,0,.6);overflow:hidden}
+  .device .status{display:flex;justify-content:space-between;padding:0 18px 12px;color:var(--device-muted);
+    font-family:var(--mono);font-size:.7rem}
+  .post{color:var(--device-ink)}
+  .post .ptext{font-size:.9rem;line-height:1.5}
+  .post .frag{color:var(--device-muted);font-size:.82rem}
+  .post .imgblk{background:linear-gradient(135deg,#2f6f9e,#7a4f86);border-radius:8px;height:0;
+    display:flex;align-items:center;justify-content:center;color:#fff;font-family:var(--mono);font-size:.72rem;
+    transition:width .35s cubic-bezier(.4,0,.2,1),height .35s cubic-bezier(.4,0,.2,1),margin .35s;
+    box-shadow:0 0 0 1px rgba(255,255,255,.14) inset}
+  .post .imgblk.b{background:linear-gradient(135deg,#9c5a3a,#b98f2a)}
+  .post .cc{display:inline-block;width:15px;height:15px;border-radius:3px;background:#3fa06a;vertical-align:-2px;margin:0 2px}
+  .post .coledge{position:relative}
+  .post .colguide{position:absolute;top:0;bottom:0;width:1px;background:repeating-linear-gradient(var(--device-muted) 0 4px,transparent 4px 9px);opacity:.5}
+  .controls{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px}
+  .controls h3{font-size:1rem;font-weight:750;margin-bottom:4px}
+  .ctl{margin-top:20px}
+  .ctl label{display:flex;justify-content:space-between;font-size:.86rem;font-weight:650;margin-bottom:9px}
+  .ctl label .val{font-family:var(--mono);color:var(--accent-ink)}
+  input[type=range]{width:100%;accent-color:var(--accent);height:22px}
+  .snaps{display:flex;gap:6px;margin-top:10px}
+  .snaps button{flex:1;font-family:var(--mono);font-size:.8rem;padding:7px 0;border-radius:8px;cursor:pointer;
+    border:1px solid var(--line);background:var(--surface-2);color:var(--ink);font-weight:600}
+  .snaps button[aria-pressed=true]{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .toggle{display:flex;align-items:center;gap:11px;cursor:pointer;user-select:none;margin-top:6px}
+  .toggle input{position:absolute;opacity:0;pointer-events:none}
+  .track{width:44px;height:25px;border-radius:999px;background:var(--surface-2);border:1px solid var(--line);position:relative;transition:background .2s;flex:0 0 auto}
+  .track::after{content:"";position:absolute;top:2px;left:2px;width:19px;height:19px;border-radius:50%;background:var(--muted);transition:transform .2s,background .2s}
+  .toggle input:checked + .track{background:color-mix(in srgb,var(--accent) 55%,transparent)}
+  .toggle input:checked + .track::after{transform:translateX(19px);background:var(--accent)}
+  .toggle input:focus-visible + .track{outline:2px solid var(--accent);outline-offset:2px}
+  .readout{margin-top:22px;border-top:1px solid var(--line);padding-top:16px;font-family:var(--mono);font-size:.82rem;line-height:1.9}
+  .readout .row{display:flex;justify-content:space-between;gap:12px}
+  .readout .row b{color:var(--ink);font-weight:700}
+  .readout .row span{color:var(--muted)}
+  .readout .hl{color:var(--accent-ink);font-weight:700}
+
+  /* ---- levers matrix ---- */
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:22px}
+  @media(max-width:640px){.grid2{grid-template-columns:1fr}}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px}
+  .card .tag{font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;font-weight:700}
+  .card h3{font-size:1.05rem;margin:8px 0 6px;font-weight:750}
+  .card p{margin:0;color:var(--muted);font-size:.92rem}
+  .card.this{border-color:color-mix(in srgb,var(--img-col) 55%,var(--line))}
+  .card.this .tag{color:var(--img-col)}
+  .card.i884{border-color:color-mix(in srgb,var(--pad-col) 55%,var(--line))}
+  .card.i884 .tag{color:var(--pad-col)}
+  .compound{margin-top:16px;background:var(--surface-2);border:1px dashed var(--line);border-radius:12px;padding:16px 18px;font-size:.92rem;color:var(--ink)}
+  .compound b{color:var(--accent-ink)}
+
+  /* ---- cost table ---- */
+  .tablewrap{margin-top:22px;overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius)}
+  table{border-collapse:collapse;width:100%;min-width:520px;font-size:.9rem}
+  th,td{text-align:left;padding:13px 16px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-size:.72rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:700;background:var(--surface-2)}
+  tr:last-child td{border-bottom:0}
+  td code{font-size:.82rem;background:var(--surface-2);padding:2px 6px;border-radius:5px}
+  .verdict{margin-top:20px;display:flex;gap:14px;align-items:flex-start;background:var(--surface);
+    border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:10px;padding:18px 20px}
+  .verdict .k{font-family:var(--mono);font-weight:700;color:var(--accent-ink);flex:0 0 auto}
+
+  /* ---- recap 3 values ---- */
+  .three{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:22px}
+  @media(max-width:640px){.three{grid-template-columns:1fr}}
+  .val3{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:18px;text-align:center}
+  .val3 .pct{font-size:2.1rem;font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+  .val3 .st{font-family:var(--mono);font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-top:2px}
+  .val3 p{font-size:.86rem;color:var(--muted);margin:10px 0 0}
+  .val3.rec{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+  .val3.rec .st{color:var(--accent-ink)}
+
+  footer{margin-top:64px;padding-top:24px;border-top:1px solid var(--line);color:var(--muted);font-size:.85rem}
+  footer .refs{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px}
+  footer .refs a{font-family:var(--mono);font-size:.8rem;padding:5px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+  @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header class="hero">
+    <div class="eyebrow">Redface 2 · rendu des images · #876</div>
+    <h1>Une image fait « 90 % »… de la colonne, pas de l'écran</h1>
+    <p class="lede">Pourquoi une image mesurée occupe 90 % du texte mais paraît plus étroite — et ce que coûterait de passer à 95 ou 100 %.</p>
+    <div class="keyline">
+      <span class="chip"><span class="dot" style="background:var(--img-col)"></span>image <b>863 px</b> = 90 % de la colonne</span>
+      <span class="chip"><span class="dot" style="background:var(--marg-col)"></span>marge <b>47 px</b> / côté</span>
+      <span class="chip"><span class="dot" style="background:var(--pad-col)"></span>padding post <b>61 px</b> / côté</span>
+      <span class="chip">sur l'écran : <b>≈ 80 %</b></span>
+    </div>
+  </header>
+
+  <section>
+    <h2><span class="num">01</span>Anatomie d'une largeur</h2>
+    <p>Mesuré au pixel sur une capture réelle (écran <span class="mono">1080 px</span>). La largeur d'une image se lit en couches, du bord de l'écran vers le centre :</p>
+    <div class="anat" role="img" aria-label="Coupe horizontale : padding 61px, marge 47px, image 863px, marge 47px, padding 61px, sur un écran de 1080px">
+      <div class="bar">
+        <div class="seg pad" style="width:5.65%">61</div>
+        <div class="seg marg" style="width:4.35%">47</div>
+        <div class="seg img" style="width:79.9%">image · 863 px · 90 % de la colonne</div>
+        <div class="seg marg" style="width:4.35%">47</div>
+        <div class="seg pad" style="width:5.65%">61</div>
+      </div>
+      <div class="rail">
+        <span style="width:5.65%">écran</span>
+        <span style="width:88.7%">colonne de contenu — 958 px = 100 %</span>
+        <span style="width:5.65%">écran</span>
+      </div>
+    </div>
+    <div class="legend">
+      <div class="it"><span class="sw" style="background:var(--pad-col)"></span><div><b>Padding du post</b> — la marge de l'encart (carte), du bord d'écran jusqu'au texte. C'est le terrain de #884.</div></div>
+      <div class="it"><span class="sw" style="background:var(--marg-col)"></span><div><b>Marge de l'image</b> — les 10 % restants, coupés en deux (5 % + 5 %). C'est le terrain de cette proposition.</div></div>
+      <div class="it"><span class="sw" style="background:var(--img-col)"></span><div><b>Image</b> — 90 % de la colonne de texte, jamais étirée au-delà (parité web RF1 : <code>max-width: 90%</code>).</div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">02</span>Essayez les deux leviers</h2>
+    <p>Bougez la largeur d'image (cette proposition) et basculez l'encart (#884). Les deux se <b>cumulent</b> : c'est pour ça que « 90 % » peut donner beaucoup ou peu d'air selon l'encart.</p>
+    <div class="play">
+      <div class="stage">
+        <div class="device" aria-hidden="true">
+          <div class="status"><span>08:35</span><span>RF2 · aperçu</span></div>
+          <div class="post" id="post">
+            <div class="ptext" id="ptextTop">Non elle ne l'est pas. Étonnante car vous ne la verrez plus sur le service public <span class="cc"></span></div>
+            <div class="imgblk a" id="imgA">image A</div>
+            <div class="ptext frag" id="fragMid">Pour le journalisme français <span class="cc"></span></div>
+            <div class="imgblk b" id="imgB">image B</div>
+          </div>
+        </div>
+      </div>
+      <div class="controls">
+        <h3>Réglages</h3>
+        <p style="margin:0;color:var(--muted);font-size:.86rem">Aperçu proportionnel à un écran de 1080 px.</p>
+
+        <div class="ctl">
+          <label for="frac">Largeur d'image <span class="val" id="fracVal">90 %</span></label>
+          <input type="range" id="frac" min="85" max="100" step="1" value="90">
+          <div class="snaps" role="group" aria-label="valeurs repères">
+            <button data-f="90" aria-pressed="true">90 %</button>
+            <button data-f="95" aria-pressed="false">95 %</button>
+            <button data-f="100" aria-pressed="false">100 %</button>
+          </div>
+        </div>
+
+        <div class="ctl">
+          <label style="margin-bottom:0">Encart (carte) du post</label>
+          <p style="margin:4px 0 12px;color:var(--muted);font-size:.82rem">Décoché = posts pleine largeur, la piste de #884.</p>
+          <label class="toggle"><input type="checkbox" id="card" checked><span class="track"></span><span id="cardLbl">Encart activé</span></label>
+        </div>
+
+        <div class="readout" id="readout"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">03</span>Deux leviers indépendants</h2>
+    <p class="sub">L'« air » autour d'une image a deux sources distinctes, gérées par deux morceaux de code différents. On peut toucher l'une sans l'autre — ou les deux.</p>
+    <div class="grid2">
+      <div class="card this">
+        <div class="tag">Cette proposition · #876</div>
+        <h3>Largeur de l'image dans la colonne</h3>
+        <p>La constante de cap (90 %). Change la marge <b>interne</b> de l'image (les 47 px). L'encart et le texte ne bougent pas.</p>
+      </div>
+      <div class="card i884">
+        <div class="tag">Chantier séparé · #884</div>
+        <h3>Encart / posts pleine largeur</h3>
+        <p>Le padding de la carte (61 px). Casse l'encart pour coller le contenu aux bords, comme d'autres apps. Concerne tout le post, pas que les images.</p>
+      </div>
+    </div>
+    <div class="compound">
+      <b>Ils se cumulent.</b> Une image à 100 % dans un post encart reste bornée par les 61 px de padding. La même image à 90 % dans un post pleine largeur (#884) est déjà bien plus large. Pour du « bord à bord » total, il faut les deux — d'où l'intérêt de les décider ensemble, mais de les livrer séparément.
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">04</span>Combien ça coûte côté code</h2>
+    <p>Le « 90 % » ne vit pas dans une seule ligne : c'est une constante <b>partagée avec les smileys</b>, plus la boîte d'attente des blocs.</p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Ce qui pilote le 90 %</th><th>Où</th><th>Piège</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><code>SMILEY_RELATIVE_MAX_WIDTH_FRACTION</code></td>
+            <td>images inline, blocs mesurés <em>et</em> smileys</td>
+            <td>Partagée avec les smileys (#175). La bosser élargit aussi les smileys → interdit par le §9 du contrat.</td>
+          </tr>
+          <tr>
+            <td><code>COLD_BLOCK_WIDTH_FRACTION</code></td>
+            <td>boîte d'attente d'un bloc non mesuré</td>
+            <td>À garder cohérente avec la largeur finale sinon saut de layout au chargement.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="verdict">
+      <div class="k">Verdict</div>
+      <div>Trivial comme <em>chiffre</em>, pas comme <em>changement</em>. Le faire proprement = créer une constante image dédiée (<code>IMAGE_RELATIVE_MAX_WIDTH_FRACTION</code>), la câbler sur 3 chemins (inline / bloc mesuré / cold) et laisser les smileys à 0,9. ~15–20 lignes + tests. <b>Mais</b> c'est une modif du contrat gelé v1.4 (§6 largeur, §9 constantes) → amendement gaté par Sol et validé, jamais un tweak silencieux (gouvernance §0).</div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">05</span>Les trois valeurs</h2>
+    <div class="three">
+      <div class="val3 rec">
+        <div class="pct">90 %</div><div class="st">actuel · recommandé</div>
+        <p>Parité web RF1. Marge 47 px/côté. Respire, ne colle jamais au texte.</p>
+      </div>
+      <div class="val3">
+        <div class="pct">95 %</div><div class="st">compromis</div>
+        <p>Marge 24 px/côté. Un peu plus large, garde un filet d'air. Bon candidat si « trop étroit ».</p>
+      </div>
+      <div class="val3">
+        <div class="pct">100 %</div><div class="st">bord à bord</div>
+        <p>Marge 0 : l'image touche pile la largeur du texte. Cogne les cadres de citation et colonnes étroites — à valider en dogfood.</p>
+      </div>
+    </div>
+    <p class="sub" style="margin-top:18px">Pour du plein écran « comme les autres apps », c'est 100 % <em>combiné</em> à #884 (encart cassé). Sinon 95 % seul suffit souvent à répondre au « trop étroit ».</p>
+  </section>
+
+  <footer>
+    <div class="refs">
+      <a href="https://github.com/ForumHFR/redface2/issues/884">#884 posts pleine largeur</a>
+      <a href="https://github.com/ForumHFR/redface2/issues/876">#876 passe images</a>
+      <a href="https://github.com/ForumHFR/redface2/issues/957">#957 renderer segmenté (livré)</a>
+    </div>
+    Mesures relevées sur build dev 0.34.1. Aperçu proportionnel — les px sont ceux d'un écran de 1080 px de large. Action par Claude Fable 5, demandée par XaTriX.
+  </footer>
+</div>
+
+<script>
+(function(){
+  var SCREEN=1080;
+  var frac=document.getElementById('frac'), fracVal=document.getElementById('fracVal');
+  var card=document.getElementById('card'), cardLbl=document.getElementById('cardLbl');
+  var imgA=document.getElementById('imgA'), imgB=document.getElementById('imgB');
+  var readout=document.getElementById('readout');
+  var snaps=document.querySelectorAll('.snaps button');
+  var PAD_ON=61, PAD_OFF=10;           // padding post : encart vs pleine largeur (#884)
+  var RATIO_A=0.68, RATIO_B=0.62;      // hauteurs des deux blocs (proportion)
+
+  function render(){
+    var f=parseInt(frac.value,10);
+    var padPx = card.checked ? PAD_ON : PAD_OFF;
+    var colPx = SCREEN - 2*padPx;               // colonne de contenu
+    var imgPx = Math.round(colPx * f/100);      // image
+    var margPx = Math.round((colPx - imgPx)/2); // marge image / côté
+    var pctScreen = Math.round(imgPx/SCREEN*100);
+
+    // rendu proportionnel dans le device (colonne = 100% de la zone de texte)
+    var wPct = (f) + '%';
+    imgA.style.width=wPct; imgB.style.width=wPct;
+    imgA.style.marginLeft='auto'; imgA.style.marginRight='auto';
+    imgB.style.marginLeft='auto'; imgB.style.marginRight='auto';
+    // hauteur proportionnelle à la largeur rendue (approx via padding-hack évité : on lit la largeur réelle après layout)
+    requestAnimationFrame(function(){
+      imgA.style.height=Math.round(imgA.clientWidth*RATIO_A)+'px';
+      imgB.style.height=Math.round(imgB.clientWidth*RATIO_B)+'px';
+    });
+    // padding du post dans le device : proportion du padding réel
+    var post=document.getElementById('post');
+    var padProp=(padPx/SCREEN*100);
+    post.style.paddingLeft=padProp+'%'; post.style.paddingRight=padProp+'%';
+    post.style.paddingBottom='10px';
+
+    fracVal.textContent=f+' %';
+    cardLbl.textContent = card.checked ? 'Encart activé' : 'Pleine largeur (#884)';
+    snaps.forEach(function(b){ b.setAttribute('aria-pressed', (+b.dataset.f===f)?'true':'false'); });
+
+    readout.innerHTML =
+      '<div class="row"><span>Colonne de contenu</span><b>'+colPx+' px</b></div>'+
+      '<div class="row"><span>Image ('+f+' %)</span><b class="hl">'+imgPx+' px</b></div>'+
+      '<div class="row"><span>Marge image / côté</span><b>'+margPx+' px</b></div>'+
+      '<div class="row"><span>Padding post / côté</span><b>'+padPx+' px</b></div>'+
+      '<div class="row"><span>Sur l’écran entier</span><b class="hl">'+pctScreen+' %</b></div>';
+  }
+  frac.addEventListener('input',render);
+  card.addEventListener('change',render);
+  snaps.forEach(function(b){ b.addEventListener('click',function(){ frac.value=b.dataset.f; render(); }); });
+  render();
+  window.addEventListener('resize',render);
+})();
+</script>
+</body>
+</html>
