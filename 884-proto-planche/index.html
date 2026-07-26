@@ -69,6 +69,29 @@ banc #876 (topic 148760) + dernière page du fil DEV. Prototype debug-only jetab
   <figure><img src="img/s10e-flatedge-dev.png" alt="fil DEV flat edge" loading="lazy"><figcaption>FLAT_EDGE</figcaption></figure>
 </div>
 
+<h2>Complément AMOLED (gate Sol) — thème vrai noir, mesures RGB au pixel</h2>
+<p class="meta">Constat clé : en AMOLED, l'encart actuel est déjà quasi invisible (carte
+RGB(11,9,9) sur fond (0,0,0), delta 11/255) — FLAT est visuellement équivalent avec moins de
+structure. La bande d'identité (88,64,63) et les barres latérales de quote portent la hiérarchie
+dans les deux modes. Point faible PRÉEXISTANT aux deux modes : la surface spoiler (5,3,3),
+indiscernable du noir (seul le label la signale). Blocs code : non évaluables, aucun
+<code>[fixed]</code> dans le banc (trou de banc à combler si exigé).</p>
+<div class="row">
+  <figure><img src="img-amoled/s10e-amoled-encart-p7.png" alt="AMOLED P7 encart" loading="lazy"><figcaption>AMOLED · P7 · ENCART</figcaption></figure>
+  <figure><img src="img-amoled/s10e-amoled-flat-p7.png" alt="AMOLED P7 flat" loading="lazy"><figcaption>AMOLED · P7 · FLAT</figcaption></figure>
+  <figure><img src="img-amoled/s10e-amoled-flatedge-p7.png" alt="AMOLED P7 flat edge" loading="lazy"><figcaption>AMOLED · P7 · FLAT_EDGE</figcaption></figure>
+</div>
+<div class="row">
+  <figure><img src="img-amoled/s10e-amoled-encart-dev.png" alt="AMOLED fil DEV encart" loading="lazy"><figcaption>AMOLED · fil DEV · ENCART</figcaption></figure>
+  <figure><img src="img-amoled/s10e-amoled-flat-dev.png" alt="AMOLED fil DEV flat" loading="lazy"><figcaption>AMOLED · fil DEV · FLAT</figcaption></figure>
+  <figure><img src="img-amoled/s10e-amoled-flatedge-dev.png" alt="AMOLED fil DEV flat edge" loading="lazy"><figcaption>AMOLED · fil DEV · FLAT_EDGE</figcaption></figure>
+</div>
+<div class="row">
+  <figure><img src="img-amoled/s10e-amoled-encart-p7-nested.png" alt="AMOLED quotes imbriquées encart" loading="lazy"><figcaption>AMOLED · quotes imbriquées · ENCART</figcaption></figure>
+  <figure><img src="img-amoled/s10e-amoled-flat-p7-nested.png" alt="AMOLED quotes imbriquées flat" loading="lazy"><figcaption>AMOLED · quotes imbriquées · FLAT</figcaption></figure>
+  <figure><img src="img-amoled/s10e-amoled-flat-p7-spoiler.png" alt="AMOLED spoiler déplié flat" loading="lazy"><figcaption>AMOLED · spoiler déplié · FLAT (surface quasi invisible)</figcaption></figure>
+</div>
+
 <p class="meta" style="margin-top:24px">Voir aussi la maquette statique antérieure :
 <a href="../largeur-images-884/" style="color:#d49a8a">largeur-images-884</a>.
 Arbitrage XaTriX attendu : retenue ou non · optionnelle ou imposée · valeur par défaut.</p>
