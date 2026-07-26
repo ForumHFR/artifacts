@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>#884 — Prototype posts pleine largeur (planche comparative S10e)</title>
+<style>
+  :root { color-scheme: dark; }
+  body { margin: 0; padding: 16px; background: #14100e; color: #e8e0dc;
+         font: 15px/1.45 system-ui, sans-serif; }
+  h1 { font-size: 1.25rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 28px 0 8px; border-top: 1px solid #3a322e; padding-top: 14px; }
+  p  { margin: 4px 0; color: #c8bcb4; }
+  .meta { font-size: .85rem; color: #9a8d84; }
+  table.modes { border-collapse: collapse; margin: 10px 0 4px; font-size: .85rem; }
+  table.modes td, table.modes th { border: 1px solid #3a322e; padding: 3px 8px; text-align: left; }
+  .row { display: flex; gap: 8px; align-items: flex-start; }
+  .row figure { flex: 1 1 0; margin: 0; min-width: 0; }
+  .row img { width: 100%; height: auto; border: 1px solid #3a322e; border-radius: 4px; display: block; }
+  figcaption { font-size: .8rem; color: #9a8d84; text-align: center; padding: 3px 0 0; }
+  @media (max-width: 700px) { .row { flex-direction: column; } }
+</style>
+</head>
+<body>
+<h1>#884 — Prototype « posts pleine largeur » (Lot 5, passe images #876)</h1>
+<p class="meta">Captures S10e (1080×2280), build dev 0.34.4+proto, 26/07/2026, thème sombre,
+banc #876 (topic 148760) + dernière page du fil DEV. Prototype debug-only jetable pour arbitrage
+— rien de shippé. Émulateur indisponible cette nuit (planche mono-device).</p>
+
+<table class="modes">
+<tr><th>Mode</th><th>Rendu</th><th>Largeur utile (Comfort, 360&nbsp;dp)</th></tr>
+<tr><td><b>ENCART</b></td><td>rendu actuel : carte arrondie + gouttières 8&nbsp;dp</td><td>320&nbsp;dp (réf.)</td></tr>
+<tr><td><b>FLAT</b></td><td>fond plat, bande d'identité bord à bord, séparateurs ; gutters texte conservés (12&nbsp;dp)</td><td>336&nbsp;dp (+5&nbsp;%)</td></tr>
+<tr><td><b>FLAT_EDGE</b></td><td>idem + tous les gutters réduits à 4&nbsp;dp (images quasi bord à bord)</td><td>352&nbsp;dp (+10&nbsp;%)</td></tr>
+</table>
+
+<h2>P13 — post « torture » (galeries + fragments + spoiler)</h2>
+<div class="row">
+  <figure><img src="img/s10e-encart-p13.png" alt="P13 encart" loading="lazy"><figcaption>ENCART</figcaption></figure>
+  <figure><img src="img/s10e-flat-p13.png" alt="P13 flat" loading="lazy"><figcaption>FLAT</figcaption></figure>
+  <figure><img src="img/s10e-flatedge-p13.png" alt="P13 flat edge" loading="lazy"><figcaption>FLAT_EDGE</figcaption></figure>
+</div>
+
+<h2>P2 — tailles bloc</h2>
+<div class="row">
+  <figure><img src="img/s10e-encart-p2.png" alt="P2 encart" loading="lazy"><figcaption>ENCART</figcaption></figure>
+  <figure><img src="img/s10e-flat-p2.png" alt="P2 flat" loading="lazy"><figcaption>FLAT</figcaption></figure>
+  <figure><img src="img/s10e-flatedge-p2.png" alt="P2 flat edge" loading="lazy"><figcaption>FLAT_EDGE</figcaption></figure>
+</div>
+
+<h2>P4 — galeries pures</h2>
+<div class="row">
+  <figure><img src="img/s10e-encart-p4.png" alt="P4 encart" loading="lazy"><figcaption>ENCART</figcaption></figure>
+  <figure><img src="img/s10e-flat-p4.png" alt="P4 flat" loading="lazy"><figcaption>FLAT</figcaption></figure>
+  <figure><img src="img/s10e-flatedge-p4.png" alt="P4 flat edge" loading="lazy"><figcaption>FLAT_EDGE</figcaption></figure>
+</div>
+
+<h2>P7 — conteneurs quote / spoiler (hiérarchie sur fond plat)</h2>
+<div class="row">
+  <figure><img src="img/s10e-encart-p7.png" alt="P7 encart" loading="lazy"><figcaption>ENCART</figcaption></figure>
+  <figure><img src="img/s10e-flat-p7.png" alt="P7 flat" loading="lazy"><figcaption>FLAT</figcaption></figure>
+  <figure><img src="img/s10e-flatedge-p7.png" alt="P7 flat edge" loading="lazy"><figcaption>FLAT_EDGE</figcaption></figure>
+</div>
+
+<h2>Fil DEV (posts réels : texte, quotes, signatures)</h2>
+<div class="row">
+  <figure><img src="img/s10e-encart-dev.png" alt="fil DEV encart" loading="lazy"><figcaption>ENCART</figcaption></figure>
+  <figure><img src="img/s10e-flat-dev.png" alt="fil DEV flat" loading="lazy"><figcaption>FLAT</figcaption></figure>
+  <figure><img src="img/s10e-flatedge-dev.png" alt="fil DEV flat edge" loading="lazy"><figcaption>FLAT_EDGE</figcaption></figure>
+</div>
+
+<p class="meta" style="margin-top:24px">Voir aussi la maquette statique antérieure :
+<a href="../largeur-images-884/" style="color:#d49a8a">largeur-images-884</a>.
+Arbitrage XaTriX attendu : retenue ou non · optionnelle ou imposée · valeur par défaut.</p>
+</body>
+</html>
