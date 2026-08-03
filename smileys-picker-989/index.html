@@ -90,15 +90,15 @@
       <tr><td><b>A</b> Actuel</td><td>pad 16 · gap 8 · min 48</td><td class="num">6</td><td class="num">48,0×48,0</td><td class="num">44,0</td><td class="num">44×31</td><td class="num">39×15</td><td class="num">48</td></tr>
       <tr><td><b>B</b> 5 col</td><td>pad 16 · gap 8 · min 56</td><td class="num">5</td><td class="num">59,2×59,2</td><td class="num">55,2</td><td class="num">55×39 <span class="tag up">+25 %</span></td><td class="num">39×15</td><td class="num">35 <span class="tag down">−13</span></td></tr>
       <tr><td><b>C</b> Marges</td><td>pad 8 · gap 4 · min 48</td><td class="num">6</td><td class="num">54,0×54,0</td><td class="num">50,0</td><td class="num">50×36 <span class="tag up">+14 %</span></td><td class="num">39×15</td><td class="num">48 <span class="tag up">=</span></td></tr>
-      <tr><td><b>D</b> Les deux</td><td>pad 8 · gap 4 · min 56</td><td class="num">5</td><td class="num">65,6×65,6</td><td class="num">61,6</td><td class="num">62×44 <span class="tag up">+40 %</span></td><td class="num">39×15</td><td class="num">30 <span class="tag down">−18</span></td></tr>
-      <tr class="win"><td><b>E</b> + paysage</td><td>D · ratio 7:5</td><td class="num">5</td><td class="num">65,6×48,0</td><td class="num">61,6×44,0</td><td class="num">62×44 <span class="tag up">+40 %</span></td><td class="num">39×15</td><td class="num">45 <span class="tag down">−3</span></td></tr>
-      <tr class="win"><td><b>F</b> + upscale</td><td>E · plafond ×1,5</td><td class="num">5</td><td class="num">65,6×48,0</td><td class="num">61,6×44,0</td><td class="num">62×44 <span class="tag up">+40 %</span></td><td class="num">59×23 <span class="tag up">+51 %</span></td><td class="num">45</td></tr>
+      <tr><td><b>D</b> Les deux</td><td>pad 8 · gap 4 · min 56</td><td class="num">5</td><td class="num">65,3×65,3</td><td class="num">61,3</td><td class="num">61×44 <span class="tag up">+40 %</span></td><td class="num">39×15</td><td class="num">30 <span class="tag down">−18</span></td></tr>
+      <tr class="win"><td><b>E</b> + paysage</td><td>D · ratio 7:5</td><td class="num">5</td><td class="num">65,3×48,0</td><td class="num">61,3×44,0</td><td class="num">61×44 <span class="tag up">+40 %</span></td><td class="num">39×15</td><td class="num">45 <span class="tag down">−3</span></td></tr>
+      <tr class="win"><td><b>F</b> + upscale</td><td>E · plafond ×1,5</td><td class="num">5</td><td class="num">65,3×48,0</td><td class="num">61,3×44,0</td><td class="num">61×44 <span class="tag up">+40 %</span></td><td class="num">59×23 <span class="tag up">+51 %</span></td><td class="num">45</td></tr>
       <tr><td><b>G</b> Borne haute</td><td>pad 8 · gap 4 · min 72</td><td class="num">4</td><td class="num">83,0×59,3</td><td class="num">79,0×55,3</td><td class="num">70×50 <span class="tag up">natif</span></td><td class="num">39×15</td><td class="num">28 <span class="tag down">−20</span></td></tr>
     </tbody>
   </table>
   </div>
 
-  <p><b>Ce que le tableau dit.</b> Passer à 5 colonnes (B) coûte 13 vignettes pour +25 %. Rogner les marges seules (C) est le seul gain <em>gratuit</em> (+14 %, densité intacte) mais reste modeste. <b>E est le meilleur rapport</b> : même +40 % que D, mais 45 vignettes visibles au lieu de 30, parce qu'abandonner la cellule carrée récupère le vertical que le corpus paysage n'utilisait pas. À la cellule 65,6×48, le 70×50 sature <em>les deux</em> axes en même temps — plus rien n'est perdu. <b>G prouve que le natif plein ne vaut pas le prix</b> : +13 % de plus que E contre 17 vignettes en moins.</p>
+  <p><b>Ce que le tableau dit.</b> Passer à 5 colonnes (B) coûte 13 vignettes pour +25 %. Rogner les marges seules (C) est le seul gain <em>gratuit</em> (+14 %, densité intacte) mais reste modeste. <b>E est le meilleur rapport</b> : même +40 % que D, mais 45 vignettes visibles au lieu de 30, parce qu'abandonner la cellule carrée récupère le vertical que le corpus paysage n'utilisait pas. À la cellule 65,3×48, le 70×50 sature <em>les deux</em> axes en même temps — plus rien n'est perdu. <b>G prouve que le natif plein ne vaut pas le prix</b> : +13 % de plus que E contre 17 vignettes en moins.</p>
 
   <h2>Comparaison directe</h2>
   <p>Les trois premières rangées de A, E, F et G, à l'échelle réelle du device. C'est ici que le flou de l'upscale de F se juge.</p>
@@ -134,7 +134,7 @@
   </div>
   <div class="grid2">
     <figure><img src="shots/A_debug.webp" alt="A en mode debug"><figcaption><b>A · debug</b> — on voit le vide : les boîtes 44×31 dans des cellules 48×48, et les mini-sprites au milieu de rien.</figcaption></figure>
-    <figure><img src="shots/E_debug.webp" alt="E en mode debug"><figcaption><b>E · debug</b> — les boîtes 62×44 remplissent la cellule 65,6×48 sur les deux axes.</figcaption></figure>
+    <figure><img src="shots/E_debug.webp" alt="E en mode debug"><figcaption><b>E · debug</b> — les boîtes 61×44 remplissent la cellule 65,3×48 sur les deux axes.</figcaption></figure>
   </div>
   <p>L'intérêt au-delà de l'esthétique : une vignette peut paraître petite parce que son fichier source est petit, parce que le cap a mordu, <em>ou</em> parce que la sonde de mesure n'a pas encore atterri. Le liseré coloré distingue les trois — sans ça, on risque de juger la politique sur une capture à cache froid.</p>
 
@@ -143,7 +143,7 @@
   <p>Les quatre points que le cadrage désignait comme risques, photographiés plutôt que supposés.</p>
 
   <h3>fontScale 1,5 et 2,0</h3>
-  <p><b>Géométrie strictement inchangée</b> — 5 colonnes, cellule 65,6×48,0, cap 61,6×44,0 aux deux échelles : seule la légende grossit. Aucune régression de layout, la grille du picker est en <code>dp</code>.</p>
+  <p><b>Géométrie strictement inchangée</b> — 5 colonnes, cellule 65,3×48,0, cap 61,3×44,0 aux deux échelles : seule la légende grossit. Aucune régression de layout, la grille du picker est en <code>dp</code>.</p>
   <p>Mais ça révèle un écart de fond, qui complète le constat de #989 : <b>le picker est en <code>dp</code>, les smileys d'un post sont en <code>sp</code></b>. À gros <code>fontScale</code>, un perso est donc <em>plus grand dans le post que dans le sélecteur qui a servi à le choisir</em> — le désaccord picker/renderer déjà noté sur les builtins (20 dp contre 16 sp) a un second visage.</p>
   <figure><img src="shots/stress_fontscale.webp" alt="Preset E à fontScale 1,5 puis 2,0"><figcaption>Preset E à <b>fontScale 1,5</b> (haut) et <b>2,0</b> (bas) : mêmes vignettes, légende plus grosse.</figcaption></figure>
 
@@ -174,14 +174,18 @@
     <li><b>Corpus réel, chargé par le vrai loader Coil de l'app</b>, avec la vraie sonde de mesure intrinsèque partagée avec le rendu des posts.</li>
     <li><b>Cache de mesure chaud.</b> Les presets sont pilotés par <code>onNewIntent</code> sans redémarrer le process — un <code>am start -S</code> aurait vidé le cache en mémoire et photographié le repli à froid au lieu de la politique.</li>
     <li><b>La politique des posts n'est pas touchée.</b> <code>intrinsicSmileyDisplaySize</code> reste intacte (§9 du contrat images, « intouchable », alignée par #871). Le picker a sa propre policy : il sert à <em>reconnaître</em> une vignette, un post à <em>reproduire</em> l'échelle de HFR. Les deux ne partagent que la taille native mesurée.</li>
-    <li><b>Minimum tactile préservé.</b> La cellule paysage est plancherée à 48 dp de haut : 65,6/1,4 = 46,9 dp serait sous le minimum Material, un test le pinne.</li>
+    <li><b>Minimum tactile préservé.</b> La cellule paysage est plancherée à 48 dp de haut : 65,3/1,4 = 46,7 dp serait sous le minimum Material, un test le pinne.</li>
     <li><b>Responsive.</b> Le nombre de colonnes est <em>résolu</em> comme <code>Adaptive</code> le fait, jamais un <code>Fixed(5)</code> en dur — qui donnerait 5 cellules étirées sur toute la largeur en paysage ou sur tablette. En paysage (744 dp utiles), le preset E donne 12 colonnes.</li>
   </ul>
+
+  <h3>Un bloquant corrigé après relecture</h3>
+  <p>Le gate de code a trouvé un défaut réel dans mon solveur de colonnes : je résolvais en <code>dp</code> avec un epsilon « de prudence », alors que <code>GridCells.Adaptive</code> résout en <b>pixels entiers</b>. À une largeur réelle de 327,5 dp sous densité 2.0, ma version répondait 6 colonnes de <b>47,92 dp — sous le minimum tactile</b> — là où <code>Adaptive</code> répond 5. L'epsilon censé absorber les arrondis était précisément ce qui faisait basculer le cas limite.</p>
+  <p>Le solveur travaille désormais en pixels comme l'API, sans epsilon. Effet secondaire bénéfique : <code>cellWidth ≥ minCellWidth</code> devient vrai <em>par construction</em>, donc le minimum tactile horizontal n'a plus besoin de garde séparée. Effet secondaire visible : la cellule compacte vaut 65,3 dp et non 65,6 (division entière en px), et le perso dominant rend à 61×44 au lieu de 62×44 — <b>1 dp, invisible à l'œil, mais les captures et les chiffres de cette page ont été refaits</b> pour correspondre au code corrigé. Deux tests pinnent le cas : le contre-exemple exact, et un balayage de 7 densités × 115 largeurs vérifiant que la cellule ne descend jamais sous le minimum.</p>
 
   <p><b>Ce qui n'est pas encore couvert</b> (à faire si un preset est retenu) : <code>fontScale</code> 1,5 et 2,0, le paysage et le split-screen photographiés, et l'onglet Standard (les builtins à 20 dp partagent cette grille — le piège de #816, où un réglage unique rendait les builtins gros et flous <em>et</em> les persos à l'étroit).</p>
 
   <footer>
-    Bench <code>SmileyPickerSpikeActivity</code> (debug-only, <code>app/src/debug</code>) · Galaxy S10e SM-G970F, 1080×2280 @ 480 dpi (360×760 dp), thème sombre · dev@9fafe209 · captures du 03/08/2026 · Cadrage validé par GPT-5 Codex (dépôt en lecture seule)
+    Bench <code>SmileyPickerSpikeActivity</code> (debug-only, <code>app/src/debug</code>) · Galaxy S10e SM-G970F, 1080×2280 @ 480 dpi (360×760 dp), thème sombre · dev@9fafe209 · captures du 03/08/2026 · Cadrage et gate de code par GPT-5 Codex (dépôt en lecture seule) — un bloquant trouvé et corrigé
   </footer>
 </div>
 </body>
