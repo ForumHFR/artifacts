@@ -138,12 +138,32 @@
   </div>
   <p>L'intérêt au-delà de l'esthétique : une vignette peut paraître petite parce que son fichier source est petit, parce que le cap a mordu, <em>ou</em> parce que la sonde de mesure n'a pas encore atterri. Le liseré coloré distingue les trois — sans ça, on risque de juger la politique sur une capture à cache froid.</p>
 
+
+  <h2>Régressions vérifiées sur device</h2>
+  <p>Les quatre points que le cadrage désignait comme risques, photographiés plutôt que supposés.</p>
+
+  <h3>fontScale 1,5 et 2,0</h3>
+  <p><b>Géométrie strictement inchangée</b> — 5 colonnes, cellule 65,6×48,0, cap 61,6×44,0 aux deux échelles : seule la légende grossit. Aucune régression de layout, la grille du picker est en <code>dp</code>.</p>
+  <p>Mais ça révèle un écart de fond, qui complète le constat de #989 : <b>le picker est en <code>dp</code>, les smileys d'un post sont en <code>sp</code></b>. À gros <code>fontScale</code>, un perso est donc <em>plus grand dans le post que dans le sélecteur qui a servi à le choisir</em> — le désaccord picker/renderer déjà noté sur les builtins (20 dp contre 16 sp) a un second visage.</p>
+  <figure><img src="shots/stress_fontscale.webp" alt="Preset E à fontScale 1,5 puis 2,0"><figcaption>Preset E à <b>fontScale 1,5</b> (haut) et <b>2,0</b> (bas) : mêmes vignettes, légende plus grosse.</figcaption></figure>
+
+  <h3>Paysage</h3>
+  <p><b>11 colonnes de 59,1×48,0 dp</b> (cap 55,1×44,0). Le comportement responsive est confirmé : aucune cellule étirée, ce qu'un <code>Fixed(5)</code> en dur aurait produit. À noter : 11 et non les 12 que prédit le test unitaire pour 744 dp — les insets système mangent ~54 dp en paysage, donc la largeur réellement disponible est ~690 dp. La fonction est juste, l'entrée diffère.</p>
+  <p>Le ratio 7:5 ne s'applique plus ici : 59,1/1,4 = 42,2 dp passerait sous le minimum tactile, donc le plancher de 48 dp gagne — exactement le garde-fou prévu.</p>
+  <figure><img src="shots/stress_landscape.webp" alt="Preset E en paysage, 11 colonnes"><figcaption>Preset E en paysage : la grille se re-résout à 11 colonnes.</figcaption></figure>
+
+  <h3>Onglet Standard — le piège de #816</h3>
+  <p>Les deux onglets <b>partagent cette grille</b>, donc une géométrie choisie pour les persos remodèle aussi les builtins. Et les builtins sont à <b>20 dp fixes</b> : ils ne suivent pas la cellule. Résultat : plus la cellule grandit, plus la grille Standard se clairseme. Sur A c'est déjà lâche, sur G c'est franchement vide.</p>
+  <figure><img src="shots/stress_builtin.webp" alt="Onglet Standard sur les presets A, E et G"><figcaption>Onglet Standard sur <b>A</b>, <b>E</b> et <b>G</b>, liseré activé. Les sprites restent à 20 dp ; seul le vide autour d'eux grandit. Le liseré devient nettement plus utile ici que sur les persos — sans lui, la grille de G n'a plus de structure.</figcaption></figure>
+  <p><b>Conséquence actionnable, et elle est bon marché :</b> la géométrie est un paramètre passé par onglet. On peut donc <b>n'appliquer le nouveau spec qu'à l'onglet Wiki</b> et laisser l'onglet Standard sur les 6 colonnes de 48 dp actuelles. C'est une ligne de code, ça évite le compromis de #816, et ça respecte le fait que les deux corpus n'ont pas le même problème : les persos sont trop petits, les builtins sont à la bonne taille.</p>
+
   <div class="ask">
     <h2>Ce qu'il reste à trancher</h2>
     <ul>
       <li><b>La géométrie</b> — ma recommandation : <b>E</b>. Même gain que D sur le format dominant (+40 %, surface doublée), et il ne coûte que 3 vignettes visibles au lieu de 18, parce que la cellule suit le ratio du corpus.</li>
       <li><b>L'upscale (F)</b> — c'est le <em>seul</em> levier qui traite les petits sprites, et il est orthogonal à la géométrie. La question est le flou : un GIF pixel-art de 15×15 étiré ×1,5 est ré-échantillonné. À voir sur la comparaison directe. Un plafond ×1,25 est possible si ×1,5 est trop.</li>
-      <li><b>Le liseré</b> — option produit indépendante des deux précédentes.</li>
+      <li><b>Le liseré</b> — option produit indépendante des deux précédentes. À noter : il rend nettement plus de service sur l'onglet Standard que sur les persos.</li>
+      <li><b>Le périmètre</b> — appliquer le nouveau spec au <b>seul onglet Wiki</b> (recommandé) ou aux deux. Les builtins sont déjà à la bonne taille ; leur élargir la cellule ne fait qu'ajouter du vide.</li>
     </ul>
     <p style="margin-bottom:0">La policy est déjà extraite et testée (14 tests verts, dont 8 qui prouvent que l'extraction n'a rien changé au comportement livré) : <b>le preset retenu devient le fix en changeant les valeurs par défaut</b>, pas en réécrivant du code.</p>
   </div>
