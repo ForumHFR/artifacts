@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Smileys perso du picker #989 — 7 géométries sur S10e réel</title>
+<style>
+  :root{--ground:#15121A;--surface:#1E1925;--surface2:#241E2C;--line:#352C42;--text:#ECE4DE;--muted:#9C8FA6;--faint:#6E6478;--red:#E23A4E;--cyan:#34C0CE;--amber:#FFB020;--green:#4ADE80;--mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;--sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--ground);color:var(--text);font-family:var(--sans);line-height:1.55;background-image:radial-gradient(1000px 480px at 84% -10%,rgba(226,58,78,.10),transparent 60%)}
+  .wrap{max-width:1000px;margin:0 auto;padding:clamp(24px,5vw,64px) clamp(14px,4vw,36px) 80px}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:var(--red);font-weight:600;margin:0 0 12px}
+  h1{font-size:clamp(27px,5vw,44px);line-height:1.06;letter-spacing:-.025em;font-weight:800;margin:0 0 14px}
+  h2{font-size:clamp(19px,3vw,26px);letter-spacing:-.015em;margin:52px 0 8px;padding-top:20px;border-top:1px solid var(--line)}
+  h3{font-size:16px;margin:26px 0 6px;color:var(--cyan);font-family:var(--mono);font-weight:600}
+  p{margin:0 0 14px;max-width:74ch}
+  .sub{color:var(--muted);font-size:17px;max-width:70ch}
+  .lede{background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--red);border-radius:0 12px 12px 0;padding:16px 20px;margin:26px 0}
+  .lede p:last-child{margin-bottom:0}
+  code,kbd{font-family:var(--mono);font-size:.9em;background:var(--surface2);padding:1px 5px;border-radius:4px;color:var(--cyan)}
+  .scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:18px 0;border:1px solid var(--line);border-radius:12px}
+  table{border-collapse:collapse;width:100%;font-size:14px;min-width:660px}
+  th,td{padding:8px 12px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}
+  th{background:var(--surface2);font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  tbody tr:last-child td{border-bottom:none}
+  td.num{font-family:var(--mono);text-align:right}
+  tr.win{background:rgba(52,192,206,.07)}
+  tr.win td:first-child{box-shadow:inset 3px 0 0 var(--cyan)}
+  .tag{font-family:var(--mono);font-size:11px;padding:2px 7px;border-radius:20px;border:1px solid var(--line);color:var(--muted)}
+  .tag.up{color:var(--green);border-color:rgba(74,222,128,.4)}
+  .tag.down{color:var(--amber);border-color:rgba(255,176,32,.4)}
+  .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;margin:20px 0}
+  figure{margin:0;background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  figure img{display:block;width:100%;height:auto;background:#171320}
+  figcaption{padding:10px 14px;font-size:13px;color:var(--muted);border-top:1px solid var(--line)}
+  figcaption b{color:var(--text)}
+  .shots{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin:20px 0}
+  .legend{display:flex;flex-wrap:wrap;gap:14px;margin:14px 0;font-size:13px;color:var(--muted)}
+  .legend span{display:flex;align-items:center;gap:6px}
+  .dot{width:11px;height:11px;border-radius:3px;border:1px solid}
+  ul{max-width:74ch;padding-left:22px}li{margin-bottom:7px}
+  .ask{background:linear-gradient(180deg,rgba(226,58,78,.13),rgba(226,58,78,.04));border:1px solid rgba(226,58,78,.35);border-radius:14px;padding:20px 22px;margin:30px 0}
+  .ask h2{border:none;margin:0 0 10px;padding:0;font-size:21px}
+  footer{margin-top:56px;border-top:1px solid var(--line);padding-top:16px;font-family:var(--mono);font-size:11.5px;color:var(--faint)}
+  a{color:var(--cyan)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <p class="eyebrow">Redface 2 · #989 · spike device</p>
+  <h1>Les smileys perso du picker sont trop petits</h1>
+  <p class="sub">Sept géométries de grille rendues par le <b>vrai</b> composant, sur un Galaxy S10e réel, avec le corpus perso réel chargé depuis HFR. Objectif : choisir laquelle on livre.</p>
+
+  <div class="lede">
+    <p><b>Le constat de départ était juste.</b> La grille est en <code>GridCells.Adaptive(minSize = 48.dp)</code> avec 16 dp de marge et 8 dp d'écart : sur un S10e (360 dp de large) ça tombe sur <b>exactement 6 colonnes de 48,0 dp</b>, et le cap image est un <code>44 dp</code> en dur.</p>
+    <p style="margin-top:10px">Mais il y a <b>deux causes distinctes</b>, pas une seule — et un seul des sept presets traite la seconde.</p>
+  </div>
+
+  <h2>Pourquoi ils sont petits</h2>
+
+  <p>J'ai téléchargé les <b>74 smileys perso</b> du top 100 HFR (fixture <code>smileys_top100_roger21.json</code>) et lu leurs dimensions natives dans les octets servis. Au passage : <b>22 des 74 sont des JPEG servis sous extension <code>.gif</code></b> avec <code>Content-Type: image/gif</code> — Coil renifle le contenu donc l'app n'en souffre pas, mais l'extension ne dit pas le format sur HFR.</p>
+
+  <div class="scroll">
+  <table>
+    <thead><tr><th>Taille native</th><th class="num">Occurrences</th><th>Rendu actuel (cap 44)</th><th>Cause</th></tr></thead>
+    <tbody>
+      <tr><td><b>70×50</b></td><td class="num">23 / 74</td><td class="num">44×31</td><td>capé en largeur → <b>17 dp de hauteur perdus</b></td></tr>
+      <tr><td>50×50</td><td class="num">7</td><td class="num">44×44</td><td>remplit la cellule</td></tr>
+      <tr><td>67×50 · 64×50 · 70×47</td><td class="num">6</td><td class="num">44×33</td><td>même cause que le dominant</td></tr>
+      <tr><td>39×15 <code>[:rofl]</code></td><td class="num">3</td><td class="num">39×15</td><td>no-upscale → illisible</td></tr>
+      <tr><td>30×15</td><td class="num">3</td><td class="num">30×15</td><td>no-upscale</td></tr>
+      <tr><td>15×15 → 20×30</td><td class="num">8</td><td class="num">natif</td><td>15 dp perdus dans 48 dp de vide</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p><b>Cause 1 — la cellule est trop petite pour le format dominant.</b> Le corpus est massivement <b>paysage 7:5</b> (70×50 à lui seul fait 31 % du top 100). Une cellule <em>carrée</em> de 48 dp cape ce format sur la largeur et laisse 17 dp de hauteur inutilisés. C'est structurel : on gaspille du vertical sur presque un tiers du corpus.</p>
+
+  <p><b>Cause 2 — le no-upscale laisse la traîne des petits sprites illisible.</b> La règle <code>scale = min(cap/w, cap/h, 1)</code> interdit tout agrandissement : un <code>[:rofl]</code> de 39×15 natif reste 39×15, quelle que soit la taille de la cellule. Agrandir la cellule ne le touche pas — <b>ça le rend même plus perdu</b>.</p>
+
+  <h2>Les 7 géométries</h2>
+
+  <p>Chiffres mesurés sur le device, pas calculés à la main : le bench affiche la géométrie que le solveur de colonnes a réellement résolue. Le nombre de vignettes visibles vient du budget de hauteur de la grille (0,62 × 760 dp = 471 dp).</p>
+
+  <div class="scroll">
+  <table>
+    <thead><tr><th>Preset</th><th>Config</th><th class="num">Col.</th><th class="num">Cellule</th><th class="num">Cap</th><th class="num">70×50 rendu</th><th class="num">[:rofl] 39×15</th><th class="num">Visibles</th></tr></thead>
+    <tbody>
+      <tr><td><b>A</b> Actuel</td><td>pad 16 · gap 8 · min 48</td><td class="num">6</td><td class="num">48,0×48,0</td><td class="num">44,0</td><td class="num">44×31</td><td class="num">39×15</td><td class="num">48</td></tr>
+      <tr><td><b>B</b> 5 col</td><td>pad 16 · gap 8 · min 56</td><td class="num">5</td><td class="num">59,2×59,2</td><td class="num">55,2</td><td class="num">55×39 <span class="tag up">+25 %</span></td><td class="num">39×15</td><td class="num">35 <span class="tag down">−13</span></td></tr>
+      <tr><td><b>C</b> Marges</td><td>pad 8 · gap 4 · min 48</td><td class="num">6</td><td class="num">54,0×54,0</td><td class="num">50,0</td><td class="num">50×36 <span class="tag up">+14 %</span></td><td class="num">39×15</td><td class="num">48 <span class="tag up">=</span></td></tr>
+      <tr><td><b>D</b> Les deux</td><td>pad 8 · gap 4 · min 56</td><td class="num">5</td><td class="num">65,6×65,6</td><td class="num">61,6</td><td class="num">62×44 <span class="tag up">+40 %</span></td><td class="num">39×15</td><td class="num">30 <span class="tag down">−18</span></td></tr>
+      <tr class="win"><td><b>E</b> + paysage</td><td>D · ratio 7:5</td><td class="num">5</td><td class="num">65,6×48,0</td><td class="num">61,6×44,0</td><td class="num">62×44 <span class="tag up">+40 %</span></td><td class="num">39×15</td><td class="num">45 <span class="tag down">−3</span></td></tr>
+      <tr class="win"><td><b>F</b> + upscale</td><td>E · plafond ×1,5</td><td class="num">5</td><td class="num">65,6×48,0</td><td class="num">61,6×44,0</td><td class="num">62×44 <span class="tag up">+40 %</span></td><td class="num">59×23 <span class="tag up">+51 %</span></td><td class="num">45</td></tr>
+      <tr><td><b>G</b> Borne haute</td><td>pad 8 · gap 4 · min 72</td><td class="num">4</td><td class="num">83,0×59,3</td><td class="num">79,0×55,3</td><td class="num">70×50 <span class="tag up">natif</span></td><td class="num">39×15</td><td class="num">28 <span class="tag down">−20</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p><b>Ce que le tableau dit.</b> Passer à 5 colonnes (B) coûte 13 vignettes pour +25 %. Rogner les marges seules (C) est le seul gain <em>gratuit</em> (+14 %, densité intacte) mais reste modeste. <b>E est le meilleur rapport</b> : même +40 % que D, mais 45 vignettes visibles au lieu de 30, parce qu'abandonner la cellule carrée récupère le vertical que le corpus paysage n'utilisait pas. À la cellule 65,6×48, le 70×50 sature <em>les deux</em> axes en même temps — plus rien n'est perdu. <b>G prouve que le natif plein ne vaut pas le prix</b> : +13 % de plus que E contre 17 vignettes en moins.</p>
+
+  <h2>Comparaison directe</h2>
+  <p>Les trois premières rangées de A, E, F et G, à l'échelle réelle du device. C'est ici que le flou de l'upscale de F se juge.</p>
+  <figure>
+    <img src="shots/compare_AEFG.webp" alt="Comparaison des presets A, E, F et G sur les trois premières rangées">
+    <figcaption><b>A → E</b> : la surface du perso dominant double. <b>E → F</b> : les petits sprites (le lapin, le smiley jaune) décollent enfin, au prix d'un ré-échantillonnage visible sur les sprites pixel-art. <b>G</b> : le natif plein, et le vide autour des petits.</figcaption>
+  </figure>
+
+  <h2>Les 7 presets en entier</h2>
+  <div class="shots">
+    <figure><img src="shots/A_normal.webp" alt="Preset A"><figcaption><b>A</b> · actuel</figcaption></figure>
+    <figure><img src="shots/B_normal.webp" alt="Preset B"><figcaption><b>B</b> · 5 colonnes</figcaption></figure>
+    <figure><img src="shots/C_normal.webp" alt="Preset C"><figcaption><b>C</b> · marges rognées</figcaption></figure>
+    <figure><img src="shots/D_normal.webp" alt="Preset D"><figcaption><b>D</b> · les deux, carré</figcaption></figure>
+    <figure><img src="shots/E_normal.webp" alt="Preset E"><figcaption><b>E</b> · + cellule paysage</figcaption></figure>
+    <figure><img src="shots/F_normal.webp" alt="Preset F"><figcaption><b>F</b> · + upscale ×1,5</figcaption></figure>
+    <figure><img src="shots/G_normal.webp" alt="Preset G"><figcaption><b>G</b> · borne haute, 4 col</figcaption></figure>
+  </div>
+
+  <h2>Le liseré</h2>
+  <p>Un filet de 1 dp en <code>outlineVariant</code>, coins arrondis 8 dp, sur la cellule entière. Sur un corpus aussi hétérogène il donne une limite franche entre deux vignettes de tailles très différentes — au prix d'une grille plus chargée visuellement.</p>
+  <div class="grid2">
+    <figure><img src="shots/E_normal.webp" alt="E sans liseré"><figcaption><b>E sans liseré</b> — les vignettes flottent, les petits sprites n'ont pas d'ancrage visuel.</figcaption></figure>
+    <figure><img src="shots/E_outline.webp" alt="E avec liseré"><figcaption><b>E avec liseré</b> — chaque cellule est lisible comme une cible, mais la grille gagne 45 rectangles.</figcaption></figure>
+  </div>
+
+  <h2>Mode debug — les containers</h2>
+  <p>Le mode que tu as demandé pour aider au choix : il peint la boîte de la cellule, la boîte de l'image, et écrit la taille native <b>mesurée</b> de chaque smiley.</p>
+  <div class="legend">
+    <span><i class="dot" style="border-color:#E23A4E;background:rgba(226,58,78,.25)"></i> boîte de l'image (ce que la policy a calculé)</span>
+    <span><i class="dot" style="border-color:#34C0CE;background:rgba(52,192,206,.25)"></i> perso mesuré (sonde Coil arrivée)</span>
+    <span><i class="dot" style="border-color:#FFB020;background:rgba(255,176,32,.25)"></i> perso non mesuré (repli cap-filling)</span>
+  </div>
+  <div class="grid2">
+    <figure><img src="shots/A_debug.webp" alt="A en mode debug"><figcaption><b>A · debug</b> — on voit le vide : les boîtes 44×31 dans des cellules 48×48, et les mini-sprites au milieu de rien.</figcaption></figure>
+    <figure><img src="shots/E_debug.webp" alt="E en mode debug"><figcaption><b>E · debug</b> — les boîtes 62×44 remplissent la cellule 65,6×48 sur les deux axes.</figcaption></figure>
+  </div>
+  <p>L'intérêt au-delà de l'esthétique : une vignette peut paraître petite parce que son fichier source est petit, parce que le cap a mordu, <em>ou</em> parce que la sonde de mesure n'a pas encore atterri. Le liseré coloré distingue les trois — sans ça, on risque de juger la politique sur une capture à cache froid.</p>
+
+  <div class="ask">
+    <h2>Ce qu'il reste à trancher</h2>
+    <ul>
+      <li><b>La géométrie</b> — ma recommandation : <b>E</b>. Même gain que D sur le format dominant (+40 %, surface doublée), et il ne coûte que 3 vignettes visibles au lieu de 18, parce que la cellule suit le ratio du corpus.</li>
+      <li><b>L'upscale (F)</b> — c'est le <em>seul</em> levier qui traite les petits sprites, et il est orthogonal à la géométrie. La question est le flou : un GIF pixel-art de 15×15 étiré ×1,5 est ré-échantillonné. À voir sur la comparaison directe. Un plafond ×1,25 est possible si ×1,5 est trop.</li>
+      <li><b>Le liseré</b> — option produit indépendante des deux précédentes.</li>
+    </ul>
+    <p style="margin-bottom:0">La policy est déjà extraite et testée (14 tests verts, dont 8 qui prouvent que l'extraction n'a rien changé au comportement livré) : <b>le preset retenu devient le fix en changeant les valeurs par défaut</b>, pas en réécrivant du code.</p>
+  </div>
+
+  <h2>Méthode &amp; garanties</h2>
+  <ul>
+    <li><b>Le vrai composant, pas une copie.</b> Le bench rend <code>SmileyPickerGrid</code> de <code>:core:ui</code>, paramétré par une <code>SmileyPickerLayoutSpec</code>. Ce qui est photographié est ce que livrer donnerait.</li>
+    <li><b>Corpus réel, chargé par le vrai loader Coil de l'app</b>, avec la vraie sonde de mesure intrinsèque partagée avec le rendu des posts.</li>
+    <li><b>Cache de mesure chaud.</b> Les presets sont pilotés par <code>onNewIntent</code> sans redémarrer le process — un <code>am start -S</code> aurait vidé le cache en mémoire et photographié le repli à froid au lieu de la politique.</li>
+    <li><b>La politique des posts n'est pas touchée.</b> <code>intrinsicSmileyDisplaySize</code> reste intacte (§9 du contrat images, « intouchable », alignée par #871). Le picker a sa propre policy : il sert à <em>reconnaître</em> une vignette, un post à <em>reproduire</em> l'échelle de HFR. Les deux ne partagent que la taille native mesurée.</li>
+    <li><b>Minimum tactile préservé.</b> La cellule paysage est plancherée à 48 dp de haut : 65,6/1,4 = 46,9 dp serait sous le minimum Material, un test le pinne.</li>
+    <li><b>Responsive.</b> Le nombre de colonnes est <em>résolu</em> comme <code>Adaptive</code> le fait, jamais un <code>Fixed(5)</code> en dur — qui donnerait 5 cellules étirées sur toute la largeur en paysage ou sur tablette. En paysage (744 dp utiles), le preset E donne 12 colonnes.</li>
+  </ul>
+
+  <p><b>Ce qui n'est pas encore couvert</b> (à faire si un preset est retenu) : <code>fontScale</code> 1,5 et 2,0, le paysage et le split-screen photographiés, et l'onglet Standard (les builtins à 20 dp partagent cette grille — le piège de #816, où un réglage unique rendait les builtins gros et flous <em>et</em> les persos à l'étroit).</p>
+
+  <footer>
+    Bench <code>SmileyPickerSpikeActivity</code> (debug-only, <code>app/src/debug</code>) · Galaxy S10e SM-G970F, 1080×2280 @ 480 dpi (360×760 dp), thème sombre · dev@9fafe209 · captures du 03/08/2026 · Cadrage validé par GPT-5 Codex (dépôt en lecture seule)
+  </footer>
+</div>
+</body>
+</html>
