@@ -1,0 +1,925 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EgoQuote + EgoPost — banc d'essai visuel</title>
+</head>
+<body>
+<style>
+/* ============================================================
+   CHÂSSIS — délibérément achromatique.
+   Le banc juge des teintes ; toute couleur de châssis fausserait
+   la perception. Neutres froids, accent ardoise désaturé.
+   ============================================================ */
+:root {
+  --paper:      #EEF0F2;
+  --panel:      #FFFFFF;
+  --panel-2:    #F7F8F9;
+  --ink:        #15181C;
+  --ink-2:      #4A525B;
+  --ink-3:      #79838D;
+  --line:       #D4D9DE;
+  --line-soft:  #E3E7EA;
+  --accent:     #3C4855;
+  --accent-ink: #FFFFFF;
+  --ok:         #1B6E3C;
+  --warn:       #8A5A00;
+  --stop:       #A32020;
+
+  --mono: ui-monospace, "SF Mono", "JetBrains Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+  --ui:   "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  /* Face de l'échantillon : Roboto = la face système Android. Fidélité avant tout. */
+  --android: Roboto, "Noto Sans", system-ui, sans-serif;
+
+  --r: 4px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper:     #101316;
+    --panel:     #191D21;
+    --panel-2:   #14181B;
+    --ink:       #E6E9EC;
+    --ink-2:     #A8B1B9;
+    --ink-3:     #757E86;
+    --line:      #2B3238;
+    --line-soft: #22282D;
+    --accent:    #C3CDD6;
+    --accent-ink:#12161A;
+    --ok:        #6CCB8E;
+    --warn:      #E0AE4E;
+    --stop:      #F08A82;
+  }
+}
+:root[data-theme="dark"] {
+  --paper:     #101316;
+  --panel:     #191D21;
+  --panel-2:   #14181B;
+  --ink:       #E6E9EC;
+  --ink-2:     #A8B1B9;
+  --ink-3:     #757E86;
+  --line:      #2B3238;
+  --line-soft: #22282D;
+  --accent:    #C3CDD6;
+  --accent-ink:#12161A;
+  --ok:        #6CCB8E;
+  --warn:      #E0AE4E;
+  --stop:      #F08A82;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--ui);
+  font-size: 15px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap { max-width: 1420px; margin: 0 auto; padding: 0 20px 96px; }
+
+/* ---------- En-tête ---------- */
+.masthead { padding: 40px 0 20px; border-bottom: 1px solid var(--line); }
+.eyebrow {
+  font-family: var(--mono); font-size: 11px; letter-spacing: .13em;
+  text-transform: uppercase; color: var(--ink-3); margin: 0 0 10px;
+}
+h1 {
+  margin: 0 0 8px; font-size: clamp(26px, 3.6vw, 38px); line-height: 1.1;
+  letter-spacing: -.02em; font-weight: 650; text-wrap: balance;
+}
+.dek { margin: 0; max-width: 66ch; color: var(--ink-2); font-size: 15px; }
+.stamp {
+  margin-top: 14px; font-family: var(--mono); font-size: 11.5px; color: var(--ink-3);
+  display: flex; flex-wrap: wrap; gap: 6px 18px;
+}
+.stamp b { color: var(--ink-2); font-weight: 500; }
+
+/* ---------- Barre de contrôle ---------- */
+.console {
+  position: sticky; top: 0; z-index: 40;
+  background: color-mix(in srgb, var(--paper) 92%, transparent);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+  margin: 0 -20px 28px; padding: 10px 20px;
+}
+.console-inner {
+  max-width: 1420px; margin: 0 auto;
+  display: flex; flex-wrap: wrap; gap: 8px 22px; align-items: center;
+}
+.ctl { display: flex; align-items: center; gap: 8px; }
+.ctl > span {
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--ink-3);
+}
+.seg { display: flex; border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; }
+.seg button {
+  appearance: none; border: 0; background: var(--panel); color: var(--ink-2);
+  font-family: var(--mono); font-size: 11.5px; padding: 5px 10px; cursor: pointer;
+  border-right: 1px solid var(--line); transition: background .12s, color .12s;
+}
+.seg button:last-child { border-right: 0; }
+.seg button:hover { background: var(--panel-2); color: var(--ink); }
+.seg button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+.seg button:focus-visible { outline: 2px solid var(--ink); outline-offset: -2px; }
+
+/* ---------- Sections ---------- */
+section { margin-top: 54px; scroll-margin-top: 70px; }
+h2 {
+  font-size: 21px; margin: 0 0 6px; font-weight: 620; letter-spacing: -.01em;
+  display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;
+}
+h2 .num {
+  font-family: var(--mono); font-size: 11px; color: var(--ink-3);
+  letter-spacing: .1em; font-weight: 400;
+}
+h2 .obj {
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: .06em; text-transform: uppercase;
+  color: var(--ink-3); border: 1px solid var(--line); border-radius: 3px; padding: 1px 6px;
+}
+.lede { margin: 0 0 20px; color: var(--ink-2); max-width: 76ch; font-size: 14.5px; }
+
+/* ---------- Grille des variantes ---------- */
+/* Deux colonnes larges : le viewport de 360 dp tient sans scroll interne, et la
+   chambre d'observation autour isole l'échantillon du châssis. */
+.bench {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
+  gap: 16px; align-items: start;
+}
+.bay {
+  background: var(--panel); border: 1px solid var(--line); border-radius: var(--r);
+  overflow: hidden; display: flex; flex-direction: column;
+}
+.bay.pick { border-color: var(--ok); box-shadow: 0 0 0 1px var(--ok); }
+/* Hauteur minimale : sans elle, un titre sur deux lignes décale le viewport voisin
+   et on ne compare plus les échantillons au même niveau. */
+.bay-head {
+  padding: 11px 13px 10px; border-bottom: 1px solid var(--line-soft);
+  display: flex; align-items: flex-start; gap: 10px; min-height: 68px;
+}
+.bay-key {
+  font-family: var(--mono); font-size: 12px; font-weight: 600;
+  color: var(--accent-ink); background: var(--accent);
+  padding: 3px 6px; border-radius: 3px; flex: none; margin-top: 1px;
+}
+.bay-name { font-size: 14.5px; font-weight: 600; margin: 0; line-height: 1.3; }
+.bay-note { font-size: 12.5px; color: var(--ink-2); margin: 3px 0 0; line-height: 1.45; }
+.verdict {
+  font-family: var(--mono); font-size: 10px; letter-spacing: .08em;
+  text-transform: uppercase; padding: 2px 6px; border-radius: 3px; flex: none;
+  border: 1px solid currentColor; margin-left: auto;
+}
+.v-sol   { color: var(--ok); }
+.v-out   { color: var(--stop); }
+.v-maybe { color: var(--warn); }
+.v-free  { color: var(--ink-3); }
+
+/* ---------- Viewport téléphone ---------- */
+.viewport {
+  font-family: var(--android); padding: 10px; overflow-x: auto;
+  background: var(--panel-2); flex: 1;
+}
+.stage { display: flex; justify-content: center; }
+/* Gouttière 8, inset haut 16, rythme 8 — TopicListLayout.
+   L'inset bas réel (88 dp) est omis : c'est du vide. */
+.screen {
+  width: var(--vw, 360px); background: var(--m3-surface);
+  padding: 16px 8px; display: flex; flex-direction: column; gap: 8px;
+  transition: background .15s; position: relative;
+}
+.screen.flat { padding: 16px 0; gap: 0; }
+
+/* Ascenseur (#300) : piste + poignée, et les repères de la variante R */
+.rail-track {
+  position: absolute; right: 2px; top: 16px; bottom: 16px; width: 4px;
+  border-radius: 2px; background: var(--m3-outlineVariant); opacity: .5;
+}
+.rail-thumb {
+  position: absolute; right: 1px; width: 6px; border-radius: 3px;
+  background: var(--m3-onSurfaceVariant); opacity: .55;
+}
+.rail-tick {
+  position: absolute; right: 0; width: 8px; height: 3px; border-radius: 2px;
+  background: var(--sig);
+}
+
+/* Carte de post */
+.post { background: var(--m3-surfContainer); border-radius: 12px; overflow: hidden; position: relative; }
+.screen.flat .post { background: transparent; border-radius: 0; }
+.post.selected { box-shadow: inset 0 0 0 2px var(--m3-primary); }
+.screen.flat .post:not(:last-child)::after {
+  content: ""; display: block; height: 1px; background: var(--m3-outlineVariant);
+}
+/* P1 — l'aplat couvre tout SAUF la bande d'identité, qui garde sa couleur.
+   Sans cela, la pastille et le pied d'actions restaient sur le fond de carte et
+   le message se lisait en sandwich. */
+.post.ego-body, .screen.flat .post.ego-body { background: var(--sig-wash); }
+/* P2 — l'aplat RF1 : toute la carte, bande d'identité comprise */
+.post.ego-card, .screen.flat .post.ego-card { background: var(--sig-wash); }
+
+/* Bandeau d'identité */
+.band {
+  display: flex; align-items: center; gap: 12px;
+  padding: var(--hdr-v, 6px) 12px;
+  background: var(--band-bg, var(--m3-secondaryContainer));
+  color: var(--band-ink, var(--m3-onSecondaryContainer));
+  position: relative;
+}
+.avatar {
+  width: 40px; height: 40px; border-radius: 8px; flex: none;
+  display: grid; place-items: center; font-size: 15px; font-weight: 600; color: #fff;
+}
+.who { min-width: 0; flex: 1; }
+.pseudo {
+  font-size: 14px; font-weight: 500; letter-spacing: .1px; line-height: 20px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  display: flex; align-items: center; gap: 6px;
+}
+/* La date et le « ⋯ » sont FORCÉS en onSurfaceVariant dans le code : ils n'héritent
+   PAS de la bande. C'est ce qui limite ce qu'une bande colorée peut porter. */
+.stamp-line {
+  font-size: 12px; font-weight: 500; line-height: 16px; letter-spacing: .5px;
+  color: var(--m3-onSurfaceVariant);
+}
+.kebab { font-size: 16px; font-weight: 700; flex: none; color: var(--m3-onSurfaceVariant); }
+
+/* Corps — bodyMedium 14/20/0.25 */
+.body-txt {
+  padding: var(--body-t, 10px) var(--body-x, 12px) var(--body-b, 8px);
+  font-size: 14px; line-height: 20px; letter-spacing: .25px;
+  color: var(--m3-onSurface); position: relative;
+}
+/* P3 — liseré au bord de départ du corps */
+.body-txt.ego-edge { box-shadow: inset 4px 0 0 var(--sig); padding-left: calc(var(--body-x, 12px) + 8px); }
+
+.badges { padding: 6px var(--body-x, 12px) 2px; display: flex; gap: 8px; }
+.pill {
+  font-size: 11px; font-weight: 500; line-height: 16px; letter-spacing: .5px;
+  padding: 2px 8px; border-radius: 8px;
+  background: var(--m3-surfContainerHighest); color: var(--m3-onSurfaceVariant);
+}
+
+/* Pied d'actions — Arrangement.End */
+.actions { display: flex; justify-content: flex-end; align-items: center; padding: 0 4px 2px; }
+.act {
+  font-size: 14px; font-weight: 500; letter-spacing: .1px; line-height: 20px;
+  padding: 8px 12px; color: var(--m3-onSurfaceVariant);
+}
+.act.on { color: var(--m3-primary); }
+
+/* Citation : Card rayon 12, barre d'accent 4, gouttière 12 */
+.quote {
+  margin: 6px 0 8px; background: var(--m3-surfContainerHighest);
+  border-radius: 12px; display: flex; overflow: hidden;
+}
+.quote-bar { width: 4px; flex: none; background: var(--quote-accent, var(--m3-primary)); }
+.quote-in {
+  padding: 12px; font-size: 14px; line-height: 20px; letter-spacing: .25px;
+  min-width: 0; display: flex; flex-direction: column; gap: 8px;
+}
+/* labelMedium, primary quand le saut vers le message cité est possible */
+.quote-who {
+  font-size: 12px; font-weight: 500; line-height: 16px; letter-spacing: .5px;
+  color: var(--quote-head, var(--m3-primary));
+  display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+}
+.quote-txt { color: var(--m3-onSurface); opacity: .85; }
+/* Q3 — fond de la citation teinté */
+.quote.ego-fill { background: var(--sig-wash); }
+
+.chip {
+  display: inline-flex; align-items: center; gap: 3px;
+  font-size: 10.5px; font-weight: 600; line-height: 15px;
+  padding: 0 6px 0 5px; border-radius: 8px;
+  background: var(--sig); color: #fff; flex: none;
+}
+.chip .gl { font-size: 11px; line-height: 1; }
+
+.legend {
+  padding: 9px 13px; border-top: 1px solid var(--line-soft);
+  font-family: var(--mono); font-size: 10.5px; color: var(--ink-3); line-height: 1.5;
+}
+
+/* ---------- Sommaire des cas ---------- */
+.roster {
+  list-style: none; margin: 0 0 18px; padding: 0;
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: var(--r);
+  overflow: hidden; counter-reset: r;
+}
+.roster li {
+  background: var(--panel); padding: 7px 11px 8px 28px; position: relative;
+  font-size: 12.5px; line-height: 1.35;
+}
+.roster li::before {
+  counter-increment: r; content: counter(r);
+  position: absolute; left: 10px; top: 7px;
+  font-family: var(--mono); font-size: 10.5px; color: var(--ink-3);
+}
+.roster b { display: block; font-weight: 600; font-size: 13px; }
+.roster span { color: var(--ink-2); }
+.roster em { font-style: normal; color: var(--ink); font-weight: 600; }
+
+/* ---------- Tableaux ---------- */
+.tbl-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--r); background: var(--panel); }
+table { border-collapse: collapse; width: 100%; font-size: 13.5px; }
+th, td { text-align: left; padding: 6px 12px; border-bottom: 1px solid var(--line-soft); vertical-align: top; }
+th {
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: .09em; text-transform: uppercase;
+  color: var(--ink-3); font-weight: 500; background: var(--panel-2); white-space: nowrap;
+}
+tbody tr:last-child td { border-bottom: 0; }
+td code, p code, li code, .call code {
+  font-family: var(--mono); font-size: 12px;
+  background: var(--panel-2); border: 1px solid var(--line-soft);
+  padding: 0 4px; border-radius: 3px;
+}
+
+/* ---------- Cartes de décision ---------- */
+.calls { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px; }
+.call { background: var(--panel); border: 1px solid var(--line); border-radius: var(--r); padding: 13px 15px; }
+.call h3 { margin: 0 0 6px; font-size: 14px; font-weight: 620; display: flex; align-items: baseline; gap: 8px; }
+.call h3 .q { font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+.call p { margin: 0 0 6px; font-size: 13.5px; color: var(--ink-2); line-height: 1.5; }
+.call p:last-child { margin-bottom: 0; }
+.call .ruling { color: var(--ink); font-weight: 550; }
+.open { border-left: 3px solid var(--warn); }
+
+.footnote {
+  margin-top: 46px; padding-top: 16px; border-top: 1px solid var(--line);
+  font-size: 12.5px; color: var(--ink-3); max-width: 82ch;
+}
+
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <filter id="cvd-deuter" color-interpolation-filters="linearRGB">
+    <feColorMatrix type="matrix" values="0.625 0.375 0 0 0  0.7 0.3 0 0 0  0 0.3 0.7 0 0  0 0 0 1 0"/>
+  </filter>
+  <filter id="cvd-prot" color-interpolation-filters="linearRGB">
+    <feColorMatrix type="matrix" values="0.567 0.433 0 0 0  0.558 0.442 0 0 0  0 0.242 0.758 0 0  0 0 0 1 0"/>
+  </filter>
+  <filter id="cvd-trit" color-interpolation-filters="linearRGB">
+    <feColorMatrix type="matrix" values="0.95 0.05 0 0 0  0 0.433 0.567 0 0  0 0.475 0.525 0 0  0 0 0 1 0"/>
+  </filter>
+  <filter id="cvd-mono" color-interpolation-filters="linearRGB">
+    <feColorMatrix type="saturate" values="0"/>
+  </filter>
+</svg>
+
+<div class="wrap">
+
+  <header class="masthead">
+    <p class="eyebrow">Redface 2 · issue #874 · arbitrage de design</p>
+    <h1>EgoQuote + EgoPost</h1>
+    <p class="dek">
+      Les deux fonctions marquent deux objets différents : « on vous cite » qualifie <b>une
+      citation</b>, « c'est le vôtre » qualifie <b>un message</b>. Le banc les traite donc sur deux
+      axes séparés, qui se choisissent indépendamment. Tout est rendu avec les couleurs et la
+      géométrie réelles de l'application ; les réglages pilotent l'app simulée, pas cette page.
+    </p>
+    <p class="stamp">
+      <span>branche <b>dev</b></span>
+      <span>commit <b>0e9c7e3e</b></span>
+      <span>palette <b>Color.kt</b>, accent rose par défaut</span>
+      <span>géométrie <b>DisplayMetrics · TopicListLayout · PostCardShell</b></span>
+      <span>cadrage relu par <b>Sol (GPT-5.5, xhigh)</b></span>
+    </p>
+  </header>
+
+  <div class="console">
+    <div class="console-inner">
+      <div class="ctl"><span>Thème app</span>
+        <div class="seg" id="c-theme" role="group" aria-label="Thème de l'application">
+          <button data-v="light"  aria-pressed="true">Clair</button>
+          <button data-v="dark"   aria-pressed="false">Sombre</button>
+          <button data-v="amoled" aria-pressed="false">AMOLED</button>
+        </div>
+      </div>
+      <div class="ctl"><span>Affichage</span>
+        <div class="seg" id="c-mode" role="group" aria-label="Mode d'affichage des messages">
+          <button data-v="card" aria-pressed="true">Cartes</button>
+          <button data-v="flat" aria-pressed="false">Pleine largeur</button>
+        </div>
+      </div>
+      <div class="ctl"><span>Densité</span>
+        <div class="seg" id="c-density" role="group" aria-label="Densité de lecture">
+          <button data-v="comfort" aria-pressed="true">Confort</button>
+          <button data-v="compact" aria-pressed="false">Compact</button>
+        </div>
+      </div>
+      <div class="ctl"><span>Écran</span>
+        <div class="seg" id="c-width" role="group" aria-label="Largeur d'écran">
+          <button data-v="360" aria-pressed="true">360 dp</button>
+          <button data-v="411" aria-pressed="false">411 dp</button>
+        </div>
+      </div>
+      <div class="ctl"><span>Vision</span>
+        <div class="seg" id="c-cvd" role="group" aria-label="Simulation de vision des couleurs">
+          <button data-v="none"   aria-pressed="true">Normale</button>
+          <button data-v="deuter" aria-pressed="false">Deutéranopie</button>
+          <button data-v="prot"   aria-pressed="false">Protanopie</button>
+          <button data-v="trit"   aria-pressed="false">Tritanopie</button>
+          <button data-v="mono"   aria-pressed="false">Achromatopsie</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section id="quote">
+    <h2><span class="num">01</span> EgoQuote <span class="obj">objet marqué : la citation</span></h2>
+    <p class="lede">
+      Cinq façons de marquer <em>la citation qui vous reprend</em>, à l'intérieur du message de
+      celui qui vous répond. Aucune ne crée de canal : la barre d'accent de 4 dp et la ligne
+      « Citation de … » existent déjà, on ne fait que les recolorer ou les réécrire. Les deux
+      premières isolent chacune une seule variable — la couleur, puis le mot — pour qu'on sache
+      lequel des deux porte réellement le repérage. Chaque baie montre un message témoin, puis deux
+      messages qui vous citent, dont le second est aussi celui où la navigation vous a déposé.
+    </p>
+    <div class="bench" id="bench-quote"></div>
+  </section>
+
+  <section id="post">
+    <h2><span class="num">02</span> EgoPost <span class="obj">objet marqué : votre message</span></h2>
+    <p class="lede">
+      Quatre façons de marquer <em>vos propres messages</em>. Le troisième message de chaque baie est
+      le vôtre <em>et</em> contient une auto-citation : c'est là que se voit l'intérêt de séparer les
+      deux axes — chacun marque son objet, sans règle de priorité à écrire. Les citations ne sont pas marquées ici : chaque section n'exerce qu'un seul axe.
+    </p>
+    <div class="bench" id="bench-post"></div>
+  </section>
+
+  <section id="global">
+    <h2><span class="num">03</span> Repérage global <span class="obj">objet marqué : la page</span></h2>
+    <p class="lede">
+      Un axe de plus, orthogonal aux deux précédents : plutôt que d'attendre d'arriver sur le
+      message, dire d'emblée <em>combien</em> et <em>où</em>. L'ascenseur existe déjà (#300,
+      réglable) — il peut porter des repères. C'est la réponse directe à bitubo : « sur les gros
+      sujets, sans repère on relit trois pages pour retrouver qui a répondu ». Se combine avec
+      n'importe quel traitement des deux sections précédentes.
+    </p>
+    <div class="bench" id="bench-global"></div>
+  </section>
+
+  <section id="cases">
+    <h2><span class="num">04</span> Les six messages du banc</h2>
+    <p class="lede">
+      Le pseudo connecté est <code>XaTriX</code>. Deux messages cumulent volontairement deux états,
+      pour que les collisions se voient.
+    </p>
+    <ol class="roster">
+      <li><b>nicko</b><span>ordinaire — le témoin</span></li>
+      <li><b>XaTriX</b><span>le vôtre, cité 3 fois</span></li>
+      <li><b>thibw</b><span>vous cite</span></li>
+      <li><b>bitubo</b><span>vous cite <em>et</em> ciblé par la navigation</span></li>
+      <li><b>XaTriX</b><span>le vôtre, et il se cite</span></li>
+      <li><b>Dintr-un lemn</b><span>vous cite <em>et</em> sélectionné</span></li>
+    </ol>
+  </section>
+
+  <section id="collisions">
+    <h2><span class="num">05</span> Ce qui occupe déjà la carte</h2>
+    <p class="lede">
+      Sept canaux visuels sont déjà attribués. C'est la contrainte qui élimine des traitements avant
+      qu'on parle de goût — et c'est aussi ce qui rend la piste « marquer la citation » économique :
+      elle réutilise deux canaux au lieu d'en ouvrir un.
+    </p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Canal</th><th>Déjà pris par</th><th>Survit à la pleine largeur ?</th></tr></thead>
+        <tbody>
+          <tr><td>Teinte du bandeau d'identité</td><td>défaut rose <code>secondaryContainer</code> ; ardoise <code>tertiaryContainer</code> sur le message ciblé (#104)</td><td>oui</td></tr>
+          <tr><td>Bordure de carte 2 dp</td><td>sélection multi-citation (#436)</td><td>oui, mais elle supprime le filet</td></tr>
+          <tr><td>Bandeau de pastilles</td><td>« cité N fois » (#239/#863)</td><td>oui</td></tr>
+          <tr><td>Fond de <em>carte</em></td><td><code>surfaceContainer</code></td><td><strong>non</strong> — transparent (#884)</td></tr>
+          <tr><td>Fond du <em>corps</em></td><td>rien — le corps est un slot distinct, il peut porter son propre fond</td><td><strong>oui</strong></td></tr>
+          <tr><td>Barre d'accent 4 dp des citations</td><td>alternance <code>primary</code>/<code>tertiary</code> par profondeur (#202/#252)</td><td>oui</td></tr>
+          <tr><td>Ligne « Citation de … »</td><td><code>primary</code> quand le saut vers le message cité est possible (#699)</td><td>oui</td></tr>
+          <tr><td>Pinceau du pseudo</td><td>dégradé doré animé des créateurs (#221)</td><td>oui</td></tr>
+          <tr><td>Séparateur inter-messages</td><td>trait « Dernier message lu » (#600)</td><td>oui</td></tr>
+          <tr><td>Ascenseur</td><td>poignée de position (#300), réglable</td><td>oui</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="lede" style="margin-top:14px">
+      Contrainte de palette : en thème clair, <code>primaryContainer</code> et
+      <code>secondaryContainer</code> sont strictement le même rose (<code>#FFDAD9</code>),
+      <code>errorContainer</code> en est indiscernable à l'œil (<code>#FFDAD6</code>), et
+      <code>tertiaryContainer</code> est déjà pris. Aucun rôle conteneur Material n'est libre — un
+      signal coloré doit sortir de la palette, comme l'ont fait les couleurs de drapeaux.
+    </p>
+  </section>
+
+  <section id="rulings">
+    <h2><span class="num">06</span> Ce que le cadrage a tranché</h2>
+    <p class="lede">Acquis, vérifié dans le dépôt. Seul le traitement visuel reste ouvert.</p>
+    <div class="calls">
+      <div class="call">
+        <h3><span class="q">Q3</span> Le message qui se cite lui-même</h3>
+        <p class="ruling">Trois états — et deux axes les rendent inoffensifs.</p>
+        <p>On calcule <code>own</code>, <code>quotesMe</code> et <code>ownAndQuotesMe</code>. Dès lors
+        que chaque fonction marque son propre objet, le cas cumulé n'a plus besoin d'arbitrage : le
+        message porte sa marque, la citation porte la sienne.</p>
+      </div>
+      <div class="call">
+        <h3><span class="q">Q4</span> Citations imbriquées</h3>
+        <p class="ruling">Premier niveau uniquement.</p>
+        <p><code>quotedAuthors</code> descend dans les citations de citations : bon pour masquer un
+        auteur bloqué, faux pour « on me répond ». On dérive de <code>content.blocks</code> en
+        s'arrêtant à la première citation. Reste à décider : une citation à la racine mais
+        <em>enveloppée dans un spoiler</em>.</p>
+      </div>
+      <div class="call">
+        <h3><span class="q">Q6</span> Le trou : session fermée</h3>
+        <p class="ruling"><code>isOwnPostEffective</code> ne suffit pas.</p>
+        <p>Les messages en cache ne sont pas purgés à la déconnexion — choix documenté. Le champ
+        <code>isOwnPost</code> survit donc au logout et le marqueur s'allumerait pour un lecteur
+        anonyme sur les messages du compte précédent. Garde de session obligatoire.</p>
+      </div>
+      <div class="call">
+        <h3><span class="q">Q6</span> Accessibilité</h3>
+        <p class="ruling">Jamais la couleur seule.</p>
+        <p>Basculez « Vision » : bleu et violet convergent en deutéranopie. D'où l'intérêt des
+        traitements qui changent aussi <em>le texte</em> — « Votre citation » se lit sans couleur, et
+        c'est ce que le lecteur d'écran annonce.</p>
+      </div>
+      <div class="call">
+        <h3><span class="q">Q6</span> Auteur bloqué</h3>
+        <p class="ruling">Le marqueur ne doit pas trahir le masque.</p>
+        <p>Si un auteur de votre liste noire vous cite, le message est masqué. Marquer la citation
+        plutôt que l'en-tête aide ici : la citation d'un auteur bloqué est déjà remplacée par un
+        placeholder, donc le marqueur disparaît avec elle.</p>
+      </div>
+      <div class="call">
+        <h3><span class="q">Q7</span> Aller au-delà de la page</h3>
+        <p class="ruling">Le lien « cité N fois » avant la recherche.</p>
+        <p>HFR rend déjà, sous chaque message cité, un lien listant ses citations — compté et stocké,
+        jamais suivi. Rendre la pastille cliquable est le pas le plus court. La recherche intra-sujet
+        reste le socle d'un balayage complet.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="open">
+    <h2><span class="num">07</span> Ce qui reste à trancher</h2>
+    <div class="calls">
+      <div class="call open">
+        <h3><span class="q">A</span> Un traitement par axe</h3>
+        <p>Les deux axes se choisissent séparément — y compris « rien » sur l'un des deux. La
+        combinaison la plus économique est <b>Q1 + P3</b> : elle n'ajoute aucune surface colorée et
+        ne consomme aucun canal neuf.</p>
+      </div>
+      <div class="call open">
+        <h3><span class="q">B</span> Une couleur ou deux</h3>
+        <p>Puisque les objets marqués diffèrent, une couleur unique « ego » suffirait peut-être. Deux
+        couleurs distinguent les fonctions mais chargent la palette — et convergent en deutéranopie.</p>
+      </div>
+      <div class="call open">
+        <h3><span class="q">C</span> Les valeurs par défaut</h3>
+        <p>EgoQuote activé, EgoPost désactivé ? Regardez la section 02 avec deux de vos messages sur
+        six : un gros posteur verrait une page entièrement allumée.</p>
+      </div>
+      <div class="call open">
+        <h3><span class="q">D</span> Le repérage global</h3>
+        <p>Les repères d'ascenseur sont un chantier à part — plus utile sur les gros sujets que
+        n'importe quel marqueur local, mais il touche un composant partagé.</p>
+      </div>
+    </div>
+  </section>
+
+  <p class="footnote">
+    Couleurs de thème, rayons, gouttières et styles de texte relevés dans <code>Color.kt</code>,
+    <code>DisplayMetrics.kt</code>, <code>TopicListLayout.kt</code>, <code>PostCardShell.kt</code>,
+    <code>RedfaceUserAvatar.kt</code>, <code>PostRenderer.kt</code> et <code>Type.kt</code>, sur
+    l'accent rose par défaut. Ne viennent pas du dépôt et restent des propositions : le bleu et le
+    violet des marqueurs, le liseré de corps, les repères d'ascenseur. Le rendu est une simulation
+    navigateur — crénage, anticrénelage et gestion des couleurs d'un écran Android diffèrent. On
+    tranche la grammaire visuelle, pas le pixel.
+  </p>
+
+</div>
+
+<script>
+"use strict";
+
+/* ===== Palettes — core/ui/theme/Color.kt ===== */
+const THEMES = {
+  light: {
+    surface: "#FFF8F7", onSurface: "#231919",
+    surfContainer: "#FCEBEA", surfContainerHighest: "#F1DFDE",
+    secondaryContainer: "#FFDAD9", onSecondaryContainer: "#2C1515",
+    tertiaryContainer: "#DAE5F1", onTertiaryContainer: "#131C26",
+    primary: "#8E1D24", surfaceVariant: "#F4DDDC", onSurfaceVariant: "#534342",
+    outlineVariant: "#D7C1BF",
+  },
+  dark: {
+    surface: "#1A1111", onSurface: "#F0DEDC",
+    surfContainer: "#271D1D", surfContainerHighest: "#3D3131",
+    secondaryContainer: "#5C3F3E", onSecondaryContainer: "#FFDAD9",
+    tertiaryContainer: "#3E4854", onTertiaryContainer: "#DAE4F1",
+    primary: "#FFB3B1", surfaceVariant: "#534342", onSurfaceVariant: "#D7C1BF",
+    outlineVariant: "#534342",
+  },
+  amoled: {
+    surface: "#000000", onSurface: "#F0DEDC",
+    surfContainer: "#0B0909", surfContainerHighest: "#1B1616",
+    secondaryContainer: "#5C3F3E", onSecondaryContainer: "#FFDAD9",
+    tertiaryContainer: "#3E4854", onTertiaryContainer: "#DAE4F1",
+    primary: "#FFB3B1", surfaceVariant: "#4A3A3A", onSurfaceVariant: "#D7C1BF",
+    outlineVariant: "#4A3A3A",
+  },
+};
+
+/* ===== Couleurs de signal — propositions, hors rôles Material.
+   Bleu : le référent du surlignage Redface 1. Violet : le créneau libre (cyan, rouge,
+   jaune et fuchsia appartiennent aux drapeaux). `wash` = le même ton en aplat léger,
+   distinct par thème pour rester lisible sur fond clair comme sur AMOLED. ===== */
+const SIG = {
+  post:  { c: "#2979FF", gl: "●", label: "vous",
+           wash: { light: "#E4EDFF", dark: "#16233A", amoled: "#0A1526" } },
+  quote: { c: "#7C4DFF", gl: "❮", label: "vous cite",
+           wash: { light: "#EDE7FF", dark: "#241C3D", amoled: "#150F28" } },
+};
+
+const DENSITY = {
+  comfort: { hdrV: 6, bodyT: 10, bodyB: 8, bodyX: 12 },
+  compact: { hdrV: 4, bodyT: 6,  bodyB: 5, bodyX: 10 },
+};
+
+/* ===== Les six messages — contenu réel du fil qui a produit la demande ===== */
+const ME = "XaTriX";
+const POSTS = [
+  { id: 1, who: "nicko", hue: "#5C6BC0", when: "13-07-2026 à 14:02",
+    txt: "L'egoquote c'est quand quelqu'un te cite, à ne pas confondre avec le surlignage de tes propres messages." },
+  { id: 2, who: ME, hue: "#8E1D24", when: "13-07-2026 à 14:11", own: true, cited: 3,
+    txt: "Du coup on tient deux fonctions distinctes. Je propose EgoPost pour la seconde, ça évitera qu'on se marche dessus." },
+  { id: 3, who: "thibw", hue: "#00897B", when: "13-07-2026 à 14:26", quotesMe: true,
+    quote: { who: ME, txt: "Je propose EgoPost pour la seconde…" },
+    txt: "Adopté. Mais c'est surtout EgoQuote qui me fait rester sur RF1, avec le pinch to zoom." },
+  { id: 4, who: "bitubo", hue: "#F4511E", when: "13-07-2026 à 14:31", anchor: true, quotesMe: true,
+    quote: { who: ME, txt: "…le sujet ici, c'est bien le repérage." },
+    txt: "Pareil. Sur les gros sujets, sans repère on relit trois pages pour retrouver qui a répondu." },
+  { id: 5, who: ME, hue: "#8E1D24", when: "13-07-2026 à 14:40", own: true, quotesMe: true,
+    quote: { who: ME, txt: "…ça évitera qu'on se marche dessus." },
+    txt: "Je me cite pour recadrer : le sujet ici, c'est bien le repérage, pas la notification." },
+  { id: 6, who: "Dintr-un lemn", hue: "#6D4C41", when: "13-07-2026 à 14:52", quotesMe: true,
+    selected: true, cited: 1,
+    quote: { who: ME, txt: "…le repérage, pas la notification." },
+    txt: "Sur RF1 c'est un simple aplat bleu et ça suffit largement." },
+];
+
+const pick = (ids) => ids.map((i) => POSTS.find((p) => p.id === i));
+
+/* ===== Axe 1 — marquer LA CITATION ===== */
+/* Q1 et Q2 isolent chacun UNE variable — couleur seule, puis texte seul — pour que Q3
+   ne puisse pas s'attribuer un gain qui viendrait en fait du libellé. */
+const QUOTE_VARIANTS = [
+  { key: "Q1", name: "Couleur seule", quote: "accent",
+    note: "La barre de 4 dp qui borde déjà toute citation prend la couleur ego. Le libellé ne change pas.",
+    verdict: "free", verdictLabel: "aucun canal neuf",
+    legend: "Le canal existe et n'est jamais lu comme une information — personne ne connaît l'alternance primary/tertiary par profondeur. Défaut visible : la ligne « Citation de … » reste en primary, et les deux couleurs se cognent." },
+  { key: "Q2", name: "Texte seul", quote: "textonly",
+    note: "Rien n'est recoloré : « Citation de XaTriX » devient simplement « Votre citation ».",
+    verdict: "free", verdictLabel: "aucune couleur",
+    legend: "Le témoin qui isole le libellé. Survit à l'achromatopsie et c'est ce que TalkBack annonce — la question est de savoir s'il se repère assez en scroll." },
+  { key: "Q3", name: "Couleur + texte", quote: "header",
+    note: "Les deux à la fois : barre recolorée et libellé réécrit.",
+    verdict: "maybe", verdictLabel: "les deux",
+    legend: "À ne retenir que si Q1 et Q2 pris séparément se révèlent insuffisants — sinon c'est payer deux changements pour un seul gain." },
+  { key: "Q4", name: "Fond de citation teinté", quote: "fill",
+    note: "L'aplat couvre le bloc de citation entier, barre comprise.",
+    verdict: "maybe", verdictLabel: "lourd si empilé",
+    legend: "Très repérable, mais un message qui cite trois personnes dont vous devient bariolé." },
+  { key: "Q5", name: "Badge sur l'en-tête", quote: "badge",
+    note: "Une pastille posée au bout de la ligne « Citation de … ».",
+    verdict: "maybe", verdictLabel: "redondant",
+    legend: "Dit la même chose que Q2, en occupant plus de largeur sur un écran de 360 dp." },
+];
+
+/* ===== Axe 2 — marquer VOTRE MESSAGE ===== */
+const POST_VARIANTS = [
+  { key: "P1", name: "Tout sauf l'identité", ego: "body",
+    note: "L'aplat couvre le corps, les pastilles et le pied d'actions. La bande d'identité garde sa couleur.",
+    verdict: "sol", verdictLabel: "marque le bon objet",
+    legend: "Survit à la pleine largeur (le corps est un slot distinct de la carte) et laisse la bande au message ciblé." },
+  { key: "P2", name: "Carte entière teintée", ego: "card",
+    note: "L'aplat couvre tout, bande d'identité comprise — le « bleu RF1 ».",
+    verdict: "maybe", verdictLabel: "le plus fidèle à RF1",
+    legend: "Ce que la communauté connaît. Mais il recouvre la teinte du message ciblé et pousse la carte en pleine largeur à redevenir une carte." },
+  { key: "P3", name: "Liseré de corps", ego: "edge",
+    note: "Un segment de 4 dp au bord de départ du corps, sans aucune surface colorée.",
+    verdict: "free", verdictLabel: "aucune surface",
+    legend: "Le plus sobre sur une page où plusieurs messages sont les vôtres ; se voit moins en scroll rapide." },
+  { key: "P4", name: "Teinte du bandeau", ego: "band",
+    note: "L'aplat prend la bande d'identité — le traitement de la première version du banc.",
+    verdict: "out", verdictLabel: "écarté",
+    legend: "Marque l'identité au lieu du contenu, réquisitionne la teinte du message ciblé, et rend la date illisible (elle est forcée en onSurfaceVariant)." },
+];
+
+/* ===== Axe 3 — repérage global ===== */
+const GLOBAL_VARIANTS = [
+  { key: "R", name: "Repères d'ascenseur", quote: "accent", scrollTicks: true,
+    note: "Chaque message qui vous cite pose un repère sur la piste de l'ascenseur, à sa position dans la page.",
+    verdict: "maybe", verdictLabel: "chantier à part",
+    legend: "Répond à la demande réelle — savoir d'emblée combien et où — mais touche un composant partagé et dépend du réglage « afficher l'ascenseur »." },
+  { key: "R0", name: "Sans repère", quote: "accent",
+    note: "La même page, ascenseur nu : le point de comparaison.",
+    verdict: "free", verdictLabel: "témoin",
+    legend: "Il faut descendre pour découvrir qu'on vous a cité deux fois." },
+];
+
+const state = { theme: "light", mode: "card", density: "comfort", width: "360", cvd: "none" };
+
+const el = (tag, cls, txt) => {
+  const n = document.createElement(tag);
+  if (cls) n.className = cls;
+  if (txt != null) n.textContent = txt;
+  return n;
+};
+
+const isEgo   = (p) => Boolean(p.own);
+const isQuoted = (p) => Boolean(p.quotesMe);
+
+function buildPost(p, cfg, theme) {
+  const post = el("div", "post" + (p.selected ? " selected" : ""));
+  const ego = isEgo(p);
+  const quoted = isQuoted(p);
+
+  if (ego) {
+    post.style.setProperty("--sig", SIG.post.c);
+    post.style.setProperty("--sig-wash", SIG.post.wash[state.theme]);
+  }
+  if (ego && cfg.ego === "card") post.classList.add("ego-card");
+  if (ego && cfg.ego === "body") post.classList.add("ego-body");
+
+  /* ---- bande d'identité ---- */
+  const band = el("div", "band");
+  let bandBg = theme.secondaryContainer, bandInk = theme.onSecondaryContainer;
+  if (p.anchor) { bandBg = theme.tertiaryContainer; bandInk = theme.onTertiaryContainer; }
+  if (ego && cfg.ego === "band") { bandBg = SIG.post.c; bandInk = "#FFFFFF"; }
+  if (ego && cfg.ego === "card") { bandBg = "transparent"; bandInk = theme.onSurface; }
+  band.style.setProperty("--band-bg", bandBg);
+  band.style.setProperty("--band-ink", bandInk);
+
+  const av = el("div", "avatar", p.who.slice(0, 2).toUpperCase());
+  av.style.background = p.hue;
+  const who = el("div", "who");
+  who.append(el("div", "pseudo", p.who), el("div", "stamp-line", p.when));
+  band.append(av, who, el("div", "kebab", "⋯"));
+  post.append(band);
+
+  if (p.cited) {
+    const b = el("div", "badges");
+    b.append(el("span", "pill", p.cited === 1 ? "cité 1 fois" : "cité " + p.cited + " fois"));
+    post.append(b);
+  }
+
+  /* ---- corps ---- */
+  let bodyCls = "body-txt";
+  if (ego && cfg.ego === "edge") bodyCls += " ego-edge";
+  const body = el("div", bodyCls);
+
+  if (p.quote) {
+    const marked = quoted && cfg.quote;
+    const q = el("div", "quote" + (marked && cfg.quote === "fill" ? " ego-fill" : ""));
+    if (marked) {
+      q.style.setProperty("--sig", SIG.quote.c);
+      q.style.setProperty("--sig-wash", SIG.quote.wash[state.theme]);
+      /* « badge » et « texte seul » ne touchent PAS la barre d'accent. */
+      if (cfg.quote !== "badge" && cfg.quote !== "textonly") {
+        q.style.setProperty("--quote-accent", SIG.quote.c);
+      }
+      /* Q3 doit être EXACTEMENT Q1 + Q2 : la barre recolorée et le libellé réécrit, rien
+         de plus. Recolorer aussi le libellé y glisserait une troisième variable et le
+         témoin ne prouverait plus rien. Seul Q4, dont le traitement EST le remplissage,
+         emporte la couleur du libellé. */
+      if (cfg.quote === "fill") q.style.setProperty("--quote-head", SIG.quote.c);
+    }
+    const qin = el("div", "quote-in");
+    const head = el("div", "quote-who");
+    /* « Citation de %s » — post_quote_author. Q2 le remplace par « Votre citation ». */
+    head.append(document.createTextNode(
+      marked && (cfg.quote === "header" || cfg.quote === "textonly")
+        ? "Votre citation"
+        : "Citation de " + p.quote.who,
+    ));
+    if (marked && cfg.quote === "badge") {
+      const chip = el("span", "chip");
+      chip.style.setProperty("--sig", SIG.quote.c);
+      chip.append(el("span", "gl", SIG.quote.gl), document.createTextNode(SIG.quote.label));
+      head.append(chip);
+    }
+    qin.append(head, el("div", "quote-txt", p.quote.txt));
+    q.append(el("div", "quote-bar"), qin);
+    body.append(q);
+  }
+  body.append(el("div", null, p.txt));
+  post.append(body);
+
+  const actions = el("div", "actions");
+  actions.append(
+    el("span", "act" + (p.selected ? " on" : ""), p.selected ? "✓ Cité" : "+ Citer"),
+    el("span", "act on", "Citer"),
+  );
+  post.append(actions);
+
+  return post;
+}
+
+function buildBay(v, posts) {
+  const bay = el("div", "bay" + (v.verdict === "sol" ? " pick" : ""));
+
+  const head = el("div", "bay-head");
+  head.append(el("div", "bay-key", v.key));
+  const meta = el("div");
+  meta.style.flex = "1";
+  meta.append(el("p", "bay-name", v.name), el("p", "bay-note", v.note));
+  head.append(meta, el("span", "verdict v-" + v.verdict, v.verdictLabel));
+  bay.append(head);
+
+  const vp = el("div", "viewport");
+  vp.dataset.viewport = "1";
+  const stage = el("div", "stage");
+  const screen = el("div", "screen");
+  screen.dataset.screen = "1";
+  screen._cfg = v;
+  screen._posts = posts;
+  stage.append(screen);
+  vp.append(stage);
+  bay.append(vp);
+
+  bay.append(el("div", "legend", v.legend));
+  return bay;
+}
+
+function paintScreen(screen) {
+  const v = screen._cfg;
+  const posts = screen._posts;
+  const theme = THEMES[state.theme];
+  const d = DENSITY[state.density];
+
+  screen.className = "screen" + (state.mode === "flat" ? " flat" : "");
+  screen.style.setProperty("--vw", state.width + "px");
+  screen.style.setProperty("--hdr-v", d.hdrV + "px");
+  screen.style.setProperty("--body-t", d.bodyT + "px");
+  screen.style.setProperty("--body-b", d.bodyB + "px");
+  screen.style.setProperty("--body-x", d.bodyX + "px");
+  Object.entries(theme).forEach(([k, val]) => screen.style.setProperty("--m3-" + k, val));
+
+  const nodes = posts.map((p) => buildPost(p, v, theme));
+
+  /* Ascenseur : piste + poignée, et les repères de la variante R */
+  const track = el("div", "rail-track");
+  const thumb = el("div", "rail-thumb");
+  thumb.style.top = "20px";
+  thumb.style.height = "38%";
+  nodes.push(track, thumb);
+
+  if (v.scrollTicks) {
+    posts.forEach((p, i) => {
+      if (!isQuoted(p)) return;
+      const t = el("div", "rail-tick");
+      t.style.setProperty("--sig", SIG.quote.c);
+      t.style.top = (14 + (i + 0.5) * (72 / posts.length)) + "%";
+      nodes.push(t);
+    });
+  }
+
+  screen.replaceChildren(...nodes);
+}
+
+function paint() {
+  const filter = state.cvd === "none" ? "none" : "url(#cvd-" + state.cvd + ")";
+  document.querySelectorAll("[data-viewport]").forEach((vp) => { vp.style.filter = filter; });
+  document.querySelectorAll("[data-screen]").forEach(paintScreen);
+}
+
+function wire(id, key) {
+  const grp = document.getElementById(id);
+  grp.addEventListener("click", (e) => {
+    const b = e.target.closest("button");
+    if (!b) return;
+    state[key] = b.dataset.v;
+    grp.querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+    paint();
+  });
+}
+
+document.getElementById("bench-quote")
+  .replaceChildren(...QUOTE_VARIANTS.map((v) => buildBay(v, pick([1, 3, 4]))));
+document.getElementById("bench-post")
+  .replaceChildren(...POST_VARIANTS.map((v) => buildBay(v, pick([1, 2, 5]))));
+document.getElementById("bench-global")
+  .replaceChildren(...GLOBAL_VARIANTS.map((v) => buildBay(v, POSTS)));
+
+["theme", "mode", "density", "width", "cvd"].forEach((k) => wire("c-" + k, k));
+paint();
+</script>
+
+</body>
+</html>
