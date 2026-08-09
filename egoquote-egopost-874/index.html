@@ -290,6 +290,70 @@ h2 .obj {
 .quote-txt { color: var(--m3-onSurface); opacity: .85; }
 /* Q3 — fond de la citation teinté */
 .quote.ego-fill { background: var(--sig-wash); }
+/* Q6/Q7 — contour du bloc de citation. `outline` plutôt que `border` : il ne prend pas
+   de place dans le flux, donc la citation ne change ni de largeur ni de hauteur, et il
+   épouse le rayon de 12 dp. En Compose : Modifier.border(…) pour le plein,
+   drawBehind + PathEffect.dashPathEffect pour le tireté. */
+.quote.ego-outline { outline: 1.5px solid var(--sig); outline-offset: -1.5px; }
+.quote.ego-dashed  { outline: 1.5px dashed var(--sig); outline-offset: -1.5px; }
+
+/* P5/P6 — contour du message. Le trait PLEIN de 2 dp appartient déjà à la sélection
+   multi-citation : le tireté s'en distingue par la forme, pas par la couleur — donc il
+   tient en daltonisme, et les deux peuvent coexister sur un même message. */
+.post.ego-outline { outline: 1.5px solid var(--sig); outline-offset: -1.5px; }
+.post.ego-dashed  { outline: 1.5px dashed var(--sig); outline-offset: -1.5px; }
+.screen.flat .post.ego-outline,
+.screen.flat .post.ego-dashed { outline-offset: -2px; }
+
+/* Q8 — médaillon : votre avatar docké au début de la ligne « Citation de … ».
+   On ne lit pas, on reconnaît. Aucune couleur à négocier : c'est une image. */
+.medallion {
+  width: 18px; height: 18px; border-radius: 4px; flex: none;
+  display: grid; place-items: center;
+  font-size: 9px; font-weight: 700; color: #fff; letter-spacing: .02em;
+}
+
+/* Q9 — vidéo inverse : la ligne d'en-tête devient une barre de luminance inversée.
+   Elle réutilise onSurface/surface, donc zéro couleur nouvelle, et gagne en force
+   sur AMOLED au lieu d'en perdre. */
+.quote-who.ego-invert {
+  background: var(--m3-onSurface); color: var(--m3-surface);
+  padding: 2px 8px; border-radius: 4px; margin: -2px -4px 0;
+  align-self: flex-start;
+}
+
+/* P7 — onglet de classeur : une languette qui déborde du bord de départ, alignée
+   sur la bande d'identité. Tous les onglets d'une page tombent sur le même rail
+   vertical, ce qui donne une colonne à balayer en défilement.
+   La carte doit laisser déborder : on lui rend `overflow: visible` et on clippe
+   la bande à la main pour garder les coins arrondis. */
+.post.ego-tab { overflow: visible; }
+.post.ego-tab .band { border-radius: 12px 12px 0 0; }
+.screen.flat .post.ego-tab .band { border-radius: 0; }
+.tab {
+  position: absolute; left: -5px; top: 10px;
+  width: 5px; height: 14px; border-radius: 3px 0 0 3px;
+  background: var(--sig);
+}
+.screen.flat .tab { left: 0; border-radius: 0 3px 3px 0; }
+
+/* P8 — hirondelles : quatre équerres aux angles, comme des traits de coupe.
+   Le cadre est suggéré, jamais fermé — c'est ce qui le distingue de la bordure
+   pleine de la sélection. */
+.corner {
+  position: absolute; width: 12px; height: 12px; z-index: 2;
+  border: 2px solid var(--sig);
+}
+.corner.tl { top: 0; left: 0; border-right: 0; border-bottom: 0; border-radius: 12px 0 0 0; }
+.corner.tr { top: 0; right: 0; border-left: 0; border-bottom: 0; border-radius: 0 12px 0 0; }
+.corner.bl { bottom: 0; left: 0; border-right: 0; border-top: 0; border-radius: 0 0 0 12px; }
+.corner.br { bottom: 0; right: 0; border-left: 0; border-top: 0; border-radius: 0 0 12px 0; }
+
+/* P9 — miroir : la bande d'identité se retourne, comme une bulle « à vous » dans
+   une messagerie. Pure géométrie, aucune teinte. */
+.band.ego-mirror { flex-direction: row-reverse; }
+.band.ego-mirror .who { text-align: right; }
+.band.ego-mirror .pseudo { justify-content: flex-end; }
 
 .chip {
   display: inline-flex; align-items: center; gap: 3px;
@@ -388,7 +452,8 @@ td code, p code, li code, .call code {
       <span>commit <b>0e9c7e3e</b></span>
       <span>palette <b>Color.kt</b>, accent rose par défaut</span>
       <span>géométrie <b>DisplayMetrics · TopicListLayout · PostCardShell</b></span>
-      <span>cadrage relu par <b>Sol (GPT-5.5, xhigh)</b></span>
+      <span>cadrage relu par <b>Sol (GPT-5 Codex, xhigh)</b></span>
+      <span>pistes élargies par <b>Fable 5</b></span>
     </p>
   </header>
 
@@ -434,12 +499,13 @@ td code, p code, li code, .call code {
   <section id="quote">
     <h2><span class="num">01</span> EgoQuote <span class="obj">objet marqué : la citation</span></h2>
     <p class="lede">
-      Cinq façons de marquer <em>la citation qui vous reprend</em>, à l'intérieur du message de
-      celui qui vous répond. Aucune ne crée de canal : la barre d'accent de 4 dp et la ligne
-      « Citation de … » existent déjà, on ne fait que les recolorer ou les réécrire. Les deux
-      premières isolent chacune une seule variable — la couleur, puis le mot — pour qu'on sache
-      lequel des deux porte réellement le repérage. Chaque baie montre un message témoin, puis deux
-      messages qui vous citent, dont le second est aussi celui où la navigation vous a déposé.
+      Neuf façons de marquer <em>la citation qui vous reprend</em>, à l'intérieur du message de
+      celui qui vous répond. Q1 et Q2 isolent chacune une seule variable — la couleur, puis le mot —
+      pour qu'on sache lequel des deux porte réellement le repérage, et Q3 est leur somme exacte.
+      Q4 à Q7 travaillent la surface et le contour ; Q8 et Q9 changent de registre, en passant par
+      l'image et par la luminance plutôt que par la teinte. Chaque baie montre un message témoin,
+      puis deux messages qui vous citent, dont le second est aussi celui où la navigation vous a
+      déposé.
     </p>
     <div class="bench" id="bench-quote"></div>
   </section>
@@ -447,9 +513,12 @@ td code, p code, li code, .call code {
   <section id="post">
     <h2><span class="num">02</span> EgoPost <span class="obj">objet marqué : votre message</span></h2>
     <p class="lede">
-      Quatre façons de marquer <em>vos propres messages</em>. Le troisième message de chaque baie est
+      Neuf façons de marquer <em>vos propres messages</em> : deux par la surface (P1-P2), quatre par
+      le trait (P3-P5, P7), une par la saillie hors des bornes (P6), une par la géométrie seule (P8),
+      plus le traitement écarté gardé comme témoin (P9). Le troisième message de chaque baie est
       le vôtre <em>et</em> contient une auto-citation : c'est là que se voit l'intérêt de séparer les
-      deux axes — chacun marque son objet, sans règle de priorité à écrire. Les citations ne sont pas marquées ici : chaque section n'exerce qu'un seul axe.
+      deux axes — chacun marque son objet, sans règle de priorité à écrire. Les citations ne sont pas
+      marquées ici : chaque section n'exerce qu'un seul axe.
     </p>
     <div class="bench" id="bench-post"></div>
   </section>
@@ -482,8 +551,32 @@ td code, p code, li code, .call code {
     </ol>
   </section>
 
+  <section id="unbuilt">
+    <h2><span class="num">05</span> Pistes explorées, non maquettées</h2>
+    <p class="lede">
+      Issues de la même passe d'élargissement. Elles ne sont pas au banc soit parce qu'un rendu
+      statique ne les montrerait pas, soit parce qu'un défaut identifié les place derrière celles
+      ci-dessus. Elles restent disponibles si aucune des dix-huit ne convainc.
+    </p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Piste</th><th>Axe</th><th>Mécanisme</th><th>Pourquoi elle n'est pas au banc</th></tr></thead>
+        <tbody>
+          <tr><td>Pouls d'entrée</td><td>les deux</td><td>Le marqueur statique bat une fois, 300 ms, quand le message entre à l'écran. La vision périphérique capte le mouvement même en défilement rapide.</td><td>Ce n'est pas un marqueur mais un <em>amplificateur</em> : il rend n'importe quel choix visible au moment exact du besoin. Invisible sur une capture. Rejoué à chaque aller-retour de scroll il devient irritant — il faut un garde-fou d'état.</td></tr>
+          <tr><td>Tamisage à la saisie</td><td>page</td><td>Tant que le doigt tient la poignée de l'ascenseur, les messages non concernés tombent à 55 % d'opacité. On relâche, tout revient.</td><td>Éphémère par construction, donc non capturable. N'aide que ceux qui saisissent la poignée — pas le fling au pouce, qui est le geste majoritaire.</td></tr>
+          <tr><td>Cliquet haptique</td><td>page</td><td>Pendant le drag de la poignée, un tick à chaque message concerné franchi : double pour une citation, simple pour un de vos messages.</td><td>Canal non visuel. Muet si les vibrations sont coupées, et les moteurs haptiques sont très inégaux d'un appareil à l'autre : strictement un bonus.</td></tr>
+          <tr><td>Navigateur d'occurrences</td><td>page</td><td>Un chip « 3 ⌄ » dans la barre du haut : tap pour sauter au suivant, appui long pour le précédent. Le n/N d'une recherche.</td><td>Déplace le problème — naviguer — au lieu de le résoudre en ambiant — repérer. Et la barre du haut est déjà disputée sur 360 dp.</td></tr>
+          <tr><td>Corne de page</td><td>message</td><td>Un triangle de 14 dp au coin haut, avec un trait de pliure : la page cornée d'un livre qu'on veut retrouver.</td><td>Ce coin héberge déjà le bouton « ⋯ ». Et le skeuomorphisme détonne dans une interface Material 3 plate.</td></tr>
+          <tr><td>Lettrine</td><td>message</td><td>La première lettre de vos messages passe en lettrine sur deux lignes, sans aucune couleur.</td><td>Fragile : un message qui ouvre sur une citation, un smiley ou un lien n'a pas de première lettre exploitable. Et toucher à la typographie du contenu hérissera les habitués.</td></tr>
+          <tr><td>Crochets de correcteur</td><td>citation</td><td>Deux angles isolés bornant le côté départ du bloc cité, comme un correcteur qui borne un passage au crayon.</td><td>Concurrence directe avec la barre d'accent, au même bord : l'ensemble se lit comme cassé, surtout en citation imbriquée.</td></tr>
+          <tr><td>Anneau décollé</td><td>message</td><td>Un filet tracé 3 dp <em>à l'extérieur</em> de la carte : le vide entre les deux est le signal.</td><td>Cumulé à la bordure de sélection sur un même message, cela fait deux cadres concentriques — chargé, et l'ordre de lecture devient ambigu.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
   <section id="collisions">
-    <h2><span class="num">05</span> Ce qui occupe déjà la carte</h2>
+    <h2><span class="num">06</span> Ce qui occupe déjà la carte</h2>
     <p class="lede">
       Sept canaux visuels sont déjà attribués. C'est la contrainte qui élimine des traitements avant
       qu'on parle de goût — et c'est aussi ce qui rend la piste « marquer la citation » économique :
@@ -516,7 +609,7 @@ td code, p code, li code, .call code {
   </section>
 
   <section id="rulings">
-    <h2><span class="num">06</span> Ce que le cadrage a tranché</h2>
+    <h2><span class="num">07</span> Ce que le cadrage a tranché</h2>
     <p class="lede">Acquis, vérifié dans le dépôt. Seul le traitement visuel reste ouvert.</p>
     <div class="calls">
       <div class="call">
@@ -566,7 +659,7 @@ td code, p code, li code, .call code {
   </section>
 
   <section id="open">
-    <h2><span class="num">07</span> Ce qui reste à trancher</h2>
+    <h2><span class="num">08</span> Ce qui reste à trancher</h2>
     <div class="calls">
       <div class="call open">
         <h3><span class="q">A</span> Un traitement par axe</h3>
@@ -597,7 +690,8 @@ td code, p code, li code, .call code {
     <code>DisplayMetrics.kt</code>, <code>TopicListLayout.kt</code>, <code>PostCardShell.kt</code>,
     <code>RedfaceUserAvatar.kt</code>, <code>PostRenderer.kt</code> et <code>Type.kt</code>, sur
     l'accent rose par défaut. Ne viennent pas du dépôt et restent des propositions : le bleu et le
-    violet des marqueurs, le liseré de corps, les repères d'ascenseur. Le rendu est une simulation
+    violet des marqueurs, et tous les mécanismes proposés (liseré, contours, onglet, hirondelles,
+    médaillon, miroir, repères d'ascenseur). Le rendu est une simulation
     navigateur — crénage, anticrénelage et gestion des couleurs d'un écran Android diffèrent. On
     tranche la grammaire visuelle, pas le pixel.
   </p>
@@ -695,10 +789,26 @@ const QUOTE_VARIANTS = [
     note: "L'aplat couvre le bloc de citation entier, barre comprise.",
     verdict: "maybe", verdictLabel: "lourd si empilé",
     legend: "Très repérable, mais un message qui cite trois personnes dont vous devient bariolé." },
-  { key: "Q5", name: "Badge sur l'en-tête", quote: "badge",
+  { key: "Q5", name: "Contour de la citation", quote: "outline",
+    note: "Un filet de 1,5 dp fait le tour du bloc cité. La barre d'accent reste inchangée.",
+    verdict: "free", verdictLabel: "sans surface",
+    legend: "Délimite exactement l'objet concerné, ne coûte ni largeur ni hauteur (c'est un outline, hors flux), et tient sur AMOLED où un aplat sombre disparaît. Défaut visible : sur le bord gauche, le filet longe la barre d'accent restée rouge — deux traits de deux couleurs collés." },
+  { key: "Q6", name: "Contour tireté", quote: "dashed",
+    note: "Le même filet, mais en pointillé.",
+    verdict: "maybe", verdictLabel: "forme + couleur",
+    legend: "Le tireté porte l'information par sa FORME : il reste distinguable en achromatopsie, là où tous les traitements colorés se valent. Défaut : le pointillé sur 12 dp de rayon se lit mal à petite taille." },
+  { key: "Q7", name: "Badge sur l'en-tête", quote: "badge",
     note: "Une pastille posée au bout de la ligne « Citation de … ».",
     verdict: "maybe", verdictLabel: "redondant",
     legend: "Dit la même chose que Q2, en occupant plus de largeur sur un écran de 360 dp." },
+  { key: "Q8", name: "Médaillon", quote: "medal",
+    note: "Votre avatar en 18 dp se docke au début de la ligne « Citation de … ».",
+    verdict: "free", verdictLabel: "une image, pas une couleur",
+    legend: "On ne lit pas, on reconnaît : son propre avatar est l'image la plus vite identifiée d'un écran — l'idiome des aperçus de réponse en messagerie. Défaut : sans avatar défini, le placeholder générique ne signale plus rien." },
+  { key: "Q9", name: "Vidéo inverse", quote: "invert",
+    note: "La ligne d'en-tête devient une barre de luminance inversée, comme une ligne sélectionnée dans un terminal.",
+    verdict: "maybe", verdictLabel: "gagne sur AMOLED",
+    legend: "Le seul traitement qui devient PLUS fort sur AMOLED au lieu de s'y diluer, et qui n'introduit aucune couleur : il inverse celles qui existent, donc il tient en daltonisme. Défauts : effet zèbre quand trois citations de vous s'empilent, et il faut re-loger l'affordance « cliquable » que porte aujourd'hui la couleur de cette ligne." },
 ];
 
 /* ===== Axe 2 — marquer VOTRE MESSAGE ===== */
@@ -715,7 +825,27 @@ const POST_VARIANTS = [
     note: "Un segment de 4 dp au bord de départ du corps, sans aucune surface colorée.",
     verdict: "free", verdictLabel: "aucune surface",
     legend: "Le plus sobre sur une page où plusieurs messages sont les vôtres ; se voit moins en scroll rapide." },
-  { key: "P4", name: "Teinte du bandeau", ego: "band",
+  { key: "P4", name: "Contour du message", ego: "outline",
+    note: "Un filet de 1,5 dp fait le tour de la carte entière.",
+    verdict: "maybe", verdictLabel: "collision de forme",
+    legend: "Sobre et sans surface, mais le trait plein de 2 dp appartient déjà à la sélection multi-citation : deux traits pleins concentriques, on ne saura plus lequel dit quoi." },
+  { key: "P5", name: "Contour tireté", ego: "dashed",
+    note: "Le même filet, en pointillé — précisément pour ne pas se confondre avec la sélection.",
+    verdict: "free", verdictLabel: "lisible sans couleur",
+    legend: "La distinction plein/tireté tient sans aucune couleur, donc en daltonisme comme en achromatopsie, et les deux états peuvent cohabiter sur un même message. Défaut : le tireté a une connotation « brouillon » ou « à valider » dans beaucoup d'interfaces." },
+  { key: "P6", name: "Onglet de classeur", ego: "tab",
+    note: "Une languette déborde du bord de départ, à hauteur de la bande — l'intercalaire d'une pile de dossiers.",
+    verdict: "free", verdictLabel: "repérage à distance",
+    legend: "Tous les onglets d'une page tombent sur le même rail vertical : l'œil balaie une colonne unique, même en défilement rapide, sans un dp de hauteur ni de largeur consommé. Défaut : il vit dans la marge de page, donc il se dégrade en encoche en pleine largeur." },
+  { key: "P7", name: "Hirondelles de coin", ego: "corners",
+    note: "Quatre équerres aux angles, comme des traits de coupe d'imprimeur. Le cadre est suggéré, jamais fermé.",
+    verdict: "maybe", verdictLabel: "cadre ouvert",
+    legend: "Un cadre interrompu ne peut pas se confondre avec la bordure continue de la sélection — la distinction est de forme, pas de couleur. Défaut : discret jusqu'à la timidité, et l'écart continu/interrompu doit être appris." },
+  { key: "P8", name: "Miroir de messagerie", ego: "mirror",
+    note: "La bande d'identité se retourne : avatar à droite, pseudo aligné à droite, menu à gauche.",
+    verdict: "maybe", verdictLabel: "pure géométrie",
+    legend: "La silhouette inversée se repère en vision périphérique sans rien lire ni aucune couleur — l'idiome « vos bulles à droite » de toute messagerie. Défaut sérieux : déplacer le « ⋯ » casse une habitude motrice, et deux gros posteurs en vis-à-vis produisent un zigzag fatigant." },
+  { key: "P9", name: "Teinte du bandeau", ego: "band",
     note: "L'aplat prend la bande d'identité — le traitement de la première version du banc.",
     verdict: "out", verdictLabel: "écarté",
     legend: "Marque l'identité au lieu du contenu, réquisitionne la teinte du message ciblé, et rend la date illisible (elle est forcée en onSurfaceVariant)." },
@@ -756,9 +886,18 @@ function buildPost(p, cfg, theme) {
   }
   if (ego && cfg.ego === "card") post.classList.add("ego-card");
   if (ego && cfg.ego === "body") post.classList.add("ego-body");
+  if (ego && cfg.ego === "outline") post.classList.add("ego-outline");
+  if (ego && cfg.ego === "dashed") post.classList.add("ego-dashed");
+  if (ego && cfg.ego === "tab") {
+    post.classList.add("ego-tab");
+    post.append(el("div", "tab"));
+  }
+  if (ego && cfg.ego === "corners") {
+    ["tl", "tr", "bl", "br"].forEach((c) => post.append(el("div", "corner " + c)));
+  }
 
   /* ---- bande d'identité ---- */
-  const band = el("div", "band");
+  const band = el("div", "band" + (ego && cfg.ego === "mirror" ? " ego-mirror" : ""));
   let bandBg = theme.secondaryContainer, bandInk = theme.onSecondaryContainer;
   if (p.anchor) { bandBg = theme.tertiaryContainer; bandInk = theme.onTertiaryContainer; }
   if (ego && cfg.ego === "band") { bandBg = SIG.post.c; bandInk = "#FFFFFF"; }
@@ -786,12 +925,18 @@ function buildPost(p, cfg, theme) {
 
   if (p.quote) {
     const marked = quoted && cfg.quote;
-    const q = el("div", "quote" + (marked && cfg.quote === "fill" ? " ego-fill" : ""));
+    let qCls = "quote";
+    if (marked && cfg.quote === "fill") qCls += " ego-fill";
+    if (marked && cfg.quote === "outline") qCls += " ego-outline";
+    if (marked && cfg.quote === "dashed") qCls += " ego-dashed";
+    const q = el("div", qCls);
     if (marked) {
       q.style.setProperty("--sig", SIG.quote.c);
       q.style.setProperty("--sig-wash", SIG.quote.wash[state.theme]);
       /* « badge » et « texte seul » ne touchent PAS la barre d'accent. */
-      if (cfg.quote !== "badge" && cfg.quote !== "textonly") {
+      /* « badge », « texte seul » et les deux contours laissent la barre d'accent
+         telle quelle : le contour est un canal de plus, pas un remplacement. */
+      if (!["badge", "textonly", "outline", "dashed", "medal", "invert"].includes(cfg.quote)) {
         q.style.setProperty("--quote-accent", SIG.quote.c);
       }
       /* Q3 doit être EXACTEMENT Q1 + Q2 : la barre recolorée et le libellé réécrit, rien
@@ -801,7 +946,12 @@ function buildPost(p, cfg, theme) {
       if (cfg.quote === "fill") q.style.setProperty("--quote-head", SIG.quote.c);
     }
     const qin = el("div", "quote-in");
-    const head = el("div", "quote-who");
+    const head = el("div", "quote-who" + (marked && cfg.quote === "invert" ? " ego-invert" : ""));
+    if (marked && cfg.quote === "medal") {
+      const m = el("div", "medallion", ME.slice(0, 2).toUpperCase());
+      m.style.background = "#8E1D24";
+      head.append(m);
+    }
     /* « Citation de %s » — post_quote_author. Q2 le remplace par « Votre citation ». */
     head.append(document.createTextNode(
       marked && (cfg.quote === "header" || cfg.quote === "textonly")
