@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Nuit redface2 02→03/09</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#f5f2ef;--surface:#ffffff;--surface-2:#ece7e2;--ink:#1f1a17;--ink-2:#5c534d;--line:#d9d1ca;
+  --accent:#b3261e;--accent-ink:#ffffff;--accent-soft:#f6dcd9;
+  --ok:#2e7d4f;--ok-soft:#dcefe3;--warn:#a2650a;--warn-soft:#f7e8cf;--bad:#9b2c2c;--bad-soft:#f4dada;--wait:#5a5f6e;--wait-soft:#e3e5ea;
+  --sol:#4a5fc1;--sol-soft:#dfe4f7;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#15120f;--surface:#1f1b18;--surface-2:#2a2421;--ink:#f1ece7;--ink-2:#b3a89f;--line:#3a332e;
+    --accent:#e2574c;--accent-ink:#1a0d0b;--accent-soft:#4a2320;
+    --ok:#6fcf97;--ok-soft:#1f3a2b;--warn:#e0a94a;--warn-soft:#3f2f14;--bad:#f28b82;--bad-soft:#4a2020;--wait:#a7abb8;--wait-soft:#2c2f38;
+    --sol:#9daaf0;--sol-soft:#262c4a;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#15120f;--surface:#1f1b18;--surface-2:#2a2421;--ink:#f1ece7;--ink-2:#b3a89f;--line:#3a332e;
+  --accent:#e2574c;--accent-ink:#1a0d0b;--accent-soft:#4a2320;
+  --ok:#6fcf97;--ok-soft:#1f3a2b;--warn:#e0a94a;--warn-soft:#3f2f14;--bad:#f28b82;--bad-soft:#4a2020;--wait:#a7abb8;--wait-soft:#2c2f38;
+  --sol:#9daaf0;--sol-soft:#262c4a;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 "IBM Plex Sans",system-ui,sans-serif}
+main{max-width:1040px;margin:0 auto;padding:28px 20px 48px;display:grid;gap:22px}
+h1,h2{font-family:Sora,"IBM Plex Sans",sans-serif;text-wrap:balance;margin:0}
+h1{font-size:26px;font-weight:600;letter-spacing:-.01em}
+h2{font-size:15px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-2)}
+.sub{color:var(--ink-2);margin:4px 0 0;font-size:13px}
+header{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px 24px;align-items:flex-end;border-bottom:2px solid var(--accent);padding-bottom:14px}
+.mono{font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:10px 12px}
+.kpi b{display:block;font:600 24px/1.1 Sora,sans-serif;font-variant-numeric:tabular-nums}
+.kpi span{color:var(--ink-2);font-size:12px}
+section{display:grid;gap:10px}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:6px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:720px}
+th,td{padding:6px 10px;text-align:left;vertical-align:top;border-top:1px solid var(--line)}
+th{border-top:0;background:var(--surface-2);font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-2);font-weight:600;white-space:nowrap}
+td.t{white-space:nowrap;color:var(--ink-2)}
+td.n{white-space:nowrap}
+.pill{display:inline-block;padding:1px 7px;border-radius:999px;font-size:11.5px;font-weight:600;white-space:nowrap;border:1px solid transparent}
+.ok{background:var(--ok-soft);color:var(--ok)}.warn{background:var(--warn-soft);color:var(--warn)}.bad{background:var(--bad-soft);color:var(--bad)}.wait{background:var(--wait-soft);color:var(--wait)}.acc{background:var(--accent-soft);color:var(--accent)}
+.ref{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:12.5px}
+.chart{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:12px 12px 6px}
+.chart svg{width:100%;height:auto;display:block}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:12px;color:var(--ink-2);padding:6px 2px 0}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-2px;margin-right:5px}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:12px 14px}
+.card h2{margin-bottom:8px}
+ul{margin:0;padding-left:18px;display:grid;gap:5px}
+li b{font-weight:600}
+footer{color:var(--ink-2);font-size:12px;border-top:1px solid var(--line);padding-top:10px}
+a{color:var(--accent)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body style="margin:0">
+<main>
+<header>
+  <div>
+    <h1>Nuit redface2 02→03/09</h1>
+    <p class="sub">Mandat autonome de XaTriX, 22:10Z → 04:50Z. Sol (Codex gpt-5.5 xhigh) produit, Fable 5.1 gate, releases dev en solo. Heures UTC (Paris = +2).</p>
+  </div>
+  <div class="sub mono">dev 0.52.3 → 0.53.2 · app-v298 → v301</div>
+</header>
+
+<div class="kpis">
+  <div class="kpi"><b>4</b><span>releases dev livrées (F-Droid servi, changelog posté)</span></div>
+  <div class="kpi"><b>6</b><span>PR mergées sur dev, CI verte à chaque fois</span></div>
+  <div class="kpi"><b>6</b><span>issues fermées avec commentaire</span></div>
+  <div class="kpi"><b>8</b><span>retours testeurs traités</span></div>
+  <div class="kpi"><b>3</b><span>runs Sol morts au quota, aucun diff perdu</span></div>
+  <div class="kpi"><b>1</b><span>PR dev → main ouverte pour revue</span></div>
+</div>
+
+<section>
+  <h2>Lots livrés</h2>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Sol</th><th>Lot</th><th>Contenu</th><th>Release</th><th>PR</th><th>Issues / retours</th></tr></thead>
+    <tbody>
+      <tr><td class="t mono">21:10–21:55</td><td>Hotfix</td><td>Poster depuis une page en retard ne téléporte plus en dernière page ; snackbar « Y aller »</td><td class="n mono">0.52.3 · v298</td><td class="ref">#1244</td><td>#1243 fermée · Eife, thom@s</td></tr>
+      <tr><td class="t mono">22:15–22:23</td><td>A1 Couleurs + Drapeaux</td><td>Sélecteur Clair / Système / Sombre dans Couleurs ; bandeaux « Doux » et « Puce » en surface secondaire, icône « Minimal » accent ; graine grise → monochrome</td><td class="n mono">0.53.0 · v299</td><td class="ref">#1245</td><td>XaTriX · CharLee (en-têtes blancs) · styx42 (gris → vert)</td></tr>
+      <tr><td class="t mono">22:25–22:33</td><td>A2 Topic</td><td>Réponse citée reste sur le message cité ; cité absent → position conservée ; réponse rapide poste la page courante</td><td class="n mono">0.53.0 · v299</td><td class="ref">#1246</td><td>nicko (suite #974) · commentaires #974, #1243</td></tr>
+      <tr><td class="t mono">22:34–23:00 · 03:37–03:45</td><td>C Éditeur / Images</td><td>« Citer le début » (troncature pure, 300 car., balises préservées) ; « Partager » une image</td><td class="n mono">0.53.1 · v300</td><td class="ref">#1248</td><td>#327, #831 fermées · Dintr-un lemn, Jungledede</td></tr>
+      <tr><td class="t mono">23:58–00:34 · 03:17–03:37</td><td>E Drapeaux</td><td>Onglet + liste exposés atomiquement (saut au swipe) ; onglet Super réel avec migration ; sous-catégorie dans la ligne</td><td class="n mono">0.53.1 · v300</td><td class="ref">#1247</td><td>#742, #737, #741 fermées · nicko</td></tr>
+      <tr><td class="t mono">03:50–04:02</td><td>F Thème</td><td>Option « En-tête des messages » Discret / Vif, topic et MP par le même helper, aperçu live</td><td class="n mono">0.53.2 · v301</td><td class="ref">#1249</td><td>styx42, nicko, XaTriX</td></tr>
+      <tr><td class="t mono">04:40</td><td>Promotion</td><td>PR de revue dev → main : tout le contenu depuis la bêta 0.50.2, points à regarder listés</td><td class="n"><span class="pill acc">go requis</span></td><td class="ref">#1250</td><td>XaTriX</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <h2>Chronologie</h2>
+  <div class="chart">
+    <svg viewBox="0 0 1000 250" role="img" aria-label="Chronologie de la nuit, de 21:00Z à 05:00Z">
+      <defs><style>
+        .ax{stroke:var(--line);stroke-width:1}.tick{fill:var(--ink-2);font:11px "IBM Plex Mono",monospace}
+        .lbl{fill:var(--ink);font:12px "IBM Plex Sans",sans-serif}.small{fill:var(--ink-2);font:10.5px "IBM Plex Sans",sans-serif}
+        .sol{fill:var(--sol)}.dead{fill:var(--bad)}.rel{fill:var(--ok)}.idle{fill:var(--wait-soft)}.gate{fill:var(--warn)}
+      </style></defs>
+      <!-- axis: 21:00Z = x 90, 05:00Z = x 990 → 112.5 px/h -->
+      <line class="ax" x1="90" y1="222" x2="990" y2="222"/>
+      <g class="tick">
+        <text x="90" y="240" text-anchor="middle">21:00</text><text x="202.5" y="240" text-anchor="middle">22:00</text><text x="315" y="240" text-anchor="middle">23:00</text><text x="427.5" y="240" text-anchor="middle">00:00</text><text x="540" y="240" text-anchor="middle">01:00</text><text x="652.5" y="240" text-anchor="middle">02:00</text><text x="765" y="240" text-anchor="middle">03:00</text><text x="877.5" y="240" text-anchor="middle">04:00</text><text x="990" y="240" text-anchor="middle">05:00</text>
+      </g>
+      <g class="ax" stroke-dasharray="2 4"><line x1="202.5" y1="20" x2="202.5" y2="222"/><line x1="315" y1="20" x2="315" y2="222"/><line x1="427.5" y1="20" x2="427.5" y2="222"/><line x1="540" y1="20" x2="540" y2="222"/><line x1="652.5" y1="20" x2="652.5" y2="222"/><line x1="765" y1="20" x2="765" y2="222"/><line x1="877.5" y1="20" x2="877.5" y2="222"/></g>
+      <!-- idle band 00:53 → 03:15 : x 527 → 793 -->
+      <rect class="idle" x="527" y="20" width="266" height="202" rx="3"/>
+      <text class="small" x="660" y="122" text-anchor="middle">deux comptes Codex à 100 %</text>
+      <!-- rows -->
+      <text class="lbl" x="84" y="42" text-anchor="end">Sol A1</text><rect class="sol" x="343" y="33" width="15" height="12" rx="2"/>
+      <text class="lbl" x="84" y="64" text-anchor="end">Sol A2</text><rect class="sol" x="362" y="55" width="15" height="12" rx="2"/>
+      <text class="lbl" x="84" y="86" text-anchor="end">Sol C</text><rect class="sol" x="379" y="77" width="49" height="12" rx="2"/><rect class="dead" x="426" y="75" width="3" height="16"/><rect class="sol" x="835" y="77" width="15" height="12" rx="2"/>
+      <text class="lbl" x="84" y="108" text-anchor="end">Sol E</text><rect class="sol" x="536" y="99" width="68" height="12" rx="2"/><rect class="dead" x="602" y="97" width="3" height="16"/><rect class="sol" x="797" y="99" width="38" height="12" rx="2"/>
+      <text class="lbl" x="84" y="130" text-anchor="end">Sol F</text><rect class="sol" x="859" y="121" width="22" height="12" rx="2"/><rect class="dead" x="879" y="119" width="3" height="16"/>
+      <text class="lbl" x="84" y="152" text-anchor="end">Gate / revue</text><rect class="gate" x="358" y="143" width="12" height="12" rx="2"/><rect class="gate" x="371" y="143" width="12" height="12" rx="2"/><rect class="gate" x="490" y="143" width="20" height="12" rx="2"/><rect class="gate" x="605" y="143" width="40" height="12" rx="2"/><rect class="gate" x="838" y="143" width="20" height="12" rx="2"/><rect class="gate" x="884" y="143" width="32" height="12" rx="2"/>
+      <text class="lbl" x="84" y="174" text-anchor="end">Release + post</text>
+      <rect class="rel" x="178" y="165" width="15" height="12" rx="2"/><text class="small" x="185" y="190" text-anchor="middle">0.52.3</text>
+      <rect class="rel" x="313" y="165" width="26" height="12" rx="2"/><text class="small" x="326" y="190" text-anchor="middle">0.53.0</text>
+      <rect class="rel" x="881" y="165" width="19" height="12" rx="2"/><text class="small" x="890" y="190" text-anchor="middle">0.53.1</text>
+      <rect class="rel" x="939" y="165" width="16" height="12" rx="2"/><text class="small" x="947" y="190" text-anchor="middle">0.53.2</text>
+      <!-- mandate start -->
+      <line x1="221" y1="20" x2="221" y2="222" stroke="var(--accent)" stroke-width="1.5"/><text class="small" x="225" y="30">22:10 mandat reçu</text>
+      <line x1="952" y1="20" x2="952" y2="222" stroke="var(--accent)" stroke-width="1.5"/><text class="small" x="948" y="30" text-anchor="end">04:40 PR #1250</text>
+    </svg>
+    <div class="legend"><span><i style="background:var(--sol)"></i>run Sol</span><span><i style="background:var(--bad)"></i>mort au quota</span><span><i style="background:var(--warn)"></i>gate Fable (build, revue, fixes triviaux)</span><span><i style="background:var(--ok)"></i>release dev + F-Droid + post DEV</span><span><i style="background:var(--wait-soft);border:1px solid var(--line)"></i>attente quota</span></div>
+  </div>
+</section>
+
+<section>
+  <h2>Incidents</h2>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Heure</th><th>Incident</th><th>Résolution</th><th>État</th></tr></thead>
+    <tbody>
+      <tr><td class="t mono">23:01</td><td>Release 0.53.0 refusée par la garde : whatsnew FR à 523 caractères pour 500 max</td><td>Raccourci, garde locale passée, redispatch ; réflexe noté en mémoire</td><td><span class="pill ok">réglé</span></td></tr>
+      <tr><td class="t mono">23:00</td><td>Sol C mort au quota (compte 2) en écrivant ses tests</td><td>Gate sur le diff partiel : 1784 tests verts, detekt seul ; reprise C2 à 03:37</td><td><span class="pill ok">réglé</span></td></tr>
+      <tr><td class="t mono">00:34</td><td>Sol E mort au quota (compte 1) en corrigeant les fakes de test</td><td>Gate + revue par agent (bug d'elvis identifié) ; reprise E2 à 03:17 ; 3 fixes triviaux orchestrateur</td><td><span class="pill ok">réglé</span></td></tr>
+      <tr><td class="t mono">00:53–03:15</td><td>Deux comptes Codex à 100 %</td><td>Attente programmée par réveils ponctuels, cron de reprise toutes les 30 min</td><td><span class="pill wait">2 h 20 perdues</span></td></tr>
+      <tr><td class="t mono">03:51</td><td>Garde de parité refuse « Parity-Impact: partial » sur la PR C</td><td>Ligne « none » avec justification, jobs relancés</td><td><span class="pill ok">réglé</span></td></tr>
+      <tr><td class="t mono">04:02</td><td>Sol F mort au quota (compte 2) après ses tests, sans rapport</td><td>Gate 2456 tests verts, 3 detekt triviaux fixés, revue par agent sans bloquant</td><td><span class="pill ok">réglé</span></td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<div class="cols">
+  <div class="card">
+    <h2>Décisions pour XaTriX</h2>
+    <ul>
+      <li><b>Promotion bêta</b> via la PR <span class="ref">#1250</span> : relire, puis go explicite avant merge sur main et dispatch beta.</li>
+      <li><b>Style de bandeau par défaut</b> des Drapeaux : « Minimal » conservé, « Doux » désormais accentué. Changer le défaut ?</li>
+      <li><b>Réglage de thème en double</b> (Affichage et Couleurs) : garder les deux ou déplacer.</li>
+      <li><b>#742</b> : symptôme d'une frame, à confirmer sur appareil avec nicko.</li>
+      <li><b>Réponse TU</b> à Eife et thom@s sur le hotfix 0.52.3 : go requis.</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h2>Écarts et leçons</h2>
+    <ul>
+      <li><b>Écartés</b> : #394 (deux bloqueurs connus dans l'atterrissage), #182 volet C (POC exigé, dépendance Telephoto), #650 (CI à ne pas toucher).</li>
+      <li><b>Non couvert</b> : « Citer le début » n'est pas branché côté MP ; aucun golden Roborazzi régénéré.</li>
+      <li><b>Quota</b> : un lot de 20 à 25 fichiers consomme une fenêtre 5 h entière quand Sol relit des fichiers de 3000 lignes en entier. Lots plus petits et lecture ciblée imposée dans les prompts.</li>
+      <li><b>Reprise</b> : le diff d'un run mort reste exploitable ; lancer le gate dessus avant la reprise donne à Sol la liste exacte des erreurs.</li>
+    </ul>
+  </div>
+</div>
+
+<footer>Suivi détaillé hors repo : redface2-work/suivi/SUIVI-NUIT-0203.md. Changelog : <a href="https://github.com/ForumHFR/redface2/blob/dev/app/CHANGELOG.md">app/CHANGELOG.md</a>. Généré par Claude Fable 5.1 pour XaTriX, 03/09/2026 04:55Z.</footer>
+</main>
+</body>
+</html>
