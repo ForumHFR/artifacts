@@ -234,6 +234,24 @@ h2{font-size:clamp(24px,3.4vw,32px); font-weight:600; letter-spacing:-.015em}
 }
 .status.err{background:var(--d-errc); color:var(--d-err)}
 .status .act{margin-left:auto; color:var(--d-prim); font-weight:500}
+
+/* bande de contexte : état durable à gauche, événement à droite */
+.ctx{
+  flex:none; display:flex; align-items:center; gap:7px; min-height:32px; padding:0 12px;
+  font-size:12px; background:var(--d-sch); color:var(--d-onv);
+  border-top:1px solid var(--d-outv);
+}
+.ctx.err{background:var(--d-errc); color:var(--d-err); align-items:flex-start;
+  padding-top:6px; padding-bottom:6px; min-height:64px}
+.ctx .ev{display:flex; align-items:center; gap:6px; margin-left:auto; min-width:0}
+.ctx .ev span:not(.act){overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.ctx.err .ev{align-items:flex-start; line-height:1.34}
+.ctx.err .ev span:not(.act){white-space:normal}
+.ctx .act{color:var(--d-prim); font-weight:500; white-space:nowrap; flex:none}
+.ctx.err .act{color:var(--d-err); text-decoration:underline}
+.ctx .pill{background:var(--d-primc); color:var(--d-onprimc)}
+.ctx .pill.mute{background:var(--d-schh); color:var(--d-onv)}
+.ctx .pill.tiny{padding:3px 7px; gap:3px}
 .prog{height:3px; background:var(--d-primc); flex:none}
 .prog i{display:block; height:100%; width:62%; background:var(--d-prim)}
 
@@ -373,6 +391,12 @@ td.st{white-space:nowrap}
   background:var(--paper-2); padding:13px 15px;
 }
 .ask h4{font-size:14px; font-weight:600; margin-bottom:5px}
+.ask.done{border-left-color:var(--ok); background:var(--paper-2)}
+.ok-tag{
+  display:inline-block; font-family:"IBM Plex Mono",monospace; font-size:9.5px; font-weight:500;
+  letter-spacing:.08em; text-transform:uppercase; background:var(--ok-soft); color:var(--ok);
+  border-radius:3px; padding:2px 6px; margin-right:7px; vertical-align:1px;
+}
 .ask p{margin:0; font-size:13.2px; color:var(--ink-2)}
 footer{padding-block:34px 0; color:var(--ink-3); font-size:12.5px}
 
@@ -396,7 +420,7 @@ footer{padding-block:34px 0; color:var(--ink-3); font-size:12.5px}
 #vpick select option{color:#111;background:#fff}
 @media print{#vpick{display:none}}
 </style>
-<div id="vpick"><label for="vpick-sel">Version</label><select id="vpick-sel" onchange="location.href=this.value"><option value="./" selected>v2 — courante</option><option value="v1/">v1</option></select></div>
+<div id="vpick"><label for="vpick-sel">Version</label><select id="vpick-sel" onchange="location.href=this.value"><option value="./" selected>v3 — courante</option><option value="v2/">v2</option><option value="v1/">v1</option></select></div>
 
 <div class="wrap">
 
@@ -661,11 +685,11 @@ footer{padding-block:34px 0; color:var(--ink-3); font-size:12.5px}
         <div class="c">Bouton d'aperçu</div><div class="v">36 dp</div><div class="v">0</div>
         <div class="c">Espacements de colonne</div><div class="v">36 dp</div><div class="v">12 dp</div>
         <div class="c">Barre d'action</div><div class="v">56 dp</div><div class="v">56 dp</div>
-        <div class="c">Ligne de statut</div><div class="v">—</div><div class="v">0–32 dp</div>
+        <div class="c">Bande de contexte</div><div class="v">—</div><div class="v">0–32 dp</div>
         <div class="c tot">Champ de saisie</div><div class="v tot">128 dp</div><div class="v tot gain">262 dp</div>
       </div>
       <ul class="notes">
-        <li><span class="n">4</span><span>De 3 à <b>7 lignes</b> visibles pendant la frappe, sans rien supprimer&nbsp;: le titre passe dans l'app bar, la barre d'outils devient un tiroir, l'aperçu devient une action.</span></li>
+        <li><span class="n">4</span><span>De 3 à <b>7 lignes</b> visibles pendant la frappe, sans rien supprimer&nbsp;: le titre passe dans l'app bar, la barre d'outils devient un tiroir, l'aperçu devient une action, et les bandeaux se regroupent en une bande de 32&nbsp;dp au-dessus de la barre.</span></li>
       </ul>
     </div>
   </div>
@@ -697,9 +721,10 @@ footer{padding-block:34px 0; color:var(--ink-3); font-size:12.5px}
     </div>
     <div class="rule">
       <div class="k">Règle 3</div>
-      <h3>Rien ne pousse le champ vers le bas</h3>
-      <p>Brouillon retrouvé, erreur d'envoi, progression d'upload&nbsp;: une ligne de statut de 32&nbsp;dp
-      ancrée juste au-dessus de la barre d'action, dans le champ de vision du pouce.</p>
+      <h3>Une seule bande dit tout, et elle ne pousse rien</h3>
+      <p>Citations armées, brouillon, upload, erreur&nbsp;: une <b>bande de contexte</b> unique de
+      32&nbsp;dp, ancrée au-dessus de la barre d'action, dans le champ de vision du pouce. L'état
+      durable à gauche en pastilles, l'événement du moment à droite.</p>
       <p>Les citations deviennent un <b>panneau</b> qui remplace le champ au lieu de le comprimer.
       L'aperçu, lui, reste à côté du source — en dessous en portrait, à droite en paysage — parce que
       comparer les deux est tout son intérêt.</p>
@@ -710,7 +735,7 @@ footer{padding-block:34px 0; color:var(--ink-3); font-size:12.5px}
 <!-- ══════════════════════════════════════════════════════════════════════ -->
 <section>
   <div class="sec-head"><span class="sec-num">04</span><h2>Les écrans</h2></div>
-  <p class="sec-sub">Treize états, rendus avec le schéma de couleurs réel de l'app et les libellés
+  <p class="sec-sub">Quinze états, rendus avec le schéma de couleurs réel de l'app et les libellés
   français réels des <code>strings.xml</code>.</p>
 
   <div class="decks">
@@ -729,14 +754,14 @@ footer{padding-block:34px 0; color:var(--ink-3); font-size:12.5px}
           <div class="icon">⋮</div>
         </div>
         <div class="body">
-          <div class="rail">
-            <span class="pill act">❝ 1 citation</span>
-            <span class="pill">Brouillon enregistré</span>
-          </div>
           <div class="field">
             <span class="lab">Message</span>
             <div class="txt ghost">Saisissez votre message…<span class="caret"></span></div>
           </div>
+        </div>
+        <div class="ctx">
+          <span class="pill">❝ 1 citation</span>
+          <span class="pill mute">Brouillon enregistré</span> <span class="n">1</span>
         </div>
         <div class="bar">
           <span class="ibtn">Aa</span><span class="ibtn">☺</span><span class="ibtn">🖼</span>
@@ -744,20 +769,20 @@ footer{padding-block:34px 0; color:var(--ink-3); font-size:12.5px}
         </div>
       </div>
       <ul class="notes">
-        <li><span class="n">1</span><span>Le <b>rail de contexte</b> remplace les cartes dépliées&nbsp;: une pastille par chose active (citations, brouillon, upload). Tap = ouvre le panneau.</span></li>
-        <li><span class="n">2</span><span><b>Aa</b> déplie le format, <b>⋯</b> ouvre les options, <b>👁</b> l'aperçu. Les trois libellés actuels restent en info-bulle et en nom accessible.</span></li>
+        <li><span class="n">1</span><span>La <b>bande de contexte</b> remplace les cartes dépliées&nbsp;: une pastille par chose active. Tap = ouvre la surface qui la gouverne. Rien au-dessus du champ&nbsp;: l'espace entre l'app bar et le texte est vide.</span></li>
+        <li><span class="n">2</span><span><b>Aa</b> déplie le format, <b>⋯</b> ouvre les options, <b>👁</b> l'aperçu. Icônes seules&nbsp;: les libellés actuels restent en info-bulle longue pression et en nom accessible.</span></li>
       </ul>
     </div>
 
     <!-- 2 : frappe -->
     <div class="deck">
       <div class="deck-title"><span class="tag new">Refonte</span> En train d'écrire</div>
-      <p class="deck-note">Clavier ouvert, même écran&nbsp;: sept lignes au lieu de trois. Le rail se
-      réduit à sa forme minimale.</p>
+      <p class="deck-note">Clavier ouvert, même écran&nbsp;: sept lignes au lieu de trois. La bande
+      se réduit au compteur de citations.</p>
       <div class="phone">
         <div class="statusbar"><span>10:42</span><span>◍ ▲ ▮</span></div>
         <div class="appbar"><div class="icon">←</div><div class="ttl">Répondre<small>[HFR] Redface 2 — client Android</small></div><div class="icon">👁</div><div class="icon">⋮</div></div>
-        <div class="body" style="flex:none; height:262px">
+        <div class="body" style="flex:none; height:230px">
           <div class="field" style="flex:1">
             <span class="lab">Message</span>
             <div class="txt">
@@ -771,6 +796,7 @@ footer{padding-block:34px 0; color:var(--ink-3); font-size:12.5px}
             </div>
           </div>
         </div>
+        <div class="ctx"><span class="pill tiny">❝ 1</span></div>
         <div class="bar">
           <span class="ibtn">Aa</span><span class="ibtn">☺</span><span class="ibtn">🖼</span>
           <span class="ibtn">⋯</span><span class="spacer"></span><span class="send">Envoyer</span>
@@ -816,6 +842,7 @@ footer{padding-block:34px 0; color:var(--ink-3); font-size:12.5px}
             <span class="chip">Lien</span><span class="chip">Couleur ▾</span>
           </div>
         </div>
+        <div class="ctx"><span class="pill tiny">❝ 1</span></div>
         <div class="bar">
           <span class="ibtn on">Aa</span><span class="ibtn">☺</span><span class="ibtn">🖼</span>
           <span class="ibtn">⋯</span><span class="spacer"></span><span class="send">Envoyer</span>
@@ -830,7 +857,7 @@ footer{padding-block:34px 0; color:var(--ink-3); font-size:12.5px}
       </div>
       <ul class="notes">
         <li><span class="n">4</span><span>Deux rangées fixes au lieu d'un défilement horizontal&nbsp;: les dix actions sont visibles d'un coup, plus de chip qui se cache à droite.</span></li>
-        <li><span class="n">5</span><span>Le tiroir naît <b>sous</b> le champ&nbsp;: la sélection en cours ne bouge pas d'un pixel quand il s'ouvre (critère <b>C6</b>).</span></li>
+        <li><span class="n">5</span><span>Le tiroir naît <b>sous</b> le champ et <b>au-dessus</b> de la bande&nbsp;: chaque élément garde son ancrage, et la sélection en cours ne bouge pas d'un pixel (critère <b>C6</b>).</span></li>
       </ul>
     </div>
 
@@ -900,7 +927,7 @@ footer{padding-block:34px 0; color:var(--ink-3); font-size:12.5px}
             <div style="margin-top:8px">Le spike device a tranché&nbsp;: <span style="text-decoration:underline">BTF2</span> gère nativement le drag de poignée. 🙂 <span class="n">10</span></div>
           </div>
         </div>
-        <div class="status"><span>✓</span><span>Aucune balise BBCode non fermée.</span></div>
+        <div class="ctx"><span class="pill tiny">❝ 1</span><span class="ev"><span>✓ Aucune balise BBCode non fermée.</span></span></div>
         <div class="bar">
           <span class="ibtn">Aa</span><span class="ibtn">☺</span><span class="ibtn">🖼</span>
           <span class="ibtn">⋯</span><span class="spacer"></span><span class="send">Envoyer</span>
@@ -1022,38 +1049,91 @@ footer{padding-block:34px 0; color:var(--ink-3); font-size:12.5px}
       </ul>
     </div>
 
-    <!-- 8 : statut -->
-    <div class="deck">
-      <div class="deck-title"><span class="tag new">Refonte</span> Statut, erreurs, upload</div>
-      <p class="deck-note">Tout ce qui était un bandeau empilé en tête devient une ligne de 32&nbsp;dp
-      juste au-dessus de la barre d'action.</p>
-      <div class="phone">
-        <div class="statusbar"><span>10:48</span><span>◍ ▲ ▮</span></div>
-        <div class="appbar"><div class="icon">←</div><div class="ttl">Répondre<small>[HFR] Redface 2 — client Android</small></div><div class="icon">👁</div><div class="icon">⋮</div></div>
-        <div class="body" style="flex:none; height:150px">
-          <div class="field" style="flex:1">
-            <span class="lab">Message</span>
-            <div class="txt">Voilà les captures du S9&nbsp;:<br><span class="bb">[img]https://reho.st/…[/img]</span><span class="caret"></span></div>
+    <!-- 8 : la bande de contexte -->
+    <div class="deck wide">
+      <div class="deck-title"><span class="tag new">Refonte</span> La bande de contexte, ses trois états</div>
+      <p class="deck-note">Tout ce qui était un bandeau empilé en tête vit ici&nbsp;: état durable à
+      gauche, événement du moment à droite. Un seul événement à la fois, par priorité
+      <b>erreur → upload → brouillon → validation</b>.</p>
+
+      <div style="display:flex; flex-wrap:wrap; gap:22px">
+        <div style="flex:1 1 300px; min-width:0">
+          <div class="phone" style="height:430px">
+            <div class="statusbar"><span>10:48</span><span>◍ ▲ ▮</span></div>
+            <div class="appbar"><div class="icon">←</div><div class="ttl">Répondre<small>[HFR] Redface 2</small></div><div class="icon">👁</div><div class="icon">⋮</div></div>
+            <div class="body">
+              <div class="field" style="flex:1">
+                <span class="lab">Message</span>
+                <div class="txt">Voilà les captures du S9.<span class="caret"></span></div>
+              </div>
+            </div>
+            <div class="ctx">
+              <span class="pill">❝ 3 citations</span>
+              <span class="pill mute">Brouillon</span> <span class="n">18</span>
+            </div>
+            <div class="bar">
+              <span class="ibtn">Aa</span><span class="ibtn">☺</span><span class="ibtn">🖼</span>
+              <span class="ibtn">⋯</span><span class="spacer"></span><span class="send">Envoyer</span>
+            </div>
           </div>
+          <p class="deck-note" style="margin-top:9px"><b>État seul</b> — 32 dp. Les pastilles portent
+          leur libellé complet.</p>
         </div>
-        <div class="prog"><i></i></div>
-        <div class="status"><span>⬆</span><span>Envoi 2/3…</span><span class="act">Annuler</span> <span class="n">18</span></div>
-        <div class="status err"><span>⚠</span><span>L'hébergeur imgur a refusé l'image (HTTP 413).</span><span class="act">Masquer</span></div>
-        <div class="status"><span>💾</span><span>Un brouillon non envoyé a été retrouvé.</span><span class="act">Restaurer</span></div>
-        <div class="bar">
-          <span class="ibtn">Aa</span><span class="ibtn">☺</span><span class="ibtn on">🖼</span>
-          <span class="ibtn">⋯</span><span class="spacer"></span><span class="send off">Envoyer</span>
+
+        <div style="flex:1 1 300px; min-width:0">
+          <div class="phone" style="height:430px">
+            <div class="statusbar"><span>10:49</span><span>◍ ▲ ▮</span></div>
+            <div class="appbar"><div class="icon">←</div><div class="ttl">Répondre<small>[HFR] Redface 2</small></div><div class="icon">👁</div><div class="icon">⋮</div></div>
+            <div class="body">
+              <div class="field" style="flex:1">
+                <span class="lab">Message</span>
+                <div class="txt">Voilà les captures du S9&nbsp;:<br><span class="bb">[img]…545423[/img]</span><span class="caret"></span></div>
+              </div>
+            </div>
+            <div class="prog"><i></i></div>
+            <div class="ctx">
+              <span class="pill tiny">❝ 3</span><span class="pill tiny mute">💾</span>
+              <span class="ev"><span>Envoi 2/3…</span><span class="act">Annuler</span></span> <span class="n">19</span>
+            </div>
+            <div class="bar">
+              <span class="ibtn">Aa</span><span class="ibtn">☺</span><span class="ibtn on">🖼</span>
+              <span class="ibtn">⋯</span><span class="spacer"></span><span class="send off">Envoyer</span>
+            </div>
+          </div>
+          <p class="deck-note" style="margin-top:9px"><b>État + événement</b> — toujours 32 dp. Les
+          pastilles se réduisent à leur compteur nu et restent visibles.</p>
         </div>
-        <div class="ime">
-          <div class="sugg"><span>captures</span><span>capture</span><span>capturé</span></div>
-          <div class="krow"><div class="k">a</div><div class="k">z</div><div class="k">e</div><div class="k">r</div><div class="k">t</div><div class="k">y</div><div class="k">u</div><div class="k">i</div><div class="k">o</div><div class="k">p</div></div>
-          <div class="krow"><div class="k">q</div><div class="k">s</div><div class="k">d</div><div class="k">f</div><div class="k">g</div><div class="k">h</div><div class="k">j</div><div class="k">k</div><div class="k">l</div><div class="k">m</div></div>
-          <div class="krow"><div class="k">?123</div><div class="k wide">espace</div><div class="k">↵</div></div>
+
+        <div style="flex:1 1 300px; min-width:0">
+          <div class="phone" style="height:430px">
+            <div class="statusbar"><span>10:50</span><span>◍ ▲ ▮</span></div>
+            <div class="appbar"><div class="icon">←</div><div class="ttl">Répondre<small>[HFR] Redface 2</small></div><div class="icon">👁</div><div class="icon">⋮</div></div>
+            <div class="body">
+              <div class="field" style="flex:1">
+                <span class="lab">Message</span>
+                <div class="txt">Voilà les captures du S9&nbsp;:<br><span class="bb">[img]…545423[/img]</span><span class="caret"></span></div>
+              </div>
+            </div>
+            <div class="ctx err">
+              <span class="pill tiny" style="background:var(--d-err); color:#fff">❝ 3</span>
+              <span class="ev"><span>Anti-flood HFR&nbsp;: pas plus de 3 réponses consécutives par
+              tranche de 10 minutes. Réessayez plus tard.</span><span class="act">Masquer</span></span>
+              <span class="n">20</span>
+            </div>
+            <div class="bar">
+              <span class="ibtn">Aa</span><span class="ibtn">☺</span><span class="ibtn">🖼</span>
+              <span class="ibtn">⋯</span><span class="spacer"></span><span class="send">Envoyer</span>
+            </div>
+          </div>
+          <p class="deck-note" style="margin-top:9px"><b>Erreur</b> — la seule exception&nbsp;: deux
+          lignes, 64 dp, le temps qu'elle est affichée.</p>
         </div>
       </div>
+
       <ul class="notes">
-        <li><span class="n">18</span><span>Les trois lignes sont montrées ensemble pour la démonstration&nbsp;; en pratique elles s'empilent au maximum à deux, la plus récente en bas, contre la barre.</span></li>
-        <li><span class="n">19</span><span>Les <b>16 messages d'erreur typés</b> existants gardent leur texte mot pour mot — c'est le conteneur qui change, pas la copie. <span class="ref">#872 F3/F4</span></span></li>
+        <li><span class="n">18</span><span>Les pastilles d'état sont des <b>raccourcis</b>&nbsp;: `❝ 3` ouvre le panneau citations, `Brouillon` propose Restaurer / Ignorer.</span></li>
+        <li><span class="n">19</span><span>La règle qui évite de perdre l'état&nbsp;: un événement ne <b>masque</b> jamais les pastilles, il les <b>compacte</b>. On ne découvre pas après l'envoi qu'on citait trois personnes.</span></li>
+        <li><span class="n">20</span><span>Les <b>16 messages d'erreur typés</b> existants gardent leur texte mot pour mot — c'est le conteneur qui change, pas la copie. Un message long ne tient pas sur une ligne à 360&nbsp;dp&nbsp;: la bande passe à deux lignes, et seulement là. <span class="ref">#872 F3/F4</span></span></li>
       </ul>
     </div>
 
@@ -1082,7 +1162,7 @@ footer{padding-block:34px 0; color:var(--ink-3); font-size:12.5px}
             <div class="txt ghost">Saisissez votre message…<span class="caret"></span> <span class="n">20</span></div>
           </div>
         </div>
-        <div class="status"><span>ℹ</span><span>Sondage préservé, non éditable dans cette version.</span></div>
+        <div class="ctx"><span class="pill mute tiny">Smartphones</span><span class="ev"><span>ℹ Sondage préservé, non éditable.</span></span></div>
         <div class="bar">
           <span class="ibtn">Aa</span><span class="ibtn">☺</span><span class="ibtn">🖼</span>
           <span class="ibtn">⋯</span><span class="spacer"></span><span class="send">Publier</span>
@@ -1124,6 +1204,7 @@ footer{padding-block:34px 0; color:var(--ink-3); font-size:12.5px}
             <div class="txt ghost">Saisissez votre message…<span class="caret"></span></div>
           </div>
         </div>
+        <div class="ctx"><span class="pill mute tiny">3 destinataires</span></div>
         <div class="bar">
           <span class="ibtn">Aa</span><span class="ibtn">☺</span><span class="ibtn">🖼</span>
           <span class="ibtn">⋯</span><span class="spacer"></span><span class="send">Envoyer</span>
@@ -1157,6 +1238,10 @@ footer{padding-block:34px 0; color:var(--ink-3); font-size:12.5px}
           <div class="field" style="height:104px; flex:none; margin:8px 14px 10px">
             <span class="lab">Votre message…</span>
             <div class="txt">Exactement ça, c'est le lot R1.<span class="caret"></span></div>
+          </div>
+          <div class="ctx" style="background:transparent; border-top:0; padding-bottom:0">
+            <span class="pill tiny">❝ 1</span>
+            <span class="ev"><span>Insertion de la citation…</span></span>
           </div>
           <div class="bar" style="background:transparent; border-top:0; padding-bottom:2px">
             <span class="ibtn">Aa</span><span class="ibtn">☺</span><span class="ibtn">🖼</span>
@@ -1237,11 +1322,11 @@ footer{padding-block:34px 0; color:var(--ink-3); font-size:12.5px}
       <tr><td>11 chips BBCode + palette</td><td>Tiroir <b>Aa</b>, deux rangées fixes</td><td>3</td><td class="st"><span class="dot move"></span>déplacé</td></tr>
       <tr><td>Bouton « Uploader » épinglé</td><td>Icône 🖼 permanente de la barre d'action</td><td>1, 8</td><td class="st"><span class="dot move"></span>déplacé</td></tr>
       <tr><td>Dialogue « Insérer une image »</td><td>Second choix du menu 🖼 (upload / URL)</td><td>8</td><td class="st"><span class="dot keep"></span>conservé</td></tr>
-      <tr><td>Compteur « Envoi n/N… »</td><td>Ligne de statut + barre de progression</td><td>8</td><td class="st"><span class="dot move"></span>déplacé</td></tr>
-      <tr><td>7 erreurs d'upload typées</td><td>Ligne de statut rouge, texte inchangé</td><td>8</td><td class="st"><span class="dot keep"></span>conservé</td></tr>
-      <tr><td>9 erreurs d'envoi typées</td><td>Ligne de statut rouge, texte inchangé</td><td>8</td><td class="st"><span class="dot keep"></span>conservé</td></tr>
-      <tr><td>Bandeau brouillon Restaurer/Ignorer</td><td>Ligne de statut, mêmes deux actions</td><td>8</td><td class="st"><span class="dot move"></span>déplacé</td></tr>
-      <tr><td>Cartes de citation ↑ ↓ ✕</td><td>Panneau plein écran + pastille dans le rail</td><td>1, 4</td><td class="st"><span class="dot move"></span>déplacé</td></tr>
+      <tr><td>Compteur « Envoi n/N… »</td><td>Bande de contexte + barre de progression</td><td>8</td><td class="st"><span class="dot move"></span>déplacé</td></tr>
+      <tr><td>7 erreurs d'upload typées</td><td>Bande de contexte rouge sur deux lignes, texte inchangé</td><td>8</td><td class="st"><span class="dot keep"></span>conservé</td></tr>
+      <tr><td>9 erreurs d'envoi typées</td><td>Bande de contexte rouge sur deux lignes, texte inchangé</td><td>8</td><td class="st"><span class="dot keep"></span>conservé</td></tr>
+      <tr><td>Bandeau brouillon Restaurer/Ignorer</td><td>Pastille de la bande, mêmes deux actions</td><td>1, 8</td><td class="st"><span class="dot move"></span>déplacé</td></tr>
+      <tr><td>Cartes de citation ↑ ↓ ✕</td><td>Panneau plein écran + pastille dans la bande</td><td>1, 4</td><td class="st"><span class="dot move"></span>déplacé</td></tr>
       <tr><td>« Tout vider » (≥ 2 cartes)</td><td>Action d'app bar du panneau citations</td><td>4</td><td class="st"><span class="dot keep"></span>conservé</td></tr>
       <tr><td>Aperçu Afficher / Masquer</td><td>Icône 👁 d'app bar → partage source / rendu, dessous en portrait, à droite en paysage</td><td>5, 5b</td><td class="st"><span class="dot fix"></span>enrichi</td></tr>
       <tr><td>Feuille Smileys Standard / Wiki</td><td>Identique, + Favoris et Récents</td><td>6</td><td class="st"><span class="dot keep"></span>conservé</td></tr>
@@ -1250,13 +1335,13 @@ footer{padding-block:34px 0; color:var(--ink-3); font-size:12.5px}
       <tr><td>Ton du message, 16 icônes</td><td>Grille dépliée dans la feuille Options</td><td>7</td><td class="st"><span class="dot fix"></span>déplié</td></tr>
       <tr><td>Envoi armé → « Confirmer »</td><td>Identique, secondaires masqués</td><td>1</td><td class="st"><span class="dot keep"></span>conservé</td></tr>
       <tr><td>Titre du sujet + sous-catégorie</td><td>En-tête collant, replié en une ligne pendant la frappe</td><td>9</td><td class="st"><span class="dot move"></span>déplacé</td></tr>
-      <tr><td>Note sondage non éditable</td><td>Ligne de statut informative</td><td>9</td><td class="st"><span class="dot move"></span>déplacé</td></tr>
+      <tr><td>Note sondage non éditable</td><td>Événement informatif de la bande</td><td>9</td><td class="st"><span class="dot move"></span>déplacé</td></tr>
       <tr><td>Destinataires CSV</td><td>Puces, même POST</td><td>10</td><td class="st"><span class="dot fix"></span>reformulé</td></tr>
       <tr><td>Compteur de sujet MP</td><td>Suffixe du champ Sujet</td><td>10</td><td class="st"><span class="dot keep"></span>conservé</td></tr>
       <tr><td>« Destinataires : N · Gérer »</td><td>Identique en réponse de conversation</td><td>10</td><td class="st"><span class="dot keep"></span>conservé</td></tr>
       <tr><td>Feuille de réponse rapide</td><td>Même éditeur en mode feuille, + format et smileys</td><td>11</td><td class="st"><span class="dot fix"></span>unifié <span class="ref">#951</span></td></tr>
       <tr><td>Bouton plein écran de la feuille</td><td>⤢, conserve texte, sélection et citations</td><td>11</td><td class="st"><span class="dot keep"></span>conservé</td></tr>
-      <tr><td>« Insertion de la citation… »</td><td>Ligne de statut de la feuille</td><td>11</td><td class="st"><span class="dot move"></span>déplacé</td></tr>
+      <tr><td>« Insertion de la citation… »</td><td>Bande de contexte de la feuille</td><td>11</td><td class="st"><span class="dot move"></span>déplacé</td></tr>
       <tr><td>Confirmation « Publier la réponse ? »</td><td>Envoi armé, comme les autres surfaces</td><td>11</td><td class="st"><span class="dot fix"></span>unifié</td></tr>
       <tr><td>Poignées de sélection + autoscroll</td><td>BTF2, inchangé</td><td>3, 12</td><td class="st"><span class="dot keep"></span>conservé</td></tr>
       <tr><td>Autofocus, capitalisation phrase</td><td>Inchangé</td><td>toutes</td><td class="st"><span class="dot keep"></span>conservé</td></tr>
@@ -1273,15 +1358,24 @@ footer{padding-block:34px 0; color:var(--ink-3); font-size:12.5px}
 
 <!-- ══════════════════════════════════════════════════════════════════════ -->
 <section>
-  <div class="sec-head"><span class="sec-num">06</span><h2>Ce qu'il faut trancher</h2></div>
-  <p class="sec-sub">Quatre choix que les maquettes posent mais ne peuvent pas décider seules.</p>
+  <div class="sec-head"><span class="sec-num">06</span><h2>Tranché, et ce qui reste</h2></div>
+  <p class="sec-sub">Deux des quatre arbitrages de la V1 sont décidés. Il en reste deux.</p>
 
   <div class="asks">
-    <div class="ask">
-      <h4>Icônes ou libellés dans la barre&nbsp;?</h4>
-      <p>Les maquettes montrent <span class="mono">Aa ☺ 🖼 ⋯</span>. La barre actuelle dit « Options »
-      et « Smileys » en toutes lettres. Les icônes libèrent la place pour « Envoyer » mais imposent
-      un apprentissage. Compromis possible&nbsp;: icône + libellé sous les 3 premières semaines.</p>
+    <div class="ask done">
+      <h4><span class="ok-tag">Tranché</span> Icônes dans la barre d'action</h4>
+      <p>La barre porte <span class="mono">Aa ☺ 🖼 ⋯</span> en icônes seules, pour rendre la largeur
+      à « Envoyer ». Les libellés actuels — « Options », « Smileys » — survivent en info-bulle à
+      l'appui long et comme nom accessible TalkBack.</p>
+    </div>
+    <div class="ask done">
+      <h4><span class="ok-tag">Tranché</span> Une seule bande, pas deux</h4>
+      <p>Le rail de contexte et la ligne de statut fusionnent en une <b>bande de contexte</b> de
+      32&nbsp;dp au-dessus de la barre d'action. État durable à gauche, événement à droite&nbsp;; un
+      événement compacte les pastilles au lieu de les masquer.</p>
+      <p>Une exception&nbsp;: pendant une erreur d'envoi, dont les messages sont longs, la bande
+      passe sur deux lignes (64&nbsp;dp). Gain annexe&nbsp;: le haut de l'écran est vide entre l'app
+      bar et le champ.</p>
     </div>
     <div class="ask">
       <h4>L'aperçu doit-il replier le clavier&nbsp;?</h4>
@@ -1292,16 +1386,13 @@ footer{padding-block:34px 0; color:var(--ink-3); font-size:12.5px}
       quatre lignes. Question à trancher sur device, pas sur maquette.</p>
     </div>
     <div class="ask">
-      <h4>Le rail de contexte&nbsp;: utile ou bruit&nbsp;?</h4>
-      <p>Il rend visible ce qui est armé (citations, brouillon, upload) sans coûter de hauteur au
-      champ. Mais c'est un concept de plus. Alternative&nbsp;: des pastilles sur les icônes de la barre
-      d'action, zéro hauteur — moins lisible.</p>
-    </div>
-    <div class="ask">
       <h4>Découpage en lots</h4>
-      <p>R1 = app bar + barre d'action + ligne de statut (les 134&nbsp;dp rendus au champ, écrans 1-3,
-      8). R2 = panneau citations et partage de l'aperçu (4, 5, 5b). R3 = smileys enrichis et menu de sélection
-      (6, 12). R4 = unification de la réponse rapide (11).</p>
+      <p><b>R1</b> = app bar, barre d'action en icônes, bande de contexte — les 134&nbsp;dp rendus au
+      champ (écrans 1-3, 8). <b>R2</b> = panneau citations et partage de l'aperçu (4, 5, 5b).
+      <b>R3</b> = smileys enrichis et menu de sélection (6, 12). <b>R4</b> = unification de la
+      réponse rapide (11).</p>
+      <p>R1 seul règle les trois retours terrain du jour (densité S9, marges hautes, boutons sur une
+      ligne). Il peut partir en dev sans attendre le reste.</p>
     </div>
   </div>
 </section>
@@ -1310,7 +1401,8 @@ footer{padding-block:34px 0; color:var(--ink-3); font-size:12.5px}
   Relevé sur <span class="mono">ForumHFR/redface2</span> à <span class="mono">860285ce</span> (dev,
   0.60.0 non releasé). Maquettes non contractuelles&nbsp;: aucune géométrie n'a été mesurée sur
   device — les hauteurs annoncées sont des cibles, à vérifier sur S10e et sur Android 10 avant tout
-  lot, comme l'exige #1417.
+  lot, comme l'exige #1417. Vocabulaire employé ici&nbsp;:
+  <a href="../editeur-lexique/" style="color:var(--accent)">Anatomie de l'éditeur</a>.
 </footer>
 
 </div>

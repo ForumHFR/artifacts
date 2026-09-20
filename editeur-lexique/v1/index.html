@@ -221,7 +221,9 @@ footer a{color:var(--accent)}
 #vpick select option{color:#111;background:#fff}
 @media print{#vpick{display:none}}
 </style>
-<div id="vpick"><label for="vpick-sel">Version</label><select id="vpick-sel" onchange="location.href=this.value"><option value="./" selected>v2 — courante</option><option value="v1/">v1</option></select></div>
+<div id="vpick"><label for="vpick-sel">Version</label><select id="vpick-sel" onchange="location.href=this.value"><option value="../">v2 — courante</option><option value="../v1/" selected>v1</option></select></div>
+
+
 
 <div class="wrap">
 
@@ -229,8 +231,7 @@ footer a{color:var(--accent)}
   <div class="eyebrow">Redface 2 · #1417 · vocabulaire de travail</div>
   <h1>Anatomie de l'éditeur</h1>
   <p class="lede">Les mots qu'on emploie pour parler de la refonte, chacun rattaché à une zone
-  précise de l'écran. Objectif&nbsp;: que « barre d'action », « bande de contexte » ou « feuille »
-  désignent la
+  précise de l'écran. Objectif&nbsp;: qu'« barre d'action », « rail » ou « feuille » désignent la
   même chose des deux côtés de la conversation. Les maquettes qui utilisent ce vocabulaire sont
   dans <a href="../editeur-1417/">Vue Éditeur #1417</a>.</p>
 </header>
@@ -240,7 +241,7 @@ footer a{color:var(--accent)}
   <div class="sec-head"><span class="sec-num">01</span><h2>La planche</h2></div>
   <p class="sec-sub">Un éditeur de réponse, clavier ouvert, avec toutes les zones nommées en même
   temps. En vrai elles ne coexistent jamais toutes&nbsp;: le tiroir est replié la plupart du temps,
-  et la bande de contexte n'apparaît que si elle a quelque chose à dire.</p>
+  et la ligne de statut n'apparaît que si elle a quelque chose à dire.</p>
 
   <div class="plate">
     <div class="phone">
@@ -252,8 +253,13 @@ footer a{color:var(--accent)}
         <div class="icon">👁</div><div class="icon">⋮</div>
       </div>
 
+      <div class="rail zone"><span class="ztag">B</span>
+        <span class="pill act">❝ 3 citations</span>
+        <span class="pill">Brouillon</span>
+      </div>
+
       <div class="bodyz">
-        <div class="field zone"><span class="ztag">B</span>
+        <div class="field zone"><span class="ztag">C</span>
           <span class="lab">Message</span>
           <div style="flex:1; overflow:hidden">
             <span class="bb">[quotemsg=…]</span>les bords haut et bas<span class="bb">[/quotemsg]</span><br>
@@ -263,23 +269,21 @@ footer a{color:var(--accent)}
         </div>
       </div>
 
-      <div class="drawer zone"><span class="ztag">C</span>
+      <div class="drawer zone"><span class="ztag">D</span>
         <span class="chip">Gras</span><span class="chip">Italique</span>
         <span class="chip">Souligné</span><span class="chip">Cita…</span>
       </div>
 
-      <div class="status zone"><span class="ztag">D</span>
-        <span class="pill act" style="padding:3px 7px">❝ 3</span>
-        <span class="pill" style="padding:3px 7px">💾</span>
-        <span style="margin-left:auto">Envoi 2/3…</span><span class="act" style="color:var(--d-prim); font-weight:500">Annuler</span>
+      <div class="status zone"><span class="ztag">E</span>
+        <span>⬆</span><span>Envoi 2/3…</span><span class="act">Annuler</span>
       </div>
 
-      <div class="bar zone"><span class="ztag">E</span>
+      <div class="bar zone"><span class="ztag">F</span>
         <span class="ibtn">Aa</span><span class="ibtn">☺</span><span class="ibtn">🖼</span>
         <span class="ibtn">⋯</span><span class="spacer"></span><span class="send">Envoyer</span>
       </div>
 
-      <div class="ime zone"><span class="ztag">F</span>
+      <div class="ime zone"><span class="ztag">G</span>
         <div class="krow"><div class="k">a</div><div class="k">z</div><div class="k">e</div><div class="k">r</div><div class="k">t</div><div class="k">y</div><div class="k">u</div><div class="k">i</div><div class="k">o</div><div class="k">p</div></div>
         <div class="krow"><div class="k">q</div><div class="k">s</div><div class="k">d</div><div class="k">f</div><div class="k">g</div><div class="k">h</div><div class="k">j</div><div class="k">k</div><div class="k">l</div><div class="k">m</div></div>
         <div class="krow"><div class="k">?123</div><div class="k wide">espace</div><div class="k">↵</div></div>
@@ -289,11 +293,12 @@ footer a{color:var(--accent)}
     <div class="plate-key">
       <ol>
         <li><span class="zn">A</span><span><b>App bar</b> — la barre du haut. Retour, titre de l'écran, contexte en seconde ligne, et les actions qui <i>changent de surface</i> (aperçu, menu). Hauteur fixe, elle ne bouge jamais.</span></li>
-        <li><span class="zn">B</span><span><b>Champ</b> — la zone de saisie elle-même, avec son label flottant et son cadre. Le texte défile <i>dedans</i>&nbsp;: c'est tout l'objet de la refonte. Rien ne s'intercale entre l'app bar et lui.</span></li>
-        <li><span class="zn">C</span><span><b>Tiroir de format</b> — la rangée de chips BBCode, dépliée par <span class="mono">Aa</span>. Elle naît sous le champ pour ne pas déplacer le texte ni la sélection.</span></li>
-        <li><span class="zn">D</span><span><b>Bande de contexte</b> — la ligne qui porte tout le reste&nbsp;: à gauche l'état durable en pastilles (citations armées, brouillon, options modifiées), à droite l'événement du moment (upload, erreur, validation).</span></li>
-        <li><span class="zn">E</span><span><b>Barre d'action</b> — la barre du bas. Les actions qui <i>agissent sur le message</i>&nbsp;: format, smileys, image, options, envoyer. En icônes, épinglée au-dessus du clavier.</span></li>
-        <li><span class="zn">F</span><span><b>IME</b> — le clavier logiciel, fourni par le système. On ne le dessine pas, mais sa hauteur est la contrainte numéro un.</span></li>
+        <li><span class="zn">B</span><span><b>Rail de contexte</b> — la ligne de pastilles. Il dit ce qui partira avec le message sans être écrit dans le champ&nbsp;: citations armées, brouillon, options modifiées. Absent s'il n'a rien à dire.</span></li>
+        <li><span class="zn">C</span><span><b>Champ</b> — la zone de saisie elle-même, avec son label flottant et son cadre. Le texte défile <i>dedans</i>&nbsp;: c'est tout l'objet de la refonte.</span></li>
+        <li><span class="zn">D</span><span><b>Tiroir de format</b> — la rangée de chips BBCode, dépliée par <span class="mono">Aa</span>. Elle naît sous le champ pour ne pas déplacer le texte ni la sélection.</span></li>
+        <li><span class="zn">E</span><span><b>Ligne de statut</b> — une ligne transitoire&nbsp;: progression d'upload, erreur d'envoi, brouillon retrouvé. Elle remplace les bandeaux empilés en tête.</span></li>
+        <li><span class="zn">F</span><span><b>Barre d'action</b> — la barre du bas. Les actions qui <i>agissent sur le message</i>&nbsp;: format, smileys, image, options, envoyer. Épinglée au-dessus du clavier.</span></li>
+        <li><span class="zn">G</span><span><b>IME</b> — le clavier logiciel, fourni par le système. On ne le dessine pas, mais sa hauteur est la contrainte numéro un.</span></li>
       </ol>
     </div>
   </div>
@@ -328,32 +333,34 @@ footer a{color:var(--accent)}
           <p>La barre du bas, <span class="dp">56 dp</span>, épinglée juste au-dessus du clavier.
           Elle porte les actions qui <b>agissent sur le message en cours</b>&nbsp;: format, smileys,
           image, options, envoyer.</p>
-          <p>Aujourd'hui elle existe déjà, avec « Options », « Smileys » et « Envoyer » en toutes
-          lettres. La refonte y ajoute le format et l'image, et passe tout en <b>icônes seules</b>
-          pour rendre la largeur à « Envoyer ». Les libellés survivent en info-bulle à l'appui long
-          et comme nom accessible TalkBack.</p>
+          <p>Aujourd'hui elle existe déjà, avec « Options », « Smileys » et « Envoyer ». La refonte
+          y ajoute le format et l'image, en icônes.</p>
+        </div>
+      </div>
+
+      <div class="term">
+        <div class="mini"><i class="m-app"></i><i class="m-rail hl"></i><i class="m-body"></i><i class="m-bar"></i></div>
+        <div class="txt">
+          <h4>Rail de contexte</h4><span class="en">context rail</span>
+          <p>Une ligne de pastilles, <span class="dp">26 dp</span>, qui n'existe que si elle a
+          quelque chose à dire. Elle rend visible ce qui <b>partira avec le message sans être écrit
+          dans le champ</b>&nbsp;: les citations armées surtout, puisque leur BBCode n'est fabriqué
+          qu'à l'envoi.</p>
+          <p>Chaque pastille est un raccourci vers la surface qui la gouverne. Sa place — en haut
+          sous l'app bar, ou fusionnée avec la ligne de statut en bas — n'est pas tranchée.</p>
         </div>
       </div>
 
       <div class="term">
         <div class="mini"><i class="m-app"></i><i class="m-body"></i><i class="m-status hl"></i><i class="m-bar"></i></div>
         <div class="txt">
-          <h4>Bande de contexte</h4><span class="en">context band</span>
-          <p>Une ligne unique de <span class="dp">32 dp</span>, ancrée au-dessus de la barre
-          d'action, absente si elle n'a rien à dire. Elle porte deux registres&nbsp;:</p>
-          <p><b>À gauche, l'état durable</b>, en pastilles&nbsp;: citations armées, brouillon,
-          options modifiées, et le rappel de la sous-catégorie ou des destinataires quand l'en-tête
-          est replié. Chaque pastille est un raccourci vers la surface qui la gouverne.</p>
-          <p><b>À droite, l'événement du moment</b>&nbsp;: « Envoi 2/3… », validation BBCode, erreur.
-          Un seul à la fois, par priorité <b>erreur → upload → brouillon → validation</b>.</p>
-          <p>La règle qui les fait cohabiter&nbsp;: un événement ne masque jamais les pastilles, il
-          les <b>compacte</b> à leur compteur nu. Seule exception, l'erreur d'envoi, dont les
-          messages sont longs&nbsp;: la bande passe alors sur deux lignes
-          (<span class="dp">64 dp</span>) le temps qu'elle est affichée.</p>
-          <p>Elle remplace deux choses&nbsp;: les bandeaux actuels, qui s'empilent en tête et
-          poussent le champ sous le pli — c'est ce qui cachait les boutons Restaurer/Ignorer sur le
-          S9 — et le « rail de contexte » de la V1 des maquettes, qui faisait la même chose en haut
-          de l'écran. Les fusionner supprime un concept et rend 26&nbsp;dp au sommet.</p>
+          <h4>Ligne de statut</h4><span class="en">status line</span>
+          <p>Une ligne <b>transitoire</b>, <span class="dp">32 dp</span>, collée au-dessus de la
+          barre d'action&nbsp;: progression d'upload, erreur d'envoi, brouillon retrouvé, validation
+          BBCode.</p>
+          <p>Elle remplace les bandeaux actuels, qui s'empilent en haut de la colonne et poussent le
+          champ vers le bas jusqu'à passer sous le pli — c'est ce qui cachait les boutons
+          Restaurer/Ignorer sur le S9.</p>
         </div>
       </div>
 
@@ -489,8 +496,8 @@ footer a{color:var(--accent)}
         <div class="txt">
           <h4>Pastille</h4><span class="en">pill · badge</span>
           <p>Une étiquette arrondie, compacte, qui <b>affiche un état</b> plutôt qu'elle ne
-          déclenche une action — même si on peut taper dessus pour aller voir. Le côté gauche de la
-          bande de contexte en est fait.</p>
+          déclenche une action — même si on peut taper dessus pour aller voir. Le rail de contexte
+          en est fait.</p>
         </div>
       </div>
 
@@ -514,8 +521,8 @@ footer a{color:var(--accent)}
         <div class="txt">
           <h4>Bandeau</h4><span class="en">banner</span>
           <p>Le format actuel des messages d'état&nbsp;: un bloc pleine largeur inséré <b>dans le
-          flux</b>, qui pousse tout ce qui suit vers le bas. C'est précisément ce que la bande de
-          contexte remplace.</p>
+          flux</b>, qui pousse tout ce qui suit vers le bas. C'est précisément ce que la ligne de
+          statut remplace.</p>
         </div>
       </div>
 
@@ -721,12 +728,11 @@ footer a{color:var(--accent)}
     </div>
 
     <div class="pair">
-      <h4>Bande de contexte ≠ bandeau</h4>
-      <p>Le <b>bandeau</b> est le format actuel&nbsp;: un bloc pleine largeur inséré dans le flux,
-      qui pousse tout ce qui suit vers le bas et peut finir sous le pli.</p>
-      <p>La <b>bande</b> est hors du flux, à hauteur fixe, collée à la barre d'action. Elle ne prend
-      jamais de place au champ au-delà de ses 32 dp, et ce qu'elle affiche est toujours à portée du
-      pouce.</p>
+      <h4>Rail de contexte ≠ ligne de statut</h4>
+      <p>Le <b>rail</b> dit un <b>état durable</b>&nbsp;: trois citations armées, un brouillon
+      enregistré, la signature coupée. Il reste tant que l'état dure.</p>
+      <p>La <b>ligne de statut</b> dit un <b>événement</b>&nbsp;: un upload en cours, une erreur
+      d'envoi. Elle part quand c'est fini. Les fusionner en une seule bande est une option ouverte.</p>
     </div>
 
     <div class="pair">
