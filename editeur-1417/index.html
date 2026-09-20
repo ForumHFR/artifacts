@@ -1,0 +1,1243 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{color-scheme:light dark}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Vue Éditeur #1417 — Redface 2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Roboto:wght@400;500&display=swap">
+<style>
+/* ── Tokens page ─────────────────────────────────────────────────────────── */
+:root{
+  --paper:#FAF5F4; --paper-2:#FFFFFF; --paper-3:#F3EAE9;
+  --ink:#241A1B; --ink-2:#5C4A4A; --ink-3:#8B7573;
+  --line:#E5D6D4; --line-2:#F1E6E5;
+  --accent:#8E1D24; --accent-soft:#FBE0DF; --accent-ink:#6B1219;
+  --warn:#8A5A00; --warn-soft:#F8EAD3;
+  --ok:#2C6149; --ok-soft:#DDEDE5;
+  --radius:10px;
+
+  /* Tokens « device » = schéma M3 réel de Redface 2 (core/ui/theme/Color.kt) */
+  --d-bg:#FFF8F7; --d-on:#231919; --d-onv:#534342;
+  --d-out:#857371; --d-outv:#D7C1BF;
+  --d-prim:#8E1D24; --d-onprim:#FFFFFF; --d-primc:#FFDAD9; --d-onprimc:#3B0709;
+  --d-scll:#FFFFFF; --d-scl:#FFF1F0; --d-sc:#FCEBEA; --d-sch:#F6E5E4; --d-schh:#F1DFDE;
+  --d-err:#93000A; --d-errc:#FFDAD6;
+  --d-ime:#E6D8D7; --d-imekey:#FFFFFF; --d-imeink:#3A2E2E;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#151010; --paper-2:#1D1616; --paper-3:#241C1C;
+    --ink:#F0E2E0; --ink-2:#C9B4B2; --ink-3:#9B8583;
+    --line:#3A2D2D; --line-2:#2A2020;
+    --accent:#FFB3B1; --accent-soft:#3D1F21; --accent-ink:#FFD5D4;
+    --warn:#E7B96A; --warn-soft:#3A2C12;
+    --ok:#8FCCAF; --ok-soft:#16301F;
+
+    --d-bg:#1A1111; --d-on:#F0DEDC; --d-onv:#D7C1BF;
+    --d-out:#9F8C8A; --d-outv:#534342;
+    --d-prim:#FFB3B1; --d-onprim:#571D22; --d-primc:#733338; --d-onprimc:#FFDAD9;
+    --d-scll:#120B0B; --d-scl:#221919; --d-sc:#271D1D; --d-sch:#322727; --d-schh:#3D3131;
+    --d-err:#FFB4AB; --d-errc:#93000A;
+    --d-ime:#2B2020; --d-imekey:#3D3131; --d-imeink:#F0DEDC;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#151010; --paper-2:#1D1616; --paper-3:#241C1C;
+  --ink:#F0E2E0; --ink-2:#C9B4B2; --ink-3:#9B8583;
+  --line:#3A2D2D; --line-2:#2A2020;
+  --accent:#FFB3B1; --accent-soft:#3D1F21; --accent-ink:#FFD5D4;
+  --warn:#E7B96A; --warn-soft:#3A2C12;
+  --ok:#8FCCAF; --ok-soft:#16301F;
+
+  --d-bg:#1A1111; --d-on:#F0DEDC; --d-onv:#D7C1BF;
+  --d-out:#9F8C8A; --d-outv:#534342;
+  --d-prim:#FFB3B1; --d-onprim:#571D22; --d-primc:#733338; --d-onprimc:#FFDAD9;
+  --d-scll:#120B0B; --d-scl:#221919; --d-sc:#271D1D; --d-sch:#322727; --d-schh:#3D3131;
+  --d-err:#FFB4AB; --d-errc:#93000A;
+  --d-ime:#2B2020; --d-imekey:#3D3131; --d-imeink:#F0DEDC;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:"Public Sans","Helvetica Neue",Arial,sans-serif;
+  font-size:15px; line-height:1.55; -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1180px; margin:0 auto; padding-inline:20px; padding-block:0 72px}
+h1,h2,h3,h4{font-family:Archivo,"Helvetica Neue",Arial,sans-serif; text-wrap:balance; margin:0}
+code,.mono{font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:.86em}
+
+/* ── En-tête ─────────────────────────────────────────────────────────────── */
+header.top{padding-block:56px 40px; border-bottom:1px solid var(--line)}
+.eyebrow{
+  font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--accent); margin-bottom:18px;
+}
+h1{font-size:clamp(38px,7vw,64px); font-weight:700; letter-spacing:-.025em; line-height:1.02}
+.lede{font-size:18px; color:var(--ink-2); max-width:62ch; margin-top:18px}
+.meta{
+  display:flex; flex-wrap:wrap; gap:8px 10px; margin-top:26px;
+  font-family:"IBM Plex Mono",monospace; font-size:11.5px;
+}
+.meta span{
+  border:1px solid var(--line); border-radius:999px; padding:4px 11px; color:var(--ink-2);
+  background:var(--paper-2);
+}
+
+/* ── Sections ────────────────────────────────────────────────────────────── */
+section{padding-block:48px; border-bottom:1px solid var(--line-2)}
+section:last-of-type{border-bottom:0}
+.sec-head{display:flex; align-items:baseline; gap:14px; flex-wrap:wrap; margin-bottom:8px}
+.sec-num{
+  font-family:"IBM Plex Mono",monospace; font-size:12px; color:var(--accent);
+  border:1px solid var(--accent); border-radius:4px; padding:1px 6px; flex:none;
+}
+h2{font-size:clamp(24px,3.4vw,32px); font-weight:600; letter-spacing:-.015em}
+.sec-sub{color:var(--ink-2); max-width:70ch; margin:6px 0 30px}
+
+/* ── Inventaire ──────────────────────────────────────────────────────────── */
+.inv{display:grid; grid-template-columns:repeat(auto-fill,minmax(258px,1fr)); gap:12px}
+.inv-card{
+  background:var(--paper-2); border:1px solid var(--line); border-radius:var(--radius);
+  padding:13px 14px 14px;
+}
+.inv-card h4{
+  font-size:12px; font-weight:600; letter-spacing:.07em; text-transform:uppercase;
+  color:var(--accent); margin-bottom:9px;
+}
+.inv-card ul{margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:5px}
+.inv-card li{font-size:13.2px; line-height:1.42; color:var(--ink-2); display:flex; gap:7px}
+.inv-card li::before{content:"·"; color:var(--ink-3); flex:none}
+.inv-card li b{color:var(--ink); font-weight:600}
+.ref{
+  font-family:"IBM Plex Mono",monospace; font-size:10.5px; color:var(--ink-3);
+  white-space:nowrap;
+}
+
+/* ── Maquettes ───────────────────────────────────────────────────────────── */
+.decks{display:flex; flex-wrap:wrap; gap:28px; align-items:flex-start}
+.deck{flex:0 1 360px; min-width:0; max-width:100%}
+.deck-title{
+  display:flex; align-items:baseline; gap:9px; margin-bottom:4px;
+  font-family:Archivo,sans-serif; font-size:15px; font-weight:600;
+}
+.deck-title .tag{
+  font-family:"IBM Plex Mono",monospace; font-size:10px; letter-spacing:.08em;
+  text-transform:uppercase; padding:2px 7px; border-radius:3px; flex:none;
+}
+.tag.now{background:var(--warn-soft); color:var(--warn)}
+.tag.new{background:var(--ok-soft); color:var(--ok)}
+.deck-note{font-size:13px; color:var(--ink-2); margin:0 0 12px}
+
+.phone{
+  width:360px; max-width:100%; height:700px; border-radius:22px; overflow:hidden;
+  border:1px solid var(--line); background:var(--d-bg); color:var(--d-on);
+  font-family:Roboto,"Helvetica Neue",Arial,sans-serif; font-size:14px; line-height:1.35;
+  display:flex; flex-direction:column;
+  box-shadow:0 1px 2px rgba(0,0,0,.06), 0 10px 26px -18px rgba(0,0,0,.4);
+}
+.phone.short{height:620px}
+
+/* chrome device */
+.statusbar{
+  height:24px; flex:none; display:flex; align-items:center; justify-content:space-between;
+  padding:0 14px; font-size:10.5px; color:var(--d-onv); background:var(--d-bg);
+}
+.appbar{
+  height:48px; flex:none; display:flex; align-items:center; gap:10px; padding:0 8px 0 4px;
+  background:var(--d-bg); border-bottom:1px solid var(--d-outv);
+}
+.appbar .icon{
+  width:36px; height:36px; border-radius:50%; display:grid; place-items:center;
+  color:var(--d-onv); font-size:17px; flex:none;
+}
+.appbar .ttl{flex:1; font-size:16px; font-weight:500; color:var(--d-on); min-width:0;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.appbar .ttl small{display:block; font-size:11px; font-weight:400; color:var(--d-onv)}
+
+.body{flex:1; min-height:0; display:flex; flex-direction:column; overflow:hidden}
+.pad{padding:10px 14px}
+
+/* champ de saisie */
+.field{
+  flex:1; min-height:0; border:1px solid var(--d-out); border-radius:6px;
+  margin:10px 14px; padding:12px 12px 10px; position:relative; background:transparent;
+  display:flex; flex-direction:column; overflow:hidden;
+}
+.field.filled{background:var(--d-scl); border-color:transparent; border-bottom:1px solid var(--d-out); border-radius:6px 6px 0 0}
+.field .lab{
+  position:absolute; top:-8px; left:9px; padding:0 5px; background:var(--d-bg);
+  font-size:11px; color:var(--d-prim);
+}
+.field .txt{color:var(--d-on); overflow:hidden; flex:1; min-height:0}
+.field .txt.ghost{color:var(--d-onv)}
+.caret{display:inline-block; width:2px; height:15px; background:var(--d-prim);
+  vertical-align:-3px; animation:bl 1.1s steps(1) infinite}
+@keyframes bl{50%{opacity:0}}
+@media (prefers-reduced-motion:reduce){.caret{animation:none}}
+.sel{background:var(--d-primc); color:var(--d-onprimc); border-radius:2px}
+.bb{color:var(--d-prim); font-family:"IBM Plex Mono",monospace; font-size:12.5px}
+
+/* barres, chips, boutons device */
+.bar{
+  flex:none; background:var(--d-sc); border-top:1px solid var(--d-outv);
+  padding:8px 12px; display:flex; align-items:center; gap:8px;
+}
+.bar.row2{border-top:1px solid var(--d-outv); background:var(--d-scl); overflow:hidden}
+.chiprow{display:flex; gap:6px; overflow:hidden; flex:1; min-width:0}
+.chip{
+  flex:none; border:1px solid var(--d-out); border-radius:8px; padding:4px 10px;
+  font-size:12.5px; color:var(--d-on); background:transparent; white-space:nowrap;
+}
+.chip.tonal{background:var(--d-primc); color:var(--d-onprimc); border-color:transparent}
+.chip.on{background:var(--d-prim); color:var(--d-onprim); border-color:transparent}
+.ibtn{
+  width:40px; height:40px; flex:none; border-radius:10px; display:grid; place-items:center;
+  font-size:17px; color:var(--d-onv); background:transparent;
+}
+.ibtn.tonal{background:var(--d-primc); color:var(--d-onprimc)}
+.ibtn.on{background:var(--d-prim); color:var(--d-onprim)}
+.send{
+  flex:none; background:var(--d-prim); color:var(--d-onprim); border-radius:20px;
+  padding:9px 18px; font-size:13.5px; font-weight:500; white-space:nowrap;
+}
+.send.armed{background:var(--d-err); color:#fff}
+.send.off{background:var(--d-schh); color:var(--d-onv)}
+.spacer{flex:1}
+
+/* bandeaux / statut */
+.banner{
+  display:flex; align-items:center; gap:8px; padding:7px 10px; font-size:12.5px;
+  background:var(--d-schh); color:var(--d-on); border-radius:8px; margin:0 14px 8px;
+}
+.banner.err{background:var(--d-errc); color:var(--d-err)}
+.banner .act{color:var(--d-prim); font-weight:500; white-space:nowrap}
+.status{
+  flex:none; display:flex; align-items:center; gap:8px; height:32px; padding:0 14px;
+  font-size:12px; background:var(--d-sch); color:var(--d-onv);
+  border-top:1px solid var(--d-outv);
+}
+.status.err{background:var(--d-errc); color:var(--d-err)}
+.status .act{margin-left:auto; color:var(--d-prim); font-weight:500}
+.prog{height:3px; background:var(--d-primc); flex:none}
+.prog i{display:block; height:100%; width:62%; background:var(--d-prim)}
+
+/* tiroirs / rails */
+.rail{
+  flex:none; display:flex; gap:6px; padding:6px 14px 0; overflow:hidden;
+}
+.pill{
+  flex:none; display:flex; align-items:center; gap:5px; font-size:11.5px;
+  background:var(--d-sch); color:var(--d-onv); border-radius:999px; padding:3px 9px;
+  white-space:nowrap;
+}
+.pill.act{background:var(--d-primc); color:var(--d-onprimc)}
+
+/* cartes de citation */
+.qcard{
+  display:flex; gap:8px; align-items:flex-start; background:var(--d-sch);
+  border-left:3px solid var(--d-prim); border-radius:0 8px 8px 0; padding:7px 8px 7px 9px;
+  font-size:12.5px; margin:0 14px 6px;
+}
+.qcard .who{font-weight:500; color:var(--d-on)}
+.qcard .ex{color:var(--d-onv); display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.qcard .ops{display:flex; gap:2px; color:var(--d-onv); font-size:13px; flex:none}
+
+/* aperçu */
+.preview{
+  margin:0 14px 8px; padding:9px 11px; border:1px dashed var(--d-outv); border-radius:8px;
+  font-size:13px; color:var(--d-on); background:var(--d-scll); overflow:hidden;
+}
+.preview .q{
+  border-left:3px solid var(--d-outv); padding:2px 0 2px 8px; margin:0 0 6px;
+  color:var(--d-onv); font-size:12px;
+}
+
+/* feuilles */
+.scrim{flex:1; min-height:0; background:rgba(0,0,0,.32)}
+.sheet{
+  flex:none; background:var(--d-scl); border-radius:18px 18px 0 0; padding:8px 0 10px;
+  box-shadow:0 -6px 20px -12px rgba(0,0,0,.5);
+}
+.grab{width:32px; height:4px; border-radius:2px; background:var(--d-outv); margin:0 auto 10px}
+.tabs{display:flex; gap:0; border-bottom:1px solid var(--d-outv); margin:0 12px 10px}
+.tabs div{
+  flex:1; text-align:center; padding:8px 0; font-size:13px; color:var(--d-onv);
+}
+.tabs div.on{color:var(--d-prim); font-weight:500; box-shadow:inset 0 -2px 0 var(--d-prim)}
+.search{
+  margin:0 12px 10px; border:1px solid var(--d-out); border-radius:22px; padding:8px 14px;
+  font-size:13px; color:var(--d-onv); display:flex; gap:8px; align-items:center;
+}
+.smgrid{display:grid; grid-template-columns:repeat(7,1fr); gap:6px; padding:0 12px}
+.sm{
+  aspect-ratio:1; border-radius:6px; background:var(--d-sch); display:grid; place-items:center;
+  font-size:15px;
+}
+.sm.out{border:1px solid var(--d-outv); background:transparent}
+.sgroup{
+  font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--d-onv);
+  padding:10px 12px 5px;
+}
+.optrow{
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  padding:9px 16px; font-size:13.5px;
+}
+.sw{width:40px; height:22px; border-radius:11px; background:var(--d-outv); position:relative; flex:none}
+.sw i{position:absolute; top:3px; left:3px; width:16px; height:16px; border-radius:50%; background:var(--d-bg)}
+.sw.on{background:var(--d-prim)}
+.sw.on i{left:21px; background:var(--d-onprim)}
+
+/* clavier */
+.ime{flex:none; background:var(--d-ime); padding:6px 4px 8px}
+.ime .krow{display:flex; gap:4px; justify-content:center; margin-bottom:4px}
+.ime .k{
+  flex:1; max-width:32px; height:32px; border-radius:5px; background:var(--d-imekey);
+  color:var(--d-imeink); display:grid; place-items:center; font-size:12px;
+}
+.ime .k.wide{max-width:none; flex:2.4}
+.ime .sugg{display:flex; justify-content:space-around; font-size:12px; color:var(--d-imeink);
+  padding:3px 0 7px; opacity:.75}
+
+/* numéros d'annotation */
+.n{
+  display:inline-grid; place-items:center; width:16px; height:16px; border-radius:50%;
+  background:var(--accent); color:#fff; font-size:10px; font-weight:600; flex:none;
+  font-family:"IBM Plex Mono",monospace; vertical-align:1px;
+}
+.phone .n{background:var(--d-prim); color:var(--d-onprim)}
+.notes{margin:12px 0 0; padding:0; list-style:none; display:flex; flex-direction:column; gap:7px}
+.notes li{display:flex; gap:9px; font-size:13.2px; color:var(--ink-2); line-height:1.45}
+.notes li b{color:var(--ink); font-weight:600}
+
+/* règles */
+.rules{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:14px; margin-top:8px}
+.rule{background:var(--paper-2); border:1px solid var(--line); border-radius:var(--radius); padding:16px 17px}
+.rule .k{
+  font-family:"IBM Plex Mono",monospace; font-size:11px; color:var(--accent);
+  letter-spacing:.1em; text-transform:uppercase;
+}
+.rule h3{font-size:17px; font-weight:600; margin:7px 0 7px; letter-spacing:-.01em}
+.rule p{margin:0; font-size:13.6px; color:var(--ink-2)}
+.rule p + p{margin-top:8px}
+
+/* budget */
+.budget{
+  display:grid; grid-template-columns:1fr auto auto; gap:0 14px; align-items:center;
+  background:var(--paper-2); border:1px solid var(--line); border-radius:var(--radius);
+  padding:4px 16px 10px; margin-top:20px; font-size:13.5px;
+}
+.budget .h{
+  font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:.09em;
+  text-transform:uppercase; color:var(--ink-3); padding:10px 0 6px;
+  border-bottom:1px solid var(--line-2);
+}
+.budget .h.r,.budget .v{text-align:right; font-variant-numeric:tabular-nums}
+.budget .c,.budget .v{padding:6px 0; border-bottom:1px solid var(--line-2)}
+.budget .tot{font-weight:600; color:var(--ink); border-bottom:0}
+.budget .gain{color:var(--ok); font-weight:600}
+
+/* tableau de traçabilité */
+.trace-wrap{overflow-x:auto; margin-top:8px}
+table{border-collapse:collapse; width:100%; min-width:640px; font-size:13.2px}
+th,td{text-align:left; padding:7px 12px 7px 0; border-bottom:1px solid var(--line-2); vertical-align:top}
+th{
+  font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:.09em;
+  text-transform:uppercase; color:var(--ink-3); font-weight:500; border-bottom:1px solid var(--line);
+}
+td b{font-weight:600}
+td.st{white-space:nowrap}
+.dot{display:inline-block; width:7px; height:7px; border-radius:50%; margin-right:6px; vertical-align:1px}
+.dot.keep{background:var(--ok)} .dot.move{background:var(--accent)} .dot.fix{background:var(--warn)}
+.legend{display:flex; flex-wrap:wrap; gap:16px; margin:14px 0 0; font-size:12.5px; color:var(--ink-2)}
+
+/* questions */
+.asks{display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:12px}
+.ask{
+  border:1px solid var(--line); border-left:3px solid var(--accent); border-radius:0 var(--radius) var(--radius) 0;
+  background:var(--paper-2); padding:13px 15px;
+}
+.ask h4{font-size:14px; font-weight:600; margin-bottom:5px}
+.ask p{margin:0; font-size:13.2px; color:var(--ink-2)}
+footer{padding-block:34px 0; color:var(--ink-3); font-size:12.5px}
+
+@media (max-width:420px){
+  .phone{height:660px; border-radius:16px}
+  .smgrid{grid-template-columns:repeat(6,1fr)}
+}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <div class="eyebrow">Redface 2 · #1417 · Vue&nbsp;Éditeur&nbsp;2</div>
+  <h1>Le champ est l'écran</h1>
+  <p class="lede">Maquettes de la refonte de l'éditeur, posées sur l'inventaire complet de ce que les
+  quatre surfaces d'écriture savent déjà faire en bêta 0.60.0. Rien n'est retiré&nbsp;: tout ce qui
+  existe est replacé, et ce qui est replacé rend des pixels au champ de saisie.</p>
+  <div class="meta">
+    <span>bêta 0.60.0 · app-v343</span>
+    <span>4 surfaces + réponse rapide</span>
+    <span>360 × 740 dp (S10e / S9)</span>
+    <span>schéma M3 réel de l'app</span>
+    <span>20 septembre 2026</span>
+  </div>
+</header>
+
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="sec-head"><span class="sec-num">01</span><h2>Ce qui existe aujourd'hui</h2></div>
+  <p class="sec-sub">Le contrat de la refonte&nbsp;: chaque ligne ci-dessous doit se retrouver dans les
+  maquettes. Relevé dans le code de <code>0.60.0</code> — <code>:core:ui/editor</code>,
+  <code>:feature:editor</code>, <code>:feature:messages</code>, <code>QuickReplySheet</code>.</p>
+
+  <div class="inv">
+    <div class="inv-card">
+      <h4>Les quatre surfaces</h4>
+      <ul>
+        <li><b>Répondre au sujet</b> / Modifier votre message <span class="ref">PostEditorScreen</span></li>
+        <li><b>Nouveau sujet</b> / Modifier le premier message <span class="ref">TopicFormScreen</span></li>
+        <li><b>Nouveau MP</b> (destinataires + sujet) <span class="ref">PrivateMessageCompose</span></li>
+        <li><b>Réponse MP</b> dans la conversation <span class="ref">MessageEditorComponents</span></li>
+        <li>+ la <b>feuille de réponse rapide</b> de la vue Topic <span class="ref">QuickReplySheet</span></li>
+      </ul>
+    </div>
+
+    <div class="inv-card">
+      <h4>Champ de saisie</h4>
+      <ul>
+        <li>BasicTextField&nbsp;2 depuis 0.59.8, réserve de <b>160&nbsp;dp</b></li>
+        <li>Label flottant « Contenu BBCode », placeholder « Saisissez votre message… »</li>
+        <li>Autofocus à l'ouverture <span class="ref">#555</span></li>
+        <li>Capitalisation en début de phrase <span class="ref">#237</span></li>
+        <li>Poignées de sélection + autoscroll dans le champ <span class="ref">#447</span></li>
+        <li>TextClassifier neutralisé (smart selection Android) <span class="ref">#1427</span></li>
+        <li>Verrouillé en lecture seule pendant un upload par lot</li>
+      </ul>
+    </div>
+
+    <div class="inv-card">
+      <h4>Barre d'outils BBCode</h4>
+      <ul>
+        <li><b>Uploader</b> épinglé en tête, spinner pendant l'envoi <span class="ref">#459</span></li>
+        <li>Gras · Italique · Souligné · Barré</li>
+        <li>Citation · Code · Bloc fixé · Spoiler</li>
+        <li>Lien · Image (dialogue URL)</li>
+        <li><b>Couleur</b> → Rouge, Bleu, Vert, Orange, Gris</li>
+        <li>Défilement horizontal, chips M3</li>
+      </ul>
+    </div>
+
+    <div class="inv-card">
+      <h4>Citations</h4>
+      <ul>
+        <li>Cartes <b>❝ auteur — extrait</b>, dans l'ordre de citation</li>
+        <li>Monter / descendre / retirer par carte</li>
+        <li><b>Tout vider</b> à partir de deux cartes <span class="ref">#436</span></li>
+        <li>BBCode <code>[quotemsg]</code> matérialisé à l'envoi, jamais dans le champ</li>
+        <li>Annonces TalkBack + focus après retrait</li>
+        <li>Cartes plafonnées et scrollables en réponse rapide <span class="ref">#808</span></li>
+      </ul>
+    </div>
+
+    <div class="inv-card">
+      <h4>Brouillons</h4>
+      <ul>
+        <li>Autosave Room par clé d'éditeur <span class="ref">EditorDraftStore</span></li>
+        <li>Bandeau « Un brouillon non envoyé a été retrouvé »</li>
+        <li><b>Restaurer</b> (concatène) / <b>Ignorer</b> (supprime) <span class="ref">#405 #1415</span></li>
+        <li>L'offre survit à la saisie du titre et des destinataires</li>
+        <li>Purge par rétention <span class="ref">DraftRetentionPurger</span></li>
+      </ul>
+    </div>
+
+    <div class="inv-card">
+      <h4>Images</h4>
+      <ul>
+        <li>Photo picker / GET_CONTENT / explorateur <span class="ref">#1128</span></li>
+        <li>Upload multiple, compteur « Envoi n/N… »</li>
+        <li>Hébergeurs <b>imgur</b> et <b>diberie</b></li>
+        <li>Insertion d'URL manuelle <span class="ref">Insérer une image</span></li>
+        <li>7 erreurs typées, dont « Aucune image reçue du sélecteur » <span class="ref">#1420</span></li>
+      </ul>
+    </div>
+
+    <div class="inv-card">
+      <h4>Smileys</h4>
+      <ul>
+        <li>Onglet <b>Standard</b> — les ~25 builtin, synchrones</li>
+        <li>Onglet <b>Wiki</b> — recherche perso à partir de 3 caractères</li>
+        <li>États Idle / Recherche… / Résultats / Vide / Erreur</li>
+        <li>Grille 62&nbsp;% de la hauteur écran, plancher 320&nbsp;dp <span class="ref">#900</span></li>
+        <li>Décoration de cellule&nbsp;: aucune / contour / séparateurs <span class="ref">#989</span></li>
+        <li>Insertion au token, la feuille se referme</li>
+      </ul>
+    </div>
+
+    <div class="inv-card">
+      <h4>Options du message</h4>
+      <ul>
+        <li>Activer votre signature</li>
+        <li>Désactiver les smilies</li>
+        <li>Activer la notification par email du sujet</li>
+        <li><b>Ton du message</b> — 16 icônes HFR, replié par défaut <span class="ref">#340</span></li>
+        <li>Valeurs par défaut lues dans le formulaire HFR</li>
+      </ul>
+    </div>
+
+    <div class="inv-card">
+      <h4>Envoi</h4>
+      <ul>
+        <li>Barre épinglée au-dessus du clavier, inset unique <span class="ref">#624 #1404</span></li>
+        <li><b>Options</b> · <b>Smileys</b> · <b>Envoyer</b></li>
+        <li>Envoi armé → <b>Confirmer</b>, les secondaires s'effacent</li>
+        <li>Spinner de chargement du formulaire et d'envoi</li>
+        <li>9 erreurs d'envoi typées, dont anti-flood et sujet fermé</li>
+      </ul>
+    </div>
+
+    <div class="inv-card">
+      <h4>Propre au sujet</h4>
+      <ul>
+        <li>Titre du sujet (capitalisation phrase)</li>
+        <li>Sélecteur de <b>sous-catégorie</b>, absent si la catégorie n'en a pas <span class="ref">#213</span></li>
+        <li>Note « sondage préservé, non éditable »</li>
+      </ul>
+    </div>
+
+    <div class="inv-card">
+      <h4>Propre au MP</h4>
+      <ul>
+        <li>Destinataires en CSV = conversation de groupe <span class="ref">#606</span></li>
+        <li>Sujet avec compteur de caractères</li>
+        <li>Résumé « Destinataires&nbsp;: N » + feuille <b>Gérer</b> pour l'owner <span class="ref">#618</span></li>
+      </ul>
+    </div>
+
+    <div class="inv-card">
+      <h4>Réponse rapide</h4>
+      <ul>
+        <li>Feuille depuis la vue Topic, champ autofocus</li>
+        <li>Bouton <b>plein écran</b> (escalade vers l'éditeur)</li>
+        <li>Cartes de citation plafonnées à 192&nbsp;dp</li>
+        <li>« Insertion de la citation… » pendant le fetch</li>
+        <li>Envoyer + dialogue « Publier la réponse&nbsp;? »</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="sec-head"><span class="sec-num">02</span><h2>Ce qui coince</h2></div>
+  <p class="sec-sub">Sur un S9 en 360 × 740&nbsp;dp, clavier ouvert, il reste 330&nbsp;dp de fenêtre.
+  Le chrome actuel en mange 178. Voici ce que le testeur voit.</p>
+
+  <div class="decks">
+    <div class="deck">
+      <div class="deck-title"><span class="tag now">Aujourd'hui</span> Répondre, clavier fermé</div>
+      <p class="deck-note">Tout est empilé en colonne&nbsp;: bandeau, titre, barre d'outils, cartes,
+      aperçu, puis le champ, puis la barre d'envoi.</p>
+      <div class="phone">
+        <div class="statusbar"><span>10:41</span><span>◍ ▲ ▮</span></div>
+        <div class="appbar">
+          <div class="icon">←</div>
+          <div class="ttl">Redface 2</div>
+        </div>
+        <div class="body">
+          <div style="padding:10px 14px 0">
+            <div class="banner" style="margin:0 0 10px">
+              <span style="flex:1">Un brouillon non envoyé a été retrouvé pour ce message.</span>
+              <span class="act">Restaurer</span><span class="act">Ignorer</span>
+            </div>
+            <div style="font-size:21px; font-weight:500; margin-bottom:10px">Répondre au sujet <span class="n">1</span></div>
+            <div class="chiprow" style="margin-bottom:10px">
+              <span class="chip tonal">⬆ Uploader</span><span class="chip">Gras</span>
+              <span class="chip">Italique</span><span class="chip">Souli…</span>
+            </div>
+            <div class="qcard" style="margin:0 0 6px">
+              <div style="flex:1; min-width:0">
+                <span class="who">❝ styx42</span>
+                <span class="ex">les bords haut et bas de la zone de saisie restent…</span>
+              </div>
+              <div class="ops">↑ ↓ ✕</div>
+            </div>
+            <div style="color:var(--d-prim); font-size:13.5px; padding:4px 0 2px">Afficher l'aperçu</div>
+          </div>
+          <div class="field" style="flex:1">
+            <span class="lab">Contenu BBCod… <span class="n">2</span></span>
+            <div class="txt ghost">Saisissez votre message…<span class="caret"></span></div>
+          </div>
+        </div>
+        <div class="bar">
+          <span class="chip tonal">Options</span>
+          <span class="chip tonal">Smileys</span>
+          <span class="spacer"></span>
+          <span class="send">Envoyer</span>
+        </div>
+      </div>
+      <ul class="notes">
+        <li><span class="n">1</span><span>Un titre de 21&nbsp;dp qui répète ce que l'utilisateur vient de toucher dans la vue Topic.</span></li>
+        <li><span class="n">2</span><span>« Contenu BBCode » tronqué à fontScale&nbsp;1.3. <span class="ref">#872</span></span></li>
+      </ul>
+    </div>
+
+    <div class="deck">
+      <div class="deck-title"><span class="tag now">Aujourd'hui</span> Répondre, clavier ouvert</div>
+      <p class="deck-note">Le budget borné a sauvé la barre d'envoi et les 160&nbsp;dp du champ. Mais
+      trois lignes de texte, c'est le retour terrain d'antiseptiqueIncolore sur S9.</p>
+      <div class="phone">
+        <div class="statusbar"><span>10:41</span><span>◍ ▲ ▮</span></div>
+        <div class="appbar"><div class="icon">←</div><div class="ttl">Redface 2</div></div>
+        <div class="body" style="flex:none">
+          <div style="padding:8px 14px 0">
+            <div style="font-size:19px; font-weight:500; margin-bottom:8px">Répondre au sujet</div>
+            <div class="chiprow" style="margin-bottom:8px">
+              <span class="chip tonal">⬆ Uploader</span><span class="chip">Gras</span><span class="chip">Itali…</span>
+            </div>
+            <div style="color:var(--d-prim); font-size:13px; padding:2px 0 6px">Afficher l'aperçu</div>
+          </div>
+          <div class="field" style="height:104px; flex:none">
+            <span class="lab">Contenu BBCode</span>
+            <div class="txt">Le spike device a tranché&nbsp;: BTF2<br>gère nativement le drag de<br>poignée.<span class="caret"></span> <span class="n">3</span></div>
+          </div>
+        </div>
+        <div class="bar">
+          <span class="chip tonal">Options</span><span class="chip tonal">Smileys</span>
+          <span class="spacer"></span><span class="send">Envoyer</span>
+        </div>
+        <div class="ime">
+          <div class="sugg"><span>poignée</span><span>poignées</span><span>poigné</span></div>
+          <div class="krow"><div class="k">a</div><div class="k">z</div><div class="k">e</div><div class="k">r</div><div class="k">t</div><div class="k">y</div><div class="k">u</div><div class="k">i</div><div class="k">o</div><div class="k">p</div></div>
+          <div class="krow"><div class="k">q</div><div class="k">s</div><div class="k">d</div><div class="k">f</div><div class="k">g</div><div class="k">h</div><div class="k">j</div><div class="k">k</div><div class="k">l</div><div class="k">m</div></div>
+          <div class="krow"><div class="k">⇧</div><div class="k">w</div><div class="k">x</div><div class="k">c</div><div class="k">v</div><div class="k">b</div><div class="k">n</div><div class="k">⌫</div></div>
+          <div class="krow"><div class="k">?123</div><div class="k wide">espace</div><div class="k">↵</div></div>
+        </div>
+      </div>
+      <ul class="notes">
+        <li><span class="n">3</span><span><b>Trois lignes visibles.</b> Le titre, la barre d'outils et le bouton d'aperçu consomment 98&nbsp;dp de la fenêtre utile, sans qu'aucun ne serve pendant la frappe.</span></li>
+      </ul>
+    </div>
+
+    <div class="deck" style="flex:1 1 300px">
+      <div class="deck-title">Le relevé</div>
+      <p class="deck-note">Répartition de la fenêtre utile (330&nbsp;dp) quand le clavier est ouvert,
+      aujourd'hui contre la proposition.</p>
+      <div class="budget">
+        <div class="h">Élément</div><div class="h r">0.60.0</div><div class="h r">Refonte</div>
+        <div class="c">Titre d'écran</div><div class="v">28 dp</div><div class="v">0</div>
+        <div class="c">Barre d'outils BBCode</div><div class="v">46 dp</div><div class="v">0</div>
+        <div class="c">Bouton d'aperçu</div><div class="v">36 dp</div><div class="v">0</div>
+        <div class="c">Espacements de colonne</div><div class="v">36 dp</div><div class="v">12 dp</div>
+        <div class="c">Barre d'action</div><div class="v">56 dp</div><div class="v">56 dp</div>
+        <div class="c">Ligne de statut</div><div class="v">—</div><div class="v">0–32 dp</div>
+        <div class="c tot">Champ de saisie</div><div class="v tot">128 dp</div><div class="v tot gain">262 dp</div>
+      </div>
+      <ul class="notes">
+        <li><span class="n">4</span><span>De 3 à <b>7 lignes</b> visibles pendant la frappe, sans rien supprimer&nbsp;: le titre passe dans l'app bar, la barre d'outils devient un tiroir, l'aperçu devient une action.</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="sec-head"><span class="sec-num">03</span><h2>Trois règles</h2></div>
+  <p class="sec-sub">Le principe produit vient de styx42 sur le topic DEV&nbsp;: les bords du champ
+  restent visibles et le texte défile dedans. Ces trois règles en sont la conséquence de mise en page.</p>
+
+  <div class="rules">
+    <div class="rule">
+      <div class="k">Règle 1</div>
+      <h3>Le chrome est à hauteur fixe, le champ est élastique</h3>
+      <p>Une app bar de 48&nbsp;dp en haut (retour, titre, contexte), une barre d'action de 56&nbsp;dp en
+      bas. Entre les deux, le champ prend tout, jamais moins de 160&nbsp;dp.</p>
+      <p>Le titre d'écran et le sujet cité montent dans l'app bar, sur deux lignes&nbsp;: c'est le seul
+      endroit qui ne bouge plus jamais.</p>
+    </div>
+    <div class="rule">
+      <div class="k">Règle 2</div>
+      <h3>Une barre, deux rangées</h3>
+      <p>La rangée permanente porte les cinq actions qui servent en frappant&nbsp;: format, smileys,
+      image, options, envoyer. La rangée de format ne se déplie que sur demande, et se replie
+      à la première frappe.</p>
+      <p>Aucune fonction n'est perdue&nbsp;: les onze chips BBCode et la palette vivent dans le
+      tiroir, à un tap, au même endroit que maintenant.</p>
+    </div>
+    <div class="rule">
+      <div class="k">Règle 3</div>
+      <h3>Rien ne pousse le champ vers le bas</h3>
+      <p>Brouillon retrouvé, erreur d'envoi, progression d'upload&nbsp;: une ligne de statut de 32&nbsp;dp
+      ancrée juste au-dessus de la barre d'action, dans le champ de vision du pouce.</p>
+      <p>Citations et aperçu deviennent des <b>panneaux</b> qui remplacent le champ au lieu de le
+      comprimer&nbsp;— on relit, puis on revient écrire.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="sec-head"><span class="sec-num">04</span><h2>Les écrans</h2></div>
+  <p class="sec-sub">Douze états, rendus avec le schéma de couleurs réel de l'app et les libellés
+  français réels des <code>strings.xml</code>.</p>
+
+  <div class="decks">
+
+    <!-- 1 : repos -->
+    <div class="deck">
+      <div class="deck-title"><span class="tag new">Refonte</span> Répondre, au repos</div>
+      <p class="deck-note">Le contexte du sujet est dans l'app bar. Le champ démarre plein écran,
+      curseur posé.</p>
+      <div class="phone">
+        <div class="statusbar"><span>10:41</span><span>◍ ▲ ▮</span></div>
+        <div class="appbar">
+          <div class="icon">←</div>
+          <div class="ttl">Répondre<small>[HFR] Redface 2 — client Android</small></div>
+          <div class="icon">👁</div>
+          <div class="icon">⋮</div>
+        </div>
+        <div class="body">
+          <div class="rail">
+            <span class="pill act">❝ 1 citation</span>
+            <span class="pill">Brouillon enregistré</span>
+          </div>
+          <div class="field">
+            <span class="lab">Message</span>
+            <div class="txt ghost">Saisissez votre message…<span class="caret"></span></div>
+          </div>
+        </div>
+        <div class="bar">
+          <span class="ibtn">Aa</span><span class="ibtn">☺</span><span class="ibtn">🖼</span>
+          <span class="ibtn">⋯</span><span class="spacer"></span><span class="send">Envoyer</span>
+        </div>
+      </div>
+      <ul class="notes">
+        <li><span class="n">1</span><span>Le <b>rail de contexte</b> remplace les cartes dépliées&nbsp;: une pastille par chose active (citations, brouillon, upload). Tap = ouvre le panneau.</span></li>
+        <li><span class="n">2</span><span><b>Aa</b> déplie le format, <b>⋯</b> ouvre les options, <b>👁</b> l'aperçu. Les trois libellés actuels restent en info-bulle et en nom accessible.</span></li>
+      </ul>
+    </div>
+
+    <!-- 2 : frappe -->
+    <div class="deck">
+      <div class="deck-title"><span class="tag new">Refonte</span> En train d'écrire</div>
+      <p class="deck-note">Clavier ouvert, même écran&nbsp;: sept lignes au lieu de trois. Le rail se
+      réduit à sa forme minimale.</p>
+      <div class="phone">
+        <div class="statusbar"><span>10:42</span><span>◍ ▲ ▮</span></div>
+        <div class="appbar"><div class="icon">←</div><div class="ttl">Répondre<small>[HFR] Redface 2 — client Android</small></div><div class="icon">👁</div><div class="icon">⋮</div></div>
+        <div class="body" style="flex:none; height:262px">
+          <div class="field" style="flex:1">
+            <span class="lab">Message</span>
+            <div class="txt">
+              <span class="bb">[quotemsg]</span> styx42<br>
+              Exactement ça&nbsp;: les bords haut et bas<br>
+              de la zone de saisie doivent rester<br>
+              visibles, et le texte défile dedans.<br>
+              C'est le comportement de K-9 Mail.<br>
+              <br>
+              Le lot R1 s'en occupe.<span class="caret"></span> <span class="n">3</span>
+            </div>
+          </div>
+        </div>
+        <div class="bar">
+          <span class="ibtn">Aa</span><span class="ibtn">☺</span><span class="ibtn">🖼</span>
+          <span class="ibtn">⋯</span><span class="spacer"></span><span class="send">Envoyer</span>
+        </div>
+        <div class="ime">
+          <div class="sugg"><span>occupe</span><span>occupé</span><span>occuper</span></div>
+          <div class="krow"><div class="k">a</div><div class="k">z</div><div class="k">e</div><div class="k">r</div><div class="k">t</div><div class="k">y</div><div class="k">u</div><div class="k">i</div><div class="k">o</div><div class="k">p</div></div>
+          <div class="krow"><div class="k">q</div><div class="k">s</div><div class="k">d</div><div class="k">f</div><div class="k">g</div><div class="k">h</div><div class="k">j</div><div class="k">k</div><div class="k">l</div><div class="k">m</div></div>
+          <div class="krow"><div class="k">⇧</div><div class="k">w</div><div class="k">x</div><div class="k">c</div><div class="k">v</div><div class="k">b</div><div class="k">n</div><div class="k">⌫</div></div>
+          <div class="krow"><div class="k">?123</div><div class="k wide">espace</div><div class="k">↵</div></div>
+        </div>
+      </div>
+      <ul class="notes">
+        <li><span class="n">3</span><span>Critères <b>C3</b> et <b>C4</b> de l'issue&nbsp;: la ligne courante reste visible, la barre d'envoi reste au-dessus du clavier, inset unique <code>navigationBars ∪ ime</code>.</span></li>
+      </ul>
+    </div>
+
+    <!-- 3 : format déplié -->
+    <div class="deck">
+      <div class="deck-title"><span class="tag new">Refonte</span> Tiroir de format</div>
+      <p class="deck-note">Les onze actions BBCode et la palette, à un tap sur <b>Aa</b>. Le tiroir se
+      replie dès la frappe suivante.</p>
+      <div class="phone">
+        <div class="statusbar"><span>10:43</span><span>◍ ▲ ▮</span></div>
+        <div class="appbar"><div class="icon">←</div><div class="ttl">Répondre<small>[HFR] Redface 2 — client Android</small></div><div class="icon">👁</div><div class="icon">⋮</div></div>
+        <div class="body" style="flex:none; height:206px">
+          <div class="field" style="flex:1">
+            <span class="lab">Message</span>
+            <div class="txt">Le spike device a tranché&nbsp;:<br>
+              <span class="sel">BTF2 gère nativement le drag</span><br>
+              <span class="sel">de poignée</span> et l'autoscroll. <span class="n">4</span></div>
+          </div>
+        </div>
+        <div class="bar row2">
+          <div class="chiprow">
+            <span class="chip">Gras</span><span class="chip">Italique</span><span class="chip">Souligné</span>
+            <span class="chip">Barré</span><span class="chip">Citation</span>
+          </div>
+        </div>
+        <div class="bar row2">
+          <div class="chiprow">
+            <span class="chip">Code</span><span class="chip">Bloc fixé</span><span class="chip">Spoiler</span>
+            <span class="chip">Lien</span><span class="chip">Couleur ▾</span>
+          </div>
+        </div>
+        <div class="bar">
+          <span class="ibtn on">Aa</span><span class="ibtn">☺</span><span class="ibtn">🖼</span>
+          <span class="ibtn">⋯</span><span class="spacer"></span><span class="send">Envoyer</span>
+        </div>
+        <div class="ime">
+          <div class="sugg"><span>l'autoscroll</span><span>autoscroll</span><span>auto</span></div>
+          <div class="krow"><div class="k">a</div><div class="k">z</div><div class="k">e</div><div class="k">r</div><div class="k">t</div><div class="k">y</div><div class="k">u</div><div class="k">i</div><div class="k">o</div><div class="k">p</div></div>
+          <div class="krow"><div class="k">q</div><div class="k">s</div><div class="k">d</div><div class="k">f</div><div class="k">g</div><div class="k">h</div><div class="k">j</div><div class="k">k</div><div class="k">l</div><div class="k">m</div></div>
+          <div class="krow"><div class="k">⇧</div><div class="k">w</div><div class="k">x</div><div class="k">c</div><div class="k">v</div><div class="k">b</div><div class="k">n</div><div class="k">⌫</div></div>
+          <div class="krow"><div class="k">?123</div><div class="k wide">espace</div><div class="k">↵</div></div>
+        </div>
+      </div>
+      <ul class="notes">
+        <li><span class="n">4</span><span>Deux rangées fixes au lieu d'un défilement horizontal&nbsp;: les dix actions sont visibles d'un coup, plus de chip qui se cache à droite.</span></li>
+        <li><span class="n">5</span><span>Le tiroir naît <b>sous</b> le champ&nbsp;: la sélection en cours ne bouge pas d'un pixel quand il s'ouvre (critère <b>C6</b>).</span></li>
+      </ul>
+    </div>
+
+    <!-- 4 : citations -->
+    <div class="deck">
+      <div class="deck-title"><span class="tag new">Refonte</span> Panneau citations</div>
+      <p class="deck-note">Les cartes prennent l'écran au lieu de le grignoter&nbsp;: on réordonne, on
+      coupe, on revient. Ouvre la porte à l'interleaving.</p>
+      <div class="phone">
+        <div class="statusbar"><span>10:44</span><span>◍ ▲ ▮</span></div>
+        <div class="appbar"><div class="icon">←</div><div class="ttl">Citations<small>3 citations · ordre d'envoi</small></div><div class="icon" style="color:var(--d-prim); font-size:13px; width:auto; padding:0 10px">Tout vider</div></div>
+        <div class="body">
+          <div style="overflow:hidden; padding-top:10px">
+            <div class="qcard"><div style="flex:1; min-width:0"><span class="who">❝ styx42</span><span class="ex">les bords haut et bas de la zone de saisie…</span></div><div class="ops">↑ ↓ ✕</div></div>
+            <div class="qcard"><div style="flex:1; min-width:0"><span class="who">❝ thibw</span><span class="ex">le retour intra-lien renvoie à la liste…</span></div><div class="ops">↑ ↓ ✕</div></div>
+            <div class="qcard"><div style="flex:1; min-width:0"><span class="who">❝ antiseptiqueIncolore</span><span class="ex">(citation sans texte)</span></div><div class="ops">↑ ↓ ✕</div></div>
+            <div style="margin:14px 14px 0; padding:11px 12px; border:1px dashed var(--d-outv); border-radius:8px">
+              <div style="font-size:12.5px; color:var(--d-onv); margin-bottom:6px">Insertion <span class="n">6</span></div>
+              <div style="display:flex; gap:6px; flex-wrap:wrap">
+                <span class="chip on">Toutes en tête</span>
+                <span class="chip">Une par une, au curseur</span>
+              </div>
+            </div>
+            <div style="margin:12px 14px 0; padding:11px 12px; border:1px dashed var(--d-outv); border-radius:8px">
+              <div style="font-size:12.5px; color:var(--d-onv); margin-bottom:6px">Longueur de « Citer le début » <span class="n">7</span></div>
+              <div style="display:flex; gap:6px">
+                <span class="chip">1 phrase</span><span class="chip on">3 lignes</span><span class="chip">Tout</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="bar">
+          <span class="spacer"></span><span class="send">Retour au message</span>
+        </div>
+      </div>
+      <ul class="notes">
+        <li><span class="n">6</span><span>« Une par une, au curseur » est la réponse à l'<b>interleaving</b> demandé en 0.23&nbsp;: répondre entre les citations. <span class="ref">#805</span></span></li>
+        <li><span class="n">7</span><span>Le réglage de longueur vit ici, au contact de l'objet qu'il règle, plutôt que dans les réglages globaux. <span class="ref">#1254</span></span></li>
+        <li><span class="n">8</span><span>Re-citer un post ajoute une carte et le dit dans le rail, au lieu de recoller silencieusement. <span class="ref">#878</span></span></li>
+      </ul>
+    </div>
+
+    <!-- 5 : aperçu -->
+    <div class="deck">
+      <div class="deck-title"><span class="tag new">Refonte</span> Aperçu</div>
+      <p class="deck-note">Plein écran, rendu comme dans la vue Topic — donc avec les smileys, ce que
+      l'aperçu actuel ne sait pas faire.</p>
+      <div class="phone">
+        <div class="statusbar"><span>10:45</span><span>◍ ▲ ▮</span></div>
+        <div class="appbar"><div class="icon">←</div><div class="ttl">Aperçu<small>rendu identique à la vue Topic</small></div><div class="icon">✎</div></div>
+        <div class="body">
+          <div class="preview" style="margin:12px 14px; flex:none">
+            <div class="q">❝ styx42 — les bords haut et bas de la zone de saisie restent toujours visibles et le texte défile dans le champ.</div>
+            Exactement ça. C'est le comportement de <b>K-9 Mail</b>, et c'est ce que fait le lot R1.
+            <div style="margin-top:8px">Le spike device a tranché&nbsp;: <span style="text-decoration:underline">BTF2</span> gère nativement le drag de poignée. 🙂 <span class="n">9</span></div>
+            <div style="margin-top:8px; padding:7px 9px; background:var(--d-sch); border-radius:6px; font-family:'IBM Plex Mono',monospace; font-size:11.5px">adjustResize &lt; API 30</div>
+          </div>
+          <div style="margin:0 14px; font-size:12px; color:var(--d-onv)">
+            Aucune balise BBCode non fermée.
+          </div>
+        </div>
+        <div class="bar">
+          <span class="ibtn">Aa</span><span class="ibtn">☺</span><span class="ibtn">🖼</span>
+          <span class="ibtn">⋯</span><span class="spacer"></span><span class="send">Envoyer</span>
+        </div>
+      </div>
+      <ul class="notes">
+        <li><span class="n">9</span><span>L'aperçu réutilise le rendu de la vue Topic&nbsp;: smileys, code, spoilers, citations. <span class="ref">#873</span></span></li>
+        <li><span class="n">10</span><span>La barre d'action ne change pas entre écrire et relire&nbsp;: on peut envoyer depuis l'aperçu.</span></li>
+      </ul>
+    </div>
+
+    <!-- 6 : smileys -->
+    <div class="deck">
+      <div class="deck-title"><span class="tag new">Refonte</span> Smileys</div>
+      <p class="deck-note">Les deux onglets actuels, plus les sections que les testeurs réclament.
+      La décoration de cellule reste un réglage.</p>
+      <div class="phone">
+        <div class="statusbar"><span>10:46</span><span>◍ ▲ ▮</span></div>
+        <div class="appbar"><div class="icon">←</div><div class="ttl">Répondre<small>[HFR] Redface 2 — client Android</small></div><div class="icon">👁</div><div class="icon">⋮</div></div>
+        <div class="scrim"></div>
+        <div class="sheet">
+          <div class="grab"></div>
+          <div class="tabs"><div class="on">Standard</div><div>Wiki</div></div>
+          <div class="search"><span>🔍</span><span>Rechercher un smiley perso</span></div>
+          <div class="sgroup">Favoris <span class="n">11</span></div>
+          <div class="smgrid">
+            <div class="sm">😀</div><div class="sm">😁</div><div class="sm">😂</div><div class="sm">🤣</div>
+            <div class="sm">😅</div><div class="sm">😉</div><div class="sm">😊</div>
+          </div>
+          <div class="sgroup">Récents</div>
+          <div class="smgrid">
+            <div class="sm">🙄</div><div class="sm">😐</div><div class="sm">😏</div><div class="sm">🤔</div>
+            <div class="sm">😱</div><div class="sm">🥲</div><div class="sm">😴</div>
+          </div>
+          <div class="sgroup">Standard — 25 smileys</div>
+          <div class="smgrid">
+            <div class="sm out">😃</div><div class="sm out">😇</div><div class="sm out">😎</div><div class="sm out">😡</div>
+            <div class="sm out">😭</div><div class="sm out">🤮</div><div class="sm out">👍</div>
+            <div class="sm out">👎</div><div class="sm out">🙏</div><div class="sm out">💀</div><div class="sm out">🔥</div>
+            <div class="sm out">🍿</div><div class="sm out">🤡</div><div class="sm out">🫠</div>
+          </div>
+        </div>
+      </div>
+      <ul class="notes">
+        <li><span class="n">11</span><span>Favoris / Récents / Top, demandés depuis un moment&nbsp;: c'est la seule fonction vraiment <i>nouvelle</i> des maquettes. <span class="ref">#1154</span></span></li>
+        <li><span class="n">12</span><span>Appui long = loupe sur la vignette, sans changer la taille des cellules. <span class="ref">#1022</span></span></li>
+      </ul>
+    </div>
+
+    <!-- 7 : options -->
+    <div class="deck">
+      <div class="deck-title"><span class="tag new">Refonte</span> Options du message</div>
+      <p class="deck-note">Les trois bascules HFR et les 16 tons, à l'identique. Le ton se choisit
+      sans déplier une seconde fois.</p>
+      <div class="phone">
+        <div class="statusbar"><span>10:47</span><span>◍ ▲ ▮</span></div>
+        <div class="appbar"><div class="icon">←</div><div class="ttl">Répondre<small>[HFR] Redface 2 — client Android</small></div><div class="icon">👁</div><div class="icon">⋮</div></div>
+        <div class="scrim"></div>
+        <div class="sheet">
+          <div class="grab"></div>
+          <div style="padding:0 16px 8px; font-size:15px; font-weight:500">Options du message</div>
+          <div class="optrow"><span>Activer votre signature</span><span class="sw on"><i></i></span></div>
+          <div class="optrow"><span>Désactiver les smilies</span><span class="sw"><i></i></span></div>
+          <div class="optrow"><span>Activer la notification par email du sujet</span><span class="sw"><i></i></span></div>
+          <div class="sgroup" style="padding-top:8px">Ton du message</div>
+          <div class="smgrid" style="grid-template-columns:repeat(8,1fr)">
+            <div class="sm on" style="background:var(--d-prim); color:var(--d-onprim); font-size:11px">Aucun</div>
+            <div class="sm">💬</div><div class="sm">❓</div><div class="sm">💡</div>
+            <div class="sm">⚠️</div><div class="sm">✅</div><div class="sm">🔧</div><div class="sm">🎁</div>
+          </div>
+          <div class="smgrid" style="grid-template-columns:repeat(8,1fr); padding-top:6px">
+            <div class="sm">📢</div><div class="sm">🎬</div><div class="sm">🎵</div><div class="sm">📷</div>
+            <div class="sm">🖥</div><div class="sm">🏁</div><div class="sm">🔒</div><div class="sm">⭐</div>
+          </div>
+          <div style="padding:12px 16px 4px; font-size:12px; color:var(--d-onv)">
+            Valeurs par défaut lues dans le formulaire HFR. <span class="n">13</span>
+          </div>
+        </div>
+      </div>
+      <ul class="notes">
+        <li><span class="n">13</span><span>Inchangé fonctionnellement&nbsp;: mêmes trois champs POST, mêmes 16 <code>msg_icon</code>. Seul le repli par défaut du ton disparaît&nbsp;— la grille tient dans la feuille.</span></li>
+      </ul>
+    </div>
+
+    <!-- 8 : statut -->
+    <div class="deck">
+      <div class="deck-title"><span class="tag new">Refonte</span> Statut, erreurs, upload</div>
+      <p class="deck-note">Tout ce qui était un bandeau empilé en tête devient une ligne de 32&nbsp;dp
+      juste au-dessus de la barre d'action.</p>
+      <div class="phone">
+        <div class="statusbar"><span>10:48</span><span>◍ ▲ ▮</span></div>
+        <div class="appbar"><div class="icon">←</div><div class="ttl">Répondre<small>[HFR] Redface 2 — client Android</small></div><div class="icon">👁</div><div class="icon">⋮</div></div>
+        <div class="body" style="flex:none; height:150px">
+          <div class="field" style="flex:1">
+            <span class="lab">Message</span>
+            <div class="txt">Voilà les captures du S9&nbsp;:<br><span class="bb">[img]https://reho.st/…[/img]</span><span class="caret"></span></div>
+          </div>
+        </div>
+        <div class="prog"><i></i></div>
+        <div class="status"><span>⬆</span><span>Envoi 2/3…</span><span class="act">Annuler</span> <span class="n">14</span></div>
+        <div class="status err"><span>⚠</span><span>L'hébergeur imgur a refusé l'image (HTTP 413).</span><span class="act">Masquer</span></div>
+        <div class="status"><span>💾</span><span>Un brouillon non envoyé a été retrouvé.</span><span class="act">Restaurer</span></div>
+        <div class="bar">
+          <span class="ibtn">Aa</span><span class="ibtn">☺</span><span class="ibtn on">🖼</span>
+          <span class="ibtn">⋯</span><span class="spacer"></span><span class="send off">Envoyer</span>
+        </div>
+        <div class="ime">
+          <div class="sugg"><span>captures</span><span>capture</span><span>capturé</span></div>
+          <div class="krow"><div class="k">a</div><div class="k">z</div><div class="k">e</div><div class="k">r</div><div class="k">t</div><div class="k">y</div><div class="k">u</div><div class="k">i</div><div class="k">o</div><div class="k">p</div></div>
+          <div class="krow"><div class="k">q</div><div class="k">s</div><div class="k">d</div><div class="k">f</div><div class="k">g</div><div class="k">h</div><div class="k">j</div><div class="k">k</div><div class="k">l</div><div class="k">m</div></div>
+          <div class="krow"><div class="k">?123</div><div class="k wide">espace</div><div class="k">↵</div></div>
+        </div>
+      </div>
+      <ul class="notes">
+        <li><span class="n">14</span><span>Les trois lignes sont montrées ensemble pour la démonstration&nbsp;; en pratique elles s'empilent au maximum à deux, la plus récente en bas, contre la barre.</span></li>
+        <li><span class="n">15</span><span>Les <b>16 messages d'erreur typés</b> existants gardent leur texte mot pour mot — c'est le conteneur qui change, pas la copie. <span class="ref">#872 F3/F4</span></span></li>
+      </ul>
+    </div>
+
+    <!-- 9 : nouveau sujet -->
+    <div class="deck">
+      <div class="deck-title"><span class="tag new">Refonte</span> Nouveau sujet</div>
+      <p class="deck-note">Titre et sous-catégorie sont des <b>champs d'en-tête collants</b>&nbsp;: ils
+      restent atteignables sans jamais chasser le corps (critère C7).</p>
+      <div class="phone">
+        <div class="statusbar"><span>10:50</span><span>◍ ▲ ▮</span></div>
+        <div class="appbar"><div class="icon">←</div><div class="ttl">Nouveau sujet<small>Hardware &amp; Périphériques</small></div><div class="icon">👁</div><div class="icon">⋮</div></div>
+        <div class="body">
+          <div style="padding:10px 14px 0; flex:none">
+            <div class="field" style="margin:0 0 8px; padding:8px 12px; flex:none">
+              <span class="lab">Titre du sujet</span>
+              <div class="txt">[Topic unik] Redface 2</div>
+            </div>
+            <div class="field" style="margin:0; padding:8px 12px; flex:none; display:flex; flex-direction:row; align-items:center">
+              <span class="lab">Sous-catégorie</span>
+              <div class="txt" style="flex:1">Smartphones et tablettes</div>
+              <span style="color:var(--d-onv)">▾</span>
+            </div>
+          </div>
+          <div class="field" style="flex:1">
+            <span class="lab">Message</span>
+            <div class="txt ghost">Saisissez votre message…<span class="caret"></span> <span class="n">16</span></div>
+          </div>
+        </div>
+        <div class="status"><span>ℹ</span><span>Sondage préservé, non éditable dans cette version.</span></div>
+        <div class="bar">
+          <span class="ibtn">Aa</span><span class="ibtn">☺</span><span class="ibtn">🖼</span>
+          <span class="ibtn">⋯</span><span class="spacer"></span><span class="send">Publier</span>
+        </div>
+      </div>
+      <ul class="notes">
+        <li><span class="n">16</span><span>Quand le clavier s'ouvre sur le corps, les deux champs d'en-tête se replient en une ligne résumée&nbsp;: <span class="mono">[Topic unik] Redface 2 · Smartphones ▾</span>. Un tap les redéploie.</span></li>
+        <li><span class="n">17</span><span>Le sélecteur disparaît pour les catégories sans sous-catégorie, exactement comme aujourd'hui. <span class="ref">#213</span></span></li>
+      </ul>
+    </div>
+
+    <!-- 10 : MP -->
+    <div class="deck">
+      <div class="deck-title"><span class="tag new">Refonte</span> Nouveau message privé</div>
+      <p class="deck-note">Destinataires en puces plutôt qu'en CSV brut, avec le même contrat&nbsp;:
+      plusieurs pseudos = conversation de groupe.</p>
+      <div class="phone">
+        <div class="statusbar"><span>10:52</span><span>◍ ▲ ▮</span></div>
+        <div class="appbar"><div class="icon">←</div><div class="ttl">Nouveau MP<small>3 destinataires</small></div><div class="icon">👁</div><div class="icon">⋮</div></div>
+        <div class="body">
+          <div style="padding:10px 14px 0; flex:none">
+            <div class="field" style="margin:0 0 8px; padding:8px 10px; flex:none">
+              <span class="lab">Destinataires</span>
+              <div style="display:flex; gap:5px; flex-wrap:wrap; align-items:center">
+                <span class="pill act">styx42 ✕</span><span class="pill act">thibw ✕</span>
+                <span class="pill act">XaTriX ✕</span><span style="color:var(--d-onv); font-size:12.5px">+ ajouter</span>
+              </div>
+            </div>
+            <div class="field" style="margin:0; padding:8px 12px; flex:none">
+              <span class="lab">Sujet</span>
+              <div class="txt" style="display:flex">
+                <span style="flex:1">Retours bêta 0.60.0</span>
+                <span style="color:var(--d-onv); font-size:11px">19/80</span>
+              </div>
+            </div>
+          </div>
+          <div class="field" style="flex:1">
+            <span class="lab">Message</span>
+            <div class="txt ghost">Saisissez votre message…<span class="caret"></span></div>
+          </div>
+        </div>
+        <div class="bar">
+          <span class="ibtn">Aa</span><span class="ibtn">☺</span><span class="ibtn">🖼</span>
+          <span class="ibtn">⋯</span><span class="spacer"></span><span class="send">Envoyer</span>
+        </div>
+      </div>
+      <ul class="notes">
+        <li><span class="n">18</span><span>Les puces se saisissent au clavier comme la CSV actuelle&nbsp;; virgule ou espace valide une puce. Le POST reste identique. <span class="ref">#606</span></span></li>
+        <li><span class="n">19</span><span>En réponse de conversation, la même ligne devient « Destinataires&nbsp;: 29 · Gérer » pour l'owner du DT. <span class="ref">#618</span></span></li>
+      </ul>
+    </div>
+
+    <!-- 11 : réponse rapide -->
+    <div class="deck">
+      <div class="deck-title"><span class="tag new">Refonte</span> Réponse rapide</div>
+      <p class="deck-note">La même barre d'action, la même barre de format&nbsp;: la réponse rapide
+      devient l'éditeur en mode feuille, pas une surface parallèle amputée.</p>
+      <div class="phone">
+        <div class="statusbar"><span>10:54</span><span>◍ ▲ ▮</span></div>
+        <div style="flex:1; min-height:0; background:var(--d-bg); padding:12px 14px; overflow:hidden; opacity:.5">
+          <div style="font-size:12px; color:var(--d-onv)">styx42 — 20/09/2026 à 09:12</div>
+          <div style="font-size:13px; margin-top:4px">Objectif produit&nbsp;: les bords haut et bas de la
+          zone de saisie restent toujours visibles et le texte défile dans le champ, comme K-9 Mail.</div>
+        </div>
+        <div class="sheet" style="background:var(--d-scl)">
+          <div class="grab"></div>
+          <div style="display:flex; align-items:center; padding:0 14px 8px">
+            <span style="font-size:14px; font-weight:500; flex:1">Réponse rapide</span>
+            <span class="ibtn" style="width:32px; height:32px; font-size:14px">⤢</span> <span class="n">20</span>
+          </div>
+          <div class="qcard"><div style="flex:1; min-width:0"><span class="who">❝ styx42</span><span class="ex">les bords haut et bas de la zone de saisie…</span></div><div class="ops">✕</div></div>
+          <div class="field" style="height:104px; flex:none; margin:8px 14px 10px">
+            <span class="lab">Votre message…</span>
+            <div class="txt">Exactement ça, c'est le lot R1.<span class="caret"></span></div>
+          </div>
+          <div class="bar" style="background:transparent; border-top:0; padding-bottom:2px">
+            <span class="ibtn">Aa</span><span class="ibtn">☺</span><span class="ibtn">🖼</span>
+            <span class="ibtn">⋯</span><span class="spacer"></span><span class="send">Envoyer</span>
+          </div>
+        </div>
+        <div class="ime">
+          <div class="sugg"><span>lot</span><span>Lot</span><span>lots</span></div>
+          <div class="krow"><div class="k">a</div><div class="k">z</div><div class="k">e</div><div class="k">r</div><div class="k">t</div><div class="k">y</div><div class="k">u</div><div class="k">i</div><div class="k">o</div><div class="k">p</div></div>
+          <div class="krow"><div class="k">q</div><div class="k">s</div><div class="k">d</div><div class="k">f</div><div class="k">g</div><div class="k">h</div><div class="k">j</div><div class="k">k</div><div class="k">l</div><div class="k">m</div></div>
+          <div class="krow"><div class="k">?123</div><div class="k wide">espace</div><div class="k">↵</div></div>
+        </div>
+      </div>
+      <ul class="notes">
+        <li><span class="n">20</span><span>⤢ escalade en plein écran en conservant texte, sélection et citations. Le réglage « plein écran par défaut » devient une préférence, pas un statut expérimental. <span class="ref">#951</span></span></li>
+        <li><span class="n">21</span><span>La feuille gagne les smileys et le format, qu'elle n'a pas aujourd'hui&nbsp;: une seule implémentation pour les cinq surfaces.</span></li>
+      </ul>
+    </div>
+
+    <!-- 12 : sélection -->
+    <div class="deck">
+      <div class="deck-title"><span class="tag new">Refonte</span> Menu de sélection</div>
+      <p class="deck-note">Le geste qui a occupé tout #447. Avec BTF2, le menu contextuel devient un
+      point d'entrée produit.</p>
+      <div class="phone short">
+        <div class="statusbar"><span>10:56</span><span>◍ ▲ ▮</span></div>
+        <div class="appbar"><div class="icon">←</div><div class="ttl">Répondre<small>[HFR] Redface 2 — client Android</small></div><div class="icon">👁</div><div class="icon">⋮</div></div>
+        <div class="body" style="flex:none; height:190px; position:relative">
+          <div class="field" style="flex:1">
+            <span class="lab">Message</span>
+            <div class="txt">
+              Le spike device a tranché&nbsp;:<br>
+              <span class="sel">BTF2 gère nativement le drag de poignée</span><br>
+              et l'autoscroll, y compris en paysage.
+            </div>
+          </div>
+          <div style="position:absolute; left:20px; top:64px; background:var(--d-sch); border-radius:8px; display:flex; font-size:12.5px; box-shadow:0 2px 10px -4px rgba(0,0,0,.5); overflow:hidden">
+            <span style="padding:8px 11px">Couper</span>
+            <span style="padding:8px 11px">Copier</span>
+            <span style="padding:8px 11px; color:var(--d-prim)">Citer</span>
+            <span style="padding:8px 11px">🌐</span>
+            <span style="padding:8px 9px; color:var(--d-onv)">⋮</span>
+          </div>
+        </div>
+        <div class="bar">
+          <span class="ibtn">Aa</span><span class="ibtn">☺</span><span class="ibtn">🖼</span>
+          <span class="ibtn">⋯</span><span class="spacer"></span><span class="send">Envoyer</span>
+        </div>
+        <div class="ime">
+          <div class="sugg"><span>paysage</span><span>paysages</span><span>pays</span></div>
+          <div class="krow"><div class="k">a</div><div class="k">z</div><div class="k">e</div><div class="k">r</div><div class="k">t</div><div class="k">y</div><div class="k">u</div><div class="k">i</div><div class="k">o</div><div class="k">p</div></div>
+          <div class="krow"><div class="k">?123</div><div class="k wide">espace</div><div class="k">↵</div></div>
+        </div>
+      </div>
+      <ul class="notes">
+        <li><span class="n">22</span><span><b>Citer</b> dans le menu de sélection = citer uniquement la portion sélectionnée, depuis la vue Topic. <span class="ref">#381</span></span></li>
+        <li><span class="n">23</span><span><b>🌐 Rechercher sur internet</b>, demandé par XaTriX le 20/09. <span class="ref">#1431</span></span></li>
+        <li><span class="n">24</span><span>Le menu est fourni par BTF2, donc il survit au <code>ContextWrapper</code> qui neutralise le TextClassifier — à vérifier sur device avant de le promettre.</span></li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="sec-head"><span class="sec-num">05</span><h2>Où va chaque fonction</h2></div>
+  <p class="sec-sub">Le contrôle de non-perte&nbsp;: une ligne par fonction existante, sa place dans la
+  refonte, et l'écran qui la montre.</p>
+
+  <div class="trace-wrap">
+  <table>
+    <thead><tr><th>Fonction en 0.60.0</th><th>Dans la refonte</th><th>Écran</th><th class="st">État</th></tr></thead>
+    <tbody>
+      <tr><td>Champ BBCode borné 160 dp</td><td>Champ élastique, plancher 160 dp conservé</td><td>1, 2</td><td class="st"><span class="dot keep"></span>conservé</td></tr>
+      <tr><td>Label « Contenu BBCode »</td><td>Label « Message », court à fontScale 1.3</td><td>1</td><td class="st"><span class="dot fix"></span>corrigé <span class="ref">#872</span></td></tr>
+      <tr><td>Titre d'écran 21 dp</td><td>Ligne 1 de l'app bar, + le sujet en ligne 2</td><td>1</td><td class="st"><span class="dot move"></span>déplacé</td></tr>
+      <tr><td>11 chips BBCode + palette</td><td>Tiroir <b>Aa</b>, deux rangées fixes</td><td>3</td><td class="st"><span class="dot move"></span>déplacé</td></tr>
+      <tr><td>Bouton « Uploader » épinglé</td><td>Icône 🖼 permanente de la barre d'action</td><td>1, 8</td><td class="st"><span class="dot move"></span>déplacé</td></tr>
+      <tr><td>Dialogue « Insérer une image »</td><td>Second choix du menu 🖼 (upload / URL)</td><td>8</td><td class="st"><span class="dot keep"></span>conservé</td></tr>
+      <tr><td>Compteur « Envoi n/N… »</td><td>Ligne de statut + barre de progression</td><td>8</td><td class="st"><span class="dot move"></span>déplacé</td></tr>
+      <tr><td>7 erreurs d'upload typées</td><td>Ligne de statut rouge, texte inchangé</td><td>8</td><td class="st"><span class="dot keep"></span>conservé</td></tr>
+      <tr><td>9 erreurs d'envoi typées</td><td>Ligne de statut rouge, texte inchangé</td><td>8</td><td class="st"><span class="dot keep"></span>conservé</td></tr>
+      <tr><td>Bandeau brouillon Restaurer/Ignorer</td><td>Ligne de statut, mêmes deux actions</td><td>8</td><td class="st"><span class="dot move"></span>déplacé</td></tr>
+      <tr><td>Cartes de citation ↑ ↓ ✕</td><td>Panneau plein écran + pastille dans le rail</td><td>1, 4</td><td class="st"><span class="dot move"></span>déplacé</td></tr>
+      <tr><td>« Tout vider » (≥ 2 cartes)</td><td>Action d'app bar du panneau citations</td><td>4</td><td class="st"><span class="dot keep"></span>conservé</td></tr>
+      <tr><td>Aperçu Afficher / Masquer</td><td>Icône 👁 d'app bar → aperçu plein écran</td><td>5</td><td class="st"><span class="dot move"></span>déplacé</td></tr>
+      <tr><td>Feuille Smileys Standard / Wiki</td><td>Identique, + Favoris et Récents</td><td>6</td><td class="st"><span class="dot keep"></span>conservé</td></tr>
+      <tr><td>Décoration de cellule (#989)</td><td>Reste un réglage, inchangé</td><td>6</td><td class="st"><span class="dot keep"></span>conservé</td></tr>
+      <tr><td>3 bascules d'options HFR</td><td>Feuille Options, identique</td><td>7</td><td class="st"><span class="dot keep"></span>conservé</td></tr>
+      <tr><td>Ton du message, 16 icônes</td><td>Grille dépliée dans la feuille Options</td><td>7</td><td class="st"><span class="dot fix"></span>déplié</td></tr>
+      <tr><td>Envoi armé → « Confirmer »</td><td>Identique, secondaires masqués</td><td>1</td><td class="st"><span class="dot keep"></span>conservé</td></tr>
+      <tr><td>Titre du sujet + sous-catégorie</td><td>En-tête collant, replié en une ligne pendant la frappe</td><td>9</td><td class="st"><span class="dot move"></span>déplacé</td></tr>
+      <tr><td>Note sondage non éditable</td><td>Ligne de statut informative</td><td>9</td><td class="st"><span class="dot move"></span>déplacé</td></tr>
+      <tr><td>Destinataires CSV</td><td>Puces, même POST</td><td>10</td><td class="st"><span class="dot fix"></span>reformulé</td></tr>
+      <tr><td>Compteur de sujet MP</td><td>Suffixe du champ Sujet</td><td>10</td><td class="st"><span class="dot keep"></span>conservé</td></tr>
+      <tr><td>« Destinataires : N · Gérer »</td><td>Identique en réponse de conversation</td><td>10</td><td class="st"><span class="dot keep"></span>conservé</td></tr>
+      <tr><td>Feuille de réponse rapide</td><td>Même éditeur en mode feuille, + format et smileys</td><td>11</td><td class="st"><span class="dot fix"></span>unifié <span class="ref">#951</span></td></tr>
+      <tr><td>Bouton plein écran de la feuille</td><td>⤢, conserve texte, sélection et citations</td><td>11</td><td class="st"><span class="dot keep"></span>conservé</td></tr>
+      <tr><td>« Insertion de la citation… »</td><td>Ligne de statut de la feuille</td><td>11</td><td class="st"><span class="dot move"></span>déplacé</td></tr>
+      <tr><td>Confirmation « Publier la réponse ? »</td><td>Envoi armé, comme les autres surfaces</td><td>11</td><td class="st"><span class="dot fix"></span>unifié</td></tr>
+      <tr><td>Poignées de sélection + autoscroll</td><td>BTF2, inchangé</td><td>3, 12</td><td class="st"><span class="dot keep"></span>conservé</td></tr>
+      <tr><td>Autofocus, capitalisation phrase</td><td>Inchangé</td><td>toutes</td><td class="st"><span class="dot keep"></span>conservé</td></tr>
+      <tr><td>Autosave et purge des brouillons</td><td>Inchangé, pastille « Brouillon enregistré »</td><td>1</td><td class="st"><span class="dot keep"></span>conservé</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="legend">
+    <span><span class="dot keep"></span>conservé tel quel</span>
+    <span><span class="dot move"></span>même fonction, autre endroit</span>
+    <span><span class="dot fix"></span>corrige une issue ouverte</span>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="sec-head"><span class="sec-num">06</span><h2>Ce qu'il faut trancher</h2></div>
+  <p class="sec-sub">Quatre choix que les maquettes posent mais ne peuvent pas décider seules.</p>
+
+  <div class="asks">
+    <div class="ask">
+      <h4>Icônes ou libellés dans la barre&nbsp;?</h4>
+      <p>Les maquettes montrent <span class="mono">Aa ☺ 🖼 ⋯</span>. La barre actuelle dit « Options »
+      et « Smileys » en toutes lettres. Les icônes libèrent la place pour « Envoyer » mais imposent
+      un apprentissage. Compromis possible&nbsp;: icône + libellé sous les 3 premières semaines.</p>
+    </div>
+    <div class="ask">
+      <h4>Aperçu plein écran ou panneau&nbsp;?</h4>
+      <p>Plein écran rend les pixels au champ, mais on perd la comparaison côte à côte que le toggle
+      actuel permettait sur un écran haut. En paysage et sur tablette, un split 50/50 serait
+      meilleur — donc deux mises en page à maintenir.</p>
+    </div>
+    <div class="ask">
+      <h4>Le rail de contexte&nbsp;: utile ou bruit&nbsp;?</h4>
+      <p>Il rend visible ce qui est armé (citations, brouillon, upload) sans coûter de hauteur au
+      champ. Mais c'est un concept de plus. Alternative&nbsp;: des pastilles sur les icônes de la barre
+      d'action, zéro hauteur — moins lisible.</p>
+    </div>
+    <div class="ask">
+      <h4>Découpage en lots</h4>
+      <p>R1 = app bar + barre d'action + ligne de statut (les 134&nbsp;dp rendus au champ, écrans 1-3,
+      8). R2 = panneaux citations et aperçu (4, 5). R3 = smileys enrichis et menu de sélection
+      (6, 12). R4 = unification de la réponse rapide (11).</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  Relevé sur <span class="mono">ForumHFR/redface2</span> à <span class="mono">860285ce</span> (dev,
+  0.60.0 non releasé). Maquettes non contractuelles&nbsp;: aucune géométrie n'a été mesurée sur
+  device — les hauteurs annoncées sont des cibles, à vérifier sur S10e et sur Android 10 avant tout
+  lot, comme l'exige #1417.
+</footer>
+
+</div>
+</body>
+</html>
