@@ -1,0 +1,781 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{color-scheme:light dark}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Anatomie de l&#x27;éditeur — Redface 2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Roboto:wght@400;500&display=swap">
+<style>
+:root{
+  --paper:#FAF5F4; --paper-2:#FFFFFF; --paper-3:#F3EAE9;
+  --ink:#241A1B; --ink-2:#5C4A4A; --ink-3:#8B7573;
+  --line:#E5D6D4; --line-2:#F1E6E5;
+  --accent:#8E1D24; --accent-soft:#FBE0DF;
+  --cool:#2E5F7A; --cool-soft:#DEEAF1;
+  --warn:#8A5A00; --warn-soft:#F8EAD3;
+  --ok:#2C6149; --ok-soft:#DDEDE5;
+
+  --d-bg:#FFF8F7; --d-on:#231919; --d-onv:#534342;
+  --d-out:#857371; --d-outv:#D7C1BF;
+  --d-prim:#8E1D24; --d-onprim:#FFFFFF; --d-primc:#FFDAD9; --d-onprimc:#3B0709;
+  --d-scl:#FFF1F0; --d-sc:#FCEBEA; --d-sch:#F6E5E4; --d-schh:#F1DFDE;
+  --d-err:#93000A; --d-errc:#FFDAD6; --d-ime:#E6D8D7; --d-imekey:#FFFFFF; --d-imeink:#3A2E2E;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#151010; --paper-2:#1D1616; --paper-3:#241C1C;
+    --ink:#F0E2E0; --ink-2:#C9B4B2; --ink-3:#9B8583;
+    --line:#3A2D2D; --line-2:#2A2020;
+    --accent:#FFB3B1; --accent-soft:#3D1F21;
+    --cool:#8FC2DC; --cool-soft:#152B36;
+    --warn:#E7B96A; --warn-soft:#3A2C12;
+    --ok:#8FCCAF; --ok-soft:#16301F;
+
+    --d-bg:#1A1111; --d-on:#F0DEDC; --d-onv:#D7C1BF;
+    --d-out:#9F8C8A; --d-outv:#534342;
+    --d-prim:#FFB3B1; --d-onprim:#571D22; --d-primc:#733338; --d-onprimc:#FFDAD9;
+    --d-scl:#221919; --d-sc:#271D1D; --d-sch:#322727; --d-schh:#3D3131;
+    --d-err:#FFB4AB; --d-errc:#93000A; --d-ime:#2B2020; --d-imekey:#3D3131; --d-imeink:#F0DEDC;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#151010; --paper-2:#1D1616; --paper-3:#241C1C;
+  --ink:#F0E2E0; --ink-2:#C9B4B2; --ink-3:#9B8583;
+  --line:#3A2D2D; --line-2:#2A2020;
+  --accent:#FFB3B1; --accent-soft:#3D1F21;
+  --cool:#8FC2DC; --cool-soft:#152B36;
+  --warn:#E7B96A; --warn-soft:#3A2C12;
+  --ok:#8FCCAF; --ok-soft:#16301F;
+
+  --d-bg:#1A1111; --d-on:#F0DEDC; --d-onv:#D7C1BF;
+  --d-out:#9F8C8A; --d-outv:#534342;
+  --d-prim:#FFB3B1; --d-onprim:#571D22; --d-primc:#733338; --d-onprimc:#FFDAD9;
+  --d-scl:#221919; --d-sc:#271D1D; --d-sch:#322727; --d-schh:#3D3131;
+  --d-err:#FFB4AB; --d-errc:#93000A; --d-ime:#2B2020; --d-imekey:#3D3131; --d-imeink:#F0DEDC;
+}
+
+*{box-sizing:border-box}
+body{margin:0; background:var(--paper); color:var(--ink);
+  font-family:"Public Sans","Helvetica Neue",Arial,sans-serif; font-size:15px; line-height:1.55;
+  -webkit-font-smoothing:antialiased}
+.wrap{max-width:1100px; margin:0 auto; padding-inline:20px; padding-block:0 72px}
+h1,h2,h3,h4{font-family:Archivo,"Helvetica Neue",Arial,sans-serif; text-wrap:balance; margin:0}
+code,.mono{font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:.86em}
+
+header.top{padding-block:52px 34px; border-bottom:1px solid var(--line)}
+.eyebrow{font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--accent); margin-bottom:16px}
+h1{font-size:clamp(36px,6.5vw,58px); font-weight:700; letter-spacing:-.025em; line-height:1.03}
+.lede{font-size:17.5px; color:var(--ink-2); max-width:64ch; margin-top:16px}
+.lede a{color:var(--accent)}
+
+section{padding-block:44px; border-bottom:1px solid var(--line-2)}
+section:last-of-type{border-bottom:0}
+.sec-head{display:flex; align-items:baseline; gap:13px; flex-wrap:wrap}
+.sec-num{font-family:"IBM Plex Mono",monospace; font-size:12px; color:var(--accent);
+  border:1px solid var(--accent); border-radius:4px; padding:1px 6px; flex:none}
+h2{font-size:clamp(22px,3.2vw,30px); font-weight:600; letter-spacing:-.015em}
+.sec-sub{color:var(--ink-2); max-width:70ch; margin:7px 0 28px}
+
+/* ── planche anatomique ──────────────────────────────────────────────────── */
+.plate{display:flex; gap:30px; align-items:flex-start; flex-wrap:wrap}
+.phone{
+  width:340px; max-width:100%; height:640px; flex:none; border-radius:20px; overflow:hidden;
+  border:1px solid var(--line); background:var(--d-bg); color:var(--d-on);
+  font-family:Roboto,"Helvetica Neue",Arial,sans-serif; font-size:13.5px; line-height:1.35;
+  display:flex; flex-direction:column;
+  box-shadow:0 1px 2px rgba(0,0,0,.06), 0 10px 26px -18px rgba(0,0,0,.4);
+}
+.zone{position:relative; outline:1px dashed var(--accent); outline-offset:-1px}
+.ztag{
+  position:absolute; top:2px; right:3px; z-index:2;
+  font-family:"IBM Plex Mono",monospace; font-size:9px; font-weight:500;
+  background:var(--accent); color:#fff; border-radius:3px; padding:1px 4px; letter-spacing:.03em;
+}
+.statusbar{height:22px; flex:none; display:flex; align-items:center; justify-content:space-between;
+  padding:0 13px; font-size:10px; color:var(--d-onv)}
+.appbar{height:46px; flex:none; display:flex; align-items:center; gap:8px; padding:0 6px 0 3px;
+  border-bottom:1px solid var(--d-outv)}
+.appbar .icon{width:34px; height:34px; border-radius:50%; display:grid; place-items:center;
+  color:var(--d-onv); font-size:16px; flex:none}
+.appbar .ttl{flex:1; font-size:15px; font-weight:500; min-width:0; overflow:hidden;
+  text-overflow:ellipsis; white-space:nowrap}
+.appbar .ttl small{display:block; font-size:10.5px; font-weight:400; color:var(--d-onv)}
+.rail{flex:none; display:flex; gap:5px; padding:5px 13px; overflow:hidden}
+.pill{flex:none; display:flex; align-items:center; gap:4px; font-size:11px; background:var(--d-sch);
+  color:var(--d-onv); border-radius:999px; padding:3px 9px; white-space:nowrap}
+.pill.act{background:var(--d-primc); color:var(--d-onprimc)}
+.bodyz{flex:1; min-height:0; display:flex; flex-direction:column; padding:8px 0}
+.field{flex:1; min-height:0; border:1px solid var(--d-out); border-radius:6px; margin:0 13px;
+  padding:11px; position:relative; display:flex; flex-direction:column; overflow:hidden}
+.field .lab{position:absolute; top:-8px; left:9px; padding:0 5px; background:var(--d-bg);
+  font-size:10.5px; color:var(--d-prim)}
+.caret{display:inline-block; width:2px; height:14px; background:var(--d-prim); vertical-align:-3px;
+  animation:bl 1.1s steps(1) infinite}
+@keyframes bl{50%{opacity:0}}
+@media (prefers-reduced-motion:reduce){.caret{animation:none}}
+.bb{color:var(--d-prim); font-family:"IBM Plex Mono",monospace; font-size:11.5px}
+.drawer{flex:none; background:var(--d-scl); border-top:1px solid var(--d-outv); padding:6px 11px;
+  display:flex; gap:5px; overflow:hidden}
+.chip{flex:none; border:1px solid var(--d-out); border-radius:8px; padding:3px 9px; font-size:11.5px;
+  white-space:nowrap}
+.status{flex:none; display:flex; align-items:center; gap:7px; height:30px; padding:0 13px;
+  font-size:11.5px; background:var(--d-sch); color:var(--d-onv); border-top:1px solid var(--d-outv)}
+.status .act{margin-left:auto; color:var(--d-prim); font-weight:500}
+.bar{flex:none; background:var(--d-sc); border-top:1px solid var(--d-outv); padding:7px 11px;
+  display:flex; align-items:center; gap:7px}
+.ibtn{width:37px; height:37px; flex:none; border-radius:10px; display:grid; place-items:center;
+  font-size:16px; color:var(--d-onv)}
+.send{flex:none; background:var(--d-prim); color:var(--d-onprim); border-radius:19px; padding:8px 16px;
+  font-size:13px; font-weight:500}
+.spacer{flex:1}
+.ime{flex:none; background:var(--d-ime); padding:5px 4px 7px}
+.krow{display:flex; gap:3px; justify-content:center; margin-bottom:3px}
+.k{flex:1; max-width:29px; height:26px; border-radius:4px; background:var(--d-imekey);
+  color:var(--d-imeink); display:grid; place-items:center; font-size:11px}
+.k.wide{max-width:none; flex:2.4}
+
+.plate-key{flex:1 1 300px; min-width:0}
+.plate-key ol{margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:9px;
+  counter-reset:z}
+.plate-key li{display:flex; gap:11px; font-size:14px; color:var(--ink-2); line-height:1.45}
+.plate-key .zn{
+  font-family:"IBM Plex Mono",monospace; font-size:10px; font-weight:500; flex:none;
+  background:var(--accent); color:#fff; border-radius:3px; padding:2px 5px; height:fit-content;
+  min-width:26px; text-align:center;
+}
+.plate-key b{color:var(--ink); font-weight:600}
+
+/* ── lexique ─────────────────────────────────────────────────────────────── */
+.fam{margin-top:30px}
+.fam > h3{
+  font-size:12px; font-weight:600; letter-spacing:.09em; text-transform:uppercase;
+  color:var(--accent); margin-bottom:14px; padding-bottom:7px; border-bottom:1px solid var(--line);
+}
+.terms{display:grid; grid-template-columns:repeat(auto-fill,minmax(316px,1fr)); gap:13px}
+.term{
+  background:var(--paper-2); border:1px solid var(--line); border-radius:10px;
+  padding:13px 15px 14px; display:flex; gap:13px; align-items:flex-start;
+}
+.term .txt{min-width:0; flex:1}
+.term h4{font-size:15px; font-weight:600; letter-spacing:-.01em; margin-bottom:2px}
+.term .en{font-family:"IBM Plex Mono",monospace; font-size:10.5px; color:var(--ink-3);
+  display:block; margin-bottom:6px; letter-spacing:.02em}
+.term p{margin:0; font-size:13.4px; color:var(--ink-2); line-height:1.48}
+.term p + p{margin-top:7px}
+.term .dp{
+  display:inline-block; font-family:"IBM Plex Mono",monospace; font-size:10.5px;
+  background:var(--paper-3); border-radius:3px; padding:1px 5px; color:var(--ink-2);
+}
+
+/* micro-schémas */
+.mini{width:42px; height:68px; flex:none; border:1px solid var(--line); border-radius:5px;
+  background:var(--paper-3); display:flex; flex-direction:column; overflow:hidden}
+.mini i{display:block; background:var(--line); flex:none}
+.mini .m-app{height:8px}
+.mini .m-rail{height:5px}
+.mini .m-body{flex:1; background:transparent; border-top:1px solid var(--line-2);
+  border-bottom:1px solid var(--line-2)}
+.mini .m-drawer{height:6px}
+.mini .m-status{height:6px}
+.mini .m-bar{height:10px}
+.mini .m-sheet{height:26px}
+.mini .m-half{flex:1; background:transparent}
+.mini .hl{background:var(--accent)}
+.mini .hl2{background:var(--cool)}
+.mini.row{flex-direction:row}
+.mini.row .m-col{flex:1; background:transparent}
+
+/* confusions */
+.pairs{display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:13px}
+.pair{border:1px solid var(--line); border-left:3px solid var(--cool); border-radius:0 10px 10px 0;
+  background:var(--paper-2); padding:13px 15px}
+.pair h4{font-size:14.5px; font-weight:600; margin-bottom:7px}
+.pair p{margin:0; font-size:13.4px; color:var(--ink-2)}
+.pair p + p{margin-top:6px}
+.pair b{color:var(--ink)}
+
+footer{padding-block:32px 0; color:var(--ink-3); font-size:12.5px}
+footer a{color:var(--accent)}
+
+@media (max-width:420px){
+  .phone{height:600px; border-radius:15px}
+  .term{gap:11px}
+}
+</style>
+
+</head>
+<body>
+
+<style id="vpick-style">
+#vpick{position:fixed;top:0;right:0;z-index:9999;display:flex;align-items:center;gap:7px;
+ padding:6px 10px;border-radius:0 0 0 10px;font:500 12px/1 ui-sans-serif,system-ui,sans-serif;
+ background:rgba(128,128,128,.14);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+ border-left:1px solid rgba(128,128,128,.28);border-bottom:1px solid rgba(128,128,128,.28);color:inherit}
+#vpick label{opacity:.65;letter-spacing:.06em;text-transform:uppercase;font-size:10px}
+#vpick select{font:inherit;color:inherit;background:transparent;border:1px solid rgba(128,128,128,.45);
+ border-radius:5px;padding:3px 6px;cursor:pointer}
+#vpick select option{color:#111;background:#fff}
+@media print{#vpick{display:none}}
+</style>
+<div id="vpick"><label for="vpick-sel">Version</label><select id="vpick-sel" onchange="location.href=this.value"><option value="./" selected>v1 — courante</option></select></div>
+
+<div class="wrap">
+
+<header class="top">
+  <div class="eyebrow">Redface 2 · #1417 · vocabulaire de travail</div>
+  <h1>Anatomie de l'éditeur</h1>
+  <p class="lede">Les mots qu'on emploie pour parler de la refonte, chacun rattaché à une zone
+  précise de l'écran. Objectif&nbsp;: qu'« barre d'action », « rail » ou « feuille » désignent la
+  même chose des deux côtés de la conversation. Les maquettes qui utilisent ce vocabulaire sont
+  dans <a href="../editeur-1417/">Vue Éditeur #1417</a>.</p>
+</header>
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="sec-head"><span class="sec-num">01</span><h2>La planche</h2></div>
+  <p class="sec-sub">Un éditeur de réponse, clavier ouvert, avec toutes les zones nommées en même
+  temps. En vrai elles ne coexistent jamais toutes&nbsp;: le tiroir est replié la plupart du temps,
+  et la ligne de statut n'apparaît que si elle a quelque chose à dire.</p>
+
+  <div class="plate">
+    <div class="phone">
+      <div class="statusbar"><span>10:41</span><span>◍ ▲ ▮</span></div>
+
+      <div class="appbar zone"><span class="ztag">A</span>
+        <div class="icon">←</div>
+        <div class="ttl">Répondre<small>[HFR] Redface 2 — client Android</small></div>
+        <div class="icon">👁</div><div class="icon">⋮</div>
+      </div>
+
+      <div class="rail zone"><span class="ztag">B</span>
+        <span class="pill act">❝ 3 citations</span>
+        <span class="pill">Brouillon</span>
+      </div>
+
+      <div class="bodyz">
+        <div class="field zone"><span class="ztag">C</span>
+          <span class="lab">Message</span>
+          <div style="flex:1; overflow:hidden">
+            <span class="bb">[quotemsg=…]</span>les bords haut et bas<span class="bb">[/quotemsg]</span><br>
+            Exactement ça, c'est le lot R1.<br>
+            Le spike a tranché sur BTF2.<span class="caret"></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="drawer zone"><span class="ztag">D</span>
+        <span class="chip">Gras</span><span class="chip">Italique</span>
+        <span class="chip">Souligné</span><span class="chip">Cita…</span>
+      </div>
+
+      <div class="status zone"><span class="ztag">E</span>
+        <span>⬆</span><span>Envoi 2/3…</span><span class="act">Annuler</span>
+      </div>
+
+      <div class="bar zone"><span class="ztag">F</span>
+        <span class="ibtn">Aa</span><span class="ibtn">☺</span><span class="ibtn">🖼</span>
+        <span class="ibtn">⋯</span><span class="spacer"></span><span class="send">Envoyer</span>
+      </div>
+
+      <div class="ime zone"><span class="ztag">G</span>
+        <div class="krow"><div class="k">a</div><div class="k">z</div><div class="k">e</div><div class="k">r</div><div class="k">t</div><div class="k">y</div><div class="k">u</div><div class="k">i</div><div class="k">o</div><div class="k">p</div></div>
+        <div class="krow"><div class="k">q</div><div class="k">s</div><div class="k">d</div><div class="k">f</div><div class="k">g</div><div class="k">h</div><div class="k">j</div><div class="k">k</div><div class="k">l</div><div class="k">m</div></div>
+        <div class="krow"><div class="k">?123</div><div class="k wide">espace</div><div class="k">↵</div></div>
+      </div>
+    </div>
+
+    <div class="plate-key">
+      <ol>
+        <li><span class="zn">A</span><span><b>App bar</b> — la barre du haut. Retour, titre de l'écran, contexte en seconde ligne, et les actions qui <i>changent de surface</i> (aperçu, menu). Hauteur fixe, elle ne bouge jamais.</span></li>
+        <li><span class="zn">B</span><span><b>Rail de contexte</b> — la ligne de pastilles. Il dit ce qui partira avec le message sans être écrit dans le champ&nbsp;: citations armées, brouillon, options modifiées. Absent s'il n'a rien à dire.</span></li>
+        <li><span class="zn">C</span><span><b>Champ</b> — la zone de saisie elle-même, avec son label flottant et son cadre. Le texte défile <i>dedans</i>&nbsp;: c'est tout l'objet de la refonte.</span></li>
+        <li><span class="zn">D</span><span><b>Tiroir de format</b> — la rangée de chips BBCode, dépliée par <span class="mono">Aa</span>. Elle naît sous le champ pour ne pas déplacer le texte ni la sélection.</span></li>
+        <li><span class="zn">E</span><span><b>Ligne de statut</b> — une ligne transitoire&nbsp;: progression d'upload, erreur d'envoi, brouillon retrouvé. Elle remplace les bandeaux empilés en tête.</span></li>
+        <li><span class="zn">F</span><span><b>Barre d'action</b> — la barre du bas. Les actions qui <i>agissent sur le message</i>&nbsp;: format, smileys, image, options, envoyer. Épinglée au-dessus du clavier.</span></li>
+        <li><span class="zn">G</span><span><b>IME</b> — le clavier logiciel, fourni par le système. On ne le dessine pas, mais sa hauteur est la contrainte numéro un.</span></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="sec-head"><span class="sec-num">02</span><h2>Le lexique</h2></div>
+  <p class="sec-sub">Chaque terme avec sa zone, sa hauteur cible quand elle est fixe, et le nom
+  anglais quand il sert à retrouver la chose dans le code ou la doc Material.</p>
+
+  <!-- ── structure ── -->
+  <div class="fam">
+    <h3>Structure d'écran</h3>
+    <div class="terms">
+
+      <div class="term">
+        <div class="mini"><i class="m-app hl"></i><i class="m-body"></i><i class="m-bar"></i></div>
+        <div class="txt">
+          <h4>App bar</h4><span class="en">top app bar · barre d'application</span>
+          <p>La barre du haut, <span class="dp">48 dp</span>. Elle porte le retour, le titre de
+          l'écran, une seconde ligne de contexte (le sujet, le nombre de destinataires) et les
+          actions qui <b>font changer de surface</b>&nbsp;: aperçu, menu de débordement.</p>
+          <p>Règle&nbsp;: rien de ce qui s'y trouve ne dépend de ce que tu es en train de taper.</p>
+        </div>
+      </div>
+
+      <div class="term">
+        <div class="mini"><i class="m-app"></i><i class="m-body"></i><i class="m-bar hl"></i></div>
+        <div class="txt">
+          <h4>Barre d'action</h4><span class="en">action bar · bottom bar</span>
+          <p>La barre du bas, <span class="dp">56 dp</span>, épinglée juste au-dessus du clavier.
+          Elle porte les actions qui <b>agissent sur le message en cours</b>&nbsp;: format, smileys,
+          image, options, envoyer.</p>
+          <p>Aujourd'hui elle existe déjà, avec « Options », « Smileys » et « Envoyer ». La refonte
+          y ajoute le format et l'image, en icônes.</p>
+        </div>
+      </div>
+
+      <div class="term">
+        <div class="mini"><i class="m-app"></i><i class="m-rail hl"></i><i class="m-body"></i><i class="m-bar"></i></div>
+        <div class="txt">
+          <h4>Rail de contexte</h4><span class="en">context rail</span>
+          <p>Une ligne de pastilles, <span class="dp">26 dp</span>, qui n'existe que si elle a
+          quelque chose à dire. Elle rend visible ce qui <b>partira avec le message sans être écrit
+          dans le champ</b>&nbsp;: les citations armées surtout, puisque leur BBCode n'est fabriqué
+          qu'à l'envoi.</p>
+          <p>Chaque pastille est un raccourci vers la surface qui la gouverne. Sa place — en haut
+          sous l'app bar, ou fusionnée avec la ligne de statut en bas — n'est pas tranchée.</p>
+        </div>
+      </div>
+
+      <div class="term">
+        <div class="mini"><i class="m-app"></i><i class="m-body"></i><i class="m-status hl"></i><i class="m-bar"></i></div>
+        <div class="txt">
+          <h4>Ligne de statut</h4><span class="en">status line</span>
+          <p>Une ligne <b>transitoire</b>, <span class="dp">32 dp</span>, collée au-dessus de la
+          barre d'action&nbsp;: progression d'upload, erreur d'envoi, brouillon retrouvé, validation
+          BBCode.</p>
+          <p>Elle remplace les bandeaux actuels, qui s'empilent en haut de la colonne et poussent le
+          champ vers le bas jusqu'à passer sous le pli — c'est ce qui cachait les boutons
+          Restaurer/Ignorer sur le S9.</p>
+        </div>
+      </div>
+
+      <div class="term">
+        <div class="mini"><i class="m-app"></i><i class="m-body"></i><i class="m-drawer hl"></i><i class="m-bar"></i></div>
+        <div class="txt">
+          <h4>Tiroir de format</h4><span class="en">format drawer</span>
+          <p>La rangée de chips BBCode, dépliée par l'icône <span class="mono">Aa</span> et repliée
+          à la frappe suivante. <span class="dp">2 × 38 dp</span> quand elle est ouverte.</p>
+          <p>Elle s'ouvre <b>sous</b> le champ, entre lui et la barre d'action&nbsp;: le texte et la
+          sélection ne bougent pas d'un pixel.</p>
+        </div>
+      </div>
+
+      <div class="term">
+        <div class="mini"><i class="m-app"></i><i class="m-body hl" style="background:var(--accent)"></i><i class="m-bar"></i></div>
+        <div class="txt">
+          <h4>Champ</h4><span class="en">text field · zone de saisie</span>
+          <p>La zone de saisie elle-même&nbsp;: le cadre, le label flottant, le texte, le curseur,
+          les poignées. Depuis la 0.59.8 c'est un <span class="mono">BasicTextField</span> à état,
+          l'API Compose moderne.</p>
+          <p>Sa hauteur minimale est de <span class="dp">160 dp</span>. « Le champ est l'écran »
+          veut dire&nbsp;: tout le reste est à hauteur fixe, il prend ce qui reste.</p>
+        </div>
+      </div>
+
+      <div class="term">
+        <div class="mini"><i class="m-app"></i><i class="m-rail"></i><i class="m-rail"></i><i class="m-body"></i><i class="m-bar"></i>
+          <span style="display:none"></span></div>
+        <div class="txt">
+          <h4>En-tête collant</h4><span class="en">sticky header</span>
+          <p>Les champs qui décrivent le message plutôt que son corps&nbsp;: titre du sujet,
+          sous-catégorie, destinataires. Ils restent en haut du contenu, et se replient en une seule
+          ligne résumée quand le clavier monte sur le corps.</p>
+          <p>Ça ne concerne que Nouveau sujet et Nouveau MP.</p>
+        </div>
+      </div>
+
+      <div class="term">
+        <div class="mini"><i class="m-app hl"></i><i class="m-body hl" style="background:var(--accent);opacity:.45"></i><i class="m-bar"></i></div>
+        <div class="txt">
+          <h4>Panneau</h4><span class="en">panel</span>
+          <p>Une surface plein écran qui <b>remplace temporairement le champ</b> en gardant la barre
+          d'action&nbsp;: le panneau citations, par exemple. On y fait une tâche, on revient.</p>
+          <p>À ne pas confondre avec une feuille&nbsp;: un panneau occupe l'écran et a sa propre app
+          bar, une feuille se superpose et laisse voir ce qu'il y a dessous.</p>
+        </div>
+      </div>
+
+      <div class="term">
+        <div class="mini row"><div class="m-col" style="background:var(--accent)"></div><div class="m-col" style="background:var(--cool)"></div></div>
+        <div class="txt">
+          <h4>Partage</h4><span class="en">split</span>
+          <p>Deux surfaces visibles en même temps, séparées par une poignée déplaçable&nbsp;: le
+          source BBCode et son rendu. <b>Dessous</b> en portrait, <b>à droite</b> en paysage et sur
+          tablette.</p>
+          <p>Le point de bascule est la <i>size class</i> de la fenêtre, pas l'orientation du
+          téléphone&nbsp;: un écran scindé large se comporte comme un paysage.</p>
+        </div>
+      </div>
+
+      <div class="term">
+        <div class="mini"><i class="m-app"></i><i class="m-body" style="background:rgba(0,0,0,.18)"></i><i class="m-sheet hl"></i></div>
+        <div class="txt">
+          <h4>Feuille</h4><span class="en">bottom sheet</span>
+          <p>Une surface qui monte du bas et se superpose à l'écran, avec un voile sombre derrière.
+          Les smileys et les options en sont. On la referme en tapant à côté ou en la tirant vers le
+          bas.</p>
+          <p>La <b>réponse rapide</b> est aussi une feuille, mais qui contient un éditeur complet.</p>
+        </div>
+      </div>
+
+      <div class="term">
+        <div class="mini"><i class="m-app"></i><i class="m-body" style="background:rgba(0,0,0,.18); position:relative">
+          </i><i class="m-bar"></i></div>
+        <div class="txt">
+          <h4>Dialogue</h4><span class="en">dialog</span>
+          <p>Une boîte centrée, modale, qui <b>bloque</b> jusqu'à ce qu'on réponde. « Insérer une
+          image » en est un. On en met le moins possible.</p>
+          <p>La confirmation d'envoi n'en est <i>pas</i> un dans les autres éditeurs&nbsp;: c'est un
+          bouton armé, qui ne bloque rien.</p>
+        </div>
+      </div>
+
+      <div class="term">
+        <div class="mini"><i class="m-app"></i><i class="m-body"></i><i class="m-bar"></i><i class="m-sheet" style="height:20px; background:var(--cool)"></i></div>
+        <div class="txt">
+          <h4>IME</h4><span class="en">input method editor · clavier logiciel</span>
+          <p>Le clavier fourni par le système. Sa hauteur varie selon le clavier installé et la
+          langue&nbsp;: on ne peut pas la supposer, on la lit dans les <i>insets</i>.</p>
+          <p>Clavier ouvert sur un 360 × 740, il reste environ <span class="dp">330 dp</span> de
+          fenêtre pour tout le reste.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── composants ── -->
+  <div class="fam">
+    <h3>Composants</h3>
+    <div class="terms">
+
+      <div class="term">
+        <div class="mini" style="justify-content:center; align-items:center; background:var(--paper-2)">
+          <span style="border:1px solid var(--accent); border-radius:6px; font-size:8px; padding:2px 5px; color:var(--accent)">Gras</span>
+        </div>
+        <div class="txt">
+          <h4>Chip</h4><span class="en">assist chip</span>
+          <p>Un petit bouton en pilule, bordé, pour une action ponctuelle. Les onze actions BBCode
+          en sont. Contrairement à un bouton, un chip est fait pour vivre en rangée avec ses
+          semblables.</p>
+        </div>
+      </div>
+
+      <div class="term">
+        <div class="mini" style="justify-content:center; align-items:center; gap:4px; background:var(--paper-2)">
+          <span style="background:var(--accent-soft); color:var(--accent); border-radius:5px; font-size:8px; padding:3px 6px">Opt</span>
+          <span style="background:var(--accent); color:#fff; border-radius:9px; font-size:8px; padding:3px 7px">Env</span>
+        </div>
+        <div class="txt">
+          <h4>Bouton tonal · bouton rempli</h4><span class="en">filled tonal · filled button</span>
+          <p>La paire d'emphase Material&nbsp;: le <b>tonal</b> (fond clair teinté) pour les actions
+          secondaires, le <b>rempli</b> (fond plein) pour l'action principale. Dans la barre
+          d'action&nbsp;: tonal pour Options et Smileys, rempli pour Envoyer.</p>
+        </div>
+      </div>
+
+      <div class="term">
+        <div class="mini" style="justify-content:center; align-items:center; background:var(--paper-2)">
+          <span style="background:var(--accent); color:#fff; border-radius:999px; font-size:8px; padding:2px 7px">❝ 3</span>
+        </div>
+        <div class="txt">
+          <h4>Pastille</h4><span class="en">pill · badge</span>
+          <p>Une étiquette arrondie, compacte, qui <b>affiche un état</b> plutôt qu'elle ne
+          déclenche une action — même si on peut taper dessus pour aller voir. Le rail de contexte
+          en est fait.</p>
+        </div>
+      </div>
+
+      <div class="term">
+        <div class="mini" style="justify-content:center; padding:5px; background:var(--paper-2)">
+          <span style="border-left:2px solid var(--accent); background:var(--paper-3); font-size:7px; padding:3px 4px; line-height:1.3">❝ styx42<br>les bords…</span>
+        </div>
+        <div class="txt">
+          <h4>Carte de citation</h4><span class="en">quote card</span>
+          <p>Une ligne par personne citée&nbsp;: auteur, extrait, et les boutons monter / descendre /
+          retirer. Elles portent l'<b>ordre</b> dans lequel les citations seront collées.</p>
+          <p>Le BBCode <span class="mono">[quotemsg]</span> n'est jamais dans le champ&nbsp;: il est
+          fabriqué au moment de l'envoi, à partir des cartes.</p>
+        </div>
+      </div>
+
+      <div class="term">
+        <div class="mini" style="justify-content:center; padding:4px; background:var(--paper-2)">
+          <span style="background:var(--warn-soft); color:var(--warn); font-size:7px; padding:4px; border-radius:3px; line-height:1.3">Brouillon<br>retrouvé</span>
+        </div>
+        <div class="txt">
+          <h4>Bandeau</h4><span class="en">banner</span>
+          <p>Le format actuel des messages d'état&nbsp;: un bloc pleine largeur inséré <b>dans le
+          flux</b>, qui pousse tout ce qui suit vers le bas. C'est précisément ce que la ligne de
+          statut remplace.</p>
+        </div>
+      </div>
+
+      <div class="term">
+        <div class="mini" style="justify-content:center; align-items:center; background:var(--paper-2)">
+          <span style="background:var(--accent); color:#fff; border-radius:12px; font-size:8px; padding:3px 8px">Confirmer</span>
+        </div>
+        <div class="txt">
+          <h4>Bouton armé</h4><span class="en">armed submit</span>
+          <p>« Envoyer » qui, au premier tap, devient « Confirmer » au lieu d'envoyer. Un garde-fou
+          sans dialogue modal. Les boutons secondaires disparaissent pendant l'armement, pour que
+          le libellé ne passe pas à la ligne.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── mise en page ── -->
+  <div class="fam">
+    <h3>Mise en page et mesures</h3>
+    <div class="terms">
+
+      <div class="term">
+        <div class="mini" style="justify-content:center; align-items:center; background:var(--paper-2); font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--accent)">dp</div>
+        <div class="txt">
+          <h4>dp</h4><span class="en">density-independent pixel</span>
+          <p>L'unité de mesure Android, indépendante de la finesse de l'écran. Un S9 fait
+          <b>360 dp de large</b>, un S25 aussi ou presque&nbsp;: les téléphones ont grandi en pixels,
+          pas en dp. C'est pourquoi une mise en page qui tient sur 360 tient partout.</p>
+        </div>
+      </div>
+
+      <div class="term">
+        <div class="mini"><i class="m-app" style="background:var(--cool)"></i><i class="m-body"></i><i class="m-bar" style="background:var(--cool)"></i></div>
+        <div class="txt">
+          <h4>Inset</h4><span class="en">window insets · encarts système</span>
+          <p>Les bandes de l'écran occupées par le système&nbsp;: barre de statut, barre de
+          navigation, clavier, encoche. L'app doit les lire et s'y ajuster.</p>
+          <p>Le bug Samsung de l'an dernier venait de deux insets qui s'additionnaient&nbsp;: la
+          barre se décalait deux fois. D'où le <span class="mono">union()</span> qui n'en garde
+          qu'un.</p>
+        </div>
+      </div>
+
+      <div class="term">
+        <div class="mini"><i class="m-app"></i><i class="m-body hl" style="background:var(--accent); opacity:.3"></i><i class="m-bar"></i><i style="height:20px; background:var(--cool)"></i></div>
+        <div class="txt">
+          <h4>Fenêtre utile</h4><span class="en">usable window</span>
+          <p>Ce qui reste à l'app une fois les insets déduits. Sur un 360 × 740&nbsp;: environ
+          <span class="dp">590 dp</span> clavier fermé, <span class="dp">330 dp</span> clavier
+          ouvert. Tous les budgets de hauteur se comptent là-dedans.</p>
+        </div>
+      </div>
+
+      <div class="term">
+        <div class="mini"><i class="m-app"></i><i class="m-rail" style="background:var(--accent)"></i><i class="m-body"></i><i class="m-status" style="background:var(--accent)"></i><i class="m-bar"></i></div>
+        <div class="txt">
+          <h4>Zone bornée · budget</h4><span class="en">bounded zone · layout budget</span>
+          <p>La mécanique qui empêche le chrome de manger le champ&nbsp;: on plafonne la hauteur de
+          tout ce qui n'est pas la saisie, en réservant d'abord les <span class="dp">160 dp</span>
+          du champ, et ce qui dépasse défile.</p>
+          <p>Le bug du S9 venait de là&nbsp;: dans l'éditeur de post, le titre et la barre d'outils
+          étaient <b>hors</b> de la zone bornée, contrairement aux trois autres éditeurs.</p>
+        </div>
+      </div>
+
+      <div class="term">
+        <div class="mini" style="justify-content:center; align-items:center; background:var(--paper-2); font-size:9px; color:var(--ink-3)">A<span style="font-size:14px; color:var(--accent)">A</span></div>
+        <div class="txt">
+          <h4>fontScale</h4><span class="en">échelle de police système</span>
+          <p>Le réglage d'accessibilité qui grossit tout le texte, de 0,85 à 2. À
+          <b>1,3</b> le label « Contenu BBCode » ne tient plus sur une ligne et se fait couper —
+          c'est un des défauts fichés.</p>
+        </div>
+      </div>
+
+      <div class="term">
+        <div class="mini" style="justify-content:center; padding:5px; background:var(--paper-2)">
+          <span style="font-size:8px; line-height:1.4">te<span style="background:var(--accent); color:#fff">xte sél</span>ec</span>
+        </div>
+        <div class="txt">
+          <h4>Poignée de sélection</h4><span class="en">selection handle</span>
+          <p>Les deux gouttes qu'on tire pour étendre une sélection. Elles vivent dans une fenêtre
+          flottante séparée — c'est pourquoi <b>aucun test automatisé ne prouve ce geste</b>, et que
+          chaque correctif qui y touche exige une preuve filmée sur téléphone réel.</p>
+        </div>
+      </div>
+
+      <div class="term">
+        <div class="mini" style="justify-content:center; padding:5px; background:var(--paper-2)">
+          <span style="font-size:8px">tex<span style="border-left:1.5px solid var(--accent); padding-left:1px"></span>te</span>
+        </div>
+        <div class="txt">
+          <h4>Caret</h4><span class="en">curseur de saisie</span>
+          <p>Le trait clignotant. « Le caret suit » veut dire que le champ défile tout seul pour le
+          garder visible quand on tape ou quand le clavier monte&nbsp;— ce qui a occupé tout #447.</p>
+        </div>
+      </div>
+
+      <div class="term">
+        <div class="mini row" style="align-items:center; justify-content:center; background:var(--paper-2)">
+          <span style="font-size:8px; color:var(--ink-3)">Compact</span>
+        </div>
+        <div class="txt">
+          <h4>Size class</h4><span class="en">window size class</span>
+          <p>La catégorie de largeur de la <b>fenêtre</b> — Compact, Medium, Expanded — et non du
+          téléphone. C'est elle qui décide si l'aperçu se met dessous ou à côté&nbsp;; un écran
+          scindé la fait changer sans qu'on tourne l'appareil.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── projet ── -->
+  <div class="fam">
+    <h3>Vocabulaire du projet</h3>
+    <div class="terms">
+
+      <div class="term">
+        <div class="mini" style="justify-content:center; align-items:center; background:var(--paper-2); font-size:15px; color:var(--accent)">4</div>
+        <div class="txt">
+          <h4>Surface d'écriture</h4><span class="en">writing surface</span>
+          <p>Les quatre écrans où l'on tape un message&nbsp;: <b>répondre / modifier</b> un post,
+          <b>nouveau sujet / modifier le premier message</b>, <b>nouveau MP</b>, <b>réponse MP</b>.
+          Plus la feuille de réponse rapide, qui est une cinquième surface aujourd'hui distincte.</p>
+          <p>« Dans les quatre éditeurs » veut toujours dire ces quatre-là.</p>
+        </div>
+      </div>
+
+      <div class="term">
+        <div class="mini"><i class="m-app"></i><i class="m-body"></i><i class="m-sheet hl" style="height:30px"></i></div>
+        <div class="txt">
+          <h4>Réponse rapide</h4><span class="en">quick reply</span>
+          <p>La feuille qui monte depuis la vue Topic pour répondre sans quitter la lecture. Elle
+          n'a aujourd'hui ni format ni smileys, et son bouton <b>⤢ escalade</b> vers l'éditeur
+          plein écran en emportant le texte et les citations.</p>
+        </div>
+      </div>
+
+      <div class="term">
+        <div class="mini" style="justify-content:center; padding:4px; background:var(--paper-2)">
+          <span style="font-family:'IBM Plex Mono',monospace; font-size:7px; color:var(--accent); line-height:1.4">[b]gras[/b]</span>
+        </div>
+        <div class="txt">
+          <h4>BBCode</h4><span class="en">—</span>
+          <p>Le balisage de HFR. Deux pièges maison&nbsp;: <span class="mono">[fixed]</span> est un
+          bloc et jamais de l'inline, et la couleur se ferme avec son propre code
+          (<span class="mono">[#FF0000]…[/#FF0000]</span>).</p>
+        </div>
+      </div>
+
+      <div class="term">
+        <div class="mini" style="justify-content:center; padding:4px; background:var(--paper-2)">
+          <span style="font-size:7px; color:var(--ink-3); line-height:1.4">C1 C2 C3<br>C4 C5 C6</span>
+        </div>
+        <div class="txt">
+          <h4>Critères C1 … C10</h4><span class="en">acceptance criteria</span>
+          <p>Les dix conditions d'acceptation écrites dans l'issue #1417, à vérifier <b>sur
+          téléphone réel et filmées</b>. Quand on dit « ça casse C6 », on parle du critère « aucun
+          saut ni double animation à l'ouverture du clavier ou au retour d'une feuille ».</p>
+        </div>
+      </div>
+
+      <div class="term">
+        <div class="mini" style="justify-content:center; align-items:center; background:var(--paper-2); font-family:'IBM Plex Mono',monospace; font-size:8px; color:var(--accent)">R1‑R5</div>
+        <div class="txt">
+          <h4>Lots</h4><span class="en">—</span>
+          <p>Le découpage livrable de la refonte. Un lot = une PR, une build dev, un retour terrain.
+          On ne commence pas le suivant tant que le précédent n'a pas eu ses retours.</p>
+        </div>
+      </div>
+
+      <div class="term">
+        <div class="mini" style="justify-content:center; padding:4px; background:var(--paper-2)">
+          <span style="font-size:7px; color:var(--ink-3); line-height:1.4">dev →<br>bêta →<br>prod</span>
+        </div>
+        <div class="txt">
+          <h4>Canaux</h4><span class="en">dev · bêta · prod</span>
+          <p><b>dev</b> = build à chaque lot, GitHub et F-Droid, pour les testeurs du topic DEV.
+          <b>bêta</b> = ce qui a survécu aux retours, Play en test ouvert. La promotion de dev vers
+          bêta demande un go explicite.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="sec-head"><span class="sec-num">03</span><h2>Ce qui n'est pas la même chose</h2></div>
+  <p class="sec-sub">Les paires qu'on confond le plus vite, et le critère qui les sépare.</p>
+
+  <div class="pairs">
+    <div class="pair">
+      <h4>Barre d'action ≠ barre d'outils BBCode</h4>
+      <p>La <b>barre d'action</b> est en bas, à hauteur fixe, et porte les actions du message
+      (envoyer, options, smileys).</p>
+      <p>La <b>barre d'outils BBCode</b> est la rangée de chips de formatage. Aujourd'hui elle est
+      en haut, dans le flux&nbsp;; dans la refonte elle devient le tiroir de format, en bas.</p>
+    </div>
+
+    <div class="pair">
+      <h4>Rail de contexte ≠ ligne de statut</h4>
+      <p>Le <b>rail</b> dit un <b>état durable</b>&nbsp;: trois citations armées, un brouillon
+      enregistré, la signature coupée. Il reste tant que l'état dure.</p>
+      <p>La <b>ligne de statut</b> dit un <b>événement</b>&nbsp;: un upload en cours, une erreur
+      d'envoi. Elle part quand c'est fini. Les fusionner en une seule bande est une option ouverte.</p>
+    </div>
+
+    <div class="pair">
+      <h4>Feuille ≠ panneau ≠ dialogue</h4>
+      <p>La <b>feuille</b> se superpose, laisse voir l'écran derrière, se ferme en tapant à côté.
+      Le <b>panneau</b> prend l'écran et a sa propre app bar. Le <b>dialogue</b> est centré, modal,
+      et bloque.</p>
+      <p>Test simple&nbsp;: « est-ce que je peux encore voir mon message&nbsp;? » Oui pour la
+      feuille, non pour le panneau.</p>
+    </div>
+
+    <div class="pair">
+      <h4>Champ ≠ zone bornée</h4>
+      <p>Le <b>champ</b> est la boîte de saisie. La <b>zone bornée</b> est la mécanique qui lui
+      garantit ses 160 dp en plafonnant tout le reste.</p>
+      <p>« Le titre n'était pas dans la zone bornée » est la formulation exacte du bug S9&nbsp;: le
+      champ allait bien, c'est ce qui l'entourait qui n'était pas compté.</p>
+    </div>
+
+    <div class="pair">
+      <h4>Aperçu ≠ rendu de la vue Topic</h4>
+      <p>Aujourd'hui l'<b>aperçu</b> de l'éditeur utilise un parser réduit, différent de celui qui
+      affiche les posts&nbsp;: d'où les smileys en texte brut.</p>
+      <p>La refonte les fait converger, pour que ce qu'on relit soit littéralement ce qu'on verra
+      publié.</p>
+    </div>
+
+    <div class="pair">
+      <h4>Bouton armé ≠ confirmation</h4>
+      <p>Le <b>bouton armé</b> change de libellé et attend un second tap, sans rien bloquer&nbsp;:
+      on peut encore modifier son texte.</p>
+      <p>La <b>confirmation</b> de la réponse rapide est un vrai dialogue modal. Les unifier sur le
+      bouton armé fait partie de la refonte.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  Vocabulaire de travail pour <a href="https://github.com/ForumHFR/redface2/issues/1417">#1417</a>,
+  établi sur la bêta 0.60.0 / app-v343. Les termes en anglais sont ceux qui servent à retrouver la
+  chose dans le code ou dans la doc Material 3. Maquettes qui l'appliquent&nbsp;:
+  <a href="../editeur-1417/">Vue Éditeur #1417</a>.
+</footer>
+
+</div>
+
+</body>
+</html>
