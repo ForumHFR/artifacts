@@ -140,18 +140,6 @@ h2{font-size:clamp(24px,3.4vw,32px); font-weight:600; letter-spacing:-.015em}
   box-shadow:0 1px 2px rgba(0,0,0,.06), 0 10px 26px -18px rgba(0,0,0,.4);
 }
 .phone.short{height:620px}
-.phone.land{width:640px; height:360px}
-.deck.wide{flex:1 1 640px}
-
-/* séparateur de partage source / aperçu */
-.split{flex:none; height:18px; display:grid; place-items:center; position:relative}
-.split .grip{width:36px; height:4px; border-radius:2px; background:var(--d-outv)}
-.split .n{position:absolute; right:14px; top:1px}
-.split.v{
-  flex:none; width:18px; height:auto; align-self:stretch; display:grid; place-items:center;
-  margin:10px 0;
-}
-.split.v .grip{width:4px; height:36px}
 
 /* chrome device */
 .statusbar{
@@ -396,7 +384,9 @@ footer{padding-block:34px 0; color:var(--ink-3); font-size:12.5px}
 #vpick select option{color:#111;background:#fff}
 @media print{#vpick{display:none}}
 </style>
-<div id="vpick"><label for="vpick-sel">Version</label><select id="vpick-sel" onchange="location.href=this.value"><option value="./" selected>v2 — courante</option><option value="v1/">v1</option></select></div>
+<div id="vpick"><label for="vpick-sel">Version</label><select id="vpick-sel" onchange="location.href=this.value"><option value="../">v2 — courante</option><option value="../v1/" selected>v1</option></select></div>
+
+
 
 <div class="wrap">
 
@@ -700,9 +690,8 @@ footer{padding-block:34px 0; color:var(--ink-3); font-size:12.5px}
       <h3>Rien ne pousse le champ vers le bas</h3>
       <p>Brouillon retrouvé, erreur d'envoi, progression d'upload&nbsp;: une ligne de statut de 32&nbsp;dp
       ancrée juste au-dessus de la barre d'action, dans le champ de vision du pouce.</p>
-      <p>Les citations deviennent un <b>panneau</b> qui remplace le champ au lieu de le comprimer.
-      L'aperçu, lui, reste à côté du source — en dessous en portrait, à droite en paysage — parce que
-      comparer les deux est tout son intérêt.</p>
+      <p>Citations et aperçu deviennent des <b>panneaux</b> qui remplacent le champ au lieu de le
+      comprimer&nbsp;— on relit, puis on revient écrire.</p>
     </div>
   </div>
 </section>
@@ -710,7 +699,7 @@ footer{padding-block:34px 0; color:var(--ink-3); font-size:12.5px}
 <!-- ══════════════════════════════════════════════════════════════════════ -->
 <section>
   <div class="sec-head"><span class="sec-num">04</span><h2>Les écrans</h2></div>
-  <p class="sec-sub">Treize états, rendus avec le schéma de couleurs réel de l'app et les libellés
+  <p class="sec-sub">Douze états, rendus avec le schéma de couleurs réel de l'app et les libellés
   français réels des <code>strings.xml</code>.</p>
 
   <div class="decks">
@@ -873,68 +862,23 @@ footer{padding-block:34px 0; color:var(--ink-3); font-size:12.5px}
       </ul>
     </div>
 
-    <!-- 5 : aperçu portrait -->
+    <!-- 5 : aperçu -->
     <div class="deck">
-      <div class="deck-title"><span class="tag new">Refonte</span> Aperçu, portrait</div>
-      <p class="deck-note">Le source reste à l'écran, l'aperçu s'ouvre dessous. Le séparateur se
-      glisse, sa position est mémorisée.</p>
+      <div class="deck-title"><span class="tag new">Refonte</span> Aperçu</div>
+      <p class="deck-note">Plein écran, rendu comme dans la vue Topic — donc avec les smileys, ce que
+      l'aperçu actuel ne sait pas faire.</p>
       <div class="phone">
         <div class="statusbar"><span>10:45</span><span>◍ ▲ ▮</span></div>
-        <div class="appbar"><div class="icon">←</div><div class="ttl">Répondre<small>[HFR] Redface 2 — client Android</small></div><div class="icon on" style="background:var(--d-primc); color:var(--d-onprimc); border-radius:50%">👁</div><div class="icon">⋮</div></div>
+        <div class="appbar"><div class="icon">←</div><div class="ttl">Aperçu<small>rendu identique à la vue Topic</small></div><div class="icon">✎</div></div>
         <div class="body">
-          <div class="field" style="flex:1; min-height:120px">
-            <span class="lab">Message</span>
-            <div class="txt">
-              <span class="bb">[quotemsg=…]</span>les bords haut et bas de la zone de
-              saisie restent toujours visibles<span class="bb">[/quotemsg]</span><br>
-              Exactement ça. C'est le comportement de <span class="bb">[b]</span>K-9
-              Mail<span class="bb">[/b]</span>, et c'est ce que fait le lot R1.<br><br>
-              Le spike device a tranché&nbsp;: <span class="bb">[u]</span>BTF2<span class="bb">[/u]</span>
-              gère nativement le drag de poignée. :) <span class="caret"></span>
-            </div>
-          </div>
-          <div class="split"><span class="grip"></span> <span class="n">9</span></div>
-          <div class="preview" style="flex:1; min-height:120px; margin:0 14px 10px; overflow:hidden">
-            <div class="q">❝ styx42 — les bords haut et bas de la zone de saisie restent toujours visibles</div>
+          <div class="preview" style="margin:12px 14px; flex:none">
+            <div class="q">❝ styx42 — les bords haut et bas de la zone de saisie restent toujours visibles et le texte défile dans le champ.</div>
             Exactement ça. C'est le comportement de <b>K-9 Mail</b>, et c'est ce que fait le lot R1.
-            <div style="margin-top:8px">Le spike device a tranché&nbsp;: <span style="text-decoration:underline">BTF2</span> gère nativement le drag de poignée. 🙂 <span class="n">10</span></div>
+            <div style="margin-top:8px">Le spike device a tranché&nbsp;: <span style="text-decoration:underline">BTF2</span> gère nativement le drag de poignée. 🙂 <span class="n">9</span></div>
+            <div style="margin-top:8px; padding:7px 9px; background:var(--d-sch); border-radius:6px; font-family:'IBM Plex Mono',monospace; font-size:11.5px">adjustResize &lt; API 30</div>
           </div>
-        </div>
-        <div class="status"><span>✓</span><span>Aucune balise BBCode non fermée.</span></div>
-        <div class="bar">
-          <span class="ibtn">Aa</span><span class="ibtn">☺</span><span class="ibtn">🖼</span>
-          <span class="ibtn">⋯</span><span class="spacer"></span><span class="send">Envoyer</span>
-        </div>
-      </div>
-      <ul class="notes">
-        <li><span class="n">9</span><span>Ouvrir l'aperçu <b>replie le clavier</b>&nbsp;: on relit, on n'écrit pas. La fenêtre passe de 330 à 590&nbsp;dp, donc ~270&nbsp;dp par moitié. Retap dans le champ&nbsp;: le clavier remonte et le partage passe à 70/30 pour le champ.</span></li>
-        <li><span class="n">10</span><span>L'aperçu réutilise le rendu de la vue Topic&nbsp;: smileys, code, spoilers, citations. <span class="ref">#873</span></span></li>
-        <li><span class="n">11</span><span>Le BBCode reste visible en source pendant qu'on lit le rendu — c'est tout l'intérêt, et ce que le toggle actuel permettait déjà.</span></li>
-      </ul>
-    </div>
-
-    <!-- 5b : aperçu paysage -->
-    <div class="deck wide">
-      <div class="deck-title"><span class="tag new">Refonte</span> Aperçu, paysage et tablette</div>
-      <p class="deck-note">La hauteur n'est plus la ressource disputée&nbsp;: le partage bascule en
-      colonnes. Même règle sur tablette et en écran scindé large.</p>
-      <div class="phone land">
-        <div class="statusbar"><span>10:46</span><span>◍ ▲ ▮</span></div>
-        <div class="appbar"><div class="icon">←</div><div class="ttl">Répondre<small>[HFR] Redface 2 — client Android</small></div><div class="icon" style="background:var(--d-primc); color:var(--d-onprimc); border-radius:50%">👁</div><div class="icon">⋮</div></div>
-        <div class="body" style="flex-direction:row">
-          <div class="field" style="flex:1; margin:10px 0 10px 14px">
-            <span class="lab">Message</span>
-            <div class="txt">
-              <span class="bb">[quotemsg=…]</span>les bords haut et bas de la zone de saisie
-              restent toujours visibles<span class="bb">[/quotemsg]</span><br>
-              Exactement ça. C'est le comportement de <span class="bb">[b]</span>K-9
-              Mail<span class="bb">[/b]</span>, et c'est ce que fait le lot R1.<span class="caret"></span>
-            </div>
-          </div>
-          <div class="split v"><span class="grip"></span></div>
-          <div class="preview" style="flex:1; margin:10px 14px 10px 0; overflow:hidden">
-            <div class="q">❝ styx42 — les bords haut et bas de la zone de saisie restent toujours visibles</div>
-            Exactement ça. C'est le comportement de <b>K-9 Mail</b>, et c'est ce que fait le lot R1. <span class="n">12</span>
+          <div style="margin:0 14px; font-size:12px; color:var(--d-onv)">
+            Aucune balise BBCode non fermée.
           </div>
         </div>
         <div class="bar">
@@ -943,9 +887,8 @@ footer{padding-block:34px 0; color:var(--ink-3); font-size:12.5px}
         </div>
       </div>
       <ul class="notes">
-        <li><span class="n">12</span><span>Le point de bascule&nbsp;: <code>windowWidthSizeClass</code> au-delà de Compact, ou hauteur utile sous 400&nbsp;dp. Une seule mise en page, deux directions de <code>flex</code>.</span></li>
-        <li><span class="n">13</span><span>En paysage le clavier reste ouvert sans gêner&nbsp;: c'est la largeur qui est partagée, pas la hauteur.</span></li>
-        <li><span class="n">14</span><span>La barre d'action ne change pas entre écrire et relire&nbsp;: on peut envoyer sans refermer l'aperçu.</span></li>
+        <li><span class="n">9</span><span>L'aperçu réutilise le rendu de la vue Topic&nbsp;: smileys, code, spoilers, citations. <span class="ref">#873</span></span></li>
+        <li><span class="n">10</span><span>La barre d'action ne change pas entre écrire et relire&nbsp;: on peut envoyer depuis l'aperçu.</span></li>
       </ul>
     </div>
 
@@ -962,7 +905,7 @@ footer{padding-block:34px 0; color:var(--ink-3); font-size:12.5px}
           <div class="grab"></div>
           <div class="tabs"><div class="on">Standard</div><div>Wiki</div></div>
           <div class="search"><span>🔍</span><span>Rechercher un smiley perso</span></div>
-          <div class="sgroup">Favoris <span class="n">15</span></div>
+          <div class="sgroup">Favoris <span class="n">11</span></div>
           <div class="smgrid">
             <div class="sm">😀</div><div class="sm">😁</div><div class="sm">😂</div><div class="sm">🤣</div>
             <div class="sm">😅</div><div class="sm">😉</div><div class="sm">😊</div>
@@ -982,8 +925,8 @@ footer{padding-block:34px 0; color:var(--ink-3); font-size:12.5px}
         </div>
       </div>
       <ul class="notes">
-        <li><span class="n">15</span><span>Favoris / Récents / Top, demandés depuis un moment&nbsp;: c'est la seule fonction vraiment <i>nouvelle</i> des maquettes. <span class="ref">#1154</span></span></li>
-        <li><span class="n">16</span><span>Appui long = loupe sur la vignette, sans changer la taille des cellules. <span class="ref">#1022</span></span></li>
+        <li><span class="n">11</span><span>Favoris / Récents / Top, demandés depuis un moment&nbsp;: c'est la seule fonction vraiment <i>nouvelle</i> des maquettes. <span class="ref">#1154</span></span></li>
+        <li><span class="n">12</span><span>Appui long = loupe sur la vignette, sans changer la taille des cellules. <span class="ref">#1022</span></span></li>
       </ul>
     </div>
 
@@ -1013,12 +956,12 @@ footer{padding-block:34px 0; color:var(--ink-3); font-size:12.5px}
             <div class="sm">🖥</div><div class="sm">🏁</div><div class="sm">🔒</div><div class="sm">⭐</div>
           </div>
           <div style="padding:12px 16px 4px; font-size:12px; color:var(--d-onv)">
-            Valeurs par défaut lues dans le formulaire HFR. <span class="n">17</span>
+            Valeurs par défaut lues dans le formulaire HFR. <span class="n">13</span>
           </div>
         </div>
       </div>
       <ul class="notes">
-        <li><span class="n">17</span><span>Inchangé fonctionnellement&nbsp;: mêmes trois champs POST, mêmes 16 <code>msg_icon</code>. Seul le repli par défaut du ton disparaît&nbsp;— la grille tient dans la feuille.</span></li>
+        <li><span class="n">13</span><span>Inchangé fonctionnellement&nbsp;: mêmes trois champs POST, mêmes 16 <code>msg_icon</code>. Seul le repli par défaut du ton disparaît&nbsp;— la grille tient dans la feuille.</span></li>
       </ul>
     </div>
 
@@ -1037,7 +980,7 @@ footer{padding-block:34px 0; color:var(--ink-3); font-size:12.5px}
           </div>
         </div>
         <div class="prog"><i></i></div>
-        <div class="status"><span>⬆</span><span>Envoi 2/3…</span><span class="act">Annuler</span> <span class="n">18</span></div>
+        <div class="status"><span>⬆</span><span>Envoi 2/3…</span><span class="act">Annuler</span> <span class="n">14</span></div>
         <div class="status err"><span>⚠</span><span>L'hébergeur imgur a refusé l'image (HTTP 413).</span><span class="act">Masquer</span></div>
         <div class="status"><span>💾</span><span>Un brouillon non envoyé a été retrouvé.</span><span class="act">Restaurer</span></div>
         <div class="bar">
@@ -1052,8 +995,8 @@ footer{padding-block:34px 0; color:var(--ink-3); font-size:12.5px}
         </div>
       </div>
       <ul class="notes">
-        <li><span class="n">18</span><span>Les trois lignes sont montrées ensemble pour la démonstration&nbsp;; en pratique elles s'empilent au maximum à deux, la plus récente en bas, contre la barre.</span></li>
-        <li><span class="n">19</span><span>Les <b>16 messages d'erreur typés</b> existants gardent leur texte mot pour mot — c'est le conteneur qui change, pas la copie. <span class="ref">#872 F3/F4</span></span></li>
+        <li><span class="n">14</span><span>Les trois lignes sont montrées ensemble pour la démonstration&nbsp;; en pratique elles s'empilent au maximum à deux, la plus récente en bas, contre la barre.</span></li>
+        <li><span class="n">15</span><span>Les <b>16 messages d'erreur typés</b> existants gardent leur texte mot pour mot — c'est le conteneur qui change, pas la copie. <span class="ref">#872 F3/F4</span></span></li>
       </ul>
     </div>
 
@@ -1079,7 +1022,7 @@ footer{padding-block:34px 0; color:var(--ink-3); font-size:12.5px}
           </div>
           <div class="field" style="flex:1">
             <span class="lab">Message</span>
-            <div class="txt ghost">Saisissez votre message…<span class="caret"></span> <span class="n">20</span></div>
+            <div class="txt ghost">Saisissez votre message…<span class="caret"></span> <span class="n">16</span></div>
           </div>
         </div>
         <div class="status"><span>ℹ</span><span>Sondage préservé, non éditable dans cette version.</span></div>
@@ -1089,8 +1032,8 @@ footer{padding-block:34px 0; color:var(--ink-3); font-size:12.5px}
         </div>
       </div>
       <ul class="notes">
-        <li><span class="n">20</span><span>Quand le clavier s'ouvre sur le corps, les deux champs d'en-tête se replient en une ligne résumée&nbsp;: <span class="mono">[Topic unik] Redface 2 · Smartphones ▾</span>. Un tap les redéploie.</span></li>
-        <li><span class="n">21</span><span>Le sélecteur disparaît pour les catégories sans sous-catégorie, exactement comme aujourd'hui. <span class="ref">#213</span></span></li>
+        <li><span class="n">16</span><span>Quand le clavier s'ouvre sur le corps, les deux champs d'en-tête se replient en une ligne résumée&nbsp;: <span class="mono">[Topic unik] Redface 2 · Smartphones ▾</span>. Un tap les redéploie.</span></li>
+        <li><span class="n">17</span><span>Le sélecteur disparaît pour les catégories sans sous-catégorie, exactement comme aujourd'hui. <span class="ref">#213</span></span></li>
       </ul>
     </div>
 
@@ -1130,8 +1073,8 @@ footer{padding-block:34px 0; color:var(--ink-3); font-size:12.5px}
         </div>
       </div>
       <ul class="notes">
-        <li><span class="n">22</span><span>Les puces se saisissent au clavier comme la CSV actuelle&nbsp;; virgule ou espace valide une puce. Le POST reste identique. <span class="ref">#606</span></span></li>
-        <li><span class="n">23</span><span>En réponse de conversation, la même ligne devient « Destinataires&nbsp;: 29 · Gérer » pour l'owner du DT. <span class="ref">#618</span></span></li>
+        <li><span class="n">18</span><span>Les puces se saisissent au clavier comme la CSV actuelle&nbsp;; virgule ou espace valide une puce. Le POST reste identique. <span class="ref">#606</span></span></li>
+        <li><span class="n">19</span><span>En réponse de conversation, la même ligne devient « Destinataires&nbsp;: 29 · Gérer » pour l'owner du DT. <span class="ref">#618</span></span></li>
       </ul>
     </div>
 
@@ -1151,7 +1094,7 @@ footer{padding-block:34px 0; color:var(--ink-3); font-size:12.5px}
           <div class="grab"></div>
           <div style="display:flex; align-items:center; padding:0 14px 8px">
             <span style="font-size:14px; font-weight:500; flex:1">Réponse rapide</span>
-            <span class="ibtn" style="width:32px; height:32px; font-size:14px">⤢</span> <span class="n">24</span>
+            <span class="ibtn" style="width:32px; height:32px; font-size:14px">⤢</span> <span class="n">20</span>
           </div>
           <div class="qcard"><div style="flex:1; min-width:0"><span class="who">❝ styx42</span><span class="ex">les bords haut et bas de la zone de saisie…</span></div><div class="ops">✕</div></div>
           <div class="field" style="height:104px; flex:none; margin:8px 14px 10px">
@@ -1171,8 +1114,8 @@ footer{padding-block:34px 0; color:var(--ink-3); font-size:12.5px}
         </div>
       </div>
       <ul class="notes">
-        <li><span class="n">24</span><span>⤢ escalade en plein écran en conservant texte, sélection et citations. Le réglage « plein écran par défaut » devient une préférence, pas un statut expérimental. <span class="ref">#951</span></span></li>
-        <li><span class="n">25</span><span>La feuille gagne les smileys et le format, qu'elle n'a pas aujourd'hui&nbsp;: une seule implémentation pour les cinq surfaces.</span></li>
+        <li><span class="n">20</span><span>⤢ escalade en plein écran en conservant texte, sélection et citations. Le réglage « plein écran par défaut » devient une préférence, pas un statut expérimental. <span class="ref">#951</span></span></li>
+        <li><span class="n">21</span><span>La feuille gagne les smileys et le format, qu'elle n'a pas aujourd'hui&nbsp;: une seule implémentation pour les cinq surfaces.</span></li>
       </ul>
     </div>
 
@@ -1212,9 +1155,9 @@ footer{padding-block:34px 0; color:var(--ink-3); font-size:12.5px}
         </div>
       </div>
       <ul class="notes">
-        <li><span class="n">26</span><span><b>Citer</b> dans le menu de sélection = citer uniquement la portion sélectionnée, depuis la vue Topic. <span class="ref">#381</span></span></li>
-        <li><span class="n">27</span><span><b>🌐 Rechercher sur internet</b>, demandé par XaTriX le 20/09. <span class="ref">#1431</span></span></li>
-        <li><span class="n">28</span><span>Le menu est fourni par BTF2, donc il survit au <code>ContextWrapper</code> qui neutralise le TextClassifier — à vérifier sur device avant de le promettre.</span></li>
+        <li><span class="n">22</span><span><b>Citer</b> dans le menu de sélection = citer uniquement la portion sélectionnée, depuis la vue Topic. <span class="ref">#381</span></span></li>
+        <li><span class="n">23</span><span><b>🌐 Rechercher sur internet</b>, demandé par XaTriX le 20/09. <span class="ref">#1431</span></span></li>
+        <li><span class="n">24</span><span>Le menu est fourni par BTF2, donc il survit au <code>ContextWrapper</code> qui neutralise le TextClassifier — à vérifier sur device avant de le promettre.</span></li>
       </ul>
     </div>
 
@@ -1243,7 +1186,7 @@ footer{padding-block:34px 0; color:var(--ink-3); font-size:12.5px}
       <tr><td>Bandeau brouillon Restaurer/Ignorer</td><td>Ligne de statut, mêmes deux actions</td><td>8</td><td class="st"><span class="dot move"></span>déplacé</td></tr>
       <tr><td>Cartes de citation ↑ ↓ ✕</td><td>Panneau plein écran + pastille dans le rail</td><td>1, 4</td><td class="st"><span class="dot move"></span>déplacé</td></tr>
       <tr><td>« Tout vider » (≥ 2 cartes)</td><td>Action d'app bar du panneau citations</td><td>4</td><td class="st"><span class="dot keep"></span>conservé</td></tr>
-      <tr><td>Aperçu Afficher / Masquer</td><td>Icône 👁 d'app bar → partage source / rendu, dessous en portrait, à droite en paysage</td><td>5, 5b</td><td class="st"><span class="dot fix"></span>enrichi</td></tr>
+      <tr><td>Aperçu Afficher / Masquer</td><td>Icône 👁 d'app bar → aperçu plein écran</td><td>5</td><td class="st"><span class="dot move"></span>déplacé</td></tr>
       <tr><td>Feuille Smileys Standard / Wiki</td><td>Identique, + Favoris et Récents</td><td>6</td><td class="st"><span class="dot keep"></span>conservé</td></tr>
       <tr><td>Décoration de cellule (#989)</td><td>Reste un réglage, inchangé</td><td>6</td><td class="st"><span class="dot keep"></span>conservé</td></tr>
       <tr><td>3 bascules d'options HFR</td><td>Feuille Options, identique</td><td>7</td><td class="st"><span class="dot keep"></span>conservé</td></tr>
@@ -1284,12 +1227,10 @@ footer{padding-block:34px 0; color:var(--ink-3); font-size:12.5px}
       un apprentissage. Compromis possible&nbsp;: icône + libellé sous les 3 premières semaines.</p>
     </div>
     <div class="ask">
-      <h4>L'aperçu doit-il replier le clavier&nbsp;?</h4>
-      <p>Le partage est acté&nbsp;: source et rendu côte à côte, dessous en portrait, à droite en
-      paysage. Reste le clavier. Le replier à l'ouverture donne deux moitiés lisibles (~270&nbsp;dp)
-      mais ajoute une animation que le critère C6 interdit ailleurs.</p>
-      <p>L'alternative&nbsp;: clavier conservé, 70/30 d'emblée, et l'aperçu ne montre que trois ou
-      quatre lignes. Question à trancher sur device, pas sur maquette.</p>
+      <h4>Aperçu plein écran ou panneau&nbsp;?</h4>
+      <p>Plein écran rend les pixels au champ, mais on perd la comparaison côte à côte que le toggle
+      actuel permettait sur un écran haut. En paysage et sur tablette, un split 50/50 serait
+      meilleur — donc deux mises en page à maintenir.</p>
     </div>
     <div class="ask">
       <h4>Le rail de contexte&nbsp;: utile ou bruit&nbsp;?</h4>
@@ -1300,7 +1241,7 @@ footer{padding-block:34px 0; color:var(--ink-3); font-size:12.5px}
     <div class="ask">
       <h4>Découpage en lots</h4>
       <p>R1 = app bar + barre d'action + ligne de statut (les 134&nbsp;dp rendus au champ, écrans 1-3,
-      8). R2 = panneau citations et partage de l'aperçu (4, 5, 5b). R3 = smileys enrichis et menu de sélection
+      8). R2 = panneaux citations et aperçu (4, 5). R3 = smileys enrichis et menu de sélection
       (6, 12). R4 = unification de la réponse rapide (11).</p>
     </div>
   </div>
@@ -1314,6 +1255,5 @@ footer{padding-block:34px 0; color:var(--ink-3); font-size:12.5px}
 </footer>
 
 </div>
-
 </body>
 </html>
