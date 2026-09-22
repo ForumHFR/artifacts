@@ -260,7 +260,7 @@ footer a{color:var(--accent)}
  backdrop-filter:none;-webkit-backdrop-filter:none}
 @media (max-width:520px){.artnav #vpick label{display:none}}
 </style>
-<div id="vpick"><label for="vpick-sel">Version</label><select id="vpick-sel" onchange="location.href=this.value"><option value="./" selected>v5 — courante</option><option value="v4/">v4</option><option value="v3/">v3</option><option value="v2/">v2</option><option value="v1/">v1</option></select></div>
+<div id="vpick"><label for="vpick-sel">Version</label><select id="vpick-sel" onchange="location.href=this.value"><option value="./" selected>v6 — courante</option><option value="v5/">v5</option><option value="v4/">v4</option><option value="v3/">v3</option><option value="v2/">v2</option><option value="v1/">v1</option></select></div>
 </nav>
 
 
@@ -333,7 +333,7 @@ footer a{color:var(--accent)}
         <li><span class="zn">A</span><span><b>App bar</b> — la barre du haut. Retour, titre de l'écran, contexte en seconde ligne, et les actions qui <i>changent de surface</i> (aperçu). Hauteur fixe, elle ne bouge jamais.</span></li>
         <li><span class="zn">B</span><span><b>Champ</b> — la zone de saisie elle-même, avec son label flottant et son cadre. Le texte défile <i>dedans</i>&nbsp;: c'est tout l'objet de la refonte. Rien ne s'intercale entre l'app bar et lui.</span></li>
         <li><span class="zn">C</span><span><b>Tiroir de format</b> — la rangée de chips BBCode, dépliée par <span class="mono">Aa</span>. Elle se <b>superpose</b> au bas du champ&nbsp;: le champ garde sa hauteur, le caret est remonté au-dessus par défilement interne.</span></li>
-        <li><span class="zn">D</span><span><b>Bande de contexte</b> — la ligne qui porte tout le reste&nbsp;: à gauche l'état durable en pastilles (citations en mode cartes, brouillon retrouvé, sous-catégorie, destinataires, sondage préservé), à droite l'événement du moment (upload, erreur) — résumé d'une ligne, hauteur constante.</span></li>
+        <li><span class="zn">D</span><span><b>Bande de contexte</b> — la ligne qui porte tout le reste&nbsp;: à gauche l'état durable en pastilles (citations en mode cartes, brouillon retrouvé, destinataires en réponse MP, sondage préservé), à droite l'événement du moment (upload, erreur) — résumé d'une ligne, hauteur constante.</span></li>
         <li><span class="zn">E</span><span><b>Barre d'action</b> — la barre du bas. Les actions qui <i>agissent sur le message</i>&nbsp;: format, smileys, image, options, envoyer. En icônes, épinglée au-dessus du clavier.</span></li>
         <li><span class="zn">F</span><span><b>IME</b> — le clavier logiciel, fourni par le système. On ne le dessine pas, mais sa hauteur est la contrainte numéro un.</span></li>
       </ol>
@@ -386,8 +386,8 @@ footer a{color:var(--accent)}
           d'action, absente si elle n'a rien à dire, <b>jamais plus haute que 32 dp, et jamais apparue
           ni disparue sur une frappe</b>. Elle porte deux registres&nbsp;:</p>
           <p><b>À gauche, l'état durable</b>, en pastilles&nbsp;: citations (en mode cartes seulement), brouillon retrouvé
-          (Restaurer / Ignorer — l'autosave, elle, est silencieuse), sondage préservé, et le rappel de
-          la sous-catégorie ou des destinataires, posé dès l'ouverture que l'en-tête soit déployé ou non. Chaque pastille
+          (Restaurer / Ignorer — l'autosave, elle, est silencieuse), sondage préservé, et le nombre de
+          destinataires en réponse MP (« Gérer » pour l'owner d'un DT). Chaque pastille
           est un raccourci vers la surface qui la gouverne.</p>
           <p><b>À droite, l'événement du moment</b>&nbsp;: « Envoi 2/3… », erreur. Un seul à la fois,
           l'erreur d'abord.</p>
@@ -430,11 +430,13 @@ footer a{color:var(--accent)}
         <div class="mini"><i class="m-app"></i><i class="m-rail"></i><i class="m-rail"></i><i class="m-body"></i><i class="m-bar"></i>
           <span style="display:none"></span></div>
         <div class="txt">
-          <h4>En-tête collant</h4><span class="en">sticky header</span>
-          <p>Les champs qui décrivent le message plutôt que son corps&nbsp;: titre du sujet,
-          sous-catégorie, destinataires. Ils restent en haut du contenu, et se replient en une seule
-          ligne résumée quand le clavier monte sur le corps.</p>
-          <p>Ça ne concerne que Nouveau sujet et Nouveau MP.</p>
+          <h4>Panneau d'en-tête</h4><span class="en">header panel</span>
+          <p>Les champs qui décrivent le message plutôt que son corps&nbsp;: titre et sous-catégorie
+          d'un sujet, destinataires et sujet d'un nouveau MP. Ils quittent la colonne&nbsp;: la seconde
+          ligne de l'app bar les résume, un appui ouvre ce panneau pour les modifier.</p>
+          <p>Aucun repli déclenché par le clavier ou le focus — ce serait une seconde animation.
+          Un nouveau MP sans destinataire s'ouvre directement sur ce panneau. Remplace l'« en-tête
+          collant » des maquettes V3-V4.</p>
         </div>
       </div>
 
