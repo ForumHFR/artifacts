@@ -1,0 +1,1118 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{color-scheme:light dark}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Spec de l&#x27;éditeur — #1417</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --paper:#FAF5F4; --paper-2:#FFFFFF; --paper-3:#F3EAE9;
+  --ink:#241A1B; --ink-2:#5C4A4A; --ink-3:#8B7573;
+  --line:#E5D6D4; --line-2:#F1E6E5; --accent:#8E1D24; --accent-soft:#FBE0DF;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#151010; --paper-2:#1D1616; --paper-3:#241C1C;
+    --ink:#F0E2E0; --ink-2:#C9B4B2; --ink-3:#9B8583;
+    --line:#3A2D2D; --line-2:#2A2020; --accent:#FFB3B1; --accent-soft:#3D1F21;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#151010; --paper-2:#1D1616; --paper-3:#241C1C;
+  --ink:#F0E2E0; --ink-2:#C9B4B2; --ink-3:#9B8583;
+  --line:#3A2D2D; --line-2:#2A2020; --accent:#FFB3B1; --accent-soft:#3D1F21;
+}
+*{box-sizing:border-box}
+body{margin:0; background:var(--paper); color:var(--ink);
+  font-family:"Public Sans","Helvetica Neue",Arial,sans-serif; font-size:15px; line-height:1.6;
+  -webkit-font-smoothing:antialiased}
+.wrap{max-width:920px; margin:0 auto; padding-inline:20px; padding-block:0 72px}
+h1,h2,h3,h4{font-family:Archivo,"Helvetica Neue",Arial,sans-serif; letter-spacing:-.01em; text-wrap:balance}
+h1{font-size:clamp(30px,5vw,44px); margin:44px 0 10px; line-height:1.08}
+h2{font-size:24px; margin:44px 0 12px; padding-top:18px; border-top:1px solid var(--line)}
+h3{font-size:18px; margin:28px 0 8px}
+a{color:var(--accent)}
+code{font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:.86em;
+  background:var(--paper-3); padding:1px 4px; border-radius:4px}
+blockquote{margin:16px 0; padding:10px 16px; border-left:3px solid var(--accent);
+  background:var(--paper-2); color:var(--ink-2)}
+blockquote p{margin:6px 0}
+table{border-collapse:collapse; width:100%; margin:14px 0; font-size:13.5px; display:block; overflow-x:auto}
+th,td{border-bottom:1px solid var(--line); padding:5px 8px; text-align:left; vertical-align:top}
+th{font-family:Archivo,sans-serif; font-weight:600; background:var(--paper-3)}
+p strong:first-child{font-family:"IBM Plex Mono",monospace; font-size:.92em; color:var(--accent)}
+pre.mermaid{background:var(--paper-2); border:1px solid var(--line); border-radius:8px;
+  padding:14px; overflow-x:auto; text-align:center}
+.doc-sep{margin:64px 0 0; padding:10px 0; border-top:3px double var(--line);
+  font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-3)}
+.status{display:inline-block; margin-top:6px; font-family:"IBM Plex Mono",monospace; font-size:11px;
+  letter-spacing:.1em; text-transform:uppercase; color:var(--accent); border:1px solid var(--accent);
+  border-radius:4px; padding:2px 7px}
+/* ── menu inter-artefacts ── */
+.artnav{
+  position:sticky; top:0; z-index:50; display:flex; gap:2px; align-items:center; flex-wrap:wrap;
+  margin-inline:-20px; padding:calc(7px + env(safe-area-inset-top, 0px)) 20px 7px;
+  background:var(--paper); background:color-mix(in srgb, var(--paper) 88%, transparent);
+  backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); border-bottom:1px solid var(--line);
+}
+.artnav a,.artnav span{font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.05em;
+  padding:5px 10px; border-radius:6px; text-decoration:none; color:var(--ink-3); white-space:nowrap}
+.artnav a:hover{color:var(--ink); background:var(--paper-3)}
+.artnav a.on{color:var(--accent); background:var(--accent-soft); font-weight:500}
+.artnav .brand{margin-right:auto; font-size:10px; letter-spacing:.14em; text-transform:uppercase; padding-left:0}
+@media (max-width:520px){
+  .artnav .brand{display:none}
+  .artnav a,.artnav span{padding:5px 7px; font-size:10.5px}
+}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+<nav class="artnav">
+  <span class="brand">Éditeur #1417</span>
+  <a href="https://forumhfr.github.io/artifacts/editeur-1417/">Maquettes</a>
+  <a href="https://forumhfr.github.io/artifacts/editeur-spec/" class="on">Spec</a>
+  <a href="https://forumhfr.github.io/artifacts/editeur-lexique/">Vocabulaire</a>
+  <a href="https://forumhfr.github.io/artifacts/editeur-roborazzi/">Rendus Roborazzi</a>
+
+<style id="vpick-style">
+#vpick{position:fixed;top:0;right:0;z-index:9999;display:flex;align-items:center;gap:7px;
+ padding:6px 10px;border-radius:0 0 0 10px;font:500 12px/1 ui-sans-serif,system-ui,sans-serif;
+ background:rgba(128,128,128,.14);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+ border-left:1px solid rgba(128,128,128,.28);border-bottom:1px solid rgba(128,128,128,.28);color:inherit}
+#vpick label{opacity:.65;letter-spacing:.06em;text-transform:uppercase;font-size:10px}
+#vpick select{font:inherit;color:inherit;background:transparent;border:1px solid rgba(128,128,128,.45);
+ border-radius:5px;padding:3px 6px;cursor:pointer}
+#vpick select option{color:#111;background:#fff}
+@media print{#vpick{display:none}}
+/* page dotée du menu inter-artefacts : le sélecteur y prend place au lieu de flotter par-dessus */
+.artnav #vpick{position:static;margin-left:6px;padding:0;border:0;border-radius:0;background:none;
+ backdrop-filter:none;-webkit-backdrop-filter:none}
+@media (max-width:520px){.artnav #vpick label{display:none}}
+</style>
+<div id="vpick"><label for="vpick-sel">Version</label><select id="vpick-sel" onchange="location.href=this.value"><option value="./" selected>v1 — courante</option></select></div>
+</nav>
+<p class="status">Proposé · non publié dans la doc du projet</p><p style="color:var(--ink-2)">Rendu de <code>docs/specs/editor.md</code> et <code>docs/adr/019-refonte-vue-editeur.md</code>, prêts à entrer dans le dépôt. Les liens internes vers la doc du projet pointent vers des pages qui n'existent pas encore.</p><h1 id="contrat-de-léditeur">Contrat de l'éditeur</h1>
+<p>Le contrat normatif de la vue Éditeur refondue : géométrie, zones, règles de comportement, erreurs, accessibilité et découpage en lots. Refonte <a href="https://github.com/ForumHFR/redface2/issues/1417">#1417</a>, décisions structurantes dans l'<a href="https://forumhfr.github.io/redface2/adr/019-refonte-vue-editeur">ADR-019</a>. Version <strong>v0.3</strong> (intègre deux relectures contre le code et une relecture de cohérence).</p>
+<blockquote>
+<p><strong>Statut : Proposé</strong> (23/09/2026). Rien de ce contrat n'est implémenté. Relevé de l'existant sur <code>dev</code> à <code>08d5b41c</code> (bêta 0.62.0). Les hauteurs en dp sont des <strong>cibles calculées</strong>, non mesurées : elles ne valent critère qu'après confirmation filmée sur appareil. Maquettes non contractuelles : <a href="https://forumhfr.github.io/artifacts/editeur-1417/">Vue Éditeur #1417</a>.</p>
+</blockquote>
+<p><strong>Conventions.</strong> Une règle normative porte un identifiant <code>ED-nn</code> ; elle est opposable en revue. Les critères d'acceptation <code>C1</code>–<code>C10</code> sont ceux de #1417, repris sans modification en <a href="#9-critères-dacceptation">§ 9</a>. Les lots <code>R0a</code>–<code>R4</code> sont définis en <a href="#11-lots">§ 11</a>. « Doit » = obligatoire ; « peut » = permis. Les signes ❝ ↺ ✕ ⤢ des tableaux désignent une icône (drawable selon l'ADR-015), pas le glyphe rendu.</p>
+<h2 id="1-périmètre">1. Périmètre</h2>
+<h3 id="11-les-cinq-surfaces">1.1 Les cinq surfaces</h3>
+<table>
+<thead>
+<tr>
+<th>Surface</th>
+<th>Écran</th>
+<th>ViewModel</th>
+<th>Implémentation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Répondre / modifier son message</td>
+<td><code>PostEditorScreen</code></td>
+<td><code>PostEditorViewModel</code></td>
+<td>composants <code>:core:ui/editor</code></td>
+</tr>
+<tr>
+<td>Nouveau sujet / modifier le premier message</td>
+<td><code>TopicFormScreen</code></td>
+<td><code>TopicFormViewModel</code></td>
+<td>composants <code>:core:ui/editor</code></td>
+</tr>
+<tr>
+<td>Nouveau MP</td>
+<td><code>PrivateMessageComposeScreen</code></td>
+<td><code>PrivateMessageComposeViewModel</code></td>
+<td>composants <code>:core:ui/editor</code></td>
+</tr>
+<tr>
+<td>Réponse dans une conversation MP</td>
+<td><code>PrivateMessageReplyScreen</code> (<code>MessageEditorComponents</code>)</td>
+<td><code>PrivateMessageReplyViewModel</code></td>
+<td>composants <code>:core:ui/editor</code></td>
+</tr>
+<tr>
+<td>Réponse rapide (vue Topic)</td>
+<td><code>QuickReplySheet</code></td>
+<td><code>QuickReplyViewModel</code></td>
+<td>propre : champ BasicTextField 1, fenêtre Dialog</td>
+</tr>
+</tbody>
+</table>
+<p>Les quatre premières sont appelées <strong>éditeurs plein écran</strong> ; la cinquième, <strong>la feuille</strong>. L'éditeur plein écran est le préréglage de surface par défaut (<code>WritingSurfacePreset.FULL_EDITOR</code>, #951) ; la feuille est opt-in.</p>
+<h3 id="12-les-deux-modes-de-citation">1.2 Les deux modes de citation</h3>
+<p>Le rendu des citations est choisi <strong>une fois à l'ouverture</strong> d'une surface (<code>observeQuoteCardsEnabled().first()</code>), jamais recâblé en cours de session :</p>
+<ul>
+<li><strong>Mode inline (défaut).</strong> Le fetch d'ouverture matérialise les citations : le champ est hydraté avec les <code>[quotemsg]</code> sous les gardes anti-écrasement existantes. Le BBCode est éditable, l'interleaving est manuel, l'envoi prend le contenu du champ tel quel.</li>
+<li><strong>Mode cartes (opt-in).</strong> Les citations sont des objets hors du champ, dédupliqués par numreponse, matérialisés en <code>[quotemsg]</code> à l'envoi seulement.</li>
+</ul>
+<p><strong>ED-01</strong> — La refonte préserve les deux modes. Aucun changement de mode ne convertit un brouillon existant. Les règles propres au mode cartes (pastille, panneau) ne s'appliquent pas au mode inline.</p>
+<h3 id="13-hors-périmètre-de-cette-phase">1.3 Hors périmètre de cette phase</h3>
+<p>Citer la portion sélectionnée d'un post lu (<a href="https://github.com/ForumHFR/redface2/issues/381">#381</a>) ; Rechercher sur internet (<a href="https://github.com/ForumHFR/redface2/issues/1431">#1431</a>) ; sections Favoris / Récents du sélecteur de smileys (<a href="https://github.com/ForumHFR/redface2/issues/1154">#1154</a>) ; loupe à l'appui long dans le sélecteur (<a href="https://github.com/ForumHFR/redface2/issues/1022">#1022</a>) ; validateur d'équilibre des balises (<a href="https://github.com/ForumHFR/redface2/issues/1444">#1444</a>) ; annulation d'un upload en cours (n'existe pas aujourd'hui, n'est pas ajoutée).</p>
+<h2 id="2-glossaire">2. Glossaire</h2>
+<table>
+<thead>
+<tr>
+<th>Terme</th>
+<th>Définition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>App bar d'éditeur</strong></td>
+<td>Barre du haut, 48 dp : retour, titre d'écran, contexte en seconde ligne, action aperçu. Rien de ce qu'elle porte ne dépend de la frappe.</td>
+</tr>
+<tr>
+<td><strong>Champ</strong></td>
+<td>La zone de saisie <code>BbcodeTextField</code> (BasicTextField 2), avec son label et son cadre. Le texte défile dedans.</td>
+</tr>
+<tr>
+<td><strong>Tiroir de format</strong></td>
+<td>Les chips BBCode, dépliées par l'action format, superposées au bas du champ.</td>
+</tr>
+<tr>
+<td><strong>Bande de contexte</strong> (la bande)</td>
+<td>Ligne de 32 dp au-dessus de la barre d'action : pastilles d'état à gauche, un événement à droite.</td>
+</tr>
+<tr>
+<td><strong>Pastille</strong></td>
+<td>Élément d'état durable de la bande (brouillon retrouvé, citations en cartes, destinataires, sondage préservé). Tap = raccourci vers la surface qui la gouverne.</td>
+</tr>
+<tr>
+<td><strong>Événement</strong></td>
+<td>Élément transitoire de la bande (upload, erreur, fin d'insertion de citation). Un seul à la fois.</td>
+</tr>
+<tr>
+<td><strong>Barre d'action</strong></td>
+<td>Barre du bas, 56 dp, épinglée au-dessus du clavier : format, smileys, image, options, envoyer.</td>
+</tr>
+<tr>
+<td><strong>Bouton armé</strong></td>
+<td>« Envoyer » qui, au premier tap, devient « Confirmer » pendant 4 s (<code>ArmedSubmitButton</code>, #312 v2).</td>
+</tr>
+<tr>
+<td><strong>Panneau</strong></td>
+<td>Surface plein écran qui remplace temporairement le champ, avec sa propre app bar et sa propre barre du bas (« Retour au message ») : le panneau citations (ED-50) et le panneau d'en-tête (ED-101, ED-113).</td>
+</tr>
+<tr>
+<td><strong>Feuille</strong></td>
+<td>Surface superposée, qui laisse voir l'écran derrière (smileys, options, réponse rapide). Une <code>ModalBottomSheet</code> est une fenêtre Dialog distincte, avec ses propres insets.</td>
+</tr>
+<tr>
+<td><strong>Partage</strong></td>
+<td>Aperçu ouvert à côté du source, séparés par un séparateur déplaçable.</td>
+</tr>
+<tr>
+<td><strong>Cran</strong></td>
+<td>Butée du séparateur quand le champ atteint 160 dp ; au-delà, glissement élastique.</td>
+</tr>
+<tr>
+<td><strong>Fenêtre utile</strong></td>
+<td>Hauteur de fenêtre disponible une fois retirés la barre d'état, le clavier et la barre de navigation.</td>
+</tr>
+<tr>
+<td><strong>Plancher</strong></td>
+<td>Hauteur minimale du champ : 160 dp (<code>EditorLayoutBudget</code>), cédant seulement dans une fenêtre trop courte.</td>
+</tr>
+<tr>
+<td><strong>Clavier (IME)</strong></td>
+<td>Clavier logiciel du système (<em>input method editor</em>).</td>
+</tr>
+<tr>
+<td><strong>BTF2</strong></td>
+<td>BasicTextField 2 (<code>TextFieldState</code>), sur lequel repose <code>BbcodeTextField</code> depuis 0.59.8.</td>
+</tr>
+<tr>
+<td><strong>Size class</strong></td>
+<td>Classes de largeur de fenêtre Material (Compact &lt; 600 dp, Medium, Expanded).</td>
+</tr>
+<tr>
+<td><strong>Spike</strong></td>
+<td>Prototype jetable d'exploration, mesuré sur appareil, qui tranche une faisabilité avant un lot.</td>
+</tr>
+<tr>
+<td><strong>Hauteur compacte</strong></td>
+<td>Fenêtre de moins de 400 dp de hauteur, <strong>mesurée hors clavier</strong> (paysage téléphone). Un portrait clavier ouvert n'est pas en hauteur compacte.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="3-géométrie">3. Géométrie</h2>
+<h3 id="31-colonne">3.1 Colonne</h3>
+<pre class="mermaid">flowchart TB
+  SB[&quot;Barre d&#39;état (inset)&quot;] --&gt; AB[&quot;App bar d&#39;éditeur — 48 dp fixe&lt;br/&gt;(absente en hauteur compacte)&quot;]
+  AB --&gt; F[&quot;Champ — élastique, plancher 160 dp&lt;br/&gt;tiroir de format superposé à sa base&quot;]
+  F --&gt; CB[&quot;Bande de contexte — 0 ou 32 dp&lt;br/&gt;(jamais modifiée par une frappe)&quot;]
+  CB --&gt; ACT[&quot;Barre d&#39;action — 56 dp fixe&quot;]
+  ACT --&gt; IME[&quot;Clavier / barre de navigation&lt;br/&gt;inset unique navigationBars ∪ ime&quot;]</pre>
+<p><strong>ED-02</strong> — Seuls l'app bar (48 dp), la bande de contexte (0 ou 32 dp) et la barre d'action (56 dp) ont une hauteur propre ; le champ prend tout le reste, sans descendre sous le plancher de 160 dp tant que la fenêtre utile le permet. Le tiroir de format n'a pas de hauteur dans la colonne (ED-21).</p>
+<p><strong>ED-03</strong> — Aucun élément ne s'intercale entre l'app bar et le champ. Les en-têtes (titre et sous-catégorie d'un sujet, destinataires et sujet d'un MP) vivent dans un panneau d'en-tête (ED-101, ED-113). Seule dérogation : les cartes de citation en R1a (ED-140).</p>
+<p><strong>ED-04</strong> — Insets : l'inset bas est unique, <code>WindowInsets.navigationBars.union(WindowInsets.ime)</code> appliqué une seule fois à la barre d'action (#624). Le mode de fenêtre reste <code>adjustNothing</code> sur API 30+ et <code>adjustResize</code> sous API 30 (#1404). La refonte ne modifie pas cette mécanique.</p>
+<p><strong>ED-05</strong> — En hauteur compacte (fenêtre hors clavier &lt; 400 dp), l'app bar s'efface avec son titre ; l'action aperçu passe dans la barre d'action en dernière icône avant « Envoyer » ; le retour passe par le geste système. Le plancher de 160 dp ne s'applique pas (environ 100 dp restent clavier ouvert). Pour les surfaces à panneau d'en-tête (sujet, nouveau MP), l'entrée du panneau passe aussi dans la barre d'action, en icône « En-tête » placée avant l'aperçu ; la barre compte alors au plus six icônes et « Envoyer ».</p>
+<h3 id="32-budget-cible-360--740-dp-clavier-ouvert-fenêtre-utile-330-dp">3.2 Budget cible (360 × 740 dp, clavier ouvert, fenêtre utile 330 dp)</h3>
+<table>
+<thead>
+<tr>
+<th>Élément</th>
+<th style="text-align: right;">0.60.0 (avant #1432)</th>
+<th style="text-align: right;">Refonte</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>App bar</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">48 dp</td>
+</tr>
+<tr>
+<td>Titre d'écran (<code>titleLarge</code>, 28 sp de ligne)</td>
+<td style="text-align: right;">~28 dp à fontScale 1</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr>
+<td>Barre d'outils BBCode</td>
+<td style="text-align: right;">46 dp</td>
+<td style="text-align: right;">0 (tiroir)</td>
+</tr>
+<tr>
+<td>Bouton d'aperçu</td>
+<td style="text-align: right;">36 dp</td>
+<td style="text-align: right;">0 (action)</td>
+</tr>
+<tr>
+<td>Espacements de colonne</td>
+<td style="text-align: right;">36 dp</td>
+<td style="text-align: right;">12 dp</td>
+</tr>
+<tr>
+<td>Barre d'action</td>
+<td style="text-align: right;">56 dp</td>
+<td style="text-align: right;">56 dp</td>
+</tr>
+<tr>
+<td>Bande de contexte</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">0 ou 32 dp</td>
+</tr>
+<tr>
+<td><strong>Champ</strong></td>
+<td style="text-align: right;"><strong>128 dp</strong></td>
+<td style="text-align: right;"><strong>182–214 dp</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Le critère à tenir est <strong>182 dp</strong> (cas avec bande). Le gain net est de +54 à +86 dp face à 0.60.0, de +22 à +54 dp face à 0.62.0 où le plancher de 160 dp existe déjà ; l'app bar est du chrome neuf. Budget établi à fontScale 1, <strong>à remesurer à 1,3</strong> (les hauteurs de texte sont en sp).</p>
+<h2 id="4-règles-par-zone">4. Règles par zone</h2>
+<h3 id="41-app-bar-déditeur">4.1 App bar d'éditeur</h3>
+<p><strong>ED-10</strong> — Ligne 1 : titre d'écran court (« Répondre », « Modifier », « Nouveau sujet », « Nouveau MP »), en <code>titleSmall</code> (20 sp de ligne) ; ligne 2 : contexte, en <code>labelMedium</code> (16 sp) — titre du sujet ; pour le formulaire de sujet, le résumé d'ED-101 ; pour le nouveau MP, le résumé d'ED-113 ; pour la réponse MP, le titre de la conversation. Ellipse sur une ligne chacune. À fontScale 1,3 les 36 sp tiennent dans 48 dp sans marge verticale ; l'app bar ne grandit jamais.</p>
+<p><strong>ED-11</strong> — Actions : aperçu seulement. Pas de menu de débordement.</p>
+<h3 id="42-champ">4.2 Champ</h3>
+<p><strong>ED-12</strong> — Le label du champ devient « Message » dans les quatre éditeurs plein écran. Libellés actuels : « Contenu BBCode » (<code>editor_field_label</code>, éditeur de post et formulaire de sujet, tronqué à fontScale 1,3, #872) et « Votre réponse » (<code>messages_reply_field_label</code>, éditeurs MP). Le placeholder devient « Saisissez votre message… » dans les quatre éditeurs (aujourd'hui <code>editor_field_placeholder</code> pour le post et le sujet, « Écrivez votre message… » <code>messages_reply_field_placeholder</code> pour les MP) ; la feuille garde « Votre message… » jusqu'à R4.</p>
+<p><strong>ED-13</strong> — Autofocus, capitalisation en début de phrase, neutralisation du TextClassifier (#1427), poignées et autoscroll (#447), verrouillage en lecture seule pendant un upload par lot : inchangés. L'autofocus reste propre à chaque surface (aujourd'hui : éditeur de post et feuille oui ; formulaire de sujet et éditeurs MP non).</p>
+<h3 id="43-tiroir-de-format">4.3 Tiroir de format</h3>
+<p><strong>ED-20</strong> — L'action format déplie un tiroir contenant les actions BBCode : Gras, Italique, Souligné, Barré, Citation, Code, Bloc fixé, Spoiler, Lien, Couleur (Rouge, Bleu, Vert, Orange, Gris). L'action Image quitte le tiroir pour le menu image (<a href="#44-barre-daction">ED-31</a>).</p>
+<p><strong>ED-21</strong> — Le tiroir est <strong>superposé</strong> au bas du champ : la hauteur du champ ne change ni à l'ouverture ni au repli, et la sélection en cours est préservée (C6). Le seul mouvement permis est celui d'ED-22.</p>
+<p><strong>ED-22</strong> — Pendant que le tiroir est ouvert, le champ réserve sa hauteur comme <strong>marge basse de défilement</strong> : le caret et la ligne courante restent visibles au-dessus du tiroir, y compris après une insertion en dernière ligne (C4, C5). Si le caret se trouve sous le tiroir à son ouverture, un <strong>défilement interne minimal</strong>, en une seule animation, le ramène au-dessus ; aucun autre élément ne bouge.</p>
+<p><strong>ED-23</strong> — Le tiroir se replie à la frappe suivante, au lancement d'un sélecteur (images, smileys, options) et à l'ouverture du panneau citations ; il n'est <strong>pas</strong> rouvert au retour.</p>
+<p><strong>ED-24</strong> — Disposition : rangées fixes, sans défilement horizontal, si les libellés tiennent à 360 dp et fontScale 1,3 ; sinon défilement horizontal avec un dégradé de bord signalant le débordement. Premier rendu Roborazzi : dix chips en trois rangées à 360 dp et fontScale 1. À trancher par mesure (R0a).</p>
+<blockquote>
+<p><strong>Précondition bloquante (R0a).</strong> <code>BbcodeTextField</code> expose son <code>ScrollState</code> mais aucune marge basse de contenu pilotée de l'extérieur ; un padding extérieur réduirait le champ et ne prouverait ni C5 ni C6. ED-21 et ED-22 ne sont engageables qu'après un spike device concluant (caret en dernière ligne, sélection, fontScale 1,3, clavier physique, retour du sélecteur d'images).</p>
+</blockquote>
+<h3 id="44-barre-daction">4.4 Barre d'action</h3>
+<p><strong>ED-30</strong> — La barre porte, de gauche à droite : format, smileys, image, options, [en hauteur compacte : en-tête puis aperçu], espace, « Envoyer ». Les actions secondaires sont des icônes seules ; « Envoyer » garde son libellé.</p>
+<p><strong>ED-31</strong> — L'action image ouvre un menu qui porte <strong>toutes les actions image existantes de la surface</strong> : « Uploader une image » (quatre éditeurs plein écran), « Insérer par URL » (éditeur de post, formulaire de sujet), « Baliser la sélection en [img] » (éditeurs MP, action <code>BbcodeAction.Image</code> actuelle). Aucune action existante n'est perdue. Ces trois libellés sont nouveaux (actuels : « Uploader » <code>bbcode_action_image_upload</code>, dialogue « Insérer une image » <code>editor_image_url_title</code>).</p>
+<p><strong>ED-32</strong> — Chaque icône a un nom accessible, repris par son info-bulle à l'appui long (<code>TooltipBox</code> + <code>PlainTooltip</code>) :</p>
+<table>
+<thead>
+<tr>
+<th>Action</th>
+<th>Nom accessible</th>
+<th>Origine</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Format</td>
+<td>« Mise en forme »</td>
+<td>nouveau</td>
+</tr>
+<tr>
+<td>Smileys</td>
+<td>« Smileys »</td>
+<td><code>editor_smiley_open</code></td>
+</tr>
+<tr>
+<td>Image</td>
+<td>« Image » (ouvre le menu d'ED-31)</td>
+<td>nouveau</td>
+</tr>
+<tr>
+<td>Options</td>
+<td>« Options »</td>
+<td><code>editor_actions_options</code></td>
+</tr>
+<tr>
+<td>Aperçu</td>
+<td>« Afficher l'aperçu » / « Masquer l'aperçu »</td>
+<td><code>editor_preview_show</code> / <code>editor_preview_hide</code></td>
+</tr>
+<tr>
+<td>En-tête (hauteur compacte)</td>
+<td>« Titre et sous-catégorie » (sujet) / « Destinataires et sujet » (MP)</td>
+<td>nouveau</td>
+</tr>
+</tbody>
+</table>
+<p><strong>ED-33</strong> — Icônes : drawables vectoriels locaux via <code>RedfaceVectorIcon</code> (<a href="https://forumhfr.github.io/redface2/adr/015-iconographie-boutons-icones">ADR-015</a>). Existent : <code>ic_arrow_back</code>, <code>ic_ms_visibility</code> / <code>ic_ms_visibility_off</code>, <code>ic_image_upload</code>, <code>ic_ms_add_photo_alternate</code>. À créer : <code>ic_ms_text_format</code> (format), <code>ic_ms_mood</code> (smileys), <code>ic_ms_more_horiz</code> (options, ellipse horizontale — <code>ic_ms_menu</code> est un menu hamburger, il ne convient pas), <code>ic_ms_title</code> (en-tête).</p>
+<p><strong>ED-34</strong> — Bouton armé : comportement actuel conservé. Premier tap → « Confirmer » (<code>editor_submit_confirm</code>) en couleurs tertiaires, compte à rebours de 4 s, second tap = envoi. <strong>Pendant l'armement, les actions secondaires sont masquées</strong> (comportement actuel des quatre éditeurs : <code>PostEditorScreen</code> et <code>TopicFormScreen</code> via <code>EditorSubmitBar</code>, <code>MessageEditorComponents</code>) pour garantir que « Confirmer » ne passe pas à la ligne ; le bouton reste aligné à droite et ne grossit pas sous le doigt.</p>
+<h3 id="45-bande-de-contexte">4.5 Bande de contexte</h3>
+<p><strong>ED-40</strong> — Hauteur <strong>32 dp exactement</strong>, une ligne, jamais deux. Absente (0 dp) quand elle n'a ni pastille ni événement.</p>
+<p><strong>ED-41</strong> — Aucune transition de la bande n'est causée par une modification du texte ou de la sélection du champ. Ses transitions sont causées par : l'ouverture de la surface ; un geste (retour d'un sélecteur ou d'un panneau, « Masquer », Restaurer / Ignorer, retrait d'une carte) ; l'aboutissement, en succès ou en échec, d'une opération lancée par un geste (envoi, upload, récupération d'une citation). Une telle transition peut survenir pendant la frappe ; elle ne modifie ni la hauteur du champ ni la position du caret (ED-02, ED-40). L'autosave des brouillons est silencieuse : aucune pastille, aucun événement.</p>
+<p><strong>ED-42</strong> — Pastilles (gauche), dans cet ordre quand elles coexistent :</p>
+<table>
+<thead>
+<tr>
+<th>Pastille</th>
+<th>Quand</th>
+<th>Tap</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❝ N citations</td>
+<td>mode cartes, N ≥ 1</td>
+<td>ouvre le panneau citations</td>
+</tr>
+<tr>
+<td>↺ Brouillon retrouvé</td>
+<td>offre de restauration en attente (#1415)</td>
+<td>propose Restaurer / Ignorer</td>
+</tr>
+<tr>
+<td>N destinataires</td>
+<td>réponse MP seulement</td>
+<td>« Gérer » pour l'owner d'un DT (#618), sinon liste des participants</td>
+</tr>
+<tr>
+<td>Sondage préservé</td>
+<td>modifier le premier message d'un sujet à sondage</td>
+<td>détail : non éditable</td>
+</tr>
+</tbody>
+</table>
+<p><strong>ED-43</strong> — Événement (droite) : un seul à la fois, priorité <strong>erreur &gt; upload &gt; insertion de citation</strong>. Quand un événement est affiché, les pastilles se <strong>compactent</strong> à leur icône et compteur nus (icône seule pour les pastilles sans compteur : brouillon, sondage) ; elles restent visibles dans la limite d'ED-47. Le retour « Déjà citée » d'ED-52 a la priorité de l'insertion de citation.</p>
+<p><strong>ED-44</strong> — Un événement ne se vide pas de lui-même. Fin d'upload : « N images insérées » + « Masquer ». Fin d'insertion de citation (feuille) : acquittable de même. Une erreur persiste jusqu'à « Masquer », le prochain envoi ou la fermeture de la surface. Toute nouvelle action de même nature (nouvel envoi, nouvel upload) remplace l'événement obsolète. Un lot d'upload arrêté par un échec indique le nombre d'images déjà insérées, qui sont conservées.</p>
+<p><strong>ED-45</strong> — Un seul emplacement d'action par événement : « Détails » quand un texte intégral existe, « Masquer » sinon ; quand le remède est une navigation (Se connecter, Réglages, Actualiser), l'emplacement porte le remède, et le détail reste accessible par un appui sur le résumé. La surface de détail porte elle-même « Masquer ».</p>
+<p><strong>ED-46</strong> — Pendant un upload, une barre de progression de 2 dp est dessinée <strong>dans</strong> les 32 dp de la bande (marge négative), sans en changer la hauteur.</p>
+<p><strong>ED-47</strong> — Saturation à 360 dp : la zone d'événement réserve au moins 168 dp au résumé et au moins 64 dp à l'action. Sans événement, au plus <strong>trois</strong> pastilles avec libellé ; avec un événement, au plus <strong>deux</strong> pastilles compactées. Au-delà, une pastille « +N » ouvre la liste des états restants. Aucune cible tactile ne recouvre sa voisine.</p>
+<p><strong>ED-48</strong> — Retirer la dernière pastille par un geste (dernière carte retirée, brouillon ignoré) fait disparaître la bande : changement voulu, provoqué par un geste, annoncé dans les notes de build.</p>
+<pre class="mermaid">stateDiagram-v2
+  [*] --&gt; Absente
+  Absente --&gt; Etat : ouverture avec pastille\nou geste (retour panneau, Restaurer)
+  Absente --&gt; Evenement : échec d&#39;envoi / début d&#39;upload\n/ insertion de citation
+  Etat --&gt; EtatEvenement : upload, erreur, insertion de citation
+  Evenement --&gt; EtatEvenement : pastille ajoutée par un geste
+  EtatEvenement --&gt; Etat : Masquer / envoi suivant
+  Evenement --&gt; Absente : Masquer / envoi suivant
+  Etat --&gt; Absente : dernière pastille retirée par un geste
+  note right of Etat : Aucune transition causée\npar le texte ou la sélection</pre>
+<h3 id="46-panneau-citations-mode-cartes">4.6 Panneau citations (mode cartes)</h3>
+<p><strong>ED-50</strong> — La pastille ❝ N ouvre un panneau plein écran qui remplace le champ : cartes auteur — extrait, monter / descendre / retirer par carte, « Tout vider » en action d'app bar à partir de deux cartes (#436), annonces TalkBack et focus après retrait conservés.</p>
+<p><strong>ED-51</strong> — Le panneau propose l'ordre d'insertion à l'envoi : « Toutes en tête » (actuel) ou « Une par une, au curseur » (interleaving, #805), et le réglage de longueur de « Citer le début » (#1254).</p>
+<p><strong>ED-52</strong> — Les cartes restent dédupliquées par numreponse. Re-citer un post déjà cité conserve une seule carte et le signale par l'événement « Déjà citée », acquittable par « Masquer », au lieu de l'ignorer sans rien dire (#878).</p>
+<p><strong>ED-53</strong> — Le retour au message restaure le focus et la sélection du champ.</p>
+<h3 id="47-aperçu-en-partage">4.7 Aperçu en partage</h3>
+<p><strong>ED-60</strong> — L'action aperçu ouvre le rendu <strong>à côté</strong> du source : dessous en portrait, à droite quand la largeur dépasse Compact ou en hauteur compacte. Une seule mise en page, deux directions.</p>
+<p><strong>ED-61</strong> — Ouvrir ou fermer l'aperçu ne touche pas au clavier.</p>
+<p><strong>ED-62</strong> — Le séparateur s'arrête quand le champ atteint 160 dp (le cran). Au-delà, le glissement est élastique et une puce « Relâcher pour fermer le clavier » apparaît pendant le sur-glissement seulement ; relâcher ferme le clavier, une seule fois. Aucun réglage.</p>
+<p><strong>ED-63</strong> — La position du séparateur est mémorisée en dp, par size class, dans les préférences utilisateur (DataStore), sans réglage exposé.</p>
+<p><strong>ED-64</strong> — La barre d'action reste identique en lecture : on peut envoyer sans fermer l'aperçu.</p>
+<p><strong>ED-65</strong> — Le calcul de l'aperçu sort de <code>_state.update {}</code>, s'exécute hors du thread principal, est annulable et ne traite que le dernier texte, dans les quatre ViewModels plein écran. Précondition de R2b.</p>
+<p><strong>ED-66</strong> — Smileys dans l'aperçu : le parseur reconnaît déjà les builtin <code>:code:</code> et les tokens perso ; restent les émoticônes de ponctuation ambiguës et l'URL des smileys perso (#873).</p>
+<h3 id="48-feuilles-smileys-et-options">4.8 Feuilles smileys et options</h3>
+<p><strong>ED-70</strong> — La feuille smileys est conservée : onglets Standard (58 builtin) et Wiki (recherche perso dès 3 caractères, états Idle / Recherche / Résultats / Vide / Erreur), grille à 62 % de la hauteur avec plancher 320 dp (#900), décoration de cellule en réglage (#989), insertion au token puis fermeture.</p>
+<p><strong>ED-71</strong> — La feuille options est conservée : trois bascules HFR (signature, smileys désactivés, notification par e-mail), valeurs par défaut lues dans le formulaire. Le ton du message (16 icônes, #340) n'est plus replié par défaut. Les éditeurs MP gardent leurs options sans ton.</p>
+<h2 id="5-transitions-et-collisions">5. Transitions et collisions</h2>
+<p><strong>ED-80</strong> — Retour d'un sélecteur (images, smileys, options) : le tiroir reste replié (<a href="#43-tiroir-de-format">ED-23</a>), le focus et la sélection du champ sont restaurés, sans double animation (C6).</p>
+<p><strong>ED-81</strong> — Rotation pendant un upload (ViewModel conservé) : l'upload se poursuit, compteur compris. Mort du process : aucun relancement automatique ; les images déjà insérées sont conservées par le brouillon, la progression repart de zéro (C8).</p>
+<p><strong>ED-82</strong> — Tiroir ouvert + événement d'erreur + clavier ouvert : les trois coexistent sans changement de hauteur ; le tiroir recouvre le bas du champ, la bande reste visible au-dessus de la barre.</p>
+<p><strong>ED-83</strong> — Changement de compte pendant la saisie : les jobs en cours sont annulés (comportement actuel), sans erreur fabriquée ; le brouillon reste attaché à sa clé d'éditeur.</p>
+<p><strong>ED-84</strong> — Escalade feuille → plein écran (⤢) : le texte et les citations sont transmis, pas la sélection.</p>
+<h2 id="6-accessibilité">6. Accessibilité</h2>
+<p><strong>ED-90</strong> — Ordre de focus de la bande : pastilles → résumé d'événement → action d'événement → champ.</p>
+<p><strong>ED-91</strong> — Le texte intégral d'un événement et son action restent accessibles à TalkBack, même quand le résumé visuel est tronqué.</p>
+<p><strong>ED-92</strong> — Les cibles tactiles des pastilles et de l'action d'événement font au moins 48 dp, au-delà des 32 dp visuels de la bande, sans recouvrir une cible voisine.</p>
+<p><strong>ED-93</strong> — Clavier physique : Maj+flèches suit les mêmes règles que les poignées (C10) ; l'insertion depuis le tiroir au clavier respecte ED-22.</p>
+<p><strong>ED-94</strong> — Le champ reste un seul nœud défilable pour TalkBack ; nom accessible conservé.</p>
+<h2 id="7-contrats-par-surface">7. Contrats par surface</h2>
+<h3 id="71-éditeur-de-post-posteditorscreen">7.1 Éditeur de post (<code>PostEditorScreen</code>)</h3>
+<p>Règles des § 3 à 6 sans exception. Hydratation du formulaire, échec et nouvel essai, sauvegarde attendue avant retour et garde contre l'écrasement d'une saisie par un GET tardif : inchangés.</p>
+<h3 id="72-formulaire-de-sujet-topicformscreen">7.2 Formulaire de sujet (<code>TopicFormScreen</code>)</h3>
+<p><strong>ED-100</strong> — Le titre du sujet (capitalisation de phrase) et la sous-catégorie quittent la colonne. Le sélecteur de sous-catégorie reste absent pour les catégories qui n'en ont pas (#213). Aujourd'hui ils occupent, avec la barre d'outils, une zone défilante plafonnée (<code>EditorLayoutBudget</code>).</p>
+<p><strong>ED-101</strong> — Aucun repli n'est déclenché par le focus, le caret ou l'IME. Dès l'ouverture du formulaire, la seconde ligne de l'app bar résume le titre (« Ajouter un titre » s'il est vide) et la sous-catégorie ; elle reste visible pendant l'édition du corps. Un appui sur la seconde ligne de l'app bar ouvre un panneau d'en-tête contenant le champ de titre et, si la catégorie le permet, le sélecteur de sous-catégorie. À la fermeture, le corps retrouve focus et sélection. La hauteur du corps ne change ni à la frappe ni au déplacement du caret (C6, C7).</p>
+<p><strong>ED-102</strong> — Le formulaire de sujet n'affiche pas de pastille de sous-catégorie : l'app bar la porte déjà (ED-101). La pastille « sondage préservé » reste dans la bande.</p>
+<h3 id="73-éditeurs-mp">7.3 Éditeurs MP</h3>
+<p><strong>ED-110</strong> — Nouveau MP, dans le panneau d'en-tête : destinataires en pastilles saisies au clavier ; <strong>la virgule seule</strong> valide une pastille (les pseudos HFR contiennent des espaces) ; le POST reste la CSV actuelle (#606). Le sujet garde son compteur de caractères.</p>
+<p><strong>ED-111</strong> — Réponse MP : « Destinataires : N · Gérer » pour l'owner d'un DT (#618).</p>
+<p><strong>ED-112</strong> — Les erreurs d'envoi MP sont déjà conservées à la frappe (<code>withDraftPreview</code>) ; seul l'avertissement « votre message a peut-être été envoyé », propre aux MP et rédigé différemment pour la réponse et le nouveau MP, est un état sans équivalent ailleurs : ses deux détails sont conservés.</p>
+<p><strong>ED-113</strong> — Nouveau MP : destinataires et sujet vivent dans un panneau d'en-tête ouvert par un appui sur la seconde ligne de l'app bar, selon le mécanisme d'ED-101. À l'ouverture d'un nouveau MP sans destinataire, le panneau est ouvert d'office, focus sur le champ destinataires ; « Retour au message » le ferme et donne le focus au corps. La seconde ligne résume « N destinataires · sujet » (« Ajouter des destinataires » si vide). La bande n'affiche pas de pastille de destinataires pour le nouveau MP.</p>
+<h3 id="74-feuille-de-réponse-rapide-quickreplysheet">7.4 Feuille de réponse rapide (<code>QuickReplySheet</code>)</h3>
+<p><strong>ED-120</strong> — La feuille devient l'éditeur en mode feuille : même champ (<code>BbcodeTextField</code>), même barre d'action, même bande, format et smileys, même bouton armé au lieu du dialogue « Publier la réponse ? ».</p>
+<p><strong>ED-121</strong> — Brouillon : bannière de restauration comme les autres surfaces au lieu de l'application d'office ; le contexte de page et de compte est conservé ; la page courante reste rafraîchie à chaque ouverture (<code>updateCurrentPage</code>, comportement actuel). L'issue #1014 est à requalifier : le code semble déjà la corriger.</p>
+<p><strong>ED-122</strong> — Cartes de citation plafonnées (<code>QUICK_REPLY_MAX_CARDS_HEIGHT</code> = 112 dp, #808) tant que la feuille garde des cartes.</p>
+<blockquote>
+<p><strong>Préconditions (R4).</strong> Dans la feuille, titre, cartes, champ, bande, barre et tiroir demandent ~420 dp sur ~330 disponibles : soit le tiroir y est superposé, soit la feuille devient plein écran. La fenêtre Dialog a ses propres insets ; aucune preuve JVM ne vaut pour elle.</p>
+</blockquote>
+<h2 id="8-erreurs">8. Erreurs</h2>
+<h3 id="81-contrat">8.1 Contrat</h3>
+<p><strong>ED-130</strong> — Toute erreur d'<strong>envoi</strong>, d'<strong>upload</strong> ou de <strong>citation</strong> affichée dans la bande est une valeur d'un type unique porté par <code>:core:ui</code> : <strong>cause</strong>, <strong>résumé</strong> (≤ 30 caractères cible, une ligne, ellipse), <strong>détail</strong> optionnel (texte intégral), <strong>action</strong> (Détails, Masquer ou remède). Un seul jeu de chaînes par cause, partagé par les cinq surfaces (R0b). Les autres erreurs (chargement d'une conversation MP, validation d'URL d'image, recherche de smileys) restent à leurs surfaces respectives et hors de la bande.</p>
+<p><strong>ED-131</strong> — La persistance d'une erreur à la frappe est fixée <strong>par cause et par surface</strong> ; la règle cible est la persistance (<a href="#45-bande-de-contexte">ED-44</a>), et aucune surface ne doit effacer une erreur sur un changement de texte.</p>
+<p>Budget : une bande d'une ligne laisse environ 204 dp au résumé sans pastille, au moins 168 dp avec deux pastilles compactées (ED-47), soit ≈ 34 caractères à fontScale 1 et ≈ 22 au pire cas (1,3 système × 1,15 du préréglage de lecture L de l'app). Une troncature automatique couperait le remède : les textes sont réécrits.</p>
+<h3 id="82-résumés">8.2 Résumés</h3>
+<table>
+<thead>
+<tr>
+<th>Cause</th>
+<th>Résumé</th>
+<th>Détail</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Message vide</td>
+<td>Message vide</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Hash invalide</td>
+<td>Formulaire rechargé, réessayez</td>
+<td>oui</td>
+</tr>
+<tr>
+<td>Anti-flood</td>
+<td>Anti-flood HFR, patientez</td>
+<td>oui — 3 réponses par 10 min</td>
+</tr>
+<tr>
+<td>Sujet fermé</td>
+<td>Sujet fermé, envoi impossible</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Connexion requise</td>
+<td>Connexion requise</td>
+<td>oui — remède : Se connecter</td>
+</tr>
+<tr>
+<td>Réponse inattendue</td>
+<td>Réponse inattendue, réessayez</td>
+<td>oui</td>
+</tr>
+<tr>
+<td>Réseau</td>
+<td>Erreur réseau, réessayez</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Session expirée</td>
+<td>Session expirée, reconnexion</td>
+<td>oui — remède : Se connecter</td>
+</tr>
+<tr>
+<td>Sous-catégorie absente</td>
+<td>Sujet à actualiser avant envoi</td>
+<td>oui — remède : Actualiser</td>
+</tr>
+<tr>
+<td>MP peut-être envoyé</td>
+<td>Envoi incertain, vérifiez</td>
+<td>oui</td>
+</tr>
+<tr>
+<td>Aucune image reçue</td>
+<td>Aucune image reçue</td>
+<td>oui — explorateur, redémarrage</td>
+</tr>
+<tr>
+<td>Image trop lourde</td>
+<td>Image trop volumineuse</td>
+<td>oui</td>
+</tr>
+<tr>
+<td>Type refusé</td>
+<td>Format d'image refusé</td>
+<td>oui</td>
+</tr>
+<tr>
+<td>Refus serveur</td>
+<td>Refus de l'hébergeur (HTTP %1$d)</td>
+<td>oui — nom de l'hébergeur</td>
+</tr>
+<tr>
+<td>Réponse illisible</td>
+<td>Réponse illisible de l'hébergeur</td>
+<td>oui — nom de l'hébergeur</td>
+</tr>
+<tr>
+<td>Hébergeur non configuré</td>
+<td>Hébergeur non configuré</td>
+<td>oui — remède : Réglages</td>
+</tr>
+<tr>
+<td>Citation non récupérée</td>
+<td>Citation non récupérée</td>
+<td>oui</td>
+</tr>
+</tbody>
+</table>
+<p>Relevé actuel, borné aux erreurs d'envoi, d'upload et de citation : 33 chaînes — 7 d'upload (<code>:core:ui</code>), 9 d'envoi (<code>:feature:editor</code>), 9 de la feuille dont 8 copies mot pour mot (<code>:feature:topic</code>), 8 des MP (<code>:feature:messages</code> : 7 de réponse + 1 formulation propre au nouveau MP pour l'envoi incertain).</p>
+<p>Toutes ces erreurs sont <strong>persistantes</strong> au sens d'ED-44 (aucune ne s'efface à la frappe) ; l'action est « Détails » quand la colonne Détail est renseignée, le remède quand il est indiqué, « Masquer » sinon.</p>
+<h2 id="9-critères-dacceptation">9. Critères d'acceptation</h2>
+<p>Repris de #1417, vérifiés sur appareil et filmés (S10e à 360 dp et Android 10).</p>
+<ul>
+<li><strong>C1</strong> — tirer une poignée (haute ou basse) jusqu'au bord fait défiler le texte en continu tant que le doigt reste au bord ; la poignée ne décroche pas, aucune agitation latérale nécessaire.</li>
+<li><strong>C2</strong> — au relâchement, la sélection correspond exactement à ce qui a été survolé, sans décalage égal à la distance défilée.</li>
+<li><strong>C3</strong> — clavier ouvert : caret et ligne courante visibles dans les 4 éditeurs, Android 10 compris ; la barre d'envoi reste au-dessus du clavier.</li>
+<li><strong>C4</strong> — la frappe en bas de texte ne masque jamais la ligne courante (non-régression #449, #275, #410).</li>
+<li><strong>C5</strong> — barre d'outils BBCode, smiley, <code>[img]</code> après upload, citation : le texte inséré et le caret résultant sont visibles sans geste supplémentaire.</li>
+<li><strong>C6</strong> — aucun saut ni double animation à l'ouverture du clavier, au retour de l'aperçu, du picker, de la feuille d'options ou du sélecteur d'images ; la sélection en cours survit à l'aller-retour.</li>
+<li><strong>C7</strong> — en mode écran scrollé (nouveau sujet, nouveau MP), déplacer le caret ne chasse pas le titre, les destinataires ni la barre d'outils hors champ.</li>
+<li><strong>C8</strong> — rotation et recréation de process : texte, sélection et position conservés ; pas de bannière « brouillon non envoyé » indue (#1415).</li>
+<li><strong>C9</strong> — comportement identique dans les 4 éditeurs (réponse/édition, nouveau sujet, réponse MP, nouveau MP) ; la réponse rapide (feuille) n'est pas dégradée.</li>
+<li><strong>C10</strong> — à fontScale 1.0 et 1.3 : label flottant non rogné, headroom correct. TalkBack : nom accessible conservé, un seul nœud scrollable ; Maj+flèches (clavier physique) suit les mêmes règles que les poignées.</li>
+</ul>
+<p>C9 est dérogé entre les lots et se clôt en R4. C7 est satisfait par construction pour le sujet (ED-101) et le nouveau MP (ED-113) : aucun en-tête ne reste dans la colonne. Roborazzi (<a href="https://forumhfr.github.io/redface2/adr/016-roborazzi-screenshot-testing">ADR-016</a>) sert à l'inspection des états visuels ; il ne prouve ni les insets IME, ni le redimensionnement système, ni la fenêtre Dialog.</p>
+<h2 id="10-traçabilité">10. Traçabilité</h2>
+<p>Chaque fonction existante, sa place dans la refonte, la règle qui la porte, le lot et la preuve.</p>
+<table>
+<thead>
+<tr>
+<th>Fonction en 0.62.0</th>
+<th>Dans la refonte</th>
+<th>Règle</th>
+<th>Lot</th>
+<th>Preuve</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Champ borné, plancher 160 dp</td>
+<td>Champ élastique, plancher conservé</td>
+<td>ED-02</td>
+<td>R1a</td>
+<td>device</td>
+</tr>
+<tr>
+<td>Labels « Contenu BBCode » / « Votre réponse »</td>
+<td>« Message »</td>
+<td>ED-12</td>
+<td>R1a, R1b</td>
+<td>Roborazzi + device 1,3</td>
+</tr>
+<tr>
+<td>Titre d'écran (<code>titleLarge</code>)</td>
+<td>Ligne 1 de l'app bar</td>
+<td>ED-10</td>
+<td>R1a</td>
+<td>Roborazzi</td>
+</tr>
+<tr>
+<td>11 chips BBCode (10 + Couleur)</td>
+<td>Tiroir, 10 chips ; Image → menu image</td>
+<td>ED-20, ED-31</td>
+<td>R1a</td>
+<td>Roborazzi + device</td>
+</tr>
+<tr>
+<td>Uploader épinglé, spinner</td>
+<td>Menu image, événement de bande</td>
+<td>ED-31, ED-43</td>
+<td>R1a</td>
+<td>device</td>
+</tr>
+<tr>
+<td>Dialogue « Insérer une image » (URL)</td>
+<td>Menu image</td>
+<td>ED-31</td>
+<td>R1a</td>
+<td>Roborazzi</td>
+</tr>
+<tr>
+<td>Action <code>[img]</code> des éditeurs MP</td>
+<td>Menu image, « Baliser la sélection »</td>
+<td>ED-31</td>
+<td>R1b-2</td>
+<td>device</td>
+</tr>
+<tr>
+<td>Compteur « Envoi n/N… »</td>
+<td>Événement + barre 2 dp</td>
+<td>ED-43, ED-46</td>
+<td>R1a</td>
+<td>Roborazzi</td>
+</tr>
+<tr>
+<td>7 erreurs d'upload</td>
+<td>Contrat unique, résumé + détail</td>
+<td>ED-130</td>
+<td>R0b</td>
+<td>tests JVM</td>
+</tr>
+<tr>
+<td>9 erreurs d'envoi</td>
+<td>Contrat unique, persistance</td>
+<td>ED-130, ED-131</td>
+<td>R0b, R1a</td>
+<td>tests JVM</td>
+</tr>
+<tr>
+<td>8 + 1 erreurs de la feuille</td>
+<td>Contrat unique</td>
+<td>ED-130</td>
+<td>R0b</td>
+<td>tests JVM</td>
+</tr>
+<tr>
+<td>8 erreurs MP + « peut-être envoyé »</td>
+<td>Contrat unique, état conservé</td>
+<td>ED-112, ED-130</td>
+<td>R0b</td>
+<td>tests JVM</td>
+</tr>
+<tr>
+<td>Bandeau brouillon Restaurer / Ignorer</td>
+<td>Pastille ↺</td>
+<td>ED-42</td>
+<td>R1a</td>
+<td>device (C8)</td>
+</tr>
+<tr>
+<td>Autosave, purge, rétention</td>
+<td>Inchangés, silencieux</td>
+<td>ED-41</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Citations inline (défaut)</td>
+<td>Inchangées</td>
+<td>ED-01</td>
+<td>—</td>
+<td>device</td>
+</tr>
+<tr>
+<td>Cartes de citation ↑ ↓ ✕</td>
+<td>Conservées en R1a (ED-140), puis pastille + panneau</td>
+<td>ED-42, ED-50</td>
+<td>R2a</td>
+<td>Roborazzi + device</td>
+</tr>
+<tr>
+<td>« Tout vider » (≥ 2 cartes)</td>
+<td>Action d'app bar du panneau</td>
+<td>ED-50</td>
+<td>R2a</td>
+<td>Roborazzi</td>
+</tr>
+<tr>
+<td>Choix du rendu des citations (réglage)</td>
+<td>Inchangé, lu à l'ouverture</td>
+<td>ED-01</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Aperçu Afficher / Masquer</td>
+<td>Bascule en R1a (ED-140), puis partage source / rendu</td>
+<td>ED-60</td>
+<td>R2b</td>
+<td>device</td>
+</tr>
+<tr>
+<td>Smileys Standard / Wiki</td>
+<td>Feuille conservée</td>
+<td>ED-70</td>
+<td>R1a</td>
+<td>Roborazzi</td>
+</tr>
+<tr>
+<td>Options HFR (3 bascules)</td>
+<td>Feuille conservée</td>
+<td>ED-71</td>
+<td>R1a</td>
+<td>Roborazzi</td>
+</tr>
+<tr>
+<td>Ton du message (16 icônes)</td>
+<td>Grille dépliée</td>
+<td>ED-71</td>
+<td>R1a</td>
+<td>Roborazzi</td>
+</tr>
+<tr>
+<td>Options MP sans ton</td>
+<td>Conservées</td>
+<td>ED-71</td>
+<td>R1b-2</td>
+<td>Roborazzi</td>
+</tr>
+<tr>
+<td>Bouton armé, secondaires masqués</td>
+<td>Conservé</td>
+<td>ED-34</td>
+<td>R1a</td>
+<td>device</td>
+</tr>
+<tr>
+<td>Cibles tactiles de la bande</td>
+<td>≥ 48 dp</td>
+<td>ED-92</td>
+<td>R1a</td>
+<td>device, fontScale 1,3</td>
+</tr>
+<tr>
+<td>Titre du sujet + sous-catégorie</td>
+<td>Résumé en app bar + panneau d'en-tête</td>
+<td>ED-100, ED-101</td>
+<td>R1b-1</td>
+<td>Roborazzi + device (C7)</td>
+</tr>
+<tr>
+<td>Note « sondage préservé »</td>
+<td>Pastille</td>
+<td>ED-42</td>
+<td>R1b-1</td>
+<td>Roborazzi</td>
+</tr>
+<tr>
+<td>Destinataires CSV</td>
+<td>Pastilles, virgule seule, dans le panneau d'en-tête</td>
+<td>ED-110, ED-113</td>
+<td>R1b-2</td>
+<td>device</td>
+</tr>
+<tr>
+<td>Destinataires + sujet du nouveau MP (dans la colonne)</td>
+<td>Résumé en app bar + panneau d'en-tête</td>
+<td>ED-113</td>
+<td>R1b-2</td>
+<td>Roborazzi + device (C3, C7)</td>
+</tr>
+<tr>
+<td>Compteur de sujet MP</td>
+<td>Conservé</td>
+<td>ED-110</td>
+<td>R1b-2</td>
+<td>Roborazzi</td>
+</tr>
+<tr>
+<td>« Destinataires : N · Gérer »</td>
+<td>Conservé</td>
+<td>ED-111</td>
+<td>R1b-2</td>
+<td>device</td>
+</tr>
+<tr>
+<td>Hydratation, échec / nouvel essai (post)</td>
+<td>Inchangés</td>
+<td>§ 7.1</td>
+<td>R1a</td>
+<td>tests JVM</td>
+</tr>
+<tr>
+<td>Chargement du formulaire, échec / nouvel essai (sujet)</td>
+<td>Inchangés</td>
+<td>§ 7.2</td>
+<td>R1b-1</td>
+<td>tests JVM</td>
+</tr>
+<tr>
+<td>Chargement de la conversation, échec / nouvel essai (MP)</td>
+<td>Inchangés, hors bande</td>
+<td>ED-130</td>
+<td>R1b-2</td>
+<td>tests JVM</td>
+</tr>
+<tr>
+<td>Sauvegarde attendue avant retour</td>
+<td>Inchangée</td>
+<td>§ 7.1</td>
+<td>—</td>
+<td>tests JVM</td>
+</tr>
+<tr>
+<td>Garde anti-écrasement (GET tardif)</td>
+<td>Inchangée</td>
+<td>§ 7.1</td>
+<td>—</td>
+<td>tests JVM</td>
+</tr>
+<tr>
+<td>Changement de compte (jobs annulés)</td>
+<td>Inchangé, sans erreur fabriquée</td>
+<td>ED-83</td>
+<td>R1a</td>
+<td>tests JVM</td>
+</tr>
+<tr>
+<td>Poignées, autoscroll, TextClassifier</td>
+<td>Inchangés</td>
+<td>ED-13</td>
+<td>—</td>
+<td>device (C1, C2)</td>
+</tr>
+<tr>
+<td>Autofocus par surface, capitalisation</td>
+<td>Inchangés</td>
+<td>ED-13</td>
+<td>—</td>
+<td>device</td>
+</tr>
+<tr>
+<td>Feuille de réponse rapide</td>
+<td>L'éditeur en mode feuille</td>
+<td>ED-120</td>
+<td>R4</td>
+<td>device</td>
+</tr>
+<tr>
+<td>Bouton plein écran de la feuille</td>
+<td>⤢, texte et citations</td>
+<td>ED-84</td>
+<td>R4</td>
+<td>device</td>
+</tr>
+<tr>
+<td>« Insertion de la citation… »</td>
+<td>Événement acquittable</td>
+<td>ED-44</td>
+<td>R4</td>
+<td>device</td>
+</tr>
+<tr>
+<td>« Publier la réponse ? »</td>
+<td>Bouton armé</td>
+<td>ED-120</td>
+<td>R4</td>
+<td>device</td>
+</tr>
+<tr>
+<td>Contexte page de la feuille</td>
+<td>Conservé, rafraîchi à chaque ouverture</td>
+<td>ED-121</td>
+<td>R4</td>
+<td>tests JVM</td>
+</tr>
+</tbody>
+</table>
+<h2 id="11-lots">11. Lots</h2>
+<p>Un lot = une PR = une build dev = un retour testeurs. Promotion bêta à la fin de la phase complète.</p>
+<p><strong>ED-140</strong> — Règle transitoire : aucun lot ne retire un parcours avant le lot qui le remplace. En R1a, les cartes de citation (mode cartes) restent affichées et utilisables en tête du champ, par dérogation à ED-03, jusqu'à R2a ; l'aperçu reste une bascule plein champ depuis l'app bar jusqu'à R2b.</p>
+<p><strong>Critères de sortie de R0a</strong> (vidéo S10e + Android 10, fontScale 1 et 1,3) : caret en dernière ligne visible au-dessus du tiroir ouvert, avant et après insertion d'un chip ; sélection étendue conservée à l'ouverture et au repli ; aucun changement de hauteur du champ ; retour du sélecteur d'images sans double animation ; Maj+flèches cohérent. Échec d'un critère = la règle du tiroir superposé est révisée avant R1a.</p>
+<pre class="mermaid">flowchart LR
+  R0a[&quot;R0a — spike tiroir / BTF2&lt;br/&gt;(device)&quot;] --&gt; R1a
+  R0b[&quot;R0b — contrat d&#39;erreur&lt;br/&gt;33 chaînes&quot;] --&gt; R1a
+  R1a[&quot;R1a — PostEditor&quot;] --&gt; R1b1[&quot;R1b-1 — TopicForm&quot;]
+  R1a --&gt; R1b2[&quot;R1b-2 — MP&quot;]
+  R1a --&gt; R2a[&quot;R2a — panneau citations&quot;]
+  P[&quot;calcul d&#39;aperçu&lt;br/&gt;hors _state.update&quot;] --&gt; R2b[&quot;R2b — aperçu en partage&quot;]
+  R1a --&gt; R2b
+  R1b1 --&gt; R4[&quot;R4 — feuille unifiée&lt;br/&gt;clôture C9&quot;]
+  R1b2 --&gt; R4
+  D[&quot;géométrie Dialog tranchée&quot;] --&gt; R4</pre>
+<table>
+<thead>
+<tr>
+<th>Lot</th>
+<th>Issue</th>
+<th>Contenu</th>
+<th>Précondition</th>
+<th>Preuve</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>R0a</td>
+<td>issue à créer</td>
+<td>Spike : marge basse de défilement pilotée par le tiroir sur <code>BbcodeTextField</code>, dix libellés sur 360 dp à fontScale 1,3</td>
+<td>—</td>
+<td>vidéo S10e + Android 10</td>
+</tr>
+<tr>
+<td>R0b</td>
+<td>issue à créer</td>
+<td>Type d'erreur unique dans <code>:core:ui</code>, migration des 33 chaînes, feuille comprise</td>
+<td>—</td>
+<td>tests JVM</td>
+</tr>
+<tr>
+<td>R1a</td>
+<td><a href="https://github.com/ForumHFR/redface2/issues/1450">#1450</a></td>
+<td>App bar, barre d'action, tiroir, bande — <code>PostEditorScreen</code></td>
+<td>R0a, R0b</td>
+<td>C3–C6, C10</td>
+</tr>
+<tr>
+<td>R1b-1</td>
+<td><a href="https://github.com/ForumHFR/redface2/issues/1451">#1451</a></td>
+<td><code>TopicFormScreen</code></td>
+<td>R1a validé sur device</td>
+<td>C3–C7, C10</td>
+</tr>
+<tr>
+<td>R1b-2</td>
+<td><a href="https://github.com/ForumHFR/redface2/issues/1451">#1451</a></td>
+<td>Nouveau MP, réponse MP</td>
+<td>R1a validé sur device</td>
+<td>C3–C7, C10</td>
+</tr>
+<tr>
+<td>R2a</td>
+<td><a href="https://github.com/ForumHFR/redface2/issues/1452">#1452</a></td>
+<td>Panneau citations (mode cartes)</td>
+<td>R1a</td>
+<td>C5, C6</td>
+</tr>
+<tr>
+<td>R2b</td>
+<td><a href="https://github.com/ForumHFR/redface2/issues/1452">#1452</a></td>
+<td>Aperçu en partage</td>
+<td>ED-65 livré</td>
+<td>C6, C8</td>
+</tr>
+<tr>
+<td>R4</td>
+<td><a href="https://github.com/ForumHFR/redface2/issues/1454">#1454</a></td>
+<td>Feuille unifiée</td>
+<td>géométrie Dialog</td>
+<td>C6, C8, C9</td>
+</tr>
+</tbody>
+</table>
+<h2 id="12-questions-ouvertes">12. Questions ouvertes</h2>
+<ol type="1">
+<li><strong>Disposition du tiroir</strong> (ED-24) : rangées fixes ou défilement avec indice — à trancher par mesure en R0a.</li>
+</ol>
+
+<div class="doc-sep">Décision associée</div>
+<h1 id="adr-019--refonte-de-la-vue-éditeur-1417--chrome-fixe-champ-élastique-bande-de-contexte-unique">ADR-019 — Refonte de la vue Éditeur (#1417) : chrome fixe, champ élastique, bande de contexte unique</h1>
+<h2 id="statut">Statut</h2>
+<p>Proposé — 2026-09-23</p>
+<h2 id="contexte">Contexte</h2>
+<p>La vue Éditeur regroupe cinq surfaces d'écriture : répondre ou modifier un message (<code>PostEditorScreen</code>), créer un sujet ou modifier son premier message (<code>TopicFormScreen</code>), écrire un nouveau MP (<code>PrivateMessageComposeScreen</code>), répondre dans une conversation MP (<code>PrivateMessageReplyScreen</code> / <code>MessageEditorComponents</code>), et la feuille de réponse rapide de la vue Topic (<code>QuickReplySheet</code>). Les quatre premières partagent les composants de <code>:core:ui/editor</code> (<code>BbcodeTextField</code>, <code>BbcodeToolbar</code>, <code>SmileyPickerSheet</code>, <code>EditorOptionsSheet</code>, <code>QuoteCards</code>, <code>ArmedSubmitButton</code>, <code>EditorLayoutBudget</code>, <code>EditorUpload</code>) ; la feuille a sa propre implémentation.</p>
+<p>L'objectif produit, posé par un testeur sur le topic DEV et repris par l'issue parapluie <a href="https://github.com/ForumHFR/redface2/issues/1417">#1417</a>, est que <strong>les bords haut et bas du champ restent visibles et que le texte défile dedans</strong>.</p>
+<p>Le problème mesuré : sur un téléphone de 360 × 740 dp clavier ouvert, il reste environ 330 dp de fenêtre utile. En 0.60.0 le chrome en consomme 202 (titre d'écran, barre d'outils BBCode, bouton d'aperçu, bandeaux empilés, espacements, barre d'envoi) et laisse environ 128 dp au champ — trois lignes. Le correctif de densité #1432 a garanti un plancher de 160 dp en rangeant le chrome haut dans une zone bornée défilante, au prix d'une barre d'outils rognée au milieu de ses chips et d'un bandeau de brouillon tronqué. Trois testeurs distincts demandent la même chose (densité, #872).</p>
+<p>La migration du champ vers BasicTextField 2, initialement prévue en dernier lot, a été livrée en avance (0.59.8) sous la pression d'un bug de sélection ; elle n'est plus un préalable.</p>
+<p>Le plan a été cadré en quatre passes croisées (Claude, Sol, Claude Fable, puis Sol contre le code en lecture seule, et une relecture de cohérence par Claude Fable), arbitré par le mainteneur, et maquetté (<a href="https://forumhfr.github.io/artifacts/editeur-1417/">maquettes</a>, <a href="https://forumhfr.github.io/artifacts/editeur-lexique/">vocabulaire</a>). La relecture contre le code a notamment établi que les <strong>cartes de citation sont désactivées par défaut</strong> : dans le mode par défaut, la citation est insérée en BBCode éditable dans le champ.</p>
+<h2 id="décision">Décision</h2>
+<p>La norme détaillée vit dans la <a href="https://forumhfr.github.io/redface2/specs/editor">spec de l'éditeur</a>. Cet ADR en fixe les choix structurants.</p>
+<h3 id="1-chrome-à-hauteur-fixe-champ-élastique">1. Chrome à hauteur fixe, champ élastique</h3>
+<p>Une app bar d'éditeur de 48 dp en haut (retour, titre d'écran, contexte en seconde ligne, aperçu), une barre d'action de 56 dp en bas. Entre les deux, le champ prend toute la hauteur restante, avec le plancher de 160 dp existant. Le titre d'écran (<code>titleLarge</code>, 28 sp de hauteur de ligne), la barre d'outils dans le flux et le bouton « Afficher l'aperçu » disparaissent de la colonne.</p>
+<p>Sous 400 dp de hauteur de fenêtre mesurée hors clavier (paysage téléphone), l'app bar s'efface avec son titre : l'aperçu passe dans la barre d'action, le retour passe par le geste système. Sinon le chrome fixe vaudrait 136 dp sur les ~150 disponibles.</p>
+<h3 id="2-barre-daction-en-icônes-tiroir-de-format-superposé">2. Barre d'action en icônes, tiroir de format superposé</h3>
+<p>La barre d'action porte les actions permanentes en icônes seules — format, smileys, image, options — et « Envoyer » en toutes lettres. Chaque icône a un nom accessible et une info-bulle à l'appui long (<code>TooltipBox</code>). Les icônes suivent l'<a href="https://forumhfr.github.io/redface2/adr/015-iconographie-boutons-icones">ADR-015</a>.</p>
+<p>Les chips BBCode vivent dans un tiroir déplié par l'icône de format. Le tiroir est <strong>superposé</strong> au bas du champ, jamais inséré dans la colonne, pour que son ouverture et son repli ne déplacent pas le texte (C6). Le champ réserve la hauteur du tiroir comme marge basse de défilement, pour que le caret ne passe jamais dessous (C5). La faisabilité de cette marge sur <code>BbcodeTextField</code> n'est pas acquise : elle fait l'objet d'un spike device <strong>bloquant</strong> avant tout lot de mise en page.</p>
+<h3 id="3-une-bande-de-contexte-unique-de-hauteur-constante">3. Une bande de contexte unique, de hauteur constante</h3>
+<p>Tout ce qui était un bandeau empilé — brouillon retrouvé, citations en cartes, compteur d'upload, erreur d'envoi ou d'upload — vit dans <strong>une bande de 32 dp</strong> ancrée au-dessus de la barre d'action. L'état durable à gauche en pastilles, l'événement du moment à droite en résumé d'une ligne, avec un seul emplacement d'action (« Détails », « Masquer » ou le remède). La bande est absente quand elle n'a rien à dire, <strong>ne change jamais de hauteur</strong>, et <strong>n'apparaît ni ne disparaît sur une frappe</strong>.</p>
+<p>Conséquence sur le code : dans l'éditeur de post, une erreur cesse de s'effacer au premier caractère tapé ; elle attend « Masquer », le prochain envoi ou la fermeture. Les éditeurs MP conservent déjà leurs erreurs d'envoi : la règle se fixe par cause et par surface, pas globalement.</p>
+<h3 id="3-bis-les-en-têtes-quittent-la-colonne">3 bis. Les en-têtes quittent la colonne</h3>
+<p>Le titre et la sous-catégorie d'un nouveau sujet, les destinataires et le sujet d'un nouveau MP quittent la colonne : la seconde ligne de l'app bar les résume, un appui ouvre un panneau d'en-tête. Aucun repli déclenché par le focus ou le clavier (ce serait une seconde animation, C6) ; le corps garde toute sa hauteur (C7 satisfait par construction).</p>
+<h3 id="4-les-deux-modes-de-citation-sont-préservés">4. Les deux modes de citation sont préservés</h3>
+<p>Le mode par défaut (citation en BBCode dans le champ, favorable à l'interleaving, parité web) reste inchangé : aucune pastille, rien à matérialiser à l'envoi. Le mode cartes (opt-in) remplace ses cartes dépliées par une pastille dans la bande et un <strong>panneau citations</strong> plein écran. Aucune conversion silencieuse d'un mode à l'autre.</p>
+<h3 id="5-aperçu-en-partage-cran-physique-pas-de-réglage">5. Aperçu en partage, cran physique, pas de réglage</h3>
+<p>L'aperçu cesse d'être une bascule : il s'ouvre à côté du source — dessous en portrait, à droite en paysage et sur tablette — pour que les deux restent comparables. Ouvrir l'aperçu ne touche pas au clavier. Le séparateur s'arrête quand le champ atteint 160 dp ; au-delà, le glissement devient élastique et relâcher ferme le clavier, une seule fois. La position est mémorisée par size class. Un réglage utilisateur a été écarté : un intitulé obscur, et une matrice de test doublée sur un comportement qui ne se prouve que sur appareil.</p>
+<h3 id="6-un-seul-contrat-derreur">6. Un seul contrat d'erreur</h3>
+<p>Les erreurs d'envoi, d'upload et de citation — 33 chaînes réparties en quatre jeux divergents (7 d'upload dans <code>:core:ui</code>, 9 d'envoi dans <code>:feature:editor</code>, 9 dans <code>:feature:topic</code>, 8 dans <code>:feature:messages</code>) — convergent vers un type unique (cause, résumé, détail, action) avant la bande, dans une PR de fondation qui inclut la feuille de réponse rapide.</p>
+<h3 id="7-découpage">7. Découpage</h3>
+<p>Un lot = une PR = une build dev = un retour testeurs. Aucun lot ne retire un parcours avant le lot qui le remplace : jusqu'à R2a et R2b, les cartes de citation et la bascule d'aperçu restent accessibles. Promotion en bêta à la fin de la phase complète, pas lot par lot ; entre deux lots, le critère C9 (comportement identique) est explicitement dérogé et annoncé.</p>
+<table>
+<thead>
+<tr>
+<th>Lot</th>
+<th>Contenu</th>
+<th>Précondition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>R0a</td>
+<td>Spike device : tiroir superposé et marge basse sur <code>BbcodeTextField</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td>R0b</td>
+<td>Fondation : contrat d'erreur unique, 33 chaînes migrées</td>
+<td>—</td>
+</tr>
+<tr>
+<td>R1a</td>
+<td>App bar, barre d'action, tiroir, bande — <code>PostEditorScreen</code> seul</td>
+<td>R0a concluant, R0b</td>
+</tr>
+<tr>
+<td>R1b-1</td>
+<td><code>TopicFormScreen</code></td>
+<td>R1a validé sur device</td>
+</tr>
+<tr>
+<td>R1b-2</td>
+<td>Nouveau MP et réponse MP</td>
+<td>R1a validé sur device</td>
+</tr>
+<tr>
+<td>R2a</td>
+<td>Panneau citations (mode cartes), interleaving</td>
+<td>R1a</td>
+</tr>
+<tr>
+<td>R2b</td>
+<td>Aperçu en partage</td>
+<td>calcul de l'aperçu hors de <code>_state.update</code> sur les quatre ViewModels</td>
+</tr>
+<tr>
+<td>R4</td>
+<td>Réponse rapide unifiée : l'éditeur en mode feuille ; clôture de C9</td>
+<td>géométrie du tiroir en fenêtre Dialog tranchée</td>
+</tr>
+</tbody>
+</table>
+<p>Le « Citer la portion sélectionnée » (<a href="https://github.com/ForumHFR/redface2/issues/381">#381</a>) sort de la phase : la sélection concernée est celle du post lu (<code>SelectionContainer</code> de <code>PostRenderer</code>), pas celle du champ.</p>
+<h2 id="conséquences">Conséquences</h2>
+<ul>
+<li><strong>+</strong> Le champ passe de ~128 dp à 182–214 dp clavier ouvert sur 360 × 740 dp (cibles calculées, à mesurer), sans retirer aucune fonction existante.</li>
+<li><strong>+</strong> Plus aucun élément de chrome n'apparaît, ne disparaît ni ne change de hauteur pendant la frappe : les sauts sous le doigt deviennent une violation de règle vérifiable, plus un défaut au cas par cas.</li>
+<li><strong>+</strong> Une seule implémentation d'éditeur à terme, feuille comprise ; un seul contrat d'erreur.</li>
+<li><strong>−</strong> La refonte ajoute 48 dp de chrome neuf (l'app bar, absente aujourd'hui) : le gain net est de +54 à +86 dp face à 0.60.0, de +22 à +54 dp face à 0.62.0 où le plancher de 160 dp existe déjà.</li>
+<li><strong>−</strong> Un résumé d'une ligne (~30 caractères) impose de réécrire tous les messages d'erreur ; le texte intégral passe derrière « Détails ».</li>
+<li><strong>−</strong> Icônes seules : la découvrabilité repose sur l'info-bulle et TalkBack. Info-bulle = première utilisation de <code>TooltipBox</code>, API <code>@ExperimentalMaterial3Api</code> (déjà opt-in dans 32 fichiers du projet).</li>
+<li><strong>−</strong> Pendant la phase, deux générations d'éditeur coexistent dans les builds dev.</li>
+<li><strong>Risque principal</strong> : la marge basse du tiroir sur BTF2. Si le spike R0a échoue, la règle du tiroir superposé est à revoir avant tout lot de mise en page.</li>
+<li><strong>Preuves attendues</strong> : les critères C1–C10 de #1417 se vérifient sur appareil, filmés (S10e à 360 dp et Android 10). Roborazzi (<a href="https://forumhfr.github.io/redface2/adr/016-roborazzi-screenshot-testing">ADR-016</a>) sert à l'inspection visuelle des états, pas à la preuve des insets, du clavier ni de la fenêtre Dialog.</li>
+</ul>
+<h2 id="alternatives-considérées">Alternatives considérées</h2>
+<ul>
+<li><strong>Garder la zone bornée de #1432 et la densifier</strong> : elle rogne la barre d'outils et tronque le bandeau ; le chrome continue de dépendre du contenu.</li>
+<li><strong>Barre d'action avec libellés</strong> : environ 16 dp de plus et « Envoyer » comprimé ; rejeté au profit des icônes avec info-bulle.</li>
+<li><strong>Tiroir de format inséré dans la colonne</strong> : chaque ouverture et repli déplacent le texte (C6).</li>
+<li><strong>Bande sur deux lignes pendant une erreur</strong> : 150 dp au champ, sous le plancher, et un repli sous le doigt à la frappe suivante.</li>
+<li><strong>Aperçu plein écran ou réglage « replier le clavier »</strong> : le premier détruit la comparaison source / rendu, le second fige un doute en préférence.</li>
+<li><strong>Refondre les cinq surfaces dans un seul lot</strong> : aucune géométrie n'a tourné sur appareil ; un retour du type « la bande gêne » obligerait à retoucher cinq écrans.</li>
+<li><strong>Inclure la feuille de réponse rapide dans le premier lot</strong> : c'est une autre implémentation (champ, ViewModel, brouillon, confirmation, fenêtre Dialog) ; l'y inclure revient à faire R4 d'abord.</li>
+</ul>
+
+</div>
+<script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+const dark = matchMedia("(prefers-color-scheme: dark)").matches;
+mermaid.initialize({startOnLoad: true, theme: dark ? "dark" : "neutral", securityLevel: "strict"});
+</script>
+
+</body>
+</html>

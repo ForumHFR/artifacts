@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{color-scheme:light dark}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Rendus Roborazzi — éditeur #1417</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{--paper:#FAF5F4; --paper-2:#FFFFFF; --paper-3:#F3EAE9; --ink:#241A1B; --ink-2:#5C4A4A; --ink-3:#8B7573;
+  --line:#E5D6D4; --accent:#8E1D24; --accent-soft:#FBE0DF}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--paper:#151010; --paper-2:#1D1616;
+  --paper-3:#241C1C; --ink:#F0E2E0; --ink-2:#C9B4B2; --ink-3:#9B8583; --line:#3A2D2D; --accent:#FFB3B1; --accent-soft:#3D1F21}}
+:root[data-theme="dark"]{--paper:#151010; --paper-2:#1D1616; --paper-3:#241C1C; --ink:#F0E2E0; --ink-2:#C9B4B2;
+  --ink-3:#9B8583; --line:#3A2D2D; --accent:#FFB3B1; --accent-soft:#3D1F21}
+*{box-sizing:border-box}
+body{margin:0; background:var(--paper); color:var(--ink); font-family:"Public Sans","Helvetica Neue",Arial,sans-serif;
+  font-size:15px; line-height:1.55; -webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px; margin:0 auto; padding-inline:20px; padding-block:0 72px}
+h1,h2,h3{font-family:Archivo,"Helvetica Neue",Arial,sans-serif; letter-spacing:-.01em; text-wrap:balance}
+h1{font-size:clamp(30px,5vw,44px); margin:44px 0 8px; line-height:1.08}
+.lede{color:var(--ink-2); max-width:72ch}
+.lede code,.card code{font-family:"IBM Plex Mono",monospace; font-size:.85em; background:var(--paper-3); padding:1px 4px; border-radius:4px}
+h2{font-size:22px; margin:40px 0 14px; padding-top:16px; border-top:1px solid var(--line)}
+.grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:18px}
+.card{background:var(--paper-2); border:1px solid var(--line); border-radius:12px; overflow:hidden; display:flex; flex-direction:column}
+.card a{display:block; line-height:0; background:var(--paper-3)}
+.card img{width:100%; height:auto; display:block}
+.card .cap{padding:10px 12px 12px}
+.card h3{font-size:14.5px; margin:0 0 3px}
+.card .rules{font-family:"IBM Plex Mono",monospace; font-size:10.5px; color:var(--accent); letter-spacing:.04em}
+.card p{margin:6px 0 0; font-size:13px; color:var(--ink-2)}
+.tag{display:inline-block; font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--accent); border:1px solid var(--accent); border-radius:4px; padding:2px 7px}
+.artnav{position:sticky; top:0; z-index:50; display:flex; gap:2px; align-items:center; flex-wrap:wrap;
+  margin-inline:-20px; padding:calc(7px + env(safe-area-inset-top, 0px)) 20px 7px; background:var(--paper);
+  background:color-mix(in srgb, var(--paper) 88%, transparent); backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px); border-bottom:1px solid var(--line)}
+.artnav a,.artnav span{font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.05em; padding:5px 10px;
+  border-radius:6px; text-decoration:none; color:var(--ink-3); white-space:nowrap}
+.artnav a:hover{color:var(--ink); background:var(--paper-3)}
+.artnav a.on{color:var(--accent); background:var(--accent-soft); font-weight:500}
+.artnav .brand{margin-right:auto; font-size:10px; letter-spacing:.14em; text-transform:uppercase; padding-left:0}
+@media (max-width:520px){.artnav .brand{display:none} .artnav a,.artnav span{padding:5px 7px; font-size:10.5px}}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+<nav class="artnav">
+  <span class="brand">Éditeur #1417</span>
+  <a href="https://forumhfr.github.io/artifacts/editeur-1417/">Maquettes</a>
+  <a href="https://forumhfr.github.io/artifacts/editeur-spec/">Spec</a>
+  <a href="https://forumhfr.github.io/artifacts/editeur-lexique/">Vocabulaire</a>
+  <a href="https://forumhfr.github.io/artifacts/editeur-roborazzi/" class="on">Rendus Roborazzi</a>
+
+<style id="vpick-style">
+#vpick{position:fixed;top:0;right:0;z-index:9999;display:flex;align-items:center;gap:7px;
+ padding:6px 10px;border-radius:0 0 0 10px;font:500 12px/1 ui-sans-serif,system-ui,sans-serif;
+ background:rgba(128,128,128,.14);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+ border-left:1px solid rgba(128,128,128,.28);border-bottom:1px solid rgba(128,128,128,.28);color:inherit}
+#vpick label{opacity:.65;letter-spacing:.06em;text-transform:uppercase;font-size:10px}
+#vpick select{font:inherit;color:inherit;background:transparent;border:1px solid rgba(128,128,128,.45);
+ border-radius:5px;padding:3px 6px;cursor:pointer}
+#vpick select option{color:#111;background:#fff}
+@media print{#vpick{display:none}}
+/* page dotée du menu inter-artefacts : le sélecteur y prend place au lieu de flotter par-dessus */
+.artnav #vpick{position:static;margin-left:6px;padding:0;border:0;border-radius:0;background:none;
+ backdrop-filter:none;-webkit-backdrop-filter:none}
+@media (max-width:520px){.artnav #vpick label{display:none}}
+</style>
+<div id="vpick"><label for="vpick-sel">Version</label><select id="vpick-sel" onchange="location.href=this.value"><option value="./" selected>v1 — courante</option></select></div>
+</nav>
+<h1>Rendus Roborazzi</h1>
+<p><span class="tag">maquette jetable · vague w2</span></p>
+<p class="lede">Premiers rendus JVM de la cible décrite par la <a href="https://forumhfr.github.io/artifacts/editeur-spec/">spec de l'éditeur</a> (v0.3, règles ED-nn). Ce sont des <b>maquettes jetables</b> : composables écrits dans un dossier de test de <code>:core:ui</code>, sur une branche locale jamais poussée, rendus par Roborazzi (Robolectric, SDK 34, 360 × 740 dp, xxhdpi, thème réel de l'app). <b>Ce qu'ils ne prouvent pas</b> : le clavier est un bloc gris simulé, il n'y a ni inset IME, ni fenêtre Dialog, ni geste ; les icônes format, smileys, options et en-tête sont des placeholders (drawables à créer, ADR-015). Ils servent à juger la géométrie et la hiérarchie visuelle, pas à valider un critère C1–C10.</p>
+<h2>Répondre — l&#x27;éditeur de post</h2>
+<div class="grid">
+<div class="card"><a href="/artifacts/editeur-roborazzi/img-w2/editor1417_01_idle_reply.jpg"><img src="/artifacts/editeur-roborazzi/img-w2/editor1417_01_idle_reply.jpg" alt="Au repos, clavier fermé" loading="lazy" width="540" height="1110"></a><div class="cap"><h3>Au repos, clavier fermé</h3><div class="rules">ED-02 · ED-10 · ED-12 · ED-01</div><p>Mode de citation inline (défaut) : le <code>[quotemsg]</code> est dans le champ, aucune pastille. Bande absente.</p></div></div>
+<div class="card"><a href="/artifacts/editeur-roborazzi/img-w2/editor1417_02_typing.jpg"><img src="/artifacts/editeur-roborazzi/img-w2/editor1417_02_typing.jpg" alt="En frappe, clavier simulé" loading="lazy" width="540" height="1110"></a><div class="cap"><h3>En frappe, clavier simulé</h3><div class="rules">ED-02 · ED-30</div><p>Il reste 330 dp entre la barre d'état et le clavier : app bar 48, barre d'action 56, le champ prend le reste.</p></div></div>
+<div class="card"><a href="/artifacts/editeur-roborazzi/img-w2/editor1417_02_typing_dark.jpg"><img src="/artifacts/editeur-roborazzi/img-w2/editor1417_02_typing_dark.jpg" alt="En frappe — thème sombre" loading="lazy" width="540" height="1110"></a><div class="cap"><h3>En frappe — thème sombre</h3><div class="rules">ED-02</div><p></p></div></div>
+<div class="card"><a href="/artifacts/editeur-roborazzi/img-w2/editor1417_12_typing_fontscale13.jpg"><img src="/artifacts/editeur-roborazzi/img-w2/editor1417_12_typing_fontscale13.jpg" alt="En frappe à fontScale 1,3" loading="lazy" width="540" height="1110"></a><div class="cap"><h3>En frappe à fontScale 1,3</h3><div class="rules">ED-10 · C10</div><p>Les deux lignes de l'app bar doivent tenir dans 48 dp ; les hauteurs de texte sont en sp.</p></div></div>
+<div class="card"><a href="/artifacts/editeur-roborazzi/img-w2/editor1417_03_format_drawer.jpg"><img src="/artifacts/editeur-roborazzi/img-w2/editor1417_03_format_drawer.jpg" alt="Tiroir de format ouvert" loading="lazy" width="540" height="1110"></a><div class="cap"><h3>Tiroir de format ouvert</h3><div class="rules">ED-20 · ED-21 · ED-22 · ED-24</div><p>Dix chips, Couleur en sous-menu. Superposé au bas du champ ; le caret reste visible au-dessus. Donnée pour le spike R0a : combien de rangées à 360 dp.</p></div></div>
+<div class="card"><a href="/artifacts/editeur-roborazzi/img-w2/editor1417_11_armed.jpg"><img src="/artifacts/editeur-roborazzi/img-w2/editor1417_11_armed.jpg" alt="Envoi armé" loading="lazy" width="540" height="1110"></a><div class="cap"><h3>Envoi armé</h3><div class="rules">ED-34</div><p>« Confirmer » en tertiaire ; les actions secondaires sont masquées, comme aujourd'hui.</p></div></div>
+</div>
+<h2>La bande de contexte</h2>
+<div class="grid">
+<div class="card"><a href="/artifacts/editeur-roborazzi/img-w2/editor1417_04_saturated_band.jpg"><img src="/artifacts/editeur-roborazzi/img-w2/editor1417_04_saturated_band.jpg" alt="Bande saturée" loading="lazy" width="540" height="1110"></a><div class="cap"><h3>Bande saturée</h3><div class="rules">ED-42 · ED-43 · ED-47</div><p>Mode cartes : ❝ 3 et ↺ compactés, « +1 » au-delà de deux pastilles, erreur en résumé d'une ligne + « Détails ».</p></div></div>
+<div class="card"><a href="/artifacts/editeur-roborazzi/img-w2/editor1417_04_saturated_band_dark.jpg"><img src="/artifacts/editeur-roborazzi/img-w2/editor1417_04_saturated_band_dark.jpg" alt="Bande saturée — thème sombre" loading="lazy" width="540" height="1110"></a><div class="cap"><h3>Bande saturée — thème sombre</h3><div class="rules">ED-47</div><p></p></div></div>
+<div class="card"><a href="/artifacts/editeur-roborazzi/img-w2/editor1417_05_upload.jpg"><img src="/artifacts/editeur-roborazzi/img-w2/editor1417_05_upload.jpg" alt="Upload en cours" loading="lazy" width="540" height="1110"></a><div class="cap"><h3>Upload en cours</h3><div class="rules">ED-43 · ED-46</div><p>Événement « Envoi 2/3… » et barre de progression de 2 dp dessinée dans les 32 dp.</p></div></div>
+<div class="card"><a href="/artifacts/editeur-roborazzi/img-w2/editor1417_15_band_upload_done.jpg"><img src="/artifacts/editeur-roborazzi/img-w2/editor1417_15_band_upload_done.jpg" alt="Upload terminé, en attente d&#x27;acquittement" loading="lazy" width="540" height="1110"></a><div class="cap"><h3>Upload terminé, en attente d&#x27;acquittement</h3><div class="rules">ED-44</div><p>« 3 images insérées » + « Masquer » : l'événement ne se vide pas de lui-même.</p></div></div>
+</div>
+<h2>Aperçu et paysage</h2>
+<div class="grid">
+<div class="card"><a href="/artifacts/editeur-roborazzi/img-w2/editor1417_06_preview_split.jpg"><img src="/artifacts/editeur-roborazzi/img-w2/editor1417_06_preview_split.jpg" alt="Aperçu en partage, au cran" loading="lazy" width="540" height="1110"></a><div class="cap"><h3>Aperçu en partage, au cran</h3><div class="rules">ED-60 · ED-62</div><p>Portrait, clavier fermé : le source garde 160 dp, l'aperçu prend le reste.</p></div></div>
+<div class="card"><a href="/artifacts/editeur-roborazzi/img-w2/editor1417_07_landscape.jpg"><img src="/artifacts/editeur-roborazzi/img-w2/editor1417_07_landscape.jpg" alt="Paysage, clavier simulé" loading="lazy" width="540" height="263"></a><div class="cap"><h3>Paysage, clavier simulé</h3><div class="rules">ED-05</div><p>Hauteur compacte : pas d'app bar, l'aperçu passe dans la barre d'action.</p></div></div>
+</div>
+<h2>Nouveau sujet et nouveau MP — les en-têtes quittent la colonne</h2>
+<div class="grid">
+<div class="card"><a href="/artifacts/editeur-roborazzi/img-w2/editor1417_08_new_topic.jpg"><img src="/artifacts/editeur-roborazzi/img-w2/editor1417_08_new_topic.jpg" alt="Nouveau sujet" loading="lazy" width="540" height="1110"></a><div class="cap"><h3>Nouveau sujet</h3><div class="rules">ED-100 · ED-101 · ED-102</div><p>La seconde ligne de l'app bar résume titre et sous-catégorie ; le corps a toute la hauteur.</p></div></div>
+<div class="card"><a href="/artifacts/editeur-roborazzi/img-w2/editor1417_13_new_topic_header_panel.jpg"><img src="/artifacts/editeur-roborazzi/img-w2/editor1417_13_new_topic_header_panel.jpg" alt="Panneau d&#x27;en-tête du sujet" loading="lazy" width="540" height="1110"></a><div class="cap"><h3>Panneau d&#x27;en-tête du sujet</h3><div class="rules">ED-101</div><p>Ouvert par un appui sur la seconde ligne de l'app bar ; « Retour au message » rend le focus au corps.</p></div></div>
+<div class="card"><a href="/artifacts/editeur-roborazzi/img-w2/editor1417_14_landscape_new_topic.jpg"><img src="/artifacts/editeur-roborazzi/img-w2/editor1417_14_landscape_new_topic.jpg" alt="Nouveau sujet en paysage" loading="lazy" width="540" height="263"></a><div class="cap"><h3>Nouveau sujet en paysage</h3><div class="rules">ED-05 · ED-30</div><p>Sans app bar, l'entrée « En-tête » passe dans la barre d'action, avant l'aperçu.</p></div></div>
+<div class="card"><a href="/artifacts/editeur-roborazzi/img-w2/editor1417_09a_new_message_header_open.jpg"><img src="/artifacts/editeur-roborazzi/img-w2/editor1417_09a_new_message_header_open.jpg" alt="Nouveau MP, panneau ouvert d&#x27;office" loading="lazy" width="540" height="1110"></a><div class="cap"><h3>Nouveau MP, panneau ouvert d&#x27;office</h3><div class="rules">ED-113 · ED-110</div><p>MP neuf sans destinataire : destinataires en pastilles (la virgule valide), sujet avec compteur.</p></div></div>
+<div class="card"><a href="/artifacts/editeur-roborazzi/img-w2/editor1417_09b_new_message.jpg"><img src="/artifacts/editeur-roborazzi/img-w2/editor1417_09b_new_message.jpg" alt="Nouveau MP, écriture" loading="lazy" width="540" height="1110"></a><div class="cap"><h3>Nouveau MP, écriture</h3><div class="rules">ED-113</div><p>Résumé « N destinataires · sujet » en app bar ; pas de pastille de destinataires dans la bande.</p></div></div>
+</div>
+<h2>Réponse rapide (lot R4)</h2>
+<div class="grid">
+<div class="card"><a href="/artifacts/editeur-roborazzi/img-w2/editor1417_10_quick_reply.jpg"><img src="/artifacts/editeur-roborazzi/img-w2/editor1417_10_quick_reply.jpg" alt="L&#x27;éditeur en mode feuille" loading="lazy" width="540" height="1110"></a><div class="cap"><h3>L&#x27;éditeur en mode feuille</h3><div class="rules">ED-120</div><p>Même barre, même bande, format et smileys. La fenêtre Dialog et ses insets ne sont pas simulés.</p></div></div>
+</div>
+</div>
+
+</body>
+</html>
