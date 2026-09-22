@@ -61,6 +61,7 @@
 }
 
 *{box-sizing:border-box}
+html{scrollbar-gutter:stable}
 body{
   margin:0; background:var(--paper); color:var(--ink);
   font-family:"Public Sans","Helvetica Neue",Arial,sans-serif;
@@ -453,7 +454,7 @@ footer{padding-block:34px 0; color:var(--ink-3); font-size:12.5px}
  backdrop-filter:none;-webkit-backdrop-filter:none}
 @media (max-width:520px){.artnav #vpick label{display:none}}
 </style>
-<div id="vpick"><label for="vpick-sel">Version</label><select id="vpick-sel" onchange="location.href=this.value"><option value="./" selected>v5 — courante</option><option value="v4/">v4</option><option value="v3/">v3</option><option value="v2/">v2</option><option value="v1/">v1</option></select></div>
+<div id="vpick"><label for="vpick-sel">Version</label><select id="vpick-sel" onchange="location.href=this.value"><option value="../">v5 — courante</option><option value="../v4/" selected>v4</option><option value="../v3/">v3</option><option value="../v2/">v2</option><option value="../v1/">v1</option></select></div>
 </nav>
 
 
@@ -468,7 +469,7 @@ footer{padding-block:34px 0; color:var(--ink-3); font-size:12.5px}
     <span>4 surfaces + réponse rapide</span>
     <span>360 × 740 dp (S10e / S9)</span>
     <span>schéma M3 réel de l'app</span>
-    <span>22 septembre 2026 · V4.3</span>
+    <span>22 septembre 2026 · V4.2</span>
   </div>
 </header>
 
@@ -746,8 +747,9 @@ footer{padding-block:34px 0; color:var(--ink-3); font-size:12.5px}
       <p>Le titre d'écran et le sujet cité montent dans l'app bar, sur deux lignes&nbsp;: c'est le seul
       endroit qui ne bouge plus jamais.</p>
       <p><b>Portrait Compact.</b> Sous 400&nbsp;dp de hauteur de fenêtre — paysage téléphone — l'app
-      bar s'efface avec son titre&nbsp;; la barre d'action reste et accueille 👁 en sixième icône, le
-      retour passe par le geste système. Sans cette clause le chrome fixe vaudrait 136&nbsp;dp sur les ~150 disponibles, et la règle serait fausse.</p>
+      bar s'efface&nbsp;; la barre d'action reste — où va son titre reste à trancher (voir
+      <i>Le plan</i>). Sans cette clause
+      le chrome fixe vaudrait 136&nbsp;dp sur les ~150 disponibles, et la règle serait fausse.</p>
     </div>
     <div class="rule">
       <div class="k">Règle 2</div>
@@ -817,7 +819,7 @@ footer{padding-block:34px 0; color:var(--ink-3); font-size:12.5px}
       </div>
       <ul class="notes">
         <li><span class="n">1</span><span>La <b>bande de contexte</b> remplace les cartes dépliées&nbsp;: une pastille par chose active, tap = ouvre la surface qui la gouverne. Pas de pastille pour l'autosave&nbsp;— elle reste silencieuse, sinon la bande surgirait sous le caret une seconde après la première lettre.</span></li>
-        <li><span class="n">2</span><span><b>Aa</b> déplie le format, <b>⋯</b> ouvre les options, <b>👁</b> l'aperçu. Icônes seules&nbsp;: le nom accessible TalkBack reprend le libellé actuel. Un appui long affiche le libellé en info-bulle (<code>TooltipBox</code>)&nbsp;: une première dans l'app, sur une API encore expérimentale — mais 32 fichiers du projet utilisent déjà des API M3 expérimentales.</span></li>
+        <li><span class="n">2</span><span><b>Aa</b> déplie le format, <b>⋯</b> ouvre les options, <b>👁</b> l'aperçu. Icônes seules&nbsp;: le nom accessible TalkBack reprend le libellé actuel. L'info-bulle à l'appui long serait une première dans l'app et l'API M3 est encore expérimentale&nbsp;— à vérifier avant de la promettre.</span></li>
       </ul>
     </div>
 
@@ -994,12 +996,12 @@ footer{padding-block:34px 0; color:var(--ink-3); font-size:12.5px}
     <div class="deck wide">
       <div class="deck-title"><span class="tag new">Refonte</span> Aperçu, paysage et tablette</div>
       <p class="deck-note">La largeur devient la ressource à partager&nbsp;; la hauteur, elle, reste
-      comptée (note 13)&nbsp;: sur un paysage téléphone, l'app bar s'efface. Même partage sur tablette
-      et en écran scindé large, où l'app bar reste.</p>
+      comptée (note 13). Même règle sur tablette et en écran scindé large.</p>
       <div class="phone land">
         <div class="statusbar"><span>10:46</span><span>◍ ▲ ▮</span></div>
+        <div class="appbar"><div class="icon">←</div><div class="ttl">Répondre<small>[HFR] Redface 2 — client Android</small></div><div class="icon" style="background:var(--d-primc); color:var(--d-onprimc); border-radius:50%">👁</div></div>
         <div class="body" style="flex-direction:row">
-          <div class="field" style="flex:1; margin:16px 0 10px 14px">
+          <div class="field" style="flex:1; margin:10px 0 10px 14px">
             <span class="lab">Message</span>
             <div class="txt">
               <span class="bb">[quotemsg=…]</span>les bords haut et bas de la zone de saisie
@@ -1009,18 +1011,18 @@ footer{padding-block:34px 0; color:var(--ink-3); font-size:12.5px}
             </div>
           </div>
           <div class="split v"><span class="grip"></span></div>
-          <div class="preview" style="flex:1; margin:16px 14px 10px 0; overflow:hidden">
+          <div class="preview" style="flex:1; margin:10px 14px 10px 0; overflow:hidden">
             <div class="q">❝ styx42 — les bords haut et bas de la zone de saisie restent toujours visibles</div>
             Exactement ça. C'est le comportement de <b>K-9 Mail</b>, et c'est ce que fait le lot R1. <span class="n">12</span>
           </div>
         </div>
         <div class="bar">
           <span class="ibtn">Aa</span><span class="ibtn">☺</span><span class="ibtn">🖼</span>
-          <span class="ibtn">⋯</span><span class="ibtn on" style="background:var(--d-primc); color:var(--d-onprimc)">👁</span><span class="spacer"></span><span class="send">Envoyer</span>
+          <span class="ibtn">⋯</span><span class="spacer"></span><span class="send">Envoyer</span>
         </div>
       </div>
       <ul class="notes">
-        <li><span class="n">12</span><span>Le point de bascule&nbsp;: <code>windowWidthSizeClass</code> au-delà de Compact, ou hauteur utile sous 400&nbsp;dp. Une seule mise en page, deux directions de <code>flex</code>. Sans app bar, 👁 passe dans la barre d'action, qui a toute la largeur pour une sixième icône&nbsp;; le retour passe par le geste système.</span></li>
+        <li><span class="n">12</span><span>Le point de bascule&nbsp;: <code>windowWidthSizeClass</code> au-delà de Compact, ou hauteur utile sous 400&nbsp;dp. Une seule mise en page, deux directions de <code>flex</code>. L'app bar est dessinée ici comme repère&nbsp;: sur un paysage téléphone, la règle&nbsp;1 l'efface.</span></li>
         <li><span class="n">13</span><span>En paysage clavier ouvert il ne reste qu'environ <b>100&nbsp;dp</b> de hauteur&nbsp;: le plancher de 160 est hors d'atteinte et ne s'applique pas. Le partage en colonnes évite seulement que l'aperçu prenne sur cette hauteur.</span></li>
         <li><span class="n">14</span><span>La barre d'action ne change pas entre écrire et relire&nbsp;: on peut envoyer sans refermer l'aperçu.</span></li>
       </ul>
@@ -1473,7 +1475,7 @@ footer{padding-block:34px 0; color:var(--ink-3); font-size:12.5px}
     <div class="ask done">
       <h4><span class="ok-tag">Tranché</span> Icônes dans la barre d'action</h4>
       <p>Cinq icônes, pour rendre la largeur à « Envoyer ». Le nom accessible TalkBack reprend les
-      libellés, et un appui long les affiche en info-bulle, dès R1a.</p>
+      libellés. L'info-bulle à l'appui long reste à valider&nbsp;: l'app n'en a aucune aujourd'hui.</p>
     </div>
     <div class="ask done">
       <h4><span class="ok-tag">Tranché</span> Une seule bande, hauteur constante</h4>
@@ -1490,8 +1492,8 @@ footer{padding-block:34px 0; color:var(--ink-3); font-size:12.5px}
     </div>
     <div class="ask done">
       <h4><span class="ok-tag">Tranché</span> Portrait Compact d'abord</h4>
-      <p>Sous 400&nbsp;dp de hauteur, l'app bar s'efface avec son titre&nbsp;; 👁 rejoint la barre
-      d'action, le retour passe par le geste système. Sinon le chrome fixe vaudrait 136&nbsp;dp sur les ~150 d'un paysage
+      <p>Sous 400&nbsp;dp de hauteur, l'app bar s'efface&nbsp;; la barre d'action reste. Où va son
+      titre reste à trancher. Sinon le chrome fixe vaudrait 136&nbsp;dp sur les ~150 d'un paysage
       téléphone.</p>
     </div>
   </div>
@@ -1543,8 +1545,12 @@ footer{padding-block:34px 0; color:var(--ink-3); font-size:12.5px}
   <div class="asks" style="margin-top:14px">
     <div class="ask">
       <h4>Encore ouvert</h4>
+      <p>L'info-bulle à l'appui long sur les icônes — l'API M3 est expérimentale, à vérifier au
+      bytecode avant de la promettre.</p>
       <p>Un validateur d'équilibre de balises BBCode&nbsp;: la V3 en montrait un dans la bande, il
-      n'existe pas. Retiré des maquettes, fiché à part hors de cette phase. <span class="ref">#1444</span></p>
+      n'existe pas. Retiré des maquettes, à ficher comme fonction à part.</p>
+      <p>Le comportement exact de l'app bar sous 400&nbsp;dp&nbsp;: effacée au défilement, ou
+      remplacée par une ligne de titre dans la bande&nbsp;?</p>
     </div>
   </div>
 </section>

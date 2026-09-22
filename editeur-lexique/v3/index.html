@@ -58,10 +58,11 @@
 }
 
 *{box-sizing:border-box}
+html{scrollbar-gutter:stable}
 body{margin:0; background:var(--paper); color:var(--ink);
   font-family:"Public Sans","Helvetica Neue",Arial,sans-serif; font-size:15px; line-height:1.55;
   -webkit-font-smoothing:antialiased}
-.wrap{max-width:1100px; margin:0 auto; padding-inline:20px; padding-block:0 72px}
+.wrap{max-width:1180px; margin:0 auto; padding-inline:20px; padding-block:0 72px}
 h1,h2,h3,h4{font-family:Archivo,"Helvetica Neue",Arial,sans-serif; text-wrap:balance; margin:0}
 code,.mono{font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:.86em}
 
@@ -93,7 +94,7 @@ h2{font-size:clamp(22px,3.2vw,30px); font-weight:600; letter-spacing:-.015em}
 .ztag{
   position:absolute; top:2px; right:3px; z-index:2;
   font-family:"IBM Plex Mono",monospace; font-size:9px; font-weight:500;
-  background:var(--accent); color:#fff; border-radius:3px; padding:1px 4px; letter-spacing:.03em;
+  background:var(--accent); color:var(--paper); border-radius:3px; padding:1px 4px; letter-spacing:.03em;
 }
 .statusbar{height:22px; flex:none; display:flex; align-items:center; justify-content:space-between;
   padding:0 13px; font-size:10px; color:var(--d-onv)}
@@ -104,7 +105,6 @@ h2{font-size:clamp(22px,3.2vw,30px); font-weight:600; letter-spacing:-.015em}
 .appbar .ttl{flex:1; font-size:15px; font-weight:500; min-width:0; overflow:hidden;
   text-overflow:ellipsis; white-space:nowrap}
 .appbar .ttl small{display:block; font-size:10.5px; font-weight:400; color:var(--d-onv)}
-.rail{flex:none; display:flex; gap:5px; padding:5px 13px; overflow:hidden}
 .pill{flex:none; display:flex; align-items:center; gap:4px; font-size:11px; background:var(--d-sch);
   color:var(--d-onv); border-radius:999px; padding:3px 9px; white-space:nowrap}
 .pill.act{background:var(--d-primc); color:var(--d-onprimc)}
@@ -144,7 +144,7 @@ h2{font-size:clamp(22px,3.2vw,30px); font-weight:600; letter-spacing:-.015em}
 .plate-key li{display:flex; gap:11px; font-size:14px; color:var(--ink-2); line-height:1.45}
 .plate-key .zn{
   font-family:"IBM Plex Mono",monospace; font-size:10px; font-weight:500; flex:none;
-  background:var(--accent); color:#fff; border-radius:3px; padding:2px 5px; height:fit-content;
+  background:var(--accent); color:var(--paper); border-radius:3px; padding:2px 5px; height:fit-content;
   min-width:26px; text-align:center;
 }
 .plate-key b{color:var(--ink); font-weight:600}
@@ -205,10 +205,45 @@ footer a{color:var(--accent)}
   .phone{height:600px; border-radius:15px}
   .term{gap:11px}
 }
+/* ── menu inter-artefacts ─────────────────────────────────────────────────── */
+.artnav{
+  position:sticky; top:0; z-index:50;
+  display:flex; gap:2px; align-items:center; flex-wrap:wrap;
+  margin-inline:-20px; padding:calc(7px + env(safe-area-inset-top, 0px)) 20px 7px;
+  background:var(--paper);
+  background:color-mix(in srgb, var(--paper) 88%, transparent);
+  backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+}
+.artnav a,.artnav span{
+  font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.05em;
+  padding:5px 10px; border-radius:6px; text-decoration:none; color:var(--ink-3);
+  white-space:nowrap;
+}
+.artnav a:hover{color:var(--ink); background:var(--paper-3)}
+.artnav a.on{color:var(--accent); background:var(--accent-soft); font-weight:500}
+.artnav span.soon{color:var(--ink-3); opacity:.55; cursor:default}
+.artnav span.soon::after{content:" · à venir"; opacity:.7}
+.artnav .brand{
+  margin-right:auto; font-size:10px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--ink-3); padding-left:0;
+}
+@media (max-width:520px){
+  .artnav .brand{display:none}
+  .artnav span.soon::after{content:""}
+  .artnav a,.artnav span{padding:5px 8px; font-size:10.5px}
+}
 </style>
 
 </head>
 <body>
+<div class="wrap">
+
+<nav class="artnav">
+  <span class="brand">Éditeur #1417</span>
+  <a href="https://forumhfr.github.io/artifacts/editeur-1417/">Plan de refonte</a>
+  <a href="https://forumhfr.github.io/artifacts/editeur-lexique/" class="on">Vocabulaire</a>
+  <span class="soon">Rendu Roborazzi</span>
 
 <style id="vpick-style">
 #vpick{position:fixed;top:0;right:0;z-index:9999;display:flex;align-items:center;gap:7px;
@@ -225,8 +260,9 @@ footer a{color:var(--accent)}
  backdrop-filter:none;-webkit-backdrop-filter:none}
 @media (max-width:520px){.artnav #vpick label{display:none}}
 </style>
-<div id="vpick"><label for="vpick-sel">Version</label><select id="vpick-sel" onchange="location.href=this.value"><option value="../">v4 — courante</option><option value="../v3/">v3</option><option value="../v2/" selected>v2</option><option value="../v1/">v1</option></select></div>
-<div class="wrap">
+<div id="vpick"><label for="vpick-sel">Version</label><select id="vpick-sel" onchange="location.href=this.value"><option value="../">v4 — courante</option><option value="../v3/" selected>v3</option><option value="../v2/">v2</option><option value="../v1/">v1</option></select></div>
+</nav>
+
 
 <header class="top">
   <div class="eyebrow">Redface 2 · #1417 · vocabulaire de travail</div>
@@ -243,7 +279,10 @@ footer a{color:var(--accent)}
   <div class="sec-head"><span class="sec-num">01</span><h2>La planche</h2></div>
   <p class="sec-sub">Un éditeur de réponse, clavier ouvert, avec toutes les zones nommées en même
   temps. En vrai elles ne coexistent jamais toutes&nbsp;: le tiroir est replié la plupart du temps,
-  et la bande de contexte n'apparaît que si elle a quelque chose à dire.</p>
+  et la bande de contexte n'apparaît que si elle a quelque chose à dire — et jamais sur une frappe&nbsp;:
+  ses déclencheurs sont posés à l'ouverture ou par un geste, et une erreur ne s'efface que sur un geste.
+  Le tiroir, lui, est dessiné ici <i>dans le flux</i> pour pouvoir être nommé&nbsp;; en vrai il se
+  superpose au bas du champ, qui ne change pas de hauteur.</p>
 
   <div class="plate">
     <div class="phone">
@@ -252,7 +291,7 @@ footer a{color:var(--accent)}
       <div class="appbar zone"><span class="ztag">A</span>
         <div class="icon">←</div>
         <div class="ttl">Répondre<small>[HFR] Redface 2 — client Android</small></div>
-        <div class="icon">👁</div><div class="icon">⋮</div>
+        <div class="icon">👁</div>
       </div>
 
       <div class="bodyz">
@@ -273,8 +312,8 @@ footer a{color:var(--accent)}
 
       <div class="status zone"><span class="ztag">D</span>
         <span class="pill act" style="padding:3px 7px">❝ 3</span>
-        <span class="pill" style="padding:3px 7px">💾</span>
-        <span style="margin-left:auto">Envoi 2/3…</span><span class="act" style="color:var(--d-prim); font-weight:500">Annuler</span>
+        <span class="pill" style="padding:3px 7px">↺</span>
+        <span style="margin-left:auto">Envoi 2/3…</span>
       </div>
 
       <div class="bar zone"><span class="ztag">E</span>
@@ -291,10 +330,10 @@ footer a{color:var(--accent)}
 
     <div class="plate-key">
       <ol>
-        <li><span class="zn">A</span><span><b>App bar</b> — la barre du haut. Retour, titre de l'écran, contexte en seconde ligne, et les actions qui <i>changent de surface</i> (aperçu, menu). Hauteur fixe, elle ne bouge jamais.</span></li>
+        <li><span class="zn">A</span><span><b>App bar</b> — la barre du haut. Retour, titre de l'écran, contexte en seconde ligne, et les actions qui <i>changent de surface</i> (aperçu). Hauteur fixe, elle ne bouge jamais.</span></li>
         <li><span class="zn">B</span><span><b>Champ</b> — la zone de saisie elle-même, avec son label flottant et son cadre. Le texte défile <i>dedans</i>&nbsp;: c'est tout l'objet de la refonte. Rien ne s'intercale entre l'app bar et lui.</span></li>
-        <li><span class="zn">C</span><span><b>Tiroir de format</b> — la rangée de chips BBCode, dépliée par <span class="mono">Aa</span>. Elle naît sous le champ pour ne pas déplacer le texte ni la sélection.</span></li>
-        <li><span class="zn">D</span><span><b>Bande de contexte</b> — la ligne qui porte tout le reste&nbsp;: à gauche l'état durable en pastilles (citations armées, brouillon, options modifiées), à droite l'événement du moment (upload, erreur, validation).</span></li>
+        <li><span class="zn">C</span><span><b>Tiroir de format</b> — la rangée de chips BBCode, dépliée par <span class="mono">Aa</span>. Elle se <b>superpose</b> au bas du champ&nbsp;: le champ garde sa hauteur, le caret est remonté au-dessus par défilement interne.</span></li>
+        <li><span class="zn">D</span><span><b>Bande de contexte</b> — la ligne qui porte tout le reste&nbsp;: à gauche l'état durable en pastilles (citations armées, brouillon retrouvé, sous-catégorie ou destinataires), à droite l'événement du moment (upload, erreur) — résumé d'une ligne, hauteur constante.</span></li>
         <li><span class="zn">E</span><span><b>Barre d'action</b> — la barre du bas. Les actions qui <i>agissent sur le message</i>&nbsp;: format, smileys, image, options, envoyer. En icônes, épinglée au-dessus du clavier.</span></li>
         <li><span class="zn">F</span><span><b>IME</b> — le clavier logiciel, fourni par le système. On ne le dessine pas, mais sa hauteur est la contrainte numéro un.</span></li>
       </ol>
@@ -319,7 +358,7 @@ footer a{color:var(--accent)}
           <h4>App bar</h4><span class="en">top app bar · barre d'application</span>
           <p>La barre du haut, <span class="dp">48 dp</span>. Elle porte le retour, le titre de
           l'écran, une seconde ligne de contexte (le sujet, le nombre de destinataires) et les
-          actions qui <b>font changer de surface</b>&nbsp;: aperçu, menu de débordement.</p>
+          actions qui <b>font changer de surface</b>&nbsp;: l'aperçu.</p>
           <p>Règle&nbsp;: rien de ce qui s'y trouve ne dépend de ce que tu es en train de taper.</p>
         </div>
       </div>
@@ -333,8 +372,9 @@ footer a{color:var(--accent)}
           image, options, envoyer.</p>
           <p>Aujourd'hui elle existe déjà, avec « Options », « Smileys » et « Envoyer » en toutes
           lettres. La refonte y ajoute le format et l'image, et passe tout en <b>icônes seules</b>
-          pour rendre la largeur à « Envoyer ». Les libellés survivent en info-bulle à l'appui long
-          et comme nom accessible TalkBack.</p>
+          pour rendre la largeur à « Envoyer ». Les libellés survivent comme nom accessible
+          TalkBack&nbsp;; l'info-bulle à l'appui long reste à valider — l'API M3 est expérimentale et
+          l'app n'en a aucune aujourd'hui.</p>
         </div>
       </div>
 
@@ -343,16 +383,18 @@ footer a{color:var(--accent)}
         <div class="txt">
           <h4>Bande de contexte</h4><span class="en">context band</span>
           <p>Une ligne unique de <span class="dp">32 dp</span>, ancrée au-dessus de la barre
-          d'action, absente si elle n'a rien à dire. Elle porte deux registres&nbsp;:</p>
-          <p><b>À gauche, l'état durable</b>, en pastilles&nbsp;: citations armées, brouillon,
-          options modifiées, et le rappel de la sous-catégorie ou des destinataires quand l'en-tête
-          est replié. Chaque pastille est un raccourci vers la surface qui la gouverne.</p>
-          <p><b>À droite, l'événement du moment</b>&nbsp;: « Envoi 2/3… », validation BBCode, erreur.
-          Un seul à la fois, par priorité <b>erreur → upload → brouillon → validation</b>.</p>
+          d'action, absente si elle n'a rien à dire, <b>jamais plus haute que 32 dp, et jamais apparue
+          ni disparue sur une frappe</b>. Elle porte deux registres&nbsp;:</p>
+          <p><b>À gauche, l'état durable</b>, en pastilles&nbsp;: citations armées, brouillon retrouvé
+          (Restaurer / Ignorer — l'autosave, elle, est silencieuse), et le rappel de la sous-catégorie
+          ou des destinataires, posé dès l'ouverture que l'en-tête soit déployé ou non. Chaque pastille
+          est un raccourci vers la surface qui la gouverne.</p>
+          <p><b>À droite, l'événement du moment</b>&nbsp;: « Envoi 2/3… », erreur. Un seul à la fois,
+          l'erreur d'abord.</p>
           <p>La règle qui les fait cohabiter&nbsp;: un événement ne masque jamais les pastilles, il
-          les <b>compacte</b> à leur compteur nu. Seule exception, l'erreur d'envoi, dont les
-          messages sont longs&nbsp;: la bande passe alors sur deux lignes
-          (<span class="dp">64 dp</span>) le temps qu'elle est affichée.</p>
+          les <b>compacte</b> à leur compteur nu. Une erreur tient sur la même ligne&nbsp;: un résumé
+          court, le texte entier derrière « Détails ». La bande ne change jamais de hauteur — la faire
+          passer à deux lignes laisserait 150&nbsp;dp au champ, sous son plancher.</p>
           <p>Elle remplace deux choses&nbsp;: les bandeaux actuels, qui s'empilent en tête et
           poussent le champ sous le pli — c'est ce qui cachait les boutons Restaurer/Ignorer sur le
           S9 — et le « rail de contexte » de la V1 des maquettes, qui faisait la même chose en haut
@@ -366,8 +408,9 @@ footer a{color:var(--accent)}
           <h4>Tiroir de format</h4><span class="en">format drawer</span>
           <p>La rangée de chips BBCode, dépliée par l'icône <span class="mono">Aa</span> et repliée
           à la frappe suivante. <span class="dp">2 × 38 dp</span> quand elle est ouverte.</p>
-          <p>Elle s'ouvre <b>sous</b> le champ, entre lui et la barre d'action&nbsp;: le texte et la
-          sélection ne bougent pas d'un pixel.</p>
+          <p>Elle se <b>superpose</b> au bas du champ&nbsp;: le champ garde sa hauteur, ses dernières
+          lignes passent dessous, et le caret est remonté au-dessus par défilement interne — sinon
+          l'insertion se ferait hors de vue, ce que le critère C5 interdit.</p>
         </div>
       </div>
 
@@ -399,8 +442,9 @@ footer a{color:var(--accent)}
         <div class="mini"><i class="m-app hl"></i><i class="m-body hl" style="background:var(--accent);opacity:.45"></i><i class="m-bar"></i></div>
         <div class="txt">
           <h4>Panneau</h4><span class="en">panel</span>
-          <p>Une surface plein écran qui <b>remplace temporairement le champ</b> en gardant la barre
-          d'action&nbsp;: le panneau citations, par exemple. On y fait une tâche, on revient.</p>
+          <p>Une surface plein écran qui <b>remplace temporairement le champ</b>, avec sa propre app
+          bar et sa propre barre du bas (« Retour au message »)&nbsp;: le panneau citations, par
+          exemple. On y fait une tâche, on revient.</p>
           <p>À ne pas confondre avec une feuille&nbsp;: un panneau occupe l'écran et a sa propre app
           bar, une feuille se superpose et laisse voir ce qu'il y a dessous.</p>
         </div>
@@ -425,7 +469,9 @@ footer a{color:var(--accent)}
           <p>Une surface qui monte du bas et se superpose à l'écran, avec un voile sombre derrière.
           Les smileys et les options en sont. On la referme en tapant à côté ou en la tirant vers le
           bas.</p>
-          <p>La <b>réponse rapide</b> est aussi une feuille, mais qui contient un éditeur complet.</p>
+          <p>La <b>réponse rapide</b> est aussi une feuille&nbsp;: elle contiendra l'éditeur complet
+          au lot R4, c'est un champ nu aujourd'hui. Une feuille M3 vit dans <b>sa propre fenêtre</b>,
+          avec ses propres insets — c'est ce qui la sépare des quatre éditeurs.</p>
         </div>
       </div>
 
@@ -466,28 +512,29 @@ footer a{color:var(--accent)}
         </div>
         <div class="txt">
           <h4>Chip</h4><span class="en">assist chip</span>
-          <p>Un petit bouton en pilule, bordé, pour une action ponctuelle. Les onze actions BBCode
-          en sont. Contrairement à un bouton, un chip est fait pour vivre en rangée avec ses
-          semblables.</p>
+          <p>Un petit bouton en pilule, bordé, pour une action ponctuelle. Les chips BBCode en sont
+          (dix actions + Couleur aujourd'hui). Contrairement à un bouton, un chip est fait pour vivre
+          en rangée avec ses semblables.</p>
         </div>
       </div>
 
       <div class="term">
         <div class="mini" style="justify-content:center; align-items:center; gap:4px; background:var(--paper-2)">
           <span style="background:var(--accent-soft); color:var(--accent); border-radius:5px; font-size:8px; padding:3px 6px">Opt</span>
-          <span style="background:var(--accent); color:#fff; border-radius:9px; font-size:8px; padding:3px 7px">Env</span>
+          <span style="background:var(--accent); color:var(--paper); border-radius:9px; font-size:8px; padding:3px 7px">Env</span>
         </div>
         <div class="txt">
           <h4>Bouton tonal · bouton rempli</h4><span class="en">filled tonal · filled button</span>
           <p>La paire d'emphase Material&nbsp;: le <b>tonal</b> (fond clair teinté) pour les actions
-          secondaires, le <b>rempli</b> (fond plein) pour l'action principale. Dans la barre
-          d'action&nbsp;: tonal pour Options et Smileys, rempli pour Envoyer.</p>
+          secondaires, le <b>rempli</b> (fond plein) pour l'action principale. Aujourd'hui&nbsp;:
+          tonal pour Options et Smileys, rempli pour Envoyer. Dans la refonte, seul Envoyer reste un
+          bouton rempli&nbsp;; les quatre autres sont des boutons-icônes.</p>
         </div>
       </div>
 
       <div class="term">
         <div class="mini" style="justify-content:center; align-items:center; background:var(--paper-2)">
-          <span style="background:var(--accent); color:#fff; border-radius:999px; font-size:8px; padding:2px 7px">❝ 3</span>
+          <span style="background:var(--accent); color:var(--paper); border-radius:999px; font-size:8px; padding:2px 7px">❝ 3</span>
         </div>
         <div class="txt">
           <h4>Pastille</h4><span class="en">pill · badge</span>
@@ -524,7 +571,7 @@ footer a{color:var(--accent)}
 
       <div class="term">
         <div class="mini" style="justify-content:center; align-items:center; background:var(--paper-2)">
-          <span style="background:var(--accent); color:#fff; border-radius:12px; font-size:8px; padding:3px 8px">Confirmer</span>
+          <span style="background:var(--accent); color:var(--paper); border-radius:12px; font-size:8px; padding:3px 8px">Confirmer</span>
         </div>
         <div class="txt">
           <h4>Bouton armé</h4><span class="en">armed submit</span>
@@ -581,8 +628,9 @@ footer a{color:var(--accent)}
           <p>La mécanique qui empêche le chrome de manger le champ&nbsp;: on plafonne la hauteur de
           tout ce qui n'est pas la saisie, en réservant d'abord les <span class="dp">160 dp</span>
           du champ, et ce qui dépasse défile.</p>
-          <p>Le bug du S9 venait de là&nbsp;: dans l'éditeur de post, le titre et la barre d'outils
-          étaient <b>hors</b> de la zone bornée, contrairement aux trois autres éditeurs.</p>
+          <p>Le bug du S9 venait de là&nbsp;: la cause première était dans l'éditeur de post, dont le
+          titre et la barre d'outils étaient <b>hors</b> de la zone bornée — le correctif a fini par
+          toucher les cinq surfaces.</p>
         </div>
       </div>
 
@@ -593,12 +641,29 @@ footer a{color:var(--accent)}
           <p>Le réglage d'accessibilité qui grossit tout le texte, de 0,85 à 2. À
           <b>1,3</b> le label « Contenu BBCode » ne tient plus sur une ligne et se fait couper —
           c'est un des défauts fichés.</p>
+          <p>L'app y ajoute son propre préréglage de lecture (S 0,9 · M 1 · L 1,15), et les deux se
+          <b>multiplient</b>&nbsp;: le pire cas à dimensionner est 1,3 × 1,15.</p>
+        </div>
+      </div>
+
+      <div class="term">
+        <div class="mini row" style="align-items:center; justify-content:center; background:var(--paper-2)">
+          <span style="font-size:18px; color:var(--accent); line-height:1">⇅</span>
+        </div>
+        <div class="txt">
+          <h4>Cran</h4><span class="en">detent</span>
+          <p>Le point où le séparateur du partage <b>s'arrête</b>&nbsp;: le source vient d'atteindre
+          ses 160&nbsp;dp. Au-delà, le glissement devient élastique, la poignée change de couleur et
+          une puce « Relâcher pour fermer le clavier » apparaît sur l'aperçu.</p>
+          <p>Relâcher au-delà du cran ferme le clavier, <b>une seule fois</b>, jamais pendant le
+          glissement. La résistance est l'affordance&nbsp;: un libellé permanent ne tiendrait pas dans
+          les 18&nbsp;dp du séparateur à fontScale 1,3.</p>
         </div>
       </div>
 
       <div class="term">
         <div class="mini" style="justify-content:center; padding:5px; background:var(--paper-2)">
-          <span style="font-size:8px; line-height:1.4">te<span style="background:var(--accent); color:#fff">xte sél</span>ec</span>
+          <span style="font-size:8px; line-height:1.4">te<span style="background:var(--accent); color:var(--paper)">xte sél</span>ec</span>
         </div>
         <div class="txt">
           <h4>Poignée de sélection</h4><span class="en">selection handle</span>
@@ -628,6 +693,7 @@ footer a{color:var(--accent)}
           <p>La catégorie de largeur de la <b>fenêtre</b> — Compact, Medium, Expanded — et non du
           téléphone. C'est elle qui décide si l'aperçu se met dessous ou à côté&nbsp;; un écran
           scindé la fait changer sans qu'on tourne l'appareil.</p>
+          <p>La hauteur compte aussi&nbsp;: sous <b>400 dp</b>, l'app bar s'efface (règle 1).</p>
         </div>
       </div>
 
@@ -656,7 +722,9 @@ footer a{color:var(--accent)}
           <h4>Réponse rapide</h4><span class="en">quick reply</span>
           <p>La feuille qui monte depuis la vue Topic pour répondre sans quitter la lecture. Elle
           n'a aujourd'hui ni format ni smileys, et son bouton <b>⤢ escalade</b> vers l'éditeur
-          plein écran en emportant le texte et les citations.</p>
+          plein écran en emportant le texte et les citations — pas la sélection.</p>
+          <p>Elle est <b>opt-in</b> par préréglage de surface depuis #951&nbsp;: l'éditeur plein écran
+          est le défaut.</p>
         </div>
       </div>
 
@@ -685,11 +753,13 @@ footer a{color:var(--accent)}
       </div>
 
       <div class="term">
-        <div class="mini" style="justify-content:center; align-items:center; background:var(--paper-2); font-family:'IBM Plex Mono',monospace; font-size:8px; color:var(--accent)">R1‑R5</div>
+        <div class="mini" style="justify-content:center; align-items:center; background:var(--paper-2); font-family:'IBM Plex Mono',monospace; font-size:8px; color:var(--accent)">R1a‑R4</div>
         <div class="txt">
           <h4>Lots</h4><span class="en">—</span>
-          <p>Le découpage livrable de la refonte. Un lot = une PR, une build dev, un retour terrain.
-          On ne commence pas le suivant tant que le précédent n'a pas eu ses retours.</p>
+          <p>Le découpage livrable de la refonte&nbsp;: <b>R1a, R1b, R2, R3, R4</b> — R5 (migration
+          BTF2) est déjà livré. Un lot = une PR, une build dev, un retour terrain&nbsp;; on ne commence
+          pas le suivant tant que le précédent n'a pas eu ses retours. Promotion en bêta à la fin de
+          la phase seulement.</p>
         </div>
       </div>
 
@@ -720,7 +790,8 @@ footer a{color:var(--accent)}
       <p>La <b>barre d'action</b> est en bas, à hauteur fixe, et porte les actions du message
       (envoyer, options, smileys).</p>
       <p>La <b>barre d'outils BBCode</b> est la rangée de chips de formatage. Aujourd'hui elle est
-      en haut, dans le flux&nbsp;; dans la refonte elle devient le tiroir de format, en bas.</p>
+      en haut, dans le flux&nbsp;; dans la refonte elle devient le tiroir de format, superposé au bas
+      du champ.</p>
     </div>
 
     <div class="pair">
@@ -728,8 +799,8 @@ footer a{color:var(--accent)}
       <p>Le <b>bandeau</b> est le format actuel&nbsp;: un bloc pleine largeur inséré dans le flux,
       qui pousse tout ce qui suit vers le bas et peut finir sous le pli.</p>
       <p>La <b>bande</b> est hors du flux, à hauteur fixe, collée à la barre d'action. Elle ne prend
-      jamais de place au champ au-delà de ses 32 dp, et ce qu'elle affiche est toujours à portée du
-      pouce.</p>
+      jamais de place au champ au-delà de ses 32 dp, <b>et ne change jamais de hauteur</b> — ce qu'elle
+      affiche est toujours à portée du pouce.</p>
     </div>
 
     <div class="pair">
@@ -751,8 +822,8 @@ footer a{color:var(--accent)}
 
     <div class="pair">
       <h4>Aperçu ≠ rendu de la vue Topic</h4>
-      <p>Aujourd'hui l'<b>aperçu</b> de l'éditeur utilise un parser réduit, différent de celui qui
-      affiche les posts&nbsp;: d'où les smileys en texte brut.</p>
+      <p>L'<b>aperçu</b> passe déjà par le moteur de rendu des posts&nbsp;; ce qui diffère est le
+      <b>parser BBCode</b> qui l'alimente, et qui ne résout pas les smileys (#873).</p>
       <p>La refonte les fait converger, pour que ce qu'on relit soit littéralement ce qu'on verra
       publié.</p>
     </div>
