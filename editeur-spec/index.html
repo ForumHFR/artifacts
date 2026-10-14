@@ -99,14 +99,14 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
  backdrop-filter:none;-webkit-backdrop-filter:none}
 @media (max-width:520px){.artnav #vpick label{display:none}}
 </style>
-<div id="vpick"><label for="vpick-sel">Version</label><select id="vpick-sel" autocomplete="off" onchange="location.href=this.value"><option value="./" selected>v4 — courante</option><option value="v3/">v3</option><option value="v2/">v2</option><option value="v1/">v1</option></select><script>addEventListener("pageshow",function(){var s=document.getElementById("vpick-sel");if(s)for(var i=0;i<s.options.length;i++)s.options[i].selected=s.options[i].defaultSelected;});</script></div>
+<div id="vpick"><label for="vpick-sel">Version</label><select id="vpick-sel" autocomplete="off" onchange="location.href=this.value"><option value="./" selected>v5 — courante</option><option value="v4/">v4</option><option value="v3/">v3</option><option value="v2/">v2</option><option value="v1/">v1</option></select><script>addEventListener("pageshow",function(){var s=document.getElementById("vpick-sel");if(s)for(var i=0;i<s.options.length;i++)s.options[i].selected=s.options[i].defaultSelected;});</script></div>
 </nav>
-<p class="state">v0.6.2 — 14/10/2026 — passes : Opus 5.5, Sol 6.1, Fable, Astra (GO sur la v0.6) ; références au code revérifiées — statut Proposé</p><p class="parts">Rendu de <code>docs/specs/editor.md</code> (<a href="#spec">contrat</a>), <code>docs/adr/019-refonte-vue-editeur.md</code> (<a href="#adr">ADR-019</a>) et <code>docs/specs/editor-annexes.md</code> (<a href="#annexes">annexes</a>), prêts à entrer dans le dépôt. Les renvois entre ces trois documents pointent vers cette page ; les autres liens vers la doc du projet visent forumhfr.github.io/redface2.</p>
+<p class="state">v0.6.3 — 14/10/2026 — passes : Opus 5.5, Sol 6.1, Fable, Astra (GO sur la v0.6) ; C1 reformulé (décision du mainteneur) — statut Proposé</p><p class="parts">Rendu de <code>docs/specs/editor.md</code> (<a href="#spec">contrat</a>), <code>docs/adr/019-refonte-vue-editeur.md</code> (<a href="#adr">ADR-019</a>) et <code>docs/specs/editor-annexes.md</code> (<a href="#annexes">annexes</a>), prêts à entrer dans le dépôt. Les renvois entre ces trois documents pointent vers cette page ; les autres liens vers la doc du projet visent forumhfr.github.io/redface2.</p>
 <section id="spec">
 <h1 id="contrat-de-léditeur">Contrat de l'éditeur</h1>
-<p>Le contrat normatif de la vue Éditeur refondue : géométrie, zones, règles de comportement, erreurs, invariants d'envoi, accessibilité, découpage et livraison. Refonte <a href="https://github.com/ForumHFR/redface2/issues/1417">#1417</a>, décisions structurantes dans l'<a href="#adr">ADR-019</a>. Version <strong>v0.6.2 (14/10/2026) — passes : Opus 5.5, Sol 6.1, Fable, Astra</strong>. La v0.6 (D35 à D43) a reçu le GO d'Astra ; la v0.6.1 corrige la rédaction (D44 à D46), sans changement de fond ; la v0.6.2 recale les références au code et précise ED-81 pour l'éditeur ouvert depuis la feuille.</p>
+<p>Le contrat normatif de la vue Éditeur refondue : géométrie, zones, règles de comportement, erreurs, invariants d'envoi, accessibilité, découpage et livraison. Refonte <a href="https://github.com/ForumHFR/redface2/issues/1417">#1417</a>, décisions structurantes dans l'<a href="#adr">ADR-019</a>. Version <strong>v0.6.3 (14/10/2026) — passes : Opus 5.5, Sol 6.1, Fable, Astra</strong>. La v0.6 (D35 à D43) a reçu le GO d'Astra ; la v0.6.1 corrige la rédaction (D44 à D46), sans changement de fond ; la v0.6.2 recale les références au code et précise ED-81 pour l'éditeur ouvert depuis la feuille ; la v0.6.3 reformule C1, décision du mainteneur.</p>
 <blockquote>
-<p><strong>Statut : Proposé</strong> (14/10/2026, v0.6.2 ; v0.3 du 23/09/2026). Rien de ce contrat n'est implémenté. Relevé de l'existant sur <code>dev</code> à <code>08d5b41c</code> (bêta 0.62.0). Les hauteurs en dp sont des <strong>cibles calculées</strong>, non mesurées : elles ne valent critère qu'après confirmation filmée sur appareil. Les choix réservés au mainteneur sont <strong>proposés</strong>, pas acquis (<a href="#14-décisions-en-attente">§ 14</a>). Maquettes non contractuelles : <a href="https://forumhfr.github.io/artifacts/editeur-1417/">Vue Éditeur #1417</a>.</p>
+<p><strong>Statut : Proposé</strong> (14/10/2026, v0.6.3 ; v0.3 du 23/09/2026). Rien de ce contrat n'est implémenté. Relevé de l'existant sur <code>dev</code> à <code>08d5b41c</code> (bêta 0.62.0). Les hauteurs en dp sont des <strong>cibles calculées</strong>, non mesurées : elles ne valent critère qu'après confirmation filmée sur appareil. Les choix réservés au mainteneur sont <strong>proposés</strong>, pas acquis (<a href="#14-décisions-en-attente">§ 14</a>). Maquettes non contractuelles : <a href="https://forumhfr.github.io/artifacts/editeur-1417/">Vue Éditeur #1417</a>.</p>
 </blockquote>
 <p><strong>Conventions.</strong> Une règle normative porte un identifiant <code>ED-nn</code> ; elle est opposable en revue. Dans une règle, le présent de l'indicatif vaut obligation ; « doit » insiste sur une obligation ; « peut » ne marque qu'une permission. Une description de l'existant est introduite par « Relevé : » (ou rangée dans une colonne « Relevé ») : elle n'est pas normative et cite sa preuve (<code>fichier:ligne</code> à <code>08d5b41c</code>). Une règle qui dépend d'une décision du mainteneur porte la mention « proposé » et renvoie au § 14 (<code>P1</code> à <code>P15</code>). Les critères d'acceptation <code>C1</code>–<code>C10</code> sont ceux de #1417 (<a href="#9-critères-dacceptation">§ 9</a>). Les lots sont définis au <a href="#11-lots">§ 11</a>. Les signes ❝ ↺ ✕ ⤢ désignent une icône (drawable selon l'ADR-015), pas le glyphe rendu. « 1,3 × L » : pire cas d'échelle de police (glossaire). Les compléments non normatifs sont dans les <a href="#annexes">annexes</a>.</p>
 <p><strong>Pile.</strong> BOM Compose 2026.08.00 (foundation et ui 1.12.0, material3 1.4.0), navigation3 1.1.2 (<code>gradle/libs.versions.toml:16-17</code>, bump #1009 du 02/09/2026), OkHttp 5.5.0, targetSdk 36. Les comportements de BTF2 cités ici (suivi du caret, historique d'annulation, <code>IME_FLAG_NO_FULLSCREEN</code>) sont ceux de foundation 1.12.0. Un bump de BOM rejoue les critères appareil.</p>
@@ -870,7 +870,7 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <h2 id="9-critères-dacceptation">9. Critères d'acceptation</h2>
 <p>Repris de #1417, vérifiés sur appareil et filmés (S10e à 360 dp et Android 10, l'AVD <code>rf2-api29</code> à défaut de Samsung sous API 30). Dans les preuves de cette spec, « fontScale 1,3 » s'entend 1,3 × L.</p>
 <ul>
-<li><strong>C1</strong> — tirer une poignée (haute ou basse) jusqu'au bord fait défiler le texte en continu tant que le doigt reste au bord ; la poignée ne décroche pas, aucune agitation latérale nécessaire.</li>
+<li><strong>C1</strong> — tirer une poignée (haute ou basse) au bord ou au-delà fait défiler le texte et étend la sélection à chaque mouvement du doigt, sans plafonnement aux lignes visibles, jusqu'au début ou à la fin du document ; la poignée ne décroche pas pendant le glissement. <em>Reformulé le 14/10 (décision du mainteneur) : le défilement continu sous un doigt immobile n'est pas exigé, ni Compose (foundation 1.12.0 à 1.13.0-beta01) ni l'<code>EditText</code> natif ne le font (<a href="#annexes-défilement-des-poignées-et-c1">annexe H</a>).</em></li>
 <li><strong>C2</strong> — au relâchement, la sélection correspond exactement à ce qui a été survolé, sans décalage égal à la distance défilée.</li>
 <li><strong>C3</strong> — clavier ouvert : caret et ligne courante visibles dans les 4 éditeurs, Android 10 compris ; la barre d'envoi reste au-dessus du clavier.</li>
 <li><strong>C4</strong> — la frappe en bas de texte ne masque jamais la ligne courante (non-régression #449, #275, #410).</li>
@@ -883,7 +883,7 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 </ul>
 <p>Positions soumises au mainteneur (P9) :</p>
 <ul>
-<li><strong>C1 est dérogé</strong>, de façon bornée : le spike du 16/09 a montré le défilement continu à poignée immobile KO dans ses trois configurations ; ce constat ne vaut pas impossibilité universelle. #1406 reste ouverte, hors phase. C2 est maintenu, et son protocole inclut la sélection du dernier caractère d'un paragraphe (retour du 27/09).</li>
+<li><strong>C1 est reformulé</strong> (décidé le 14/10, plus soumis) : aligné sur la plateforme, il est déjà tenu par le champ BTF2 actuel d'après le spike du 16/09, sauf « la poignée ne décroche pas », refilmé en R0a (critère N). Le défilement continu à doigt immobile reste une amélioration au-delà de la plateforme, suivie dans #1406, hors phase. C2 est maintenu, et son protocole inclut la sélection du dernier caractère d'un paragraphe (retour du 27/09).</li>
 <li><strong>C8 est amendé</strong> : après une mort du process, les cartes de citation ne sont pas restaurées ; texte, sélection, en-têtes et position le sont (ED-81).</li>
 </ul>
 <p>C6 garde sa définition ; le mode format (ED-21) et l'événement de barre (ED-40) le satisfont par construction ; C3 tient en hauteur compacte avec ≈ 82 dp de champ (ED-05, à mesurer) ; les feuilles, le dialogue URL et le sélecteur d'images sont filmés (ED-80). C7 est satisfait par construction pour le sujet (ED-101) et le nouveau MP (ED-113). C9 est dérogé entre les lots ; il se clôt en R4, ou sur les quatre éditeurs plein écran si R4 sort de la phase (P5).</p>
@@ -1037,7 +1037,7 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 </tr>
 <tr>
 <td>R0a</td>
-<td>Critères A à M de l'<a href="#annexes-b5-critères-de-sortie-de-r0a">annexe B.5</a>, filmés sur S10e (Samsung Keyboard <strong>et</strong> Gboard) et sur l'AVD API 29, à fontScale 1 et 1,3 × L</td>
+<td>Critères A à N de l'<a href="#annexes-b5-critères-de-sortie-de-r0a">annexe B.5</a>, filmés sur S10e (Samsung Keyboard <strong>et</strong> Gboard) et sur l'AVD API 29, à fontScale 1 et 1,3 × L</td>
 </tr>
 <tr>
 <td>R0b</td>
@@ -1081,7 +1081,7 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 </tr>
 <tr>
 <td>R5 (si P1)</td>
-<td>C1–C10 filmés (C1 dérogé) ; aucun défaut bloquant ouvert</td>
+<td>C1–C10 filmés ; aucun défaut bloquant ouvert</td>
 </tr>
 </tbody>
 </table>
@@ -1119,7 +1119,7 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <tr>
 <td>G4</td>
 <td>bêta en <code>PAR_DÉFAUT</code> (si P1) ou promotion de fin de phase</td>
-<td>ED-140 éteinte (R2a, R2b mergés) ; R4 mergé ou sorti de la phase ; C1–C10 filmés (C1 dérogé) ; go du mainteneur</td>
+<td>ED-140 éteinte (R2a, R2b mergés) ; R4 mergé ou sorti de la phase ; C1–C10 filmés ; go du mainteneur</td>
 </tr>
 <tr>
 <td>G5</td>
@@ -1173,7 +1173,7 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 </tr>
 <tr>
 <td>P9</td>
-<td>C1 dérogé (borné au spike du 16/09) et C8 amendé (cartes non restaurées) ?</td>
+<td>C8 amendé (cartes non restaurées) ? (C1 : reformulé, décidé le 14/10, § 9.)</td>
 <td><strong>Oui.</strong></td>
 </tr>
 <tr>
@@ -1213,14 +1213,14 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <section id="adr">
 <h1 id="adr-adr-019--refonte-de-la-vue-éditeur-1417--chrome-fixe-champ-élastique-états-dans-lapp-bar">ADR-019 — Refonte de la vue Éditeur (#1417) : chrome fixe, champ élastique, états dans l'app bar</h1>
 <h2 id="adr-statut">Statut</h2>
-<p>Proposé — 2026-10-14 (v0.6.2 ; v0.3 du 2026-09-23 ; passes : Opus 5.5, Sol 6.1, Fable, Astra). L'acceptation et la validation des choix pris par délégation sont la décision P10 de la <a href="#14-décisions-en-attente">spec de l'éditeur</a>.</p>
+<p>Proposé — 2026-10-14 (v0.6.3 ; v0.3 du 2026-09-23 ; passes : Opus 5.5, Sol 6.1, Fable, Astra). L'acceptation et la validation des choix pris par délégation sont la décision P10 de la <a href="#14-décisions-en-attente">spec de l'éditeur</a>.</p>
 <h2 id="adr-contexte">Contexte</h2>
 <p>La vue Éditeur regroupe cinq surfaces d'écriture : répondre ou modifier un message (<code>PostEditorScreen</code>), créer un sujet ou modifier son premier message (<code>TopicFormScreen</code>), écrire un nouveau MP (<code>PrivateMessageComposeScreen</code>), répondre dans une conversation MP (<code>PrivateMessageReplyScreen</code> / <code>MessageEditorComponents</code>), et la feuille de réponse rapide de la vue Topic (<code>QuickReplySheet</code>). Les quatre premières partagent les composants de <code>:core:ui/editor</code> (<code>BbcodeTextField</code>, <code>BbcodeToolbar</code>, <code>SmileyPickerSheet</code>, <code>EditorOptionsSheet</code>, <code>ArmedSubmitButton</code>, <code>EditorLayoutBudget</code>, <code>EditorUpload</code>) ; <code>QuoteCards</code> ne sert qu'à l'éditeur de post. La feuille a sa propre implémentation et ne réutilise que <code>QuoteCardsColumn</code>.</p>
 <p>L'objectif produit, posé par un testeur sur le topic DEV et repris par l'issue parapluie <a href="https://github.com/ForumHFR/redface2/issues/1417">#1417</a>, est que <strong>les bords haut et bas du champ restent visibles et que le texte défile dedans</strong>.</p>
 <p>Le problème : sur un téléphone de 360 × 740 dp clavier ouvert, il reste environ 330 dp de fenêtre utile. En 0.59.8, avant le correctif de densité #1432, le chrome (titre d'écran, barre d'outils BBCode d'au moins 56 dp, bouton d'aperçu de 48 dp, bandeaux empilés, 36 dp d'espacements, barre d'envoi d'au moins 65 dp) laisse au champ <strong>environ 97 à 128 dp</strong> — valeurs estimées par lecture de code, non mesurées : les composants M3 cliquables ont une taille interactive minimale de 48 dp. #1432 a garanti en 0.62.0 un plancher de 160 dp en rangeant le chrome haut dans une zone bornée défilante, au prix d'une barre d'outils rognée au milieu de ses chips et d'un bandeau de brouillon tronqué. Trois testeurs distincts demandent la même chose (densité, #872).</p>
 <p>Le champ repose sur BasicTextField 2 depuis 0.59.8 (#1427), livré en avance sous la pression d'un bug de sélection ; les ViewModels restent en <code>TextFieldValue</code>, reliés au champ par un pont <code>TextFieldValue</code> ↔︎ <code>TextFieldState</code>. La migration complète des ViewModels a été actée pour la refonte (mainteneur, 19/09) : c'est le lot R0c. Le lot « R5 BTF2 » de la v0.3 est donc caduc pour le champ seulement.</p>
 <p>Pile : BOM Compose 2026.08.00 (foundation et ui 1.12.0, material3 1.4.0), navigation3 1.1.2, OkHttp 5.5.0, targetSdk 36. Un bump de BOM rejoue les critères sur appareil.</p>
-<p>Le plan a été cadré en cinq passes croisées (Claude, Sol, Claude Fable, Sol contre le code en lecture seule, relecture de cohérence par Claude Fable), arbitré par le mainteneur les 19 et 22/09, et maquetté (<a href="https://forumhfr.github.io/artifacts/editeur-1417/">maquettes</a>, <a href="https://forumhfr.github.io/artifacts/editeur-lexique/">vocabulaire</a>). La v0.4 a intégré six relectures du 13/10 (fidélité au code, cohérence, plateforme, issues, rendus, livraison), un challenge de Sol contre le code le 14/10 et les décisions déléguées D18 à D32 ; la v0.5 intègre le gate de Claude Fable du 14/10 et les décisions D33 (pas de bande) et D34 ; la v0.6 intègre le gate final d'Astra (NO-GO, trois bloquants et six majeurs, tous retenus : D35 à D43), qui a reçu son GO ; la v0.6.1 en corrige la rédaction (D44 à D46), sans changement de fond ; la v0.6.2 recale les références au code (221 revérifiées à <code>08d5b41c</code>, 16 décalées) et précise ED-81. Le lexique corrigé (v0.6.1) est la source du vocabulaire.</p>
+<p>Le plan a été cadré en cinq passes croisées (Claude, Sol, Claude Fable, Sol contre le code en lecture seule, relecture de cohérence par Claude Fable), arbitré par le mainteneur les 19 et 22/09, et maquetté (<a href="https://forumhfr.github.io/artifacts/editeur-1417/">maquettes</a>, <a href="https://forumhfr.github.io/artifacts/editeur-lexique/">vocabulaire</a>). La v0.4 a intégré six relectures du 13/10 (fidélité au code, cohérence, plateforme, issues, rendus, livraison), un challenge de Sol contre le code le 14/10 et les décisions déléguées D18 à D32 ; la v0.5 intègre le gate de Claude Fable du 14/10 et les décisions D33 (pas de bande) et D34 ; la v0.6 intègre le gate final d'Astra (NO-GO, trois bloquants et six majeurs, tous retenus : D35 à D43), qui a reçu son GO ; la v0.6.1 en corrige la rédaction (D44 à D46), sans changement de fond ; la v0.6.2 recale les références au code (221 revérifiées à <code>08d5b41c</code>, 16 décalées) et précise ED-81 ; la v0.6.3 reformule C1 (décision du mainteneur). Le lexique corrigé (v0.6.3) est la source du vocabulaire.</p>
 <p>Deux constats de la relecture contre le code orientent la décision. Les <strong>cartes de citation sont désactivées par défaut</strong> : dans le mode par défaut, la citation est insérée en BBCode éditable dans le champ. Le <strong>bouton armé</strong> n'existe que si la préférence « Confirmation avant publication » (#312) est active, et elle est désactivée par défaut : la protection contre le double post (#1301) ne peut pas reposer sur lui. L'audit #1301 relève en outre que l'éditeur se réarme après un succès, que l'envoi en cours est peu visible et que le POST d'écriture reste rejouable par la couche HTTP.</p>
 <h2 id="adr-décision">Décision</h2>
 <p>La norme détaillée vit dans la <a href="#spec">spec de l'éditeur</a>. Cet ADR en fixe les choix structurants.</p>
@@ -1290,7 +1290,7 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <li><strong>−</strong> La migration des ViewModels vers <code>TextFieldState</code> (R0c) touche environ 3 975 lignes ; elle est hors du chemin critique sauf pour R2b.</li>
 <li><strong>−</strong> Pendant la phase, deux générations d'éditeur coexistent ; avec l'interrupteur, environ 2 000 lignes de chrome ancien sont conservées jusqu'à R5.</li>
 <li><strong>Risques principaux</strong> : la preuve d'interaction du mode format (R0a), une régression d'envoi pendant la phase, <code>dev</code> non promouvable. Parades : repli E écrit avant R0a, #1301-ST avant R1a-2, interrupteur proposé.</li>
-<li><strong>Preuves attendues</strong> : les critères C1–C10 de #1417 se vérifient sur appareil, filmés (S10e à 360 dp et Android 10), avec C1 dérogé et C8 amendé, proposés au mainteneur. Roborazzi (<a href="https://forumhfr.github.io/redface2/adr/016-roborazzi-screenshot-testing">ADR-016</a>) sert à l'inspection visuelle des états, pas à la preuve des insets, du clavier ni de la fenêtre Dialog.</li>
+<li><strong>Preuves attendues</strong> : les critères C1–C10 de #1417 se vérifient sur appareil, filmés (S10e à 360 dp et Android 10), avec C1 reformulé (décidé le 14/10) et C8 amendé (proposé au mainteneur). Roborazzi (<a href="https://forumhfr.github.io/redface2/adr/016-roborazzi-screenshot-testing">ADR-016</a>) sert à l'inspection visuelle des états, pas à la preuve des insets, du clavier ni de la fenêtre Dialog.</li>
 </ul>
 <h2 id="adr-alternatives-considérées">Alternatives considérées</h2>
 <ul>
@@ -1515,7 +1515,7 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <td>ED-65, § 11</td>
 </tr>
 <tr>
-<td>D25 — C1 dérogé, borné au spike du 16/09</td>
+<td>D25 — C1 dérogé, borné au spike du 16/09 (remplacée le 14/10 : C1 reformulé)</td>
 <td>14/10</td>
 <td>délégué ; P9</td>
 <td>§ 9</td>
@@ -1671,6 +1671,12 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <td>ED-81, § 11.1, annexe A</td>
 </tr>
 <tr>
+<td>C1 reformulé, aligné sur la plateforme : sélection étendue à chaque mouvement, sans plafonnement aux lignes visibles, poignée qui ne décroche pas ; défilement continu à doigt immobile non exigé (absent de Compose 1.12 à 1.13.0-beta01 et de l'<code>EditText</code> natif) ; critère N de R0a ; P9 réduit à C8</td>
+<td>14/10</td>
+<td><strong>mainteneur</strong></td>
+<td>§ 9, annexe H</td>
+</tr>
+<tr>
 <td>P1, P4, P5, P7 à P15 (P2 fondue dans P1, P3 retirée, P6 fusionnée dans P13)</td>
 <td>—</td>
 <td><strong>proposés</strong> au mainteneur</td>
@@ -1682,7 +1688,7 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <div class="doc-sep">Annexes</div>
 <section id="annexes">
 <h1 id="annexes-annexes-du-contrat-de-léditeur">Annexes du contrat de l'éditeur</h1>
-<p>Compléments <strong>non normatifs</strong> du <a href="#spec">contrat de l'éditeur</a> (v0.6.2, 14/10/2026) : relevés de l'existant, stratégie de test, traçabilité détaillée, registre des risques, livraison proposée, questions ouvertes, graphe des lots, sujets hors phase. En cas d'écart, le contrat fait foi.</p>
+<p>Compléments <strong>non normatifs</strong> du <a href="#spec">contrat de l'éditeur</a> (v0.6.3, 14/10/2026) : relevés de l'existant, stratégie de test, traçabilité détaillée, registre des risques, livraison proposée, questions ouvertes, graphe des lots, sujets hors phase. En cas d'écart, le contrat fait foi.</p>
 <h2 id="annexes-a-relevé-de-lexistant">A. Relevé de l'existant</h2>
 <p>Relevé à <code>08d5b41c</code> (bêta 0.62.0), rangé par règle du contrat. Chaque passage décrit l'existant que la règle remplace ou conserve, avec sa preuve <code>fichier:ligne</code>.</p>
 <h3 id="annexes-citations--12">Citations (§ 1.2)</h3>
@@ -2044,6 +2050,11 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <td>M</td>
 <td>Sélection qui inclut à la main le dernier caractère d'un paragraphe (retour du 27/09) : si le défaut est reproduit, une issue est ouverte après R0a, aucun lot ne le corrigeant ; variante Dialog de la feuille mesurée si R4 reste</td>
 <td>C2, R4</td>
+</tr>
+<tr>
+<td>N</td>
+<td>Champ actuel (BTF2), 60 lignes : poignée de fin tirée au bord bas puis au-delà, poignée de début vers le haut, doigt réel, mouvements lents puis tenue de 5 s — la sélection s'étend jusqu'à la fin ou au début du document, la poignée ne décroche jamais (retour du 15/09, build 335). Témoin facultatif : <code>EditText</code> natif, même geste</td>
+<td>C1</td>
 </tr>
 </tbody>
 </table>
@@ -2475,10 +2486,10 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 </tr>
 <tr>
 <td>Poignées, autoscroll, TextClassifier</td>
-<td>Inchangés ; C1 dérogé</td>
+<td>Inchangés ; C1 reformulé, tenu par le champ actuel</td>
 <td>ED-13</td>
-<td>—</td>
-<td>device (C2)</td>
+<td>R0a (N)</td>
+<td>device (C1, C2)</td>
 </tr>
 <tr>
 <td>Autofocus par surface, capitalisation</td>
@@ -2851,8 +2862,8 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <td>proposé hors phase (P7)</td>
 </tr>
 <tr>
-<td>Défilement continu des poignées au bord (#1406)</td>
-<td>C1 dérogé (§ 9) ; #1406 reste ouverte</td>
+<td>Défilement continu des poignées sous un doigt immobile (#1406)</td>
+<td>non exigé : C1 reformulé le 14/10 (§ 9, ci-dessous) ; #1406 reste ouverte comme amélioration</td>
 </tr>
 <tr>
 <td>Annulation d'un upload (D8), annulation tactile, raccourcis de format</td>
@@ -2876,6 +2887,14 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 </tr>
 </tbody>
 </table>
+<h3 id="annexes-défilement-des-poignées-et-c1">Défilement des poignées et C1</h3>
+<p>Recherche du 14/10 dans les sources (foundation 1.12.0 et 1.13.0-beta01, AOSP <code>main</code>) :</p>
+<ul>
+<li><strong>Compose</strong> : une poignée ne change la sélection, et donc le défilement, que sur un mouvement réel du doigt (<code>TextFieldSelectionState</code>, <code>TextFieldCoreModifier.updateScrollState</code>) ; aucune minuterie. <code>DragGestureDetector.kt</code> (1.13.0-beta01) l'écrit : la version desktop génère des mouvements synthétiques quand le texte défile sous un pointeur immobile, « Android doesn't currently generate such synthetic events » (b/343917640). L'autoscroll de 1.12 vise <code>SelectionContainer</code> seul. Aucune API publique ne dit qu'une poignée est tenue (<code>draggingHandle</code> est interne).</li>
+<li><strong><code>EditText</code> natif</strong> : la sélection n'est recalculée que sur <code>ACTION_MOVE</code>, le défilement suit par <code>bringPointIntoView</code> ; aucun <code>Runnable</code> reposté, poignées comme glissé après double-tap. Le défilement continu sur minuterie est une convention de bureau.</li>
+<li><strong>Material 3 1.5.0-beta01</strong> : rien sur la sélection ni le défilement des champs.</li>
+</ul>
+<p>C1 est donc aligné sur la plateforme ; le défilement continu ne serait possible qu'avec l'état interne de Compose ou des poignées réimplémentées (#1406). Rapport complet hors dépôt : <code>redface2-work/reports/1417-v04/c1-autoscroll-recherche.md</code>.</p>
 </section>
 </div>
 <script type="module">
