@@ -99,14 +99,14 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
  backdrop-filter:none;-webkit-backdrop-filter:none}
 @media (max-width:520px){.artnav #vpick label{display:none}}
 </style>
-<div id="vpick"><label for="vpick-sel">Version</label><select id="vpick-sel" autocomplete="off" onchange="location.href=this.value"><option value="./" selected>v5 — courante</option><option value="v4/">v4</option><option value="v3/">v3</option><option value="v2/">v2</option><option value="v1/">v1</option></select><script>addEventListener("pageshow",function(){var s=document.getElementById("vpick-sel");if(s)for(var i=0;i<s.options.length;i++)s.options[i].selected=s.options[i].defaultSelected;});</script></div>
+<div id="vpick"><label for="vpick-sel">Version</label><select id="vpick-sel" autocomplete="off" onchange="location.href=this.value"><option value="./" selected>v6 — courante</option><option value="v5/">v5</option><option value="v4/">v4</option><option value="v3/">v3</option><option value="v2/">v2</option><option value="v1/">v1</option></select><script>addEventListener("pageshow",function(){var s=document.getElementById("vpick-sel");if(s)for(var i=0;i<s.options.length;i++)s.options[i].selected=s.options[i].defaultSelected;});</script></div>
 </nav>
-<p class="state">v0.6.3 — 14/10/2026 — passes : Opus 5.5, Sol 6.1, Fable, Astra (GO sur la v0.6) ; C1 reformulé (décision du mainteneur) — statut Proposé</p><p class="parts">Rendu de <code>docs/specs/editor.md</code> (<a href="#spec">contrat</a>), <code>docs/adr/019-refonte-vue-editeur.md</code> (<a href="#adr">ADR-019</a>) et <code>docs/specs/editor-annexes.md</code> (<a href="#annexes">annexes</a>), prêts à entrer dans le dépôt. Les renvois entre ces trois documents pointent vers cette page ; les autres liens vers la doc du projet visent forumhfr.github.io/redface2.</p>
+<p class="state">v0.6.4 — 28/10/2026 — passes : Opus 5.5, Sol 6.1, Fable, Astra (GO sur la v0.6 ; GO avec conditions, levées, sur le raccourci) ; raccourci de la barre d&#x27;action (P16) — statut Proposé</p><p class="parts">Rendu de <code>docs/specs/editor.md</code> (<a href="#spec">contrat</a>), <code>docs/adr/019-refonte-vue-editeur.md</code> (<a href="#adr">ADR-019</a>) et <code>docs/specs/editor-annexes.md</code> (<a href="#annexes">annexes</a>), prêts à entrer dans le dépôt. Les renvois entre ces trois documents pointent vers cette page ; les autres liens vers la doc du projet visent forumhfr.github.io/redface2.</p>
 <section id="spec">
 <h1 id="contrat-de-léditeur">Contrat de l'éditeur</h1>
-<p>Le contrat normatif de la vue Éditeur refondue : géométrie, zones, règles de comportement, erreurs, invariants d'envoi, accessibilité, découpage et livraison. Refonte <a href="https://github.com/ForumHFR/redface2/issues/1417">#1417</a>, décisions structurantes dans l'<a href="#adr">ADR-019</a>. Version <strong>v0.6.3 (14/10/2026) — passes : Opus 5.5, Sol 6.1, Fable, Astra</strong>. La v0.6 (D35 à D43) a reçu le GO d'Astra ; la v0.6.1 corrige la rédaction (D44 à D46), sans changement de fond ; la v0.6.2 recale les références au code et précise ED-81 pour l'éditeur ouvert depuis la feuille ; la v0.6.3 reformule C1, décision du mainteneur.</p>
+<p>Le contrat normatif de la vue Éditeur refondue : géométrie, zones, règles de comportement, erreurs, invariants d'envoi, accessibilité, découpage et livraison. Refonte <a href="https://github.com/ForumHFR/redface2/issues/1417">#1417</a>, décisions structurantes dans l'<a href="#adr">ADR-019</a>. Version <strong>v0.6.4 (28/10/2026) — passes : Opus 5.5, Sol 6.1, Fable, Astra</strong>. La v0.6 (D35 à D43) a reçu le GO d'Astra ; la v0.6.1 corrige la rédaction (D44 à D46), sans changement de fond ; la v0.6.2 recale les références au code et précise ED-81 pour l'éditeur ouvert depuis la feuille ; la v0.6.3 reformule C1, décision du mainteneur ; la v0.6.4 ajoute le raccourci de la barre d'action (ED-36 à ED-39), demande du mainteneur, proposé (P16) ; challenge de Sol, gate de Fable et GO avec conditions d'Astra intégrés.</p>
 <blockquote>
-<p><strong>Statut : Proposé</strong> (14/10/2026, v0.6.3 ; v0.3 du 23/09/2026). Rien de ce contrat n'est implémenté. Relevé de l'existant sur <code>dev</code> à <code>08d5b41c</code> (bêta 0.62.0). Les hauteurs en dp sont des <strong>cibles calculées</strong>, non mesurées : elles ne valent critère qu'après confirmation filmée sur appareil. Les choix réservés au mainteneur sont <strong>proposés</strong>, pas acquis (<a href="#14-décisions-en-attente">§ 14</a>). Maquettes non contractuelles : <a href="https://forumhfr.github.io/artifacts/editeur-1417/">Vue Éditeur #1417</a>.</p>
+<p><strong>Statut : Proposé</strong> (28/10/2026, v0.6.4 ; v0.3 du 23/09/2026). Rien de ce contrat n'est implémenté. Relevé de l'existant sur <code>dev</code> à <code>08d5b41c</code> (bêta 0.62.0). Les hauteurs en dp sont des <strong>cibles calculées</strong>, non mesurées : elles ne valent critère qu'après confirmation filmée sur appareil. Les choix réservés au mainteneur sont <strong>proposés</strong>, pas acquis (<a href="#14-décisions-en-attente">§ 14</a>). Maquettes non contractuelles : <a href="https://forumhfr.github.io/artifacts/editeur-1417/">Vue Éditeur #1417</a>.</p>
 </blockquote>
 <p><strong>Conventions.</strong> Une règle normative porte un identifiant <code>ED-nn</code> ; elle est opposable en revue. Dans une règle, le présent de l'indicatif vaut obligation ; « doit » insiste sur une obligation ; « peut » ne marque qu'une permission. Une description de l'existant est introduite par « Relevé : » (ou rangée dans une colonne « Relevé ») : elle n'est pas normative et cite sa preuve (<code>fichier:ligne</code> à <code>08d5b41c</code>). Une règle qui dépend d'une décision du mainteneur porte la mention « proposé » et renvoie au § 14 (<code>P1</code> à <code>P15</code>). Les critères d'acceptation <code>C1</code>–<code>C10</code> sont ceux de #1417 (<a href="#9-critères-dacceptation">§ 9</a>). Les lots sont définis au <a href="#11-lots">§ 11</a>. Les signes ❝ ↺ ✕ ⤢ désignent une icône (drawable selon l'ADR-015), pas le glyphe rendu. « 1,3 × L » : pire cas d'échelle de police (glossaire). Les compléments non normatifs sont dans les <a href="#annexes">annexes</a>.</p>
 <p><strong>Pile.</strong> BOM Compose 2026.08.00 (foundation et ui 1.12.0, material3 1.4.0), navigation3 1.1.2 (<code>gradle/libs.versions.toml:16-17</code>, bump #1009 du 02/09/2026), OkHttp 5.5.0, targetSdk 36. Les comportements de BTF2 cités ici (suivi du caret, historique d'annulation, <code>IME_FLAG_NO_FULLSCREEN</code>) sont ceux de foundation 1.12.0. Un bump de BOM rejoue les critères appareil.</p>
@@ -164,7 +164,7 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 </ul>
 <p><strong>ED-01</strong> — La refonte préserve les deux modes. Aucun changement de mode ne convertit un brouillon existant. Les règles propres au mode cartes (icône d'état ❝, panneau citations) ne s'appliquent pas au mode inline.</p>
 <h3 id="13-hors-périmètre-de-cette-phase">1.3 Hors périmètre de cette phase</h3>
-<p><strong>Principe.</strong> La phase remplace l'existant. Elle n'ajoute que du comportement local à la surface ; elle n'ajoute <strong>jamais</strong> de fonction réseau ni de navigation hors de la surface. Conséquences : pas d'annulation d'upload, pas de remède de navigation dans un événement (ED-45), pas de liste des participants pour un non-owner (ED-40).</p>
+<p><strong>Principe.</strong> La phase remplace l'existant. Elle n'ajoute que du comportement local à la surface ; elle n'ajoute <strong>jamais</strong> de fonction réseau ni de navigation hors de la surface. Conséquences : pas d'annulation d'upload, pas de remède de navigation dans un événement (ED-45), pas de liste des participants pour un non-owner (ED-40). Exception proposée (P16) : le raccourci (ED-36 à ED-39), demandé par le mainteneur le 28/10/2026, ajoute un réglage hors de la surface, sans navigation depuis l'éditeur, et une action nouvelle, « Smiley perso ».</p>
 <p>« Hors phase » : aucun lot de #1417 ne le porte et la clôture de #1417 n'en dépend pas ; une issue hors phase peut rester dans la milestone « Vue · Éditeur 2 ».</p>
 <p>Sujets hors phase et motifs : <a href="#annexes-h-sujets-hors-phase">annexe H</a>.</p>
 <h2 id="2-glossaire">2. Glossaire</h2>
@@ -195,6 +195,10 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <tr>
 <td><strong>Événement de barre</strong></td>
 <td>Opération en cours, erreur, fin ou information affichée dans la barre d'action à la place des actions secondaires (ED-40, ED-43).</td>
+</tr>
+<tr>
+<td><strong>Raccourci</strong></td>
+<td>Action choisie dans les réglages, dans un catalogue fermé (actions existantes : format, teinte, action image, « Smileys Wiki » ; action nouvelle : « Smiley perso »), posée avec son icône dans la barre d'action, après « Smileys », pour la déclencher en un tap (ED-36).</td>
 </tr>
 <tr>
 <td><strong>Panneau</strong></td>
@@ -416,18 +420,18 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <h3 id="42-champ">4.2 Champ</h3>
 <p><strong>ED-12</strong> — Le label du champ est « Message » dans les quatre éditeurs plein écran ; le placeholder est « Saisissez votre message… ». La feuille garde « Votre message… » tant qu'elle n'est pas refondue. Relevé : <a href="#annexes-ed-12">annexe A</a>.</p>
 <p><strong>ED-13</strong> — Restent inchangés : autofocus, capitalisation en début de phrase, neutralisation du TextClassifier (#1427), poignées et autoscroll (#447), verrouillage du champ en lecture seule pendant <strong>tout</strong> upload, image unique comprise. L'autofocus reste propre à chaque surface. Le champ est aussi en lecture seule pendant l'envoi (ED-169). Relevé : <a href="#annexes-ed-13">annexe A</a>.</p>
-<p><strong>ED-14</strong> — Après une insertion programmatique (format, smiley, <code>[img]</code>, citation) faite pendant que le champ est en lecture seule ou n'a pas le focus, le caret est ramené explicitement dans le viewport. Relevé : <a href="#annexes-ed-14">annexe A</a>.</p>
+<p><strong>ED-14</strong> — Après une insertion programmatique (format, smiley, raccourci, <code>[img]</code>, citation) faite pendant que le champ est en lecture seule ou n'a pas le focus, le caret est ramené explicitement dans le viewport. Relevé : <a href="#annexes-ed-14">annexe A</a>.</p>
 <h3 id="43-mode-format">4.3 Mode format</h3>
 <p><strong>ED-20</strong> — Actions de format : Gras, Italique, Souligné, Barré, Citation, Code, Bloc fixé, Spoiler, Lien, Couleur. Ce sont des <strong>actions d'insertion</strong>, jamais des bascules de style : aucune n'a d'état « actif », puisque <code>BbcodeAction</code> insère des balises sans détecter le format existant. La présentation de <code>BbcodeToolbar</code> (rangée de chips libellées, upload épinglé, menu Couleur) est remplacée ; ses dispatchs (<code>BbcodeAction</code>, <code>BbcodeFormatter</code>) sont conservés. L'upload quitte les actions de format pour le sous-niveau Image (ED-31). Relevé : <code>BbcodeToolbar.kt:59-74</code>, <code>:124-153</code>, <code>:171</code>.</p>
-<p><strong>ED-21</strong> — L'icône format bascule la barre d'action en <strong>mode format</strong>, à hauteur constante (56 dp) : l'icône format reste en place, sélectionnée, et referme le mode ; smileys, image et options cèdent la place à une rangée défilante d'icônes de format, avec un dégradé de bord qui signale le débordement ; « Envoyer » reste à droite. Le mode ne recouvre rien et ne change aucune hauteur : l'ouvrir ou le fermer ne déplace pas le texte du champ (C6). Trois formats sont visibles à 360 dp au pire cas (360 − 32 − 48 − 115 = 165 dp, « Envoyer » à 1,3 × L).</p>
+<p><strong>ED-21</strong> — L'icône format bascule la barre d'action en <strong>mode format</strong>, à hauteur constante (56 dp) : l'icône format reste en place, sélectionnée, et referme le mode ; smileys, raccourci (ED-36), image et options cèdent la place à une rangée défilante d'icônes de format, avec un dégradé de bord qui signale le débordement ; « Envoyer » reste à droite. Le mode ne recouvre rien et ne change aucune hauteur : l'ouvrir ou le fermer ne déplace pas le texte du champ (C6). Trois formats sont visibles à 360 dp au pire cas (360 − 32 − 48 − 115 = 165 dp, « Envoyer » à 1,3 × L).</p>
 <p><strong>ED-22</strong> — Sélection. La sélection en cours survit à l'ouverture du mode et au défilement de la rangée ; chaque action s'applique à la sélection courante, puis le caret résultant est visible (C5, ED-14). Relevé : <a href="#annexes-ed-22">annexe A</a>. Le comportement après une action (sélection gardée ou caret replacé après la balise fermante) est tranché en R0a, scénario Format → Smiley.</p>
 <p><strong>ED-23</strong> — Persistance. Le mode format <strong>persiste à la frappe</strong>. Il se referme par l'icône format, le retour (ED-85), l'ouverture d'une feuille, d'un panneau ou de l'aperçu ; il n'est pas rouvert au retour de ces surfaces. L'armement de l'envoi le masque, comme il masque les actions secondaires (ED-34) ; au désarmement, la barre revient dans le mode où elle était. (La v0.3 repliait le tiroir à la frappe : la règle est supprimée.)</p>
 <p><strong>ED-24</strong> — Couleur ouvre un <strong>sous-niveau</strong> dans la même barre : les cinq teintes (Rouge, Bleu, Vert, Orange, Gris) et « Retour ». Aucune popup : le clavier n'est jamais fermé par un choix de couleur. Choisir une teinte insère la balise et ramène la barre en mode format.</p>
-<p><strong>ED-25</strong> — Emplacements fixes, en hauteur compacte seulement (ED-05) : « En-tête » (surfaces à panneau d'en-tête), « Aperçu » et les icônes d'état (ED-40) sont des emplacements fixes de la barre d'action, présents dans le mode normal, le mode format, les sous-niveaux et pendant un événement. Quand la <strong>largeur disponible</strong> ne suffit pas (multi-fenêtre, 360 dp en hauteur compacte), ils sont retenus par priorité — « Envoyer » &gt; « En-tête » &gt; « Aperçu » &gt; icônes d'état — et les autres passent dans la rangée défilante (ED-30). La règle se teste par largeur (360 dp et paysage S10e au moins), jamais par orientation. En portrait, « En-tête » n'existe pas dans la barre : le bloc titre est l'entrée du panneau (ED-10, ED-101). Relevé de calcul : à 360 dp, quatre outils, « Aperçu » et « En-tête » (288 dp), « Envoyer » (≈ 115 dp à 1,3 × L) et 32 dp de gouttières font 435 dp.</p>
-<p><strong>ED-26</strong> — Clavier. Aucun raccourci de format n'est ajouté (Ctrl+B, I, U n'existent pas aujourd'hui). La barre, ses deux modes et ses sous-niveaux sont atteignables au clavier (Tab, ED-93) ; une action activée au clavier rend le focus au champ.</p>
+<p><strong>ED-25</strong> — Emplacements fixes, en hauteur compacte seulement (ED-05) : « En-tête » (surfaces à panneau d'en-tête), « Aperçu » et les icônes d'état (ED-40) sont des emplacements fixes de la barre d'action, présents dans le mode normal, le mode format, les sous-niveaux et pendant un événement. Quand la <strong>largeur disponible</strong> ne suffit pas (multi-fenêtre, 360 dp en hauteur compacte), ils sont retenus par priorité — « Envoyer » &gt; « En-tête » &gt; « Aperçu » &gt; icônes d'état — et les autres passent dans la rangée défilante (ED-30). La rangée défilante garde au moins 48 dp : un emplacement fixe qui la réduirait en dessous y passe à son tour. La règle se teste par largeur (360 dp et paysage S10e au moins), jamais par orientation. En portrait, « En-tête » n'existe pas dans la barre : le bloc titre est l'entrée du panneau (ED-10, ED-101). Relevé de calcul : à 360 dp, quatre outils (cinq avec le raccourci, ED-38), « Aperçu » et « En-tête » (288 dp), « Envoyer » (≈ 115 dp à 1,3 × L) et 32 dp de gouttières font 435 dp.</p>
+<p><strong>ED-26</strong> — Clavier. Aucun raccourci clavier de format n'est ajouté (Ctrl+B, I, U n'existent pas aujourd'hui). La barre, ses deux modes et ses sous-niveaux sont atteignables au clavier (Tab, ED-93) ; une action d'insertion activée au clavier rend aussitôt le focus au champ ; une action qui ouvre une feuille, un dialogue ou le sélecteur d'images le rend à leur fermeture, selon ED-80.</p>
 <p><strong>ED-27</strong> — Repli. Si R0a montre que le tap de sortie du mode format pénalise smileys et image, le repli est l'option E : une rangée unique défilante qui regroupe insertion (smileys, image, options) et formats, « Envoyer » fixe, sans mode.</p>
 <h3 id="44-barre-daction">4.4 Barre d'action</h3>
-<p><strong>ED-30</strong> — En mode normal, la barre porte, de gauche à droite : [en hauteur compacte, emplacements fixes retenus d'ED-25], format, smileys, image, options, espace, « Envoyer ». Les actions secondaires sont des icônes seules ; « Envoyer » garde son libellé et n'est jamais déclassé. Si la largeur manque (ED-25), les emplacements déclassés puis les actions du mode forment une rangée défilante à dégradé de bord, avant « Envoyer ». En mode format : [emplacements retenus], format (sélectionné), rangée de formats précédée des emplacements déclassés, « Envoyer ». Pendant un événement : [emplacements retenus], icône, résumé et action de l'événement, « Envoyer » (ED-40) ; la largeur du résumé (ED-133) prime, et un emplacement qui ne tient plus est masqué jusqu'à l'acquittement, comme les outils.</p>
+<p><strong>ED-30</strong> — En mode normal, la barre porte, de gauche à droite : [en hauteur compacte, emplacements fixes retenus d'ED-25], format, smileys, [raccourci, ED-36], image, options, espace, « Envoyer ». Les actions secondaires sont des icônes seules ; « Envoyer » garde son libellé et n'est jamais déclassé. Si la largeur manque (ED-25), les emplacements déclassés puis les actions du mode forment une rangée défilante à dégradé de bord, avant « Envoyer ». En mode format : [emplacements retenus], format (sélectionné), rangée de formats précédée des emplacements déclassés, « Envoyer ». Pendant un événement : [emplacements retenus], icône, résumé et action de l'événement, « Envoyer » (ED-40) ; la largeur du résumé (ED-133) prime, et un emplacement qui ne tient plus est masqué jusqu'à l'acquittement, comme les outils.</p>
 <p><strong>ED-31</strong> — L'action image bascule la barre dans le <strong>sous-niveau Image</strong>, qui porte toutes les actions image existantes de la surface et « Retour » : « Uploader une image » (quatre éditeurs plein écran), « Insérer par URL » (éditeur de post, formulaire de sujet ; ouvre le dialogue existant), « Baliser la sélection en [img] » (éditeurs MP, action <code>BbcodeAction.Image</code> actuelle). Aucune popup ; aucune action existante n'est perdue. Une action du sous-niveau le referme. Ces trois libellés sont nouveaux.</p>
 <p>Le lanceur du sélecteur d'images (<code>rememberEditorImagePicker</code>) est déclaré à la racine de l'écran, jamais dans un contenu temporaire de la barre : il serait désenregistré à sa disparition et le résultat perdu. Le brouillon est écrit immédiatement (<code>persistDraftNow()</code>) après chaque <code>[img]</code> inséré. Une sélection reçue avant que le compte actif soit connu (recréation, flux d'authentification asynchrone) est mise en attente jusqu'à sa résolution, pas ignorée. Relevé : <a href="#annexes-ed-31">annexe A</a>.</p>
 <p><strong>ED-32</strong> — Chaque icône a un nom accessible, repris par son info-bulle à l'appui long (<code>TooltipBox</code> + <code>PlainTooltip</code>) :</p>
@@ -446,6 +450,10 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <tr>
 <td>Smileys, Image, Options</td>
 <td>« Smileys », « Image », « Options »</td>
+</tr>
+<tr>
+<td>Raccourci</td>
+<td>Le nom de son action (ED-36) ; « Smileys Wiki », « Smiley perso »</td>
 </tr>
 <tr>
 <td>Aperçu</td>
@@ -478,10 +486,71 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <li><strong>Activable</strong> (dans les quatre éditeurs plein écran) quand le formulaire de la surface est chargé, qu'aucun envoi ni upload n'est en cours et que le corps n'est pas vide (ou, en réponse, qu'au moins une carte de citation existe). Un appui alors que l'en-tête est incomplet n'arme pas et n'envoie pas : il affiche l'événement « Titre manquant », « Sous-catégorie manquante », « Aucun destinataire » ou « Sujet manquant » avec l'action « Compléter », qui ouvre le panneau d'en-tête (ED-45).</li>
 <li><strong>Autorisation du POST</strong> (<code>canSubmit</code> du ViewModel) : elle reste stricte et exige en plus l'en-tête complet et le contexte complet (sujet, page, sous-catégorie valide, compte connecté). Aucun POST ne part sans elle.</li>
 </ul>
-<p>Pendant un upload, les actions qui modifient le texte — format, smileys, image — sont désactivées. Le chargement du formulaire n'est pas un événement (D34) : outils et champ restent actifs, seule la barre de 2 dp d'ED-46 le signale, et « Envoyer » n'est activable qu'une fois le formulaire chargé. Côté MP, l'exigence « aucun upload en cours » est un <strong>changement voulu</strong>, porté dès #1301-ST (ED-172) : aujourd'hui un MP peut partir pendant un upload, sans le <code>[img]</code> en cours.</p>
+<p>Pendant un upload, les actions qui modifient le texte — format, smileys, image, raccourci — sont désactivées. Le chargement du formulaire n'est pas un événement (D34) : outils et champ restent actifs, seule la barre de 2 dp d'ED-46 le signale, et « Envoyer » n'est activable qu'une fois le formulaire chargé. Côté MP, l'exigence « aucun upload en cours » est un <strong>changement voulu</strong>, porté dès #1301-ST (ED-172) : aujourd'hui un MP peut partir pendant un upload, sans le <code>[img]</code> en cours.</p>
 <p>Relevé : <a href="#annexes-ed-35">annexe A</a>.</p>
+<p><strong>Raccourci (proposé, P16).</strong> Demande du mainteneur du 28/10/2026 : une action existante, choisie par l'utilisateur, posée dans la barre et déclenchée en un tap au lieu d'un passage par un ou plusieurs sous-niveaux. Le but est d'économiser des taps sur l'action dont on se sert le plus.</p>
+<p><strong>ED-36</strong> — Définition. L'utilisateur choisit <strong>un raccourci</strong> (aucun par défaut : sans raccourci, la barre est celle d'ED-30) dans un catalogue fermé d'actions. Chaque action garde <strong>son</strong> icône (ED-33) et son nom accessible (ED-32) : l'utilisateur ne choisit pas d'icône.</p>
+<table>
+<thead>
+<tr>
+<th>Action</th>
+<th>Sans raccourci</th>
+<th>Surfaces</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Un format d'ED-20, sauf Couleur (Gras à Lien)</td>
+<td>2 taps : mode format, format</td>
+<td>toutes</td>
+</tr>
+<tr>
+<td>Une teinte d'ED-24 (icône : pastille de la teinte)</td>
+<td>3 taps : mode format, Couleur, teinte</td>
+<td>toutes</td>
+</tr>
+<tr>
+<td>« Uploader une image » (ED-31)</td>
+<td>2 taps : Image, action</td>
+<td>les quatre éditeurs plein écran</td>
+</tr>
+<tr>
+<td>« Insérer par URL » (ED-31)</td>
+<td>2 taps : Image, action</td>
+<td>éditeur de post, formulaire de sujet</td>
+</tr>
+<tr>
+<td>« Baliser la sélection en [img] » (ED-31)</td>
+<td>2 taps : Image, action</td>
+<td>éditeurs MP</td>
+</tr>
+<tr>
+<td>« Smileys Wiki » : la feuille smileys ouverte sur l'onglet Wiki (ED-70)</td>
+<td>2 taps : Smileys, onglet Wiki (un seul si une recherche restaurée l'ouvre déjà)</td>
+<td>toutes</td>
+</tr>
+<tr>
+<td>« Smiley perso » : <code>[:</code> et <code>]</code> (<strong>action nouvelle</strong>, R6)</td>
+<td>frappe au clavier</td>
+<td>toutes</td>
+</tr>
+</tbody>
+</table>
+<p>« Smileys Wiki » et « Smiley perso » reçoivent leurs icônes en R6, selon l'ADR-015 (ED-33), distinctes de celle de « Smileys ». La pastille d'une teinte est dessinée, pas un drawable tinté : exception explicite à l'ADR-015, même taille de 24 dp et même cible de 48 dp ; sa lisibilité sur les deux thèmes est une capture de R6.</p>
+<p>Hors catalogue : « Smileys » et « Options » (déjà dans la barre) ; Couleur (elle ouvre un sous-niveau, ses teintes la remplacent) ; les bascules et le ton de la feuille options (des états du message, pas des actions). « Toutes » désigne toutes les surfaces qui portent la barre d'action, la feuille comprise si R4 reste.</p>
+<p><strong>ED-37</strong> — Effet. Un tap sur le raccourci produit l'effet de son action, sans ouvrir le mode format ni un sous-niveau, avec les mêmes dispatchs que depuis la barre (ED-20, ED-24, ED-31) :</p>
+<ul>
+<li>un format ou une teinte s'applique à la sélection courante (ED-22), et la barre reste en mode normal ;</li>
+<li>« Uploader une image » ouvre le sélecteur par le lanceur déclaré à la racine de l'écran ; « Insérer par URL » ouvre le dialogue ; « Baliser la sélection en [img] » enveloppe aussitôt la sélection (<code>BbcodeAction.Image</code>). Chaque <code>[img]</code> inséré est écrit immédiatement au brouillon (ED-31) ;</li>
+<li>« Smileys Wiki » ouvre la feuille smileys sur l'onglet Wiki ; comme depuis « Smileys », la feuille prend le focus, ici dans la recherche (comportement actuel de l'onglet), et ED-80 rend le corps, la sélection et l'état du clavier au retour. Une recherche et des résultats restaurés sont conservés ; le choix de l'onglet ne lance aucune requête ;</li>
+<li>« Smiley perso » insère <code>[:</code> et <code>]</code>, sans espace ajouté, et place le caret entre les deux ; avec une sélection, il l'entoure (un nom sélectionné devient <code>[:nom]</code>) et place le caret après le <code>]</code>, sans sélection.</li>
+</ul>
+<p>Ctrl+Z annule l'insertion comme une insertion de format (en une fois à partir de R0c). Le texte inséré et le caret qui en résulte sont visibles (C5, ED-14).</p>
+<p><strong>ED-38</strong> — Place. Le raccourci est une action secondaire du mode normal, placée après « Smileys » (ED-30) ; il n'a pas de rang parmi les emplacements fixes d'ED-25. Il suit les règles des actions secondaires : il cède la place à la rangée de formats (ED-21) ; il est masqué pendant l'armement (ED-34) et pendant un événement (ED-40) ; il est désactivé quand son action l'est, par exemple pendant un upload (ED-35) ; il est atteignable au clavier (ED-26, ED-93). Sur une surface qui ne porte pas son action (tableau d'ED-36), il est absent.</p>
+<p>Visibilité. Dans une fenêtre qui n'est pas compacte en hauteur, à partir de 360 dp de large et à toute échelle, le raccourci est entièrement visible au repos : troisième action, il finit à 144 dp sur les 213 dp que laissent les gouttières (32 dp) et « Envoyer » à 1,3 × L (≈ 115 dp). Quand la largeur manque, Options puis Image passent dans la rangée défilante d'ED-30 : c'est le prix assumé du raccourci. En hauteur compacte, paysage ou fenêtre basse (360 × 470 dp, par exemple), les emplacements fixes retenus passent d'abord (ED-25) et le raccourci vient après format et smileys, dans une rangée défilante d'au moins 48 dp : il y est toujours atteignable, au besoin en la faisant défiler. En paysage S10e, cinq actions et quatre emplacements fixes font ≈ 579 dp plus les insets horizontaux, mesurés en R0a (critère O). La promesse d'un seul tap ne vaut que là où R0a l'a mesurée.</p>
+<p><strong>ED-39</strong> — Réglage. Le raccourci se choisit dans les réglages, rubrique « Édition et publication » : le catalogue d'ED-36, avec ses icônes, et « Aucun ». Une entrée limitée à certaines surfaces le dit en texte secondaire (« éditeurs MP » ; « post et sujet »). Le choix vaut pour toutes les surfaces qui portent la barre d'action (§ 7) ; il est stocké sur l'appareil, comme les autres réglages d'édition. L'éditeur n'ouvre pas ce réglage (§ 1.3), et l'appui long sur le raccourci garde l'info-bulle (ED-32).</p>
 <h3 id="45-icônes-détat-et-événement-de-barre">4.5 Icônes d'état et événement de barre</h3>
-<p><strong>ED-40</strong> — Il n'y a pas de bande. Les états durables (↺ brouillon, ❝ N, N destinataires, sondage) sont des icônes à badge de l'app bar, deux au plus, cibles 48 dp, badge tonal (jamais <code>error</code>) qui ne recouvre pas le glyphe ; en hauteur compacte, ce sont des emplacements fixes de la barre d'action (ED-25). L'événement — un seul, rang d'ED-43 — occupe la barre d'action à la place des quatre actions secondaires, comme l'armement : icône, résumé, une action (Détails / Compléter / Masquer) à au moins 8 dp d'« Envoyer », qui reste à droite ; la barre de progression de 2 dp (ED-46) y est dessinée. Une opération en cours (Envoi…, Image n/N…) masque des outils déjà désactivés (ED-35, ED-169) : aucun coût. Une erreur, une fin ou une information persistent (ED-44) et masquent les outils jusqu'à un tap d'acquittement — Masquer, Compléter, ou Détails (consulter le détail vaut acquittement : l'événement est retiré au retour) ; un événement de rang inférieur réapparaît alors. Aucune hauteur ne change jamais ; ED-41 (jamais sur le texte) et ED-95 (nœud live permanent, dans la barre) tiennent. Champ : 214 dp à 360 × 740 clavier ouvert, ≈ 82 dp en paysage S10e (à mesurer, R0a).</p>
+<p><strong>ED-40</strong> — Il n'y a pas de bande. Les états durables (↺ brouillon, ❝ N, N destinataires, sondage) sont des icônes à badge de l'app bar, deux au plus, cibles 48 dp, badge tonal (jamais <code>error</code>) qui ne recouvre pas le glyphe ; en hauteur compacte, ce sont des emplacements fixes de la barre d'action (ED-25). L'événement — un seul, rang d'ED-43 — occupe la barre d'action à la place des actions secondaires, comme l'armement : icône, résumé, une action (Détails / Compléter / Masquer) à au moins 8 dp d'« Envoyer », qui reste à droite ; la barre de progression de 2 dp (ED-46) y est dessinée. Une opération en cours (Envoi…, Image n/N…) masque des outils déjà désactivés (ED-35, ED-169) : aucun coût. Une erreur, une fin ou une information persistent (ED-44) et masquent les outils jusqu'à un tap d'acquittement — Masquer, Compléter, ou Détails (consulter le détail vaut acquittement : l'événement est retiré au retour) ; un événement de rang inférieur réapparaît alors. Aucune hauteur ne change jamais ; ED-41 (jamais sur le texte) et ED-95 (nœud live permanent, dans la barre) tiennent. Champ : 214 dp à 360 × 740 clavier ouvert, ≈ 82 dp en paysage S10e (à mesurer, R0a).</p>
 <p>Icônes d'état, dans cet ordre quand elles coexistent :</p>
 <table>
 <thead>
@@ -600,7 +669,7 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <p><strong>ED-90</strong> — L'ordre de parcours TalkBack et l'ordre de focus au clavier suivent l'ordre visuel : app bar (retour, titre, icônes d'état, aperçu) → champ → barre d'action (actions du mode courant, ou résumé puis action de l'événement) → « Envoyer ». Le besoin d'entendre un état ou un événement est couvert par l'annonce (ED-95), pas par un avancement dans l'ordre.</p>
 <p><strong>ED-91</strong> — Le texte intégral d'un événement et son action restent accessibles à TalkBack, même quand le résumé visuel est tronqué.</p>
 <p><strong>ED-92</strong> — Les icônes d'état et l'action d'événement ont des cibles d'au moins 48 × 48 dp, sans recouvrir une cible voisine ; l'action d'événement est à au moins 8 dp d'« Envoyer » (ED-167).</p>
-<p><strong>ED-93</strong> — Clavier physique : Maj+flèches suit les mêmes règles que les poignées (C10) ; Tab et Maj+Tab font sortir le focus du champ vers l'élément suivant ou précédent, sans insérer de tabulation (une tabulation n'a pas d'usage en BBCode HFR) ; la barre d'action, ses modes et ses sous-niveaux sont atteignables au clavier (ED-26) ; une action activée au clavier rend le focus au champ. Relevé : <a href="#annexes-ed-93">annexe A</a>.</p>
+<p><strong>ED-93</strong> — Clavier physique : Maj+flèches suit les mêmes règles que les poignées (C10) ; Tab et Maj+Tab font sortir le focus du champ vers l'élément suivant ou précédent, sans insérer de tabulation (une tabulation n'a pas d'usage en BBCode HFR) ; la barre d'action, ses modes et ses sous-niveaux sont atteignables au clavier (ED-26) ; une action d'insertion activée au clavier rend aussitôt le focus au champ, une action qui ouvre une feuille, un dialogue ou le sélecteur d'images le rend à leur fermeture (ED-80). Relevé : <a href="#annexes-ed-93">annexe A</a>.</p>
 <p><strong>ED-94</strong> — Le champ reste un seul nœud défilable pour TalkBack ; nom accessible conservé.</p>
 <p><strong>ED-95</strong> — Annonces. La barre d'action porte un nœud live <strong>permanent</strong> (ED-40) dont le contenu change : un nœud live qui apparaît n'est pas annoncé de façon fiable, et <code>View.announceForAccessibility</code> est déprécié en API 36 (patron déjà en place pour les cartes de citation, <code>QuoteCards.kt:139-149</code>). Une erreur est annoncée en mode <code>Assertive</code> ; une opération en cours, une fin et une information en mode <code>Polite</code>. Le contenu annoncé est le résumé suivi du nom de l'action. La progression d'un upload est annoncée au début et à la fin seulement. L'armement du bouton est annoncé (<code>stateDescription</code>), son désarmement aussi. L'arrivée d'une icône d'état (offre ↺ comprise) est annoncée en <code>Polite</code>.</p>
 <h2 id="7-contrats-par-surface">7. Contrats par surface</h2>
@@ -874,7 +943,7 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <li><strong>C2</strong> — au relâchement, la sélection correspond exactement à ce qui a été survolé, sans décalage égal à la distance défilée.</li>
 <li><strong>C3</strong> — clavier ouvert : caret et ligne courante visibles dans les 4 éditeurs, Android 10 compris ; la barre d'envoi reste au-dessus du clavier.</li>
 <li><strong>C4</strong> — la frappe en bas de texte ne masque jamais la ligne courante (non-régression #449, #275, #410).</li>
-<li><strong>C5</strong> — barre d'outils BBCode, smiley, <code>[img]</code> après upload, citation : le texte inséré et le caret résultant sont visibles sans geste supplémentaire.</li>
+<li><strong>C5</strong> — barre d'outils BBCode, smiley, raccourci, <code>[img]</code> après upload, citation : le texte inséré et le caret résultant sont visibles sans geste supplémentaire.</li>
 <li><strong>C6</strong> — aucun saut ni double animation à l'ouverture du clavier, au retour de l'aperçu, du picker, de la feuille d'options ou du sélecteur d'images ; la sélection en cours survit à l'aller-retour.</li>
 <li><strong>C7</strong> — en mode écran scrollé (nouveau sujet, nouveau MP), déplacer le caret ne chasse pas le titre, les destinataires ni la barre d'outils hors champ.</li>
 <li><strong>C8</strong> — rotation et recréation de process : texte, sélection et position conservés ; pas de bannière « brouillon non envoyé » indue (#1415).</li>
@@ -919,7 +988,7 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <td>R0a</td>
 <td>#1455</td>
 <td>Preuve d'interaction et mesure sur appareil, durée maximale de trois jours, repli E écrit avant</td>
-<td>preuve d'ED-20 à ED-27, ED-80, ED-93 ; mesures d'ED-02, ED-05, ED-10, ED-166</td>
+<td>preuve d'ED-20 à ED-27, ED-80, ED-93 ; mesures d'ED-02, ED-05, ED-10, ED-38, ED-166</td>
 <td>—</td>
 <td>rf2-dev (hors dépôt)</td>
 </tr>
@@ -950,8 +1019,8 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <tr>
 <td>R1a-1</td>
 <td>à créer</td>
-<td><code>EditorScaffold</code> dans <code>:core:ui/editor</code>, app bar et icônes d'état, barre d'action et ses modes (événement compris), panneau d'en-tête ; non branchés</td>
-<td>ED-02 à ED-05, ED-10, ED-11, ED-20 à ED-27, ED-30 à ED-33, ED-40, ED-41, ED-43 à ED-46, ED-49, ED-85, ED-90 à ED-95 ; composant d'ED-101 et d'ED-113</td>
+<td><code>EditorScaffold</code> dans <code>:core:ui/editor</code>, app bar et icônes d'état, barre d'action et ses modes (événement compris), place du raccourci (sans réglage), panneau d'en-tête ; non branchés</td>
+<td>ED-02 à ED-05, ED-10, ED-11, ED-20 à ED-27, ED-30 à ED-33, ED-38, ED-40, ED-41, ED-43 à ED-46, ED-49, ED-85, ED-90 à ED-95 ; composant d'ED-101 et d'ED-113</td>
 <td>G0</td>
 <td>rf2-dev</td>
 </tr>
@@ -1019,8 +1088,17 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <td>G5</td>
 <td>rf2-dev</td>
 </tr>
+<tr>
+<td>R6</td>
+<td>à créer (si P16)</td>
+<td>Raccourci : préférence et réglage, action « Smiley perso », feuille smileys ouvrable sur l'onglet Wiki, branchement sur chaque surface migrée</td>
+<td>ED-36 à ED-39</td>
+<td>R1a-2</td>
+<td>rf2-dev</td>
+</tr>
 </tbody>
 </table>
+<p>Si P16 retient R6 dans la phase : R6 branche le raccourci sur les surfaces déjà migrées, et toute surface migrée après R6 le porte dans son propre lot, avec les critères de R6 sur cette surface.</p>
 <p>R0c est précondition de <strong>R2b seulement</strong> : la restauration après mort du process (ED-81) ne dépend pas de R0c et sort avec R1a-2. Si la mesure de R0a montre un <code>Bundle</code> dangereux (§ 12, Q7), un correctif minimal du pont (diff préfixe / suffixe) passe avant R0c.</p>
 <h3 id="112-critères-de-sortie">11.2 Critères de sortie</h3>
 <table>
@@ -1037,7 +1115,7 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 </tr>
 <tr>
 <td>R0a</td>
-<td>Critères A à N de l'<a href="#annexes-b5-critères-de-sortie-de-r0a">annexe B.5</a>, filmés sur S10e (Samsung Keyboard <strong>et</strong> Gboard) et sur l'AVD API 29, à fontScale 1 et 1,3 × L</td>
+<td>Critères A à O de l'<a href="#annexes-b5-critères-de-sortie-de-r0a">annexe B.5</a>, filmés sur S10e (Samsung Keyboard <strong>et</strong> Gboard) et sur l'AVD API 29, à fontScale 1 et 1,3 × L</td>
 </tr>
 <tr>
 <td>R0b</td>
@@ -1083,6 +1161,10 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <td>R5 (si P1)</td>
 <td>C1–C10 filmés ; aucun défaut bloquant ouvert</td>
 </tr>
+<tr>
+<td>R6 (si P16)</td>
+<td><a href="#annexes-b1-par-lot">Annexe B.1</a> : tests des actions du catalogue (formats et teintes, image, « Smileys Wiki », « Smiley perso »), gardes et réglage ; barre sans raccourci identique à R1a-1 ; C5, C6, C10 et TalkBack sur chaque surface migrée</td>
+</tr>
 </tbody>
 </table>
 <p>Échec de R0a, critère A, B ou C : le repli E est adopté, ou la règle du mode format est réécrite avant R1a-2. Échec d'un autre critère : la règle concernée est réécrite avant le lot qui la porte.</p>
@@ -1099,12 +1181,12 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <tr>
 <td>G0</td>
 <td>R1a-1</td>
-<td>Spec v0.6 passée au gate de revue (GO Astra, 14/10/2026) ; R0a et R1a-1 peuvent partir avant l'acceptation de l'ADR (P10)</td>
+<td>Spec v0.6 passée au gate de revue (GO Astra, 14/10/2026) ; ajout de la v0.6.4 (raccourci, ED-25, ED-26, ED-36 à ED-39, ED-93) passé au gate d'Astra (GO avec conditions, 28/10/2026, conditions levées) ; R0a et R1a-1 peuvent partir avant l'acceptation de l'ADR (P10)</td>
 </tr>
 <tr>
 <td>G1</td>
 <td>merge de R1a-2</td>
-<td>R0a concluant (ou repli E adopté) ; #1301-ST et R0b mergés ; R0d mergé si P1 ; ADR-019 accepté et choix délégués validés (P10) ; ancien éditeur capturé (Roborazzi et dump uiautomator)</td>
+<td>R0a concluant (ou repli E adopté ; le critère O est exigé dans les deux cas) ; #1301-ST et R0b mergés ; R0d mergé si P1 ; ADR-019 accepté et choix délégués validés (P10) ; ancien éditeur capturé (Roborazzi et dump uiautomator)</td>
 </tr>
 <tr>
 <td>G2</td>
@@ -1119,7 +1201,7 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <tr>
 <td>G4</td>
 <td>bêta en <code>PAR_DÉFAUT</code> (si P1) ou promotion de fin de phase</td>
-<td>ED-140 éteinte (R2a, R2b mergés) ; R4 mergé ou sorti de la phase ; C1–C10 filmés ; go du mainteneur</td>
+<td>ED-140 éteinte (R2a, R2b mergés) ; R4 mergé ou sorti de la phase ; si P16 retient R6, R6 mergé et raccourci porté par toutes les surfaces migrées ; C1–C10 filmés ; go du mainteneur</td>
 </tr>
 <tr>
 <td>G5</td>
@@ -1206,6 +1288,11 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <td>Si P1 est acceptée : ED-131 (les erreurs ne s'effacent plus à la frappe, cinq surfaces) part en bêta dans l'ancien chrome avant le nouveau. Valider ce changement visible et son annonce ?</td>
 <td><strong>Oui</strong>, annoncé dans les notes de version.</td>
 </tr>
+<tr>
+<td>P16</td>
+<td>Raccourci (ED-36 à ED-39, demande du 28/10) : dans la phase, en lot R6 après R1a-2, R1a-1 réservant sa place ? Sinon hors phase, en issue à part après #1417, R1a-1 réservant quand même la place. Valider aussi les choix proposés : un seul raccourci, catalogue d'ED-36 (dont « Smiley perso », nouvelle), réglage hors de l'éditeur, Options déclassée en largeur compacte. Défaut : « Aucun » (barre d'ED-30 inchangée, raccourci annoncé dans les notes de version), ou « Smiley perso » (cinq icônes pour tous, Options déclassée à 360 dp et 1,3 × L) ?</td>
+<td><strong>Dans la phase (R6)</strong>, choix tels quels ; défaut <strong>« Aucun »</strong>, annoncé dans les notes de version.</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -1213,14 +1300,14 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <section id="adr">
 <h1 id="adr-adr-019--refonte-de-la-vue-éditeur-1417--chrome-fixe-champ-élastique-états-dans-lapp-bar">ADR-019 — Refonte de la vue Éditeur (#1417) : chrome fixe, champ élastique, états dans l'app bar</h1>
 <h2 id="adr-statut">Statut</h2>
-<p>Proposé — 2026-10-14 (v0.6.3 ; v0.3 du 2026-09-23 ; passes : Opus 5.5, Sol 6.1, Fable, Astra). L'acceptation et la validation des choix pris par délégation sont la décision P10 de la <a href="#14-décisions-en-attente">spec de l'éditeur</a>.</p>
+<p>Proposé — 2026-10-28 (v0.6.4 ; v0.3 du 2026-09-23 ; passes : Opus 5.5, Sol 6.1, Fable, Astra). L'acceptation et la validation des choix pris par délégation sont la décision P10 de la <a href="#14-décisions-en-attente">spec de l'éditeur</a>.</p>
 <h2 id="adr-contexte">Contexte</h2>
 <p>La vue Éditeur regroupe cinq surfaces d'écriture : répondre ou modifier un message (<code>PostEditorScreen</code>), créer un sujet ou modifier son premier message (<code>TopicFormScreen</code>), écrire un nouveau MP (<code>PrivateMessageComposeScreen</code>), répondre dans une conversation MP (<code>PrivateMessageReplyScreen</code> / <code>MessageEditorComponents</code>), et la feuille de réponse rapide de la vue Topic (<code>QuickReplySheet</code>). Les quatre premières partagent les composants de <code>:core:ui/editor</code> (<code>BbcodeTextField</code>, <code>BbcodeToolbar</code>, <code>SmileyPickerSheet</code>, <code>EditorOptionsSheet</code>, <code>ArmedSubmitButton</code>, <code>EditorLayoutBudget</code>, <code>EditorUpload</code>) ; <code>QuoteCards</code> ne sert qu'à l'éditeur de post. La feuille a sa propre implémentation et ne réutilise que <code>QuoteCardsColumn</code>.</p>
 <p>L'objectif produit, posé par un testeur sur le topic DEV et repris par l'issue parapluie <a href="https://github.com/ForumHFR/redface2/issues/1417">#1417</a>, est que <strong>les bords haut et bas du champ restent visibles et que le texte défile dedans</strong>.</p>
 <p>Le problème : sur un téléphone de 360 × 740 dp clavier ouvert, il reste environ 330 dp de fenêtre utile. En 0.59.8, avant le correctif de densité #1432, le chrome (titre d'écran, barre d'outils BBCode d'au moins 56 dp, bouton d'aperçu de 48 dp, bandeaux empilés, 36 dp d'espacements, barre d'envoi d'au moins 65 dp) laisse au champ <strong>environ 97 à 128 dp</strong> — valeurs estimées par lecture de code, non mesurées : les composants M3 cliquables ont une taille interactive minimale de 48 dp. #1432 a garanti en 0.62.0 un plancher de 160 dp en rangeant le chrome haut dans une zone bornée défilante, au prix d'une barre d'outils rognée au milieu de ses chips et d'un bandeau de brouillon tronqué. Trois testeurs distincts demandent la même chose (densité, #872).</p>
 <p>Le champ repose sur BasicTextField 2 depuis 0.59.8 (#1427), livré en avance sous la pression d'un bug de sélection ; les ViewModels restent en <code>TextFieldValue</code>, reliés au champ par un pont <code>TextFieldValue</code> ↔︎ <code>TextFieldState</code>. La migration complète des ViewModels a été actée pour la refonte (mainteneur, 19/09) : c'est le lot R0c. Le lot « R5 BTF2 » de la v0.3 est donc caduc pour le champ seulement.</p>
 <p>Pile : BOM Compose 2026.08.00 (foundation et ui 1.12.0, material3 1.4.0), navigation3 1.1.2, OkHttp 5.5.0, targetSdk 36. Un bump de BOM rejoue les critères sur appareil.</p>
-<p>Le plan a été cadré en cinq passes croisées (Claude, Sol, Claude Fable, Sol contre le code en lecture seule, relecture de cohérence par Claude Fable), arbitré par le mainteneur les 19 et 22/09, et maquetté (<a href="https://forumhfr.github.io/artifacts/editeur-1417/">maquettes</a>, <a href="https://forumhfr.github.io/artifacts/editeur-lexique/">vocabulaire</a>). La v0.4 a intégré six relectures du 13/10 (fidélité au code, cohérence, plateforme, issues, rendus, livraison), un challenge de Sol contre le code le 14/10 et les décisions déléguées D18 à D32 ; la v0.5 intègre le gate de Claude Fable du 14/10 et les décisions D33 (pas de bande) et D34 ; la v0.6 intègre le gate final d'Astra (NO-GO, trois bloquants et six majeurs, tous retenus : D35 à D43), qui a reçu son GO ; la v0.6.1 en corrige la rédaction (D44 à D46), sans changement de fond ; la v0.6.2 recale les références au code (221 revérifiées à <code>08d5b41c</code>, 16 décalées) et précise ED-81 ; la v0.6.3 reformule C1 (décision du mainteneur). Le lexique corrigé (v0.6.3) est la source du vocabulaire.</p>
+<p>Le plan a été cadré en cinq passes croisées (Claude, Sol, Claude Fable, Sol contre le code en lecture seule, relecture de cohérence par Claude Fable), arbitré par le mainteneur les 19 et 22/09, et maquetté (<a href="https://forumhfr.github.io/artifacts/editeur-1417/">maquettes</a>, <a href="https://forumhfr.github.io/artifacts/editeur-lexique/">vocabulaire</a>). La v0.4 a intégré six relectures du 13/10 (fidélité au code, cohérence, plateforme, issues, rendus, livraison), un challenge de Sol contre le code le 14/10 et les décisions déléguées D18 à D32 ; la v0.5 intègre le gate de Claude Fable du 14/10 et les décisions D33 (pas de bande) et D34 ; la v0.6 intègre le gate final d'Astra (NO-GO, trois bloquants et six majeurs, tous retenus : D35 à D43), qui a reçu son GO ; la v0.6.1 en corrige la rédaction (D44 à D46), sans changement de fond ; la v0.6.2 recale les références au code (221 revérifiées à <code>08d5b41c</code>, 16 décalées) et précise ED-81 ; la v0.6.3 reformule C1 (décision du mainteneur) ; la v0.6.4 ajoute le raccourci de la barre d'action, demandé par le mainteneur et proposé (P16). Le lexique corrigé (v0.6.3) est la source du vocabulaire.</p>
 <p>Deux constats de la relecture contre le code orientent la décision. Les <strong>cartes de citation sont désactivées par défaut</strong> : dans le mode par défaut, la citation est insérée en BBCode éditable dans le champ. Le <strong>bouton armé</strong> n'existe que si la préférence « Confirmation avant publication » (#312) est active, et elle est désactivée par défaut : la protection contre le double post (#1301) ne peut pas reposer sur lui. L'audit #1301 relève en outre que l'éditeur se réarme après un succès, que l'envoi en cours est peu visible et que le POST d'écriture reste rejouable par la couche HTTP.</p>
 <h2 id="adr-décision">Décision</h2>
 <p>La norme détaillée vit dans la <a href="#spec">spec de l'éditeur</a>. Cet ADR en fixe les choix structurants.</p>
@@ -1229,8 +1316,8 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <p>L'app bar ne grandit jamais : quand ses deux lignes ne tiennent pas dans 48 dp à l'échelle effective (fontScale du système × préréglage de lecture de l'app, pire cas 1,3 × L), la seconde ligne est masquée (D20) et le bloc titre reste l'entrée du panneau d'en-tête. La flèche de retour passe par la fermeture du ViewModel, comme le retour système : sauvegarde attendue, inerte pendant l'envoi.</p>
 <p>En <strong>hauteur compacte</strong> — classe de hauteur Material Compact (&lt; 480 dp), calculée sur la configuration et non sur les bounds de fenêtre, que l'IME réduit sous API 30 (D26) —, l'app bar s'efface avec son titre ; les icônes d'état, l'aperçu et l'entrée « En-tête » deviennent des emplacements fixes de la barre d'action, retenus par priorité quand la largeur manque — « Envoyer », puis « En-tête », « Aperçu », icônes d'état ; le reste défile (D38) ; le retour passe par le geste système. Le champ y garde environ 82 dp sur un S10e en paysage, en B5 comme en B1 : le minimum utilisable mesuré est soumis au mainteneur (P14). En portrait, « En-tête » n'entre jamais dans la barre : cinq icônes et « Envoyer » ne tiennent pas dans 360 dp.</p>
 <h3 id="adr-2-barre-daction-en-icônes-mode-format">2. Barre d'action en icônes, mode format</h3>
-<p>La barre d'action porte les actions permanentes en icônes seules — format, smileys, image, options — et « Envoyer » en toutes lettres. Chaque icône a un nom accessible et une info-bulle à l'appui long (<code>TooltipBox</code>). Les icônes suivent l'<a href="https://forumhfr.github.io/redface2/adr/015-iconographie-boutons-icones">ADR-015</a>.</p>
-<p>Les actions de format ne vivent plus dans un tiroir. L'icône format bascule la barre en <strong>mode format</strong>, à hauteur constante (D18) : l'icône reste en place, sélectionnée, et referme le mode ; smileys, image et options cèdent la place à une rangée défilante d'icônes de format, avec un dégradé de bord ; « Envoyer » reste à droite. Le mode ne recouvre rien et ne change aucune hauteur : l'ouvrir ou le fermer ne déplace pas le texte (C6), et le caret ne peut pas passer dessous (C5). Il persiste à la frappe ; il se referme par l'icône format, le retour, l'ouverture d'une feuille, d'un panneau ou de l'aperçu ; l'armement de l'envoi le masque. Couleur et Image ouvrent un <strong>sous-niveau</strong> dans la même barre (teintes ou actions image, plus « Retour ») : aucune popup, donc aucun <code>DropdownMenu</code> focusable qui fermerait le clavier.</p>
+<p>La barre d'action porte les actions permanentes en icônes seules — format, smileys, image, options — et « Envoyer » en toutes lettres ; si P16 est retenue, un raccourci choisi par l'utilisateur s'y ajoute après smileys (ED-36 à ED-39). La pastille d'une teinte choisie en raccourci est dessinée, pas un drawable tinté : exception explicite à l'ADR-015, même taille et même cible, lisibilité capturée sur les deux thèmes en R6. Chaque icône a un nom accessible et une info-bulle à l'appui long (<code>TooltipBox</code>). Les icônes suivent l'<a href="https://forumhfr.github.io/redface2/adr/015-iconographie-boutons-icones">ADR-015</a>.</p>
+<p>Les actions de format ne vivent plus dans un tiroir. L'icône format bascule la barre en <strong>mode format</strong>, à hauteur constante (D18) : l'icône reste en place, sélectionnée, et referme le mode ; smileys, raccourci (si P16), image et options cèdent la place à une rangée défilante d'icônes de format, avec un dégradé de bord ; « Envoyer » reste à droite. Le mode ne recouvre rien et ne change aucune hauteur : l'ouvrir ou le fermer ne déplace pas le texte (C6), et le caret ne peut pas passer dessous (C5). Il persiste à la frappe ; il se referme par l'icône format, le retour, l'ouverture d'une feuille, d'un panneau ou de l'aperçu ; l'armement de l'envoi le masque. Couleur et Image ouvrent un <strong>sous-niveau</strong> dans la même barre (teintes ou actions image, plus « Retour ») : aucune popup, donc aucun <code>DropdownMenu</code> focusable qui fermerait le clavier.</p>
 <p>Les formats sont des actions d'insertion, jamais des bascules de style. La présentation de <code>BbcodeToolbar</code> est remplacée ; ses dispatchs (<code>BbcodeAction</code>, <code>BbcodeFormatter</code>) sont conservés. La sélection survit à l'ouverture du mode et au défilement de la rangée. Aucun raccourci clavier de format n'est ajouté ; la barre et ses modes sont atteignables au clavier.</p>
 <p>Le spike de marge basse de la v0.3 disparaît avec le tiroir superposé. Le lot R0a devient une <strong>preuve d'interaction</strong> sur appareil (sélection inversée, formats enchaînés, Couleur puis retour, format puis smiley ou image, frappe puis Maj+flèches) et une session de mesure. Si le tap de sortie du mode format pénalise smileys et image, le repli est l'option E (rangée unique défilante sans mode, alternatives).</p>
 <h3 id="adr-3-états-dans-lapp-bar-événements-dans-la-barre-daction">3. États dans l'app bar, événements dans la barre d'action</h3>
@@ -1248,7 +1335,7 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <p>« Envoyer » a deux gardes (D28) : il est activable dès que le corps n'est pas vide et qu'aucun envoi ni upload n'est en cours ; un appui avec un en-tête incomplet n'arme pas, affiche la cause et l'action « Compléter », qui ouvre le panneau. L'autorisation du POST, dans le ViewModel, reste stricte.</p>
 <h3 id="adr-4-les-deux-modes-de-citation-sont-préservés">4. Les deux modes de citation sont préservés</h3>
 <p>Le mode par défaut (citation en BBCode dans le champ, favorable à l'interleaving, parité web) reste inchangé : aucune icône d'état, rien à matérialiser à l'envoi. La réponse MP cite toujours en BBCode dans le champ (#1074). Le mode cartes (opt-in) remplace ses cartes dépliées par une icône d'état ❝ N dans l'app bar et un <strong>panneau citations</strong> plein écran. Aucune conversion silencieuse d'un mode à l'autre.</p>
-<p>La refonte suit un principe de périmètre (D29) : <strong>la phase remplace l'existant ; elle n'ajoute que du comportement local à la surface, jamais de fonction réseau ni de navigation hors de la surface</strong>. La seule nouveauté de citation est une déduplication de <strong>livraison</strong> : un <code>[quotemsg]</code> re-livré automatiquement par « Citer » n'est pas réajouté, et « Déjà citée » le signale ; la recitation volontaire reste permise et « Restaurer » n'est jamais filtré (#878).</p>
+<p>La refonte suit un principe de périmètre (D29) : <strong>la phase remplace l'existant ; elle n'ajoute que du comportement local à la surface, jamais de fonction réseau ni de navigation hors de la surface</strong>. Exception proposée (P16) : le raccourci de la barre d'action ajoute un réglage hors de la surface et une action nouvelle, « Smiley perso ». La seule nouveauté de citation est une déduplication de <strong>livraison</strong> : un <code>[quotemsg]</code> re-livré automatiquement par « Citer » n'est pas réajouté, et « Déjà citée » le signale ; la recitation volontaire reste permise et « Restaurer » n'est jamais filtré (#878).</p>
 <h3 id="adr-5-aperçu-en-partage-sans-réglage">5. Aperçu en partage, sans réglage</h3>
 <p>L'aperçu cesse d'être une bascule : il s'ouvre à côté du source — dessous en portrait, à droite quand la largeur dépasse la classe Compact ou en hauteur compacte — pour que les deux restent comparables. Ouvrir l'aperçu ne touche pas au clavier. Clavier ouvert, le source ne descend pas sous la hauteur réelle de trois lignes du vrai champ ; au-delà, le glissement devient élastique et relâcher ferme le clavier, une seule fois. Clavier fermé, le séparateur s'arrête quand le source atteint 160 dp. La position initiale est 50/50 ; elle est mémorisée par couple direction × size class. Quand source, séparateur et aperçu ne tiennent pas à leurs planchers, l'aperçu revient en bascule (D21). Le calcul de l'aperçu sort du thread principal et un résultat périmé est abandonné (R0c, D24). Un réglage utilisateur a été écarté : un intitulé obscur, et une matrice de test doublée sur un comportement qui ne se prouve que sur appareil.</p>
 <h3 id="adr-6-un-seul-contrat-derreur-classé-par-étape">6. Un seul contrat d'erreur, classé par étape</h3>
@@ -1677,7 +1764,13 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <td>§ 9, annexe H</td>
 </tr>
 <tr>
-<td>P1, P4, P5, P7 à P15 (P2 fondue dans P1, P3 retirée, P6 fusionnée dans P13)</td>
+<td>v0.6.4 : raccourci de la barre d'action (demande du 28/10) : une action existante en un tap, avec son icône, choisie dans un catalogue fermé (formats, teintes, actions image, « Smileys Wiki », « Smiley perso », nouvelle) ; réglage hors de l'éditeur ; place après « Smileys », Options déclassée en largeur compacte ; lot R6. Challenge de Sol (À REVOIR : un bloquant, quatre majeurs, deux mineurs, tous retenus) : R6 conditionne G4, visibilité bornée et mesurée (critère O de R0a), dispatchs image distingués, focus de l'onglet Wiki, preuves de R6. Gate de Fable (OK avec amendements : trois majeurs, six mineurs, tous retenus) : défaut posé dans P16, pastille de teinte en exception à l'ADR-015, focus de « Smileys Wiki » rattaché à ED-80, règle du catalogue écrite, raccords d'ED-14, ED-21, ED-25, ED-35. Variante rejetée par le mainteneur le 28/10 : texte libre avant et après, icône au choix, trois favoris. Gate d'Astra (GO avec conditions, levées) : visibilité limitée aux fenêtres non compactes en hauteur, rangée défilante d'au moins 48 dp (ED-25), retour du focus à la fermeture d'une feuille, d'un dialogue ou du sélecteur (ED-26, ED-93), G0 et G1 actualisées</td>
+<td>28/10</td>
+<td><strong>proposé</strong> (P16) ; ED-25, ED-26 et ED-93 retouchées par délégation</td>
+<td>ED-25, ED-26, ED-36 à ED-39, ED-93, § 1.3, § 11, § 14, annexes B, C, G, H</td>
+</tr>
+<tr>
+<td>P1, P4, P5, P7 à P16 (P2 fondue dans P1, P3 retirée, P6 fusionnée dans P13)</td>
 <td>—</td>
 <td><strong>proposés</strong> au mainteneur</td>
 <td>spec § 14</td>
@@ -1688,7 +1781,7 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <div class="doc-sep">Annexes</div>
 <section id="annexes">
 <h1 id="annexes-annexes-du-contrat-de-léditeur">Annexes du contrat de l'éditeur</h1>
-<p>Compléments <strong>non normatifs</strong> du <a href="#spec">contrat de l'éditeur</a> (v0.6.3, 14/10/2026) : relevés de l'existant, stratégie de test, traçabilité détaillée, registre des risques, livraison proposée, questions ouvertes, graphe des lots, sujets hors phase. En cas d'écart, le contrat fait foi.</p>
+<p>Compléments <strong>non normatifs</strong> du <a href="#spec">contrat de l'éditeur</a> (v0.6.4, 28/10/2026) : relevés de l'existant, stratégie de test, traçabilité détaillée, registre des risques, livraison proposée, questions ouvertes, graphe des lots, sujets hors phase. En cas d'écart, le contrat fait foi.</p>
 <h2 id="annexes-a-relevé-de-lexistant">A. Relevé de l'existant</h2>
 <p>Relevé à <code>08d5b41c</code> (bêta 0.62.0), rangé par règle du contrat. Chaque passage décrit l'existant que la règle remplace ou conserve, avec sa preuve <code>fichier:ligne</code>.</p>
 <h3 id="annexes-citations--12">Citations (§ 1.2)</h3>
@@ -1858,7 +1951,7 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <td>—</td>
 <td>—</td>
 <td>—</td>
-<td>Critères de sortie d'A à M (§ 11.2)</td>
+<td>Critères de sortie d'A à O (§ 11.2)</td>
 <td>—</td>
 </tr>
 <tr>
@@ -1888,7 +1981,7 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <tr>
 <td>R1a-1</td>
 <td>Modèle d'événement en fonction pure : rang, file, identité d'opération, acquittement</td>
-<td>ED-02 (hauteurs) ; ED-21 (champ identique en mode normal et en mode format) ; ED-40, ED-41 (app bar et barre d'action identiques avant et après 50 frappes, avec et sans événement) ; ED-92 ; ED-167 ; hauteur compacte ; ED-25 par largeur disponible (360 dp, paysage S10e), priorité des emplacements fixes ; ED-10 (ligne 2 masquée à 1,3 × L)</td>
+<td>ED-02 (hauteurs) ; ED-21 (champ identique en mode normal et en mode format) ; ED-40, ED-41 (app bar et barre d'action identiques avant et après 50 frappes, avec et sans événement) ; ED-92 ; ED-167 ; hauteur compacte ; ED-25 par largeur disponible (360 dp, paysage S10e), priorité des emplacements fixes ; ED-38 (place du raccourci, barre avec et sans, déclassement d'Options puis d'Image à 360 dp ; rangée défilante d'au moins 48 dp en hauteur compacte, ED-25) ; ED-10 (ligne 2 masquée à 1,3 × L)</td>
 <td>Tous les états des composants</td>
 <td>—</td>
 <td>—</td>
@@ -1956,6 +2049,14 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <td>—</td>
 <td>C1–C10 complets, filmés</td>
 <td>—</td>
+</tr>
+<tr>
+<td>R6 (si P16)</td>
+<td>Sélection vide et inversée ; teinte directe, barre restée en mode normal ; « Smiley perso » avec et sans sélection, caret résultant, Ctrl+Z ; disponibilité par surface (tableau d'ED-36) ; masquage et désactivation (ED-34, ED-35, ED-40) ; réglage persistant, « Aucun » par défaut</td>
+<td>Barre avec et sans raccourci ; focus de la recherche Wiki à l'ouverture, rendu au champ à la fermeture</td>
+<td>Barre avec raccourci (un format, une teinte sur les deux thèmes, une action image, « Smileys Wiki », « Smiley perso »), réglage</td>
+<td>C5, C6 (retours de la feuille Wiki, du dialogue URL, du sélecteur), C10, TalkBack, sur chaque surface migrée</td>
+<td>Barre sans raccourci identique à R1a-1</td>
 </tr>
 </tbody>
 </table>
@@ -2055,6 +2156,11 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <td>N</td>
 <td>Champ actuel (BTF2), 60 lignes : poignée de fin tirée au bord bas puis au-delà, poignée de début vers le haut, doigt réel, mouvements lents puis tenue de 5 s — la sélection s'étend jusqu'à la fin ou au début du document, la poignée ne décroche jamais (retour du 15/09, build 335). Témoin facultatif : <code>EditText</code> natif, même geste</td>
 <td>C1</td>
+</tr>
+<tr>
+<td>O</td>
+<td>Barre à cinq actions (format, smileys, raccourci, image, options) et « Envoyer » à sa largeur fixe, en portrait 360 dp, en paysage S10e et en multi-fenêtre, à fontScale 1 et 1,3 × L : ce qui est visible au repos et ce qui passe dans la rangée défilante ; le raccourci est entièrement visible dans une fenêtre non compacte en hauteur ; en hauteur compacte (paysage, fenêtre de 360 × 470 dp), rangée défilante d'au moins 48 dp et raccourci atteignable ; insets horizontaux du paysage relevés</td>
+<td>ED-25, ED-30, ED-38</td>
 </tr>
 </tbody>
 </table>
@@ -2547,6 +2653,13 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <td>R4</td>
 <td>tests JVM</td>
 </tr>
+<tr>
+<td>(accès nouveau, si P16) Formats, teintes, actions image, onglet Wiki, <code>[:</code> <code>]</code></td>
+<td>Aussi en un tap par le raccourci de la barre d'action</td>
+<td>ED-36 à ED-39</td>
+<td>R6</td>
+<td>Roborazzi + device</td>
+</tr>
 </tbody>
 </table>
 <h2 id="annexes-d-registre-des-risques">D. Registre des risques</h2>
@@ -2828,6 +2941,8 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
   R2a --&gt; G4
   R2b --&gt; G4
   R4 -.-&gt; G4
+  R1a2 -.-&gt; R6[&quot;R6 raccourci&lt;br/&gt;(si P16)&quot;]
+  R6 -.-&gt; G4
   G4 -.-&gt; R5[&quot;R5 retrait&lt;br/&gt;(si P1)&quot;]</pre>
 <p><strong>Chemin critique</strong> : R0a et R1a-1 → G1 → R1a-2 → G2 → R1b → G3 → G4. #1301-ST, R0b, R0c et R0d en sont hors s'ils démarrent tôt ; R1b-1, R1b-2a et R2a sont produits en parallèle après G2 et mergés en série.</p>
 <p><strong>Préconditions de R4, s'il reste.</strong> La fenêtre Dialog est mesurée en R0a (titre, cartes, champ et barre dans environ 280 dp ; propriétaire explicite des insets) ; aucune preuve JVM ne vaut pour elle. Restent à reprendre : <code>ModalBottomSheet</code> de material3 1.5 (#1196), ton dans la feuille (#1441), plafond de 15 lignes (#949), course flush/seed (#951), retour de nicko (DEV #2802392).</p>
@@ -2866,7 +2981,7 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <td>non exigé : C1 reformulé le 14/10 (§ 9, ci-dessous) ; #1406 reste ouverte comme amélioration</td>
 </tr>
 <tr>
-<td>Annulation d'un upload (D8), annulation tactile, raccourcis de format</td>
+<td>Annulation d'un upload (D8), annulation tactile, raccourcis clavier de format</td>
 <td>fonctions nouvelles ; Ctrl+Z au clavier physique reste (ED-26)</td>
 </tr>
 <tr>
