@@ -99,16 +99,16 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
  backdrop-filter:none;-webkit-backdrop-filter:none}
 @media (max-width:520px){.artnav #vpick label{display:none}}
 </style>
-<div id="vpick"><label for="vpick-sel">Version</label><select id="vpick-sel" autocomplete="off" onchange="location.href=this.value"><option value="./" selected>v7 — courante</option><option value="v6/">v6</option><option value="v5/">v5</option><option value="v4/">v4</option><option value="v3/">v3</option><option value="v2/">v2</option><option value="v1/">v1</option></select><script>addEventListener("pageshow",function(){var s=document.getElementById("vpick-sel");if(s)for(var i=0;i<s.options.length;i++)s.options[i].selected=s.options[i].defaultSelected;});</script></div>
+<div id="vpick"><label for="vpick-sel">Version</label><select id="vpick-sel" autocomplete="off" onchange="location.href=this.value"><option value="./" selected>v8 — courante</option><option value="v7/">v7</option><option value="v6/">v6</option><option value="v5/">v5</option><option value="v4/">v4</option><option value="v3/">v3</option><option value="v2/">v2</option><option value="v1/">v1</option></select><script>addEventListener("pageshow",function(){var s=document.getElementById("vpick-sel");if(s)for(var i=0;i<s.options.length;i++)s.options[i].selected=s.options[i].defaultSelected;});</script></div>
 </nav>
-<p class="state">v0.7 (01/11/2026) — Accepté, sauf P13, P17 a/b, P18 et P19 en attente</p><p class="parts">Rendu de <code>docs/specs/editor.md</code> (<a href="#spec">contrat</a>), <code>docs/adr/020-refonte-vue-editeur.md</code> (<a href="#adr">ADR-020</a>) et <code>docs/specs/editor-annexes.md</code> (<a href="#annexes">annexes</a>), prêts à entrer dans le dépôt. Les renvois entre ces trois documents pointent vers cette page ; les autres liens vers la doc du projet visent forumhfr.github.io/redface2.</p>
+<p class="state">v0.7.1 (01/11/2026) — Accepté</p><p class="parts">Rendu de <code>docs/specs/editor.md</code> (<a href="#spec">contrat</a>), <code>docs/adr/020-refonte-vue-editeur.md</code> (<a href="#adr">ADR-020</a>) et <code>docs/specs/editor-annexes.md</code> (<a href="#annexes">annexes</a>), prêts à entrer dans le dépôt. Les renvois entre ces trois documents pointent vers cette page ; les autres liens vers la doc du projet visent forumhfr.github.io/redface2.</p>
 <section id="spec">
 <h1 id="contrat-de-léditeur">Contrat de l'éditeur</h1>
-<p>Le contrat normatif de la vue Éditeur refondue : géométrie, zones, règles de comportement, erreurs, invariants d'envoi, accessibilité, découpage et livraison. Refonte <a href="https://github.com/ForumHFR/redface2/issues/1417">#1417</a>, décisions structurantes dans l'<a href="#adr">ADR-020</a>. Version <strong>v0.7 (01/11/2026)</strong> — passes jusqu'à la v0.6.4 : Opus 5.5, Sol 6.1, Fable, Astra ; v0.7 : passes 1 et 2 (Opus) ; challenge de Sol : À REVOIR (0 / 6 / 3), intégré en passe 3 ; gate de Fable : OK avec amendements (0 / 6 / 6), intégrés en passe 4 ; gate d'Astra : GO avec conditions (01/11), conditions inscrites : cartes en hauteur compacte avant G1 (ED-140, critère J), C8 sur les trois surfaces R1b avant G3, trois corrections mineures reportées. La v0.6 (D35 à D43) a reçu le GO d'Astra ; la v0.6.1 corrige la rédaction (D44 à D46), sans changement de fond ; la v0.6.2 recale les références au code et précise ED-81 pour l'éditeur ouvert depuis la feuille ; la v0.6.3 reformule C1, décision du mainteneur ; la v0.6.4 ajoute le raccourci de la barre d'action (ED-36 à ED-39), demande du mainteneur, proposé (P16) ; challenge de Sol, gate de Fable et GO avec conditions d'Astra intégrés ; la v0.7 reporte les arbitrages du mainteneur du 01/11 (P1 refusée : pas d'interrupteur ; P13 en attente d'une simulation B5 / B1 ; M1 à M4) et l'état livré de #1154.</p>
+<p>Le contrat normatif de la vue Éditeur refondue : géométrie, zones, règles de comportement, erreurs, invariants d'envoi, accessibilité, découpage et livraison. Refonte <a href="https://github.com/ForumHFR/redface2/issues/1417">#1417</a>, décisions structurantes dans l'<a href="#adr">ADR-020</a>. Version <strong>v0.7.1 (01/11/2026)</strong> — passes jusqu'à la v0.6.4 : Opus 5.5, Sol 6.1, Fable, Astra ; v0.7 : passes 1 et 2 (Opus) ; challenge de Sol : À REVOIR (0 / 6 / 3), intégré en passe 3 ; gate de Fable : OK avec amendements (0 / 6 / 6), intégrés en passe 4 ; gate d'Astra : GO avec conditions (01/11), conditions inscrites : cartes en hauteur compacte avant G1 (ED-140, critère J), C8 sur les trois surfaces R1b avant G3, trois corrections mineures reportées. La v0.6 (D35 à D43) a reçu le GO d'Astra ; la v0.6.1 corrige la rédaction (D44 à D46), sans changement de fond ; la v0.6.2 recale les références au code et précise ED-81 pour l'éditeur ouvert depuis la feuille ; la v0.6.3 reformule C1, décision du mainteneur ; la v0.6.4 ajoute le raccourci de la barre d'action (ED-36 à ED-39), demande du mainteneur, proposé (P16) ; challenge de Sol, gate de Fable et GO avec conditions d'Astra intégrés ; la v0.7 reporte les arbitrages du mainteneur du 01/11 (P1 refusée : pas d'interrupteur ; P13 en attente d'une simulation B5 / B1 ; M1 à M4) et l'état livré de #1154 ; la v0.7.1 reporte les dernières décisions du mainteneur du 01/11 : P13 (B5), P17 a (cible du sélecteur de smileys), P17 b (champ de recherche unique), P18 (d) et P19 (#1301-ST chez rf2-smalldev).</p>
 <blockquote>
-<p><strong>Statut : Accepté</strong> (01/11/2026, v0.7 ; v0.3 du 23/09/2026), sauf les points encore ouverts : P13 et P17 à P19. Rien de ce contrat n'est implémenté. Relevé de l'existant sur <code>dev</code> à <code>08d5b41c</code> (bêta 0.62.0) ; références au code revérifiées à <code>04d3039c</code> (01/11/2026), bêta 0.65.0, dont le chrome d'éditeur est inchangé depuis 0.62.0 ; la feuille smileys est relevée à <code>04d3039c</code> (ED-70). Les hauteurs en dp sont des <strong>cibles calculées</strong>, non mesurées : elles ne valent critère qu'après confirmation filmée sur appareil. Les choix encore ouverts (P13, P17 à P19) sont <strong>proposés</strong>, pas acquis ; les autres ont été arbitrés par le mainteneur le 01/11 (<a href="#14-décisions-en-attente">§ 14</a>). Maquettes non contractuelles : <a href="https://forumhfr.github.io/artifacts/editeur-1417/">Vue Éditeur #1417</a>.</p>
+<p><strong>Statut : Accepté</strong> (01/11/2026, v0.7.1 ; v0.3 du 23/09/2026). Rien de ce contrat n'est implémenté. Relevé de l'existant sur <code>dev</code> à <code>08d5b41c</code> (bêta 0.62.0) ; références au code revérifiées à <code>04d3039c</code> (01/11/2026), bêta 0.65.0, dont le chrome d'éditeur est inchangé depuis 0.62.0 ; la feuille smileys est relevée à <code>04d3039c</code> (ED-70). Les hauteurs en dp sont des <strong>cibles calculées</strong>, non mesurées : elles ne valent critère qu'après confirmation filmée sur appareil. Tous les choix réservés au mainteneur ont été arbitrés le 01/11 ; aucun n'est en attente (<a href="#14-décisions-en-attente">§ 14</a>). Maquettes non contractuelles : <a href="https://forumhfr.github.io/artifacts/editeur-1417/">Vue Éditeur #1417</a>.</p>
 </blockquote>
-<p><strong>Conventions.</strong> Une règle normative porte un identifiant <code>ED-nn</code> ; elle est opposable en revue. Dans une règle, le présent de l'indicatif vaut obligation ; « doit » insiste sur une obligation ; « peut » ne marque qu'une permission. Une description de l'existant est introduite par « Relevé : » (ou rangée dans une colonne « Relevé ») : elle n'est pas normative et cite sa preuve (<code>fichier:ligne</code> à <code>04d3039c</code>). Une règle qui dépend d'une décision du mainteneur encore ouverte porte la mention « proposé » et renvoie au § 14 (<code>P13</code>, <code>P17</code> à <code>P19</code>) ; une décision arbitrée le 01/11 est citée « décidé le 01/11 (Pn) », et les arbitrages <code>M1</code> à <code>M4</code> portent sur material3 1.5 (§ 14). Les critères d'acceptation <code>C1</code>–<code>C10</code> sont ceux de #1417 (<a href="#9-critères-dacceptation">§ 9</a>). Les lots sont définis au <a href="#11-lots">§ 11</a>. Les signes ❝ ↺ ✕ ⤢ désignent une icône (drawable selon l'ADR-015), pas le glyphe rendu. « 1,3 × L » : pire cas d'échelle de police (glossaire). Les compléments non normatifs sont dans les <a href="#annexes">annexes</a>.</p>
+<p><strong>Conventions.</strong> Une règle normative porte un identifiant <code>ED-nn</code> ; elle est opposable en revue. Dans une règle, le présent de l'indicatif vaut obligation ; « doit » insiste sur une obligation ; « peut » ne marque qu'une permission. Une description de l'existant est introduite par « Relevé : » (ou rangée dans une colonne « Relevé ») : elle n'est pas normative et cite sa preuve (<code>fichier:ligne</code> à <code>04d3039c</code>). Une décision du mainteneur est citée « décidé le 01/11 (Pn) » ; toutes sont arbitrées, aucune règle ne reste « proposée » (§ 14). Les arbitrages <code>M1</code> à <code>M4</code> portent sur material3 1.5 (§ 14). Les critères d'acceptation <code>C1</code>–<code>C10</code> sont ceux de #1417 (<a href="#9-critères-dacceptation">§ 9</a>). Les lots sont définis au <a href="#11-lots">§ 11</a>. Les signes ❝ ↺ ✕ ⤢ désignent une icône (drawable selon l'ADR-015), pas le glyphe rendu. « 1,3 × L » : pire cas d'échelle de police (glossaire). Les compléments non normatifs sont dans les <a href="#annexes">annexes</a>.</p>
 <p><strong>Pile.</strong> BOM Compose 2026.09.00 (foundation et ui 1.12.1 ; material3 1.4.0 jusqu'à R0m), navigation3 1.1.2 (<code>gradle/libs.versions.toml:16-17</code>, bump #1459 du 14/10/2026), OkHttp 5.5.0, targetSdk 36. Les comportements de BTF2 cités ici (suivi du caret, historique d'annulation, <code>IME_FLAG_NO_FULLSCREEN</code>) ont été relevés sur foundation 1.12.0 ; ils sont à reconfirmer en 1.12.1. Un bump de BOM rejoue les critères appareil : la règle s'applique au bump du 14/10, et c'est R0m qui la porte (§ 11.2), avant toute mesure de R0a. La refonte se construit sur material3 1.5 (M1, décidé le 01/11) : le lot R0m épingle material3 1.5.0-beta02 par-dessus la BOM stable 2026.09.00, sans <code>compose-bom-beta</code>, qui tirerait foundation 1.13 ; foundation et ui restent en 1.12.1. R0m passe ensuite à la BOM stable qui embarque material3 1.5, attendue entre le 18/11 et le 02/12 (#1474).</p>
 <h2 id="1-périmètre">1. Périmètre</h2>
 <h3 id="11-les-cinq-surfaces">1.1 Les cinq surfaces</h3>
@@ -199,7 +199,7 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 </tr>
 <tr>
 <td><strong>Raccourci</strong></td>
-<td>Action choisie dans les réglages, dans un catalogue fermé (actions existantes : format, teinte, action image, « Smileys Wiki » ; action nouvelle : « Smiley perso »), posée avec son icône dans la barre d'action, après « Smileys », pour la déclencher en un tap (ED-36).</td>
+<td>Action choisie dans les réglages, dans un catalogue fermé (actions existantes : format, teinte, action image, « Smileys Wiki », « Rechercher un smiley » après S2 ; action nouvelle : « Smiley perso »), posée avec son icône dans la barre d'action, après « Smileys », pour la déclencher en un tap (ED-36).</td>
 </tr>
 <tr>
 <td><strong>Panneau</strong></td>
@@ -258,7 +258,7 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <p><strong>ED-02</strong> — Seuls ont une hauteur propre : l'app bar (48 dp ; 0 en hauteur compacte), les espacements de colonne (12 dp ; 0 en hauteur compacte) et la barre d'action (56 dp ; 48 dp en hauteur compacte, ED-05 ; dans tous ses modes, événement compris). Il n'y a pas de bande (ED-40). Le champ prend tout le reste, sans descendre sous le plancher de 160 dp tant que la fenêtre utile le permet : hors hauteur compacte, il ne cède sous 160 dp que dans une fenêtre utile de moins de 276 dp (48 + 12 + 56 + 160). Aucune de ces hauteurs ne varie pendant la vie de la surface ; rien ne recouvre le champ.</p>
 <p><strong>ED-03</strong> — Aucun élément ne s'intercale entre l'app bar et le champ. Les en-têtes (titre et sous-catégorie d'un sujet, destinataires et sujet d'un MP) vivent dans un panneau d'en-tête (ED-101, ED-113). Seule dérogation : les cartes de citation jusqu'à R2a (ED-140).</p>
 <p><strong>ED-04</strong> — Insets. L'inset bas est unique, <code>WindowInsets.navigationBars.union(WindowInsets.ime)</code>, appliqué une seule fois à la barre d'action (#447, #1404). Les insets horizontaux — barre de navigation latérale en paysage, découpe d'écran — s'appliquent à <strong>toute</strong> la colonne, par <code>WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal)</code>. Le mode de fenêtre reste <code>adjustNothing</code> sur API 30+ et <code>adjustResize</code> sous API 30 (#1404). La refonte ne modifie pas la mécanique de l'inset bas. Relevé : <a href="#annexes-ed-04">annexe A</a>.</p>
-<p><strong>ED-05</strong> — Hauteur compacte. C'est la classe de hauteur Material Compact (&lt; 480 dp), calculée sur la taille d'écran de la <strong>configuration</strong>, jamais sur les bounds de fenêtre : sous API 30, en <code>adjustResize</code>, ceux-ci rétrécissent avec l'IME (740 − 386 = 354 dp, donc Compact dès l'ouverture du clavier). Elle est réévaluée à chaque changement de configuration (rotation, multi-fenêtre, pliable) ; ouvrir ou fermer le clavier ne la change jamais. Relevé : <a href="#annexes-ed-05">annexe A</a>. En hauteur compacte, l'app bar s'efface avec son titre ; les icônes d'état (ED-40), l'aperçu et, pour les surfaces à panneau d'en-tête (sujet, nouveau MP), l'entrée « En-tête » deviennent des emplacements fixes de la barre d'action (ED-25) ; le retour passe par le geste système. Le plancher de 160 dp ne s'applique pas. La <strong>variante compacte</strong> s'applique (M2, qui remplace P14) : la barre d'action mesure 48 dp, l'espacement de colonne tombe à 0, et le label <strong>visuel</strong> du champ est retiré, son nom accessible « Message » étant conservé (ED-12, ED-94). Dans cette barre de 48 dp, la pilule « Envoyer » et les icônes gardent une cible de 48 dp, mais leur forme visible fait 40 dp, centrée, ce qui laisse 4 dp d'écart visuel avec le cadre du champ sans rien lui prendre (rendu w8, défaut W8-1 : à espacement 0, une pilule visible de 48 dp touche le cadre). Calcul sur un S10e en paysage (clavier supposé de 186 dp, fenêtre utile de 150 dp) : 150 − 48 − 0 = <strong>≈ 102 dp</strong> de champ, soit <strong>≈ 86 dp</strong> de viewport, en B5 comme en B1, à mesurer en R0a (critère J). Le seuil est C3 sur tout le domaine couvert, avec au moins 3 lignes du vrai champ visibles à fontScale 1 et 2 lignes à 1,3 × L. La marge n'est que de 14 dp, avec un clavier de 186 dp supposé, non mesuré. Un échec du critère J est un arbitrage explicite du mainteneur, jamais une limite actée d'office ; un échec de C3 bloque l'intégration.</p>
+<p><strong>ED-05</strong> — Hauteur compacte. C'est la classe de hauteur Material Compact (&lt; 480 dp), calculée sur la taille d'écran de la <strong>configuration</strong>, jamais sur les bounds de fenêtre : sous API 30, en <code>adjustResize</code>, ceux-ci rétrécissent avec l'IME (740 − 386 = 354 dp, donc Compact dès l'ouverture du clavier). Elle est réévaluée à chaque changement de configuration (rotation, multi-fenêtre, pliable) ; ouvrir ou fermer le clavier ne la change jamais. Relevé : <a href="#annexes-ed-05">annexe A</a>. En hauteur compacte, l'app bar s'efface avec son titre ; les icônes d'état (ED-40), l'aperçu et, pour les surfaces à panneau d'en-tête (sujet, nouveau MP), l'entrée « En-tête » deviennent des emplacements fixes de la barre d'action (ED-25) ; le retour passe par le geste système. Le plancher de 160 dp ne s'applique pas. La <strong>variante compacte</strong> s'applique (M2, qui remplace P14) : la barre d'action mesure 48 dp, l'espacement de colonne tombe à 0, et le label <strong>visuel</strong> du champ est retiré, son nom accessible « Message » étant conservé (ED-12, ED-94). Dans cette barre de 48 dp, la pilule « Envoyer » et les icônes gardent une cible de 48 dp, mais leur forme visible fait 40 dp, centrée, ce qui laisse 4 dp d'écart visuel avec le cadre du champ sans rien lui prendre (rendu w8, défaut W8-1 : à espacement 0, une pilule visible de 48 dp touche le cadre). Calcul sur un S10e en paysage (clavier supposé de 186 dp, fenêtre utile de 150 dp) : 150 − 48 − 0 = <strong>≈ 102 dp</strong> de champ, soit <strong>≈ 86 dp</strong> de viewport, en B5 comme dans le repli B1, à mesurer en R0a (critère J). Le seuil est C3 sur tout le domaine couvert, avec au moins 3 lignes du vrai champ visibles à fontScale 1 et 2 lignes à 1,3 × L. La marge n'est que de 14 dp, avec un clavier de 186 dp supposé, non mesuré. Un échec du critère J est un arbitrage explicite du mainteneur, jamais une limite actée d'office ; un échec de C3 bloque l'intégration.</p>
 <h3 id="32-budget-cible-360--740-dp-clavier-ouvert-fenêtre-utile-330-dp">3.2 Budget cible (360 × 740 dp, clavier ouvert, fenêtre utile 330 dp)</h3>
 <table>
 <thead>
@@ -312,7 +312,7 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 </tbody>
 </table>
 <p>Colonne 0.59.8 estimée par lecture de code, non mesurée : <a href="#annexes-budget-de-0598">annexe A</a>.</p>
-<p><strong>Critère.</strong> Le champ mesure la <strong>hauteur cible de l'option retenue en P13</strong> — 214 dp en B5 (règle), 166 dp en repli B1 (§ 3.3) — à 360 × 740 dp, clavier par défaut ouvert, à toute échelle de police : les hauteurs du chrome sont en dp fixes. La mesure est filmée sur le S10e (porte G2). En hauteur compacte, le critère est le seuil de la variante compacte d'ED-05 (M2), mesuré en R0a (critère J).</p>
+<p><strong>Critère.</strong> Le champ mesure <strong>214 dp</strong>, hauteur cible de B5, la disposition retenue (décidé le 01/11, P13 ; le repli B1 du § 3.3 en donnerait 166), à 360 × 740 dp, clavier par défaut ouvert, à toute échelle de police : les hauteurs du chrome sont en dp fixes. La mesure est filmée sur le S10e (porte G2). En hauteur compacte, le critère est le seuil de la variante compacte d'ED-05 (M2), mesuré en R0a (critère J).</p>
 <p><strong>Gain</strong> : <strong>+54 dp</strong> face à 0.62.0 (+34 %), +86 à +117 dp face à 0.59.8, et la stabilité. Coût (tap d'acquittement, titre plus étroit) et justification : <a href="#adr-3-états-dans-lapp-bar-événements-dans-la-barre-daction">ADR-020, décision 3</a>.</p>
 <h3 id="33-repli-et-variantes-écartées">3.3 Repli et variantes écartées</h3>
 <table>
@@ -331,14 +331,14 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <td>états en icônes à badge de l'app bar ; événement à la place des actions secondaires</td>
 <td style="text-align: right;">214 dp</td>
 <td style="text-align: right;">≈ 102 dp (variante compacte, ED-05)</td>
-<td><strong>règle</strong> (D33, ED-40)</td>
+<td><strong>règle</strong> (D33, ED-40 ; décidé le 01/11, P13)</td>
 </tr>
 <tr>
 <td><strong>B1 — bande permanente de 48 dp, absente en hauteur compacte</strong></td>
 <td>bande en portrait ; en hauteur compacte, états en emplacements fixes</td>
 <td style="text-align: right;">166 dp</td>
 <td style="text-align: right;">≈ 102 dp (variante compacte, ED-05)</td>
-<td><strong>repli</strong> si le mainteneur refuse les outils masqués (P13) ; deux emplacements pour les mêmes états</td>
+<td><strong>repli</strong> décrit, qui n'est plus une option ouverte (B5 retenue le 01/11, P13) ; deux emplacements pour les mêmes états</td>
 </tr>
 <tr>
 <td>B1 avec bande en hauteur compacte (v0.4)</td>
@@ -454,7 +454,7 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 </tr>
 <tr>
 <td>Raccourci</td>
-<td>Le nom de son action (ED-36) ; « Smileys Wiki » (« Rechercher un smiley » après la livraison de S2, si P17 b retient le champ unique, ED-37), « Smiley perso »</td>
+<td>Le nom de son action (ED-36) ; « Smileys Wiki » (« Rechercher un smiley » après la livraison de S2, champ unique de P17 b, ED-37), « Smiley perso »</td>
 </tr>
 <tr>
 <td>Aperçu</td>
@@ -526,8 +526,8 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <td>éditeurs MP</td>
 </tr>
 <tr>
-<td>« Smileys Wiki » : la feuille smileys ouverte en intention recherche sur l'onglet Wiki, focus dans la recherche (ED-70) ; après la livraison de S2, si P17 b retient le champ unique, « Rechercher un smiley » à sa place : feuille ouverte en intention recherche, focus dans le champ unique (ED-37)</td>
-<td>2 taps : Smileys, onglet Wiki (un seul si une recherche restaurée l'ouvre déjà) ; après S2 avec le champ unique, 2 taps : Smileys, champ</td>
+<td>« Smileys Wiki », tant que S2 n'est pas livré : la feuille smileys ouverte en intention recherche sur l'onglet Wiki, focus dans la recherche (ED-70) ; après la livraison de S2, « Rechercher un smiley » à sa place (champ unique, décidé le 01/11, P17 b) : feuille ouverte en intention recherche, focus dans le champ unique (ED-37)</td>
+<td>2 taps : Smileys, onglet Wiki (un seul si une recherche restaurée l'ouvre déjà) ; après S2, 2 taps : Smileys, champ</td>
 <td>toutes</td>
 </tr>
 <tr>
@@ -543,7 +543,7 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <ul>
 <li>un format ou une teinte s'applique à la sélection courante (ED-22), et la barre reste en mode normal ;</li>
 <li>« Uploader une image » ouvre le sélecteur par le lanceur déclaré à la racine de l'écran ; « Insérer par URL » ouvre le dialogue ; « Baliser la sélection en [img] » enveloppe aussitôt la sélection (<code>BbcodeAction.Image</code>). Chaque <code>[img]</code> inséré est écrit immédiatement au brouillon (ED-31) ;</li>
-<li>« Smileys Wiki » ouvre la feuille smileys sur l'onglet Wiki ; en intention recherche, la feuille prend le focus dans la recherche ; ED-80 rend le corps, la sélection et l'état du clavier au retour. Une recherche et des résultats restaurés sont conservés ; le choix de l'onglet ne lance aucune requête. <code>open()</code> ne prend pas d'onglet aujourd'hui : l'onglet d'ouverture est calculé par le contrôleur (<code>SmileyPickerController.kt:200-218</code>, <code>:294-301</code>). Ce point d'entrée prend la forme des deux intentions d'ouverture stables de la feuille (ED-70) : <strong>consultation</strong>, celle de l'action « Smileys », et <strong>recherche</strong>, celle du raccourci. Les deux intentions sont créées par le premier lot qui touche <code>open()</code> — la correction de S-D3 ou S2, suites de #1154 chez rf2-smalldev, ou R6 s'il arrive avant — et conservées par les suivants ; un lot qui les trouve en place, R6 compris, les consomme et n'en redéfinit pas la sémantique. L'entrée suit le code livré, pas la seule décision P17 b : tant que S2 n'est pas livré : « Smileys Wiki », qui ouvre sur Wiki, focus dans la recherche ; après la livraison de S2 : « Rechercher un smiley », feuille ouverte avec le focus dans le champ unique (ED-70 b), si P17 b retient le champ unique ; sinon l'entrée reste « Smileys Wiki », feuille ouverte sur l'onglet Wiki, focus dans la recherche. Le reste de ce point vaut tel quel. ED-26, ED-80 et ED-93 sont rejoués à la livraison de S2 ;</li>
+<li>« Smileys Wiki » ouvre la feuille smileys sur l'onglet Wiki ; en intention recherche, la feuille prend le focus dans la recherche ; ED-80 rend le corps, la sélection et l'état du clavier au retour. Une recherche et des résultats restaurés sont conservés ; le choix de l'onglet ne lance aucune requête. <code>open()</code> ne prend pas d'onglet aujourd'hui : l'onglet d'ouverture est calculé par le contrôleur (<code>SmileyPickerController.kt:200-218</code>, <code>:294-301</code>). Ce point d'entrée prend la forme des deux intentions d'ouverture stables de la feuille (ED-70) : <strong>consultation</strong>, celle de l'action « Smileys », et <strong>recherche</strong>, celle du raccourci. Les deux intentions sont créées par le premier lot qui touche <code>open()</code> — la correction de S-D3 ou S2, suites de #1154 chez rf2-smalldev, ou R6 s'il arrive avant — et conservées par les suivants ; un lot qui les trouve en place, R6 compris, les consomme et n'en redéfinit pas la sémantique. L'entrée suit le code livré, pas la seule décision P17 b (champ unique, décidé le 01/11) : tant que S2 n'est pas livré, « Smileys Wiki », qui ouvre sur Wiki, focus dans la recherche ; après la livraison de S2, « Rechercher un smiley », feuille ouverte avec le focus dans le champ unique (ED-70 b). Le reste de ce point vaut tel quel. ED-26, ED-80 et ED-93 sont rejoués à la livraison de S2 ;</li>
 <li>« Smiley perso » insère <code>[:</code> et <code>]</code>, sans espace ajouté, et place le caret entre les deux ; avec une sélection, il l'entoure (un nom sélectionné devient <code>[:nom]</code>) et place le caret après le <code>]</code>, sans sélection.</li>
 </ul>
 <p>Ctrl+Z annule l'insertion comme une insertion de format (en une fois à partir de R0c). Le texte inséré et le caret qui en résulte sont visibles (C5, ED-14).</p>
@@ -645,8 +645,8 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <p><strong>ED-65</strong> — Le calcul de l'aperçu sort de <code>_state.update {}</code> et s'exécute hors du thread principal, sur le dernier texte seulement ; un résultat périmé est <strong>abandonné</strong> (<code>mapLatest</code> ou équivalent), sans promesse d'interrompre le calcul : <code>BbcodeContentParser.parse()</code> est synchrone et n'est pas annulable (<code>BbcodeContentParser.kt:27</code>). Porté par R0c, précondition de R2b. Relevé : <a href="#annexes-ed-65">annexe A</a>.</p>
 <p><strong>ED-66</strong> — Smileys dans l'aperçu (R2b, #873). Relevé : un smiley perso n'a aujourd'hui pas d'URL dans l'aperçu (<a href="#annexes-ed-66">annexe A</a>). L'URL d'un smiley perso est dérivée de son nom : <code>[:nom]</code> → <code>perso/nom.gif</code>, <code>[:nom:N]</code> → <code>perso/N/nom.gif</code>. Cette dérivation existe déjà pour les favoris locaux sans URL (<code>SmileyImageResolver.persoUrl</code>, méthode privée d'une classe interne à <code>:core:ui</code>, à extraire avant réutilisation, #1154) : R2b la réutilise, déplacée dans <code>:core:model</code> ou <code>:core:parser</code> pour <code>BbcodeContentParser</code>, et n'en écrit pas une seconde. La dérivation est vérifiée sur HFR réel avant R2b (accents, suffixe <code>:N</code>, casse, extension) ; un 404 replie sur le token texte ; un registre n'est envisagé que si la dérivation échoue. Aucune requête réseau à la frappe. Les émoticônes de ponctuation relèvent de #1442, pas de #873. L'aperçu rendu par le serveur (#1443) est exclu (§ 1.3).</p>
 <h3 id="48-feuilles-smileys-et-options">4.8 Feuilles smileys et options</h3>
-<p><strong>ED-70</strong> — Feuille smileys. Dans la phase, seule son entrée change : l'action « Smileys » de la barre (ED-30) et le raccourci d'ED-36. La refonte conserve et héberge la feuille telle que #1154 l'a livrée (a) ; la cible proposée (b) est livrée hors phase. Ton des textes : ED-72.</p>
-<p>Intentions d'ouverture. La feuille s'ouvre selon l'une de deux intentions stables : <strong>consultation</strong>, l'ouverture ordinaire par l'action « Smileys » (dans l'état livré, l'onglet reste calculé par le contrôleur) ; <strong>recherche</strong>, l'ouverture par le raccourci « Smileys Wiki » d'ED-36 (« Rechercher un smiley » après S2, si P17 b retient le champ unique), focus dans la recherche (onglet Wiki tant que S2 n'est pas livré ; après, champ unique ou onglet Wiki selon P17 b ; ED-37). Les deux intentions sont créées par le premier lot qui touche <code>open()</code> : la correction de S-D3 ou S2, chez rf2-smalldev, ou R6 s'il arrive avant. Les lots suivants, R6 compris quand il n'est pas le premier, les consomment et n'en redéfinissent pas la sémantique. S1 et S2 changent ce que fait chaque intention, pas l'intention que demande chaque entrée.</p>
+<p><strong>ED-70</strong> — Feuille smileys. Dans la phase, seule son entrée change : l'action « Smileys » de la barre (ED-30) et le raccourci d'ED-36. La refonte conserve et héberge la feuille telle que #1154 l'a livrée (a) ; la cible (b), décidée le 01/11 (P17 a et P17 b), est livrée hors phase. Ton des textes : ED-72.</p>
+<p>Intentions d'ouverture. La feuille s'ouvre selon l'une de deux intentions stables : <strong>consultation</strong>, l'ouverture ordinaire par l'action « Smileys » (dans l'état livré, l'onglet reste calculé par le contrôleur) ; <strong>recherche</strong>, l'ouverture par le raccourci « Smileys Wiki » d'ED-36 (« Rechercher un smiley » après S2, P17 b), focus dans la recherche (onglet Wiki tant que S2 n'est pas livré ; après, champ unique ; ED-37). Les deux intentions sont créées par le premier lot qui touche <code>open()</code> : la correction de S-D3 ou S2, chez rf2-smalldev, ou R6 s'il arrive avant. Les lots suivants, R6 compris quand il n'est pas le premier, les consomment et n'en redéfinissent pas la sémantique. S1 et S2 changent ce que fait chaque intention, pas l'intention que demande chaque entrée.</p>
 <p>a) <strong>État livré</strong> (#1154, bêta 0.65.0 ; relevé : <a href="#annexes-ed-70">annexe A</a>) :</p>
 <ul>
 <li>trois onglets, Favoris | Standard | Wiki : Standard porte les 58 builtins ; Wiki, la recherche perso dès 3 caractères (quatre états, Idle / Recherche / Résultats / Erreur, Résultats vide rendu à part : « Aucun smiley trouvé. ») ;</li>
@@ -657,10 +657,10 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <li>décoration de cellule en réglage (#989) ; insertion au token puis fermeture, depuis la grille comme depuis le détail ;</li>
 <li>les composants, les types et le contrat des quatre hôtes inventoriés dans l'<a href="#annexes-ed-70">annexe A</a>, que la refonte ne doit pas casser.</li>
 </ul>
-<p>b) <strong>Cible proposée</strong> (P17 a et P17 b, proposé, <a href="#14-décisions-en-attente">§ 14</a>) :</p>
+<p>b) <strong>Cible</strong> (décidé le 01/11, P17 a et P17 b, <a href="#14-décisions-en-attente">§ 14</a>) :</p>
 <ul>
 <li>hauteur fixe, calculée à l'ouverture et au passage du clavier ;</li>
-<li>une recherche — champ unique au-dessus de Favoris | Standard, ou onglet Wiki, selon P17 b — sans focus lors d'une ouverture ordinaire, donc sans clavier ; l'ouverture par le raccourci en intention recherche place le focus dans la recherche ;</li>
+<li>une recherche — champ unique au-dessus de Favoris | Standard (P17 b) : Wiki n'est plus un onglet après S2 — sans focus lors d'une ouverture ordinaire, donc sans clavier ; l'ouverture par le raccourci en intention recherche place le focus dans la recherche ;</li>
 <li>une rangée Récents en tête de Favoris ;</li>
 <li>recherche locale (builtins, favoris, récents) dès le 1ᵉʳ caractère, Wiki en complément à partir de 3 ;</li>
 <li>récupération d'une recherche : « Réessayer » sur erreur, relance de la requête interrompue, croix d'effacement ;</li>
@@ -669,13 +669,13 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <li>libellés TalkBack prononçables ;</li>
 <li>Standard dense : cellules de 48 dp ; les 58 builtins visibles sans défiler dans la configuration de référence, 360 × 740 dp, portrait, clavier fermé ; ailleurs, les cellules restent à 48 dp et le défilement est permis.</li>
 </ul>
-<p>Livraison hors phase, chez rf2-smalldev (proposée, P17 a) :</p>
+<p>Livraison hors phase, chez rf2-smalldev (décidé le 01/11, P17 a) :</p>
 <ul>
 <li><strong>S1</strong> (coût S) : hauteur fixe, rangée Récents, récupération d'une recherche, vignettes nommées, libellés TalkBack, Standard dense, et les deux écarts d'ED-90 et d'ED-95 ;</li>
-<li><strong>S2</strong> (coût M) : recherche locale dès le 1ᵉʳ caractère avec Wiki en complément, présentation de Wiki selon P17 b (champ unique ou onglet), mode compact ;</li>
+<li><strong>S2</strong> (coût M) : recherche locale dès le 1ᵉʳ caractère avec Wiki en complément, dans le champ unique qui remplace l'onglet Wiki (P17 b), mode compact ;</li>
 <li><strong>épingle « Garder ouvert »</strong> : feuille maintenue ouverte après une insertion, bande « Ajoutés » avec « Retirer le dernier » ; ni dans S1 ni dans S2, elle n'est décidée et livrée qu'après mesure de la fréquence des enchaînements.</li>
 </ul>
-<p>À la livraison de S2, ED-26, ED-80 et ED-93 sont rejoués, avec l'entrée du raccourci qui en découle : « Rechercher un smiley » si P17 b retient le champ unique, « Smileys Wiki » sinon (ED-37). Rendus non contractuels : page <a href="https://forumhfr.github.io/artifacts/editeur-roborazzi/">editeur-roborazzi</a>, itération w8b, scènes 50 à 58.</p>
+<p>À la livraison de S2, ED-26, ED-80 et ED-93 sont rejoués, avec l'entrée du raccourci qui en découle : « Rechercher un smiley » remplace « Smileys Wiki » (P17 b, ED-37). Rendus non contractuels : page <a href="https://forumhfr.github.io/artifacts/editeur-roborazzi/">editeur-roborazzi</a>, itération w8b, scènes 50 à 58.</p>
 <p><strong>ED-71</strong> — La feuille options est conservée : trois bascules HFR (signature, smileys désactivés, notification par e-mail), valeurs par défaut lues dans le formulaire. Le ton du message (16 icônes, #340) n'est plus replié par défaut. Les éditeurs MP gardent leurs options sans ton.</p>
 <p><strong>ED-72</strong> — Ton. Les textes de l'éditeur et de ses feuilles (libellés, placeholders, aides, résumés et détails d'erreur, annonces) <strong>vouvoient</strong> l'utilisateur, comme la plupart des textes de l'app : « Saisissez votre message… » (ED-12), « Réessayez ». Relevé : depuis #1154, les chaînes d'édition de <code>:core:ui</code>, <code>:feature:editor</code>, <code>:feature:messages</code> et <code>:feature:topic</code> vouvoient toutes, celles de la feuille smileys comprises ; quelques chaînes de connexion et de drapeaux, hors éditeur, tutoient encore. Chaque lot qui ajoute ou réécrit un texte de l'éditeur l'applique (R0b, R1a-1 et R6 notamment).</p>
 <h2 id="5-transitions-et-collisions">5. Transitions et collisions</h2>
@@ -705,7 +705,7 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <p><strong>ED-92</strong> — Les icônes d'état et l'action d'événement ont des cibles d'au moins 48 × 48 dp, sans recouvrir une cible voisine, y compris dans la barre d'action de 48 dp de la hauteur compacte (ED-05) ; l'action d'événement est à au moins 8 dp d'« Envoyer » (ED-167).</p>
 <p><strong>ED-93</strong> — Clavier physique : Maj+flèches suit les mêmes règles que les poignées (C10) ; Tab et Maj+Tab font sortir le focus du champ vers l'élément suivant ou précédent, sans insérer de tabulation (une tabulation n'a pas d'usage en BBCode HFR) ; la barre d'action, ses modes et ses sous-niveaux sont atteignables au clavier (ED-26) ; une action d'insertion activée au clavier rend aussitôt le focus au champ, une action qui ouvre une feuille, un dialogue ou le sélecteur d'images le rend à leur fermeture (ED-80). Relevé : <a href="#annexes-ed-93">annexe A</a>.</p>
 <p><strong>ED-94</strong> — Le champ reste un seul nœud défilable pour TalkBack ; nom accessible « Message » conservé, y compris en hauteur compacte, où le label visuel est retiré (ED-05, ED-12).</p>
-<p><strong>ED-95</strong> — Annonces. La barre d'action porte un nœud live <strong>permanent</strong> (ED-40) dont le contenu change : un nœud live qui apparaît n'est pas annoncé de façon fiable, et <code>View.announceForAccessibility</code> est déprécié en API 36 (patron déjà en place pour les cartes de citation, <code>QuoteCards.kt:139-149</code>). Une erreur est annoncée en mode <code>Assertive</code> ; une opération en cours, une fin et une information en mode <code>Polite</code>. Le contenu annoncé est le résumé suivi du nom de l'action. La progression d'un upload est annoncée au début et à la fin seulement. L'armement du bouton est annoncé (<code>stateDescription</code>), son désarmement aussi. L'arrivée d'une icône d'état (offre ↺ comprise) est annoncée en <code>Polite</code>. Dans la feuille smileys, les retours des favoris (ajout, retrait, refus, échec) sont annoncés de façon fiable, selon le même principe : par un nœud live présent avant le retour, jamais par une région live qui apparaît. Ce point et le retour du focus d'ED-90 sont des écarts de l'état livré (ED-70 a ; relevé : <a href="#annexes-ed-95">annexe A</a>) : R1a-2 étend sa passe TalkBack à la feuille smileys (actions de cellule, page de détail, retours des favoris) et les relève. Leur correction revient à la feuille elle-même, hors des lots de la phase : les deux écarts, focus rendu à la cellule d'origine au sortir du détail et annonce fiable des retours des favoris, sont portés par le <strong>lot S1</strong> de la suite de #1154 (rf2-smalldev) ou, si P17 a est refusée, par une suite de #1154 limitée à ces deux écarts. G4 les exige corrigés, ou bien une dérogation bornée à ces deux écarts, actée par le mainteneur, qui renvoie au lot S1 (<a href="#113-portes">§ 11.3</a>).</p>
+<p><strong>ED-95</strong> — Annonces. La barre d'action porte un nœud live <strong>permanent</strong> (ED-40) dont le contenu change : un nœud live qui apparaît n'est pas annoncé de façon fiable, et <code>View.announceForAccessibility</code> est déprécié en API 36 (patron déjà en place pour les cartes de citation, <code>QuoteCards.kt:139-149</code>). Une erreur est annoncée en mode <code>Assertive</code> ; une opération en cours, une fin et une information en mode <code>Polite</code>. Le contenu annoncé est le résumé suivi du nom de l'action. La progression d'un upload est annoncée au début et à la fin seulement. L'armement du bouton est annoncé (<code>stateDescription</code>), son désarmement aussi. L'arrivée d'une icône d'état (offre ↺ comprise) est annoncée en <code>Polite</code>. Dans la feuille smileys, les retours des favoris (ajout, retrait, refus, échec) sont annoncés de façon fiable, selon le même principe : par un nœud live présent avant le retour, jamais par une région live qui apparaît. Ce point et le retour du focus d'ED-90 sont des écarts de l'état livré (ED-70 a ; relevé : <a href="#annexes-ed-95">annexe A</a>) : R1a-2 étend sa passe TalkBack à la feuille smileys (actions de cellule, page de détail, retours des favoris) et les relève. Leur correction revient à la feuille elle-même, hors des lots de la phase : les deux écarts, focus rendu à la cellule d'origine au sortir du détail et annonce fiable des retours des favoris, sont portés par le <strong>lot S1</strong> de la suite de #1154 (rf2-smalldev, décidé le 01/11, P17 a). G4 les exige corrigés, ou bien une dérogation bornée à ces deux écarts, actée par le mainteneur, qui renvoie au lot S1 (<a href="#113-portes">§ 11.3</a>).</p>
 <h2 id="7-contrats-par-surface">7. Contrats par surface</h2>
 <h3 id="71-éditeur-de-post-posteditorscreen">7.1 Éditeur de post (<code>PostEditorScreen</code>)</h3>
 <p>Règles des § 3 à 6 sans exception. Sauvegarde attendue avant retour (ED-10, sauf après un succès, ED-161) et garde contre l'écrasement d'une saisie par un GET tardif (<code>PostEditorViewModel.kt:907-944</code>) : inchangées. Hydratation du formulaire : inchangée hors citation.</p>
@@ -1017,7 +1017,7 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <td>Succès terminal, corps figé, identité d'armement et horloge, verrou transport, marqueur « publié », tentative durable, préférence inconnue = confirmation requise, exclusion envoi / upload ; causes « Envoi incertain » et « Brouillon non écrit » à libellé définitif (D44) ; précède R1a-2 (ordre du correctif : mainteneur)</td>
 <td>ED-160, ED-161, ED-164, ED-166, ED-168 à ED-172</td>
 <td>—</td>
-<td>rf2-smalldev, maintenant (recommandé, P19 ; repli : rf2-dev après R0m)</td>
+<td>rf2-smalldev, maintenant, en parallèle de R0m, R0a et R1a-1 (décidé le 01/11, P19)</td>
 </tr>
 <tr>
 <td>R0m</td>
@@ -1049,7 +1049,7 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <td>Pipeline texte : les quatre ViewModels sur <code>TextFieldState</code> (4 093 lignes), un par PR, qui adapte le chrome en place sur la surface migrée, ancien ou nouveau, et garde les invariants des hôtes de la feuille smileys (#1154 : contrôleur déclaré avant <code>init</code>, setter de <code>loadedForm</code> qui appelle <code>refreshFavorites(null)</code>, <code>favoriteFormStamp()</code> avant chaque chargement et <code>refreshFavorites(stamp)</code> après ; <a href="#annexes-ed-70">annexe A</a>) ; <code>canSubmit</code>, validation, autosave et aperçu recâblés ; insertions atomiques ; matrice IME ; dette de la review du 20/09</td>
 <td>ED-65</td>
 <td>R0b (série)</td>
-<td>rf2-smalldev (recommandé, P19)</td>
+<td>rf2-smalldev (décidé le 01/11, P19)</td>
 </tr>
 <tr>
 <td>R0d</td>
@@ -1064,7 +1064,7 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <td>à créer</td>
 <td><code>EditorScaffold</code> dans <code>:core:ui/editor</code>, app bar et icônes d'état, barre d'action et ses modes (événement compris), variante compacte (ED-05), place du raccourci (sans réglage), panneau d'en-tête ; non branchés ; choix des composables figé (M3)</td>
 <td>ED-02 à ED-05, ED-10, ED-11, ED-20 à ED-27, ED-30 à ED-33, ED-38, ED-40, ED-41, ED-43 à ED-46, ED-49, ED-85, ED-90 à ED-95 ; composant d'ED-101 et d'ED-113</td>
-<td>G0, R0a concluant et P13 tranchée</td>
+<td>G0, R0a concluant ou repli E</td>
 <td>rf2-dev</td>
 </tr>
 <tr>
@@ -1134,7 +1134,7 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <tr>
 <td>R6</td>
 <td>à créer</td>
-<td>Raccourci, dans la phase (P16, décidé le 01/11) : préférence et réglage, action « Smiley perso », intentions d'ouverture consultation et recherche de la feuille smileys, consommées, ou créées si R6 est le premier lot qui touche <code>open()</code> (ED-70) ; entrée « Smileys Wiki », feuille ouverte sur l'onglet Wiki avec le focus dans la recherche, tant que S2 n'est pas livré (après, « Rechercher un smiley » si P17 b retient le champ unique, ED-37) ; branchement sur chaque surface migrée</td>
+<td>Raccourci, dans la phase (P16, décidé le 01/11) : préférence et réglage, action « Smiley perso », intentions d'ouverture consultation et recherche de la feuille smileys, consommées, ou créées si R6 est le premier lot qui touche <code>open()</code> (ED-70) ; entrée « Smileys Wiki », feuille ouverte sur l'onglet Wiki avec le focus dans la recherche, tant que S2 n'est pas livré (après, « Rechercher un smiley », focus dans le champ unique, P17 b, ED-37) ; branchement sur chaque surface migrée</td>
 <td>ED-36 à ED-39</td>
 <td>G3 (les quatre surfaces migrées)</td>
 <td>rf2-dev</td>
@@ -1142,8 +1142,8 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 </tbody>
 </table>
 <p>R6 est dans la phase (P16, décidé le 01/11) : il se merge après G3, quand les quatre éditeurs plein écran sont migrés, et branche le raccourci sur chacun ; R1a-1 réserve sa place (ED-38).</p>
-<p>Le choix des composables qui portent le chrome (enveloppes material3 1.5, <code>TopAppBar</code> à 48 dp par exemple, ou composition applicative) est une décision déléguée de R1a-1, prise sur la mesure de R0a (M3, dans le cadre de P10) : ce n'est pas une question du § 14. R1a-1 a donc pour préconditions, outre G0, « R0a concluant (ou repli E adopté par le mainteneur, comme pour G1) et P13 tranchée » : le choix des composables se fait sur les mesures de R0a, et la disposition dépend de B5 ou B1. Avant, seule la préparation des composants qui ne dépendent pas de ces choix est permise, sans figer leur géométrie. R6 suit la même règle d'enchaînement que les autres lots de l'éditeur : rien ne se merge pendant la fenêtre R1a-2 → R1b-2b. R6 se merge après G3, sans exception.</p>
-<p>R0b démarre dès que #1301-ST est mergé. R0c est précondition de <strong>R2b seulement</strong> : la restauration après mort du process (ED-81) ne dépend pas de R0c et sort avec R1a-2. R0c, en quatre PR, une par ViewModel, peut être préparé par rf2-smalldev dès R0b mergé, en coordination sur les hôtes avec rf2-dev ; aucune PR de R0c n'est mergée pendant la fenêtre R1a-2 → R1b-2b. R2a et R2b ne dépendent pas l'un de l'autre. Si la mesure de R0a montre un <code>Bundle</code> dangereux (§ 12, Q7), un correctif minimal du pont (diff préfixe / suffixe) passe avant R0c.</p>
+<p>Le choix des composables qui portent le chrome (enveloppes material3 1.5, <code>TopAppBar</code> à 48 dp par exemple, ou composition applicative) est une décision déléguée de R1a-1, prise sur la mesure de R0a (M3, dans le cadre de P10) : ce n'est pas une question du § 14. R1a-1 a donc pour précondition, outre G0, « R0a concluant (ou repli E adopté par le mainteneur, comme pour G1) » : le choix des composables se fait sur les mesures de R0a ; la disposition est B5 (décidé le 01/11, P13). Avant, seule la préparation des composants qui ne dépendent pas de ce choix est permise, sans figer leur géométrie. R6 suit la même règle d'enchaînement que les autres lots de l'éditeur : rien ne se merge pendant la fenêtre R1a-2 → R1b-2b. R6 se merge après G3, sans exception.</p>
+<p>#1301-ST part maintenant chez rf2-smalldev, en parallèle de R0m, R0a et R1a-1, menés par rf2-dev (décidé le 01/11, P19). R0b démarre dès que #1301-ST est mergé. R0c est précondition de <strong>R2b seulement</strong> : la restauration après mort du process (ED-81) ne dépend pas de R0c et sort avec R1a-2. R0c, en quatre PR, une par ViewModel, est préparé par rf2-smalldev dès R0b mergé (P19), en coordination sur les hôtes avec rf2-dev ; aucune PR de R0c n'est mergée pendant la fenêtre R1a-2 → R1b-2b. R2a et R2b ne dépendent pas l'un de l'autre. Si la mesure de R0a montre un <code>Bundle</code> dangereux (§ 12, Q7), un correctif minimal du pont (diff préfixe / suffixe) passe avant R0c.</p>
 <h3 id="112-critères-de-sortie">11.2 Critères de sortie</h3>
 <table>
 <thead>
@@ -1203,7 +1203,7 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 </tr>
 <tr>
 <td>R6</td>
-<td><a href="#annexes-b1-par-lot">Annexe B.1</a> : tests des actions du catalogue (formats et teintes, image, entrée recherche effectivement livrée — « Smileys Wiki », ou champ unique après S2 selon P17 b —, « Smiley perso »), gardes et réglage ; barre sans raccourci identique à R1a-1 ; C5, C6, C10 et TalkBack sur chaque surface migrée</td>
+<td><a href="#annexes-b1-par-lot">Annexe B.1</a> : tests des actions du catalogue (formats et teintes, image, entrée recherche effectivement livrée — « Smileys Wiki », ou « Rechercher un smiley » et le champ unique après S2 (P17 b) —, « Smiley perso »), gardes et réglage ; barre sans raccourci identique à R1a-1 ; C5, C6, C10 et TalkBack sur chaque surface migrée</td>
 </tr>
 </tbody>
 </table>
@@ -1226,7 +1226,7 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <tr>
 <td>G0</td>
 <td>R1a-1</td>
-<td>Spec v0.7 passée au challenge de Sol puis aux gates de Fable et d'Astra. Verdicts : Sol, À REVOIR (0 / 6 / 3), intégré ; Fable, OK avec amendements (0 / 6 / 6), intégrés ; Astra, GO avec conditions (01/11), conditions inscrites : cartes en hauteur compacte avant G1 (ED-140, critère J), C8 sur les trois surfaces R1b avant G3, trois corrections mineures reportées. Après les gates de la v0.6 (GO Astra, 14/10/2026) et de l'ajout de la v0.6.4 (raccourci, ED-25, ED-26, ED-36 à ED-39, ED-93 ; GO avec conditions d'Astra, 28/10/2026, conditions levées) ; ADR accepté le 01/11 (P10). R1a-1 attend en outre R0a concluant et P13 tranchée (§ 11.1)</td>
+<td>Spec v0.7 passée au challenge de Sol puis aux gates de Fable et d'Astra. Verdicts : Sol, À REVOIR (0 / 6 / 3), intégré ; Fable, OK avec amendements (0 / 6 / 6), intégrés ; Astra, GO avec conditions (01/11), conditions inscrites : cartes en hauteur compacte avant G1 (ED-140, critère J), C8 sur les trois surfaces R1b avant G3, trois corrections mineures reportées. Après les gates de la v0.6 (GO Astra, 14/10/2026) et de l'ajout de la v0.6.4 (raccourci, ED-25, ED-26, ED-36 à ED-39, ED-93 ; GO avec conditions d'Astra, 28/10/2026, conditions levées) ; ADR accepté le 01/11 (P10). R1a-1 attend en outre R0a concluant, ou le repli E (§ 11.1)</td>
 </tr>
 <tr>
 <td>G1</td>
@@ -1235,8 +1235,8 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 </tr>
 <tr>
 <td>G2</td>
-<td>merge de R1b-* ; sous l'option a de P18 seulement, aussi la première bêta de R1a-2</td>
-<td>R1a-2 dans au moins une release dev, au moins trois jours d'exposition, aucun retour bloquant ouvert, champ mesuré à la hauteur cible sur S10e (§ 3.2 : 214 dp en B5, 166 dp en B1)</td>
+<td>merge de R1b-*</td>
+<td>R1a-2 dans au moins une release dev, au moins trois jours d'exposition, aucun retour bloquant ouvert, champ mesuré à la hauteur cible sur S10e (§ 3.2 : 214 dp en B5)</td>
 </tr>
 <tr>
 <td>G3</td>
@@ -1257,13 +1257,12 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 </table>
 <p>Graphe des dépendances et convergence des branches vers G4 : <a href="#annexes-g-graphe-des-lots-et-préconditions-de-r4">annexe G</a>. Version : politique A (le premier lot mergé impose le mineur).</p>
 <h2 id="11-bis-stratégie-de-livraison-sans-interrupteur">11 bis. Stratégie de livraison (sans interrupteur)</h2>
-<p>Le mainteneur a refusé l'interrupteur le 01/11 (P1 : « on vire l'ancien éditeur »). Il n'y a ni interrupteur, ni second chemin, ni lot de retrait : le lot d'interrupteur, le lot de retrait R5 et la porte G5 sont retirés (§ 11.1, § 11.3), ainsi que les règles ED-141 à ED-149 (numéros conservés, <a href="#annexes-e-stratégie-de-livraison">annexe E</a>). La stratégie ci-dessous suit la recommandation d de P18, encore ouverte (§ 14) ; l'option a reste décrite. Le détail est dans l'annexe E.</p>
+<p>Le mainteneur a refusé l'interrupteur le 01/11 (P1 : « on vire l'ancien éditeur »). Il n'y a ni interrupteur, ni second chemin, ni lot de retrait : le lot d'interrupteur, le lot de retrait R5 et la porte G5 sont retirés (§ 11.1, § 11.3), ainsi que les règles ED-141 à ED-149 (numéros conservés, <a href="#annexes-e-stratégie-de-livraison">annexe E</a>). La stratégie ci-dessous est l'option d de P18, décidée le 01/11 (§ 14). Le détail est dans l'annexe E.</p>
 <ul>
 <li><strong>Remplacement par surface.</strong> Chaque lot d'interface (R1a-2, R1b-1, R1b-2a, R1b-2b) remplace l'ancien chrome sur sa surface et supprime le code devenu mort dans la même PR.</li>
 <li><strong>Règle transitoire.</strong> ED-140 reste la règle transitoire : aucun lot ne retire un parcours avant le lot qui le remplace.</li>
 <li><strong>Pipeline et promotions bêta.</strong> R0b et R0c changent le pipeline de l'ancien chrome, qui reste en place jusqu'à R1a-2. Toute promotion bêta pendant la phase, et pas seulement avant R1a-2, prouve le protocole d'envoi, cas 1 (<a href="#annexes-b3-protocole-denvoi-sur-appareil">annexe B.3</a>), sur toutes les surfaces livrées, chacune dans le chrome qu'elle porte : avant R1a-2, l'ancien chrome sur le nouveau pipeline ; ensuite, les surfaces migrées et celles qui ne le sont pas encore, la feuille comprise. Chaque PR de R0c passe en outre le protocole d'envoi sur la surface de son ViewModel (§ 11.2).</li>
-<li><strong>Première bêta à G3 (P18 d).</strong> Les lots partent en dev un par un. La première bêta du nouveau chrome attend G3 (quatre éditeurs plein écran migrés, § 11.3), sans attendre R0c, R2b ni G4. Pendant la fenêtre R1a-2 → G3, aucune promotion bêta de <code>dev</code> n'a lieu, et un correctif urgent passe par <code>main</code>. Les surfaces déjà migrées y portent le nouveau chrome et les autres l'ancien : ce chrome mixte, pendant lequel C9 est dérogé (§ 9), n'existe qu'en dev. Les lots R1a-2, R1b-1, R1b-2a et R1b-2b s'enchaînent sans autre lot de l'éditeur entre eux, ce qui borne le gel (risque K17). La première bêta du nouveau chrome demande le go explicite du mainteneur. Raisons : pas de chrome mixte en public, un gel borné à la migration des quatre surfaces, ni interrupteur ni branche longue.</li>
-<li><strong>Option a, si elle était retenue.</strong> Chaque lot part en dev et en bêta dès qu'il est prêt ; la première bêta de R1a-2 dépend alors de G2 (§ 11.3). Le chrome mixte de la fenêtre R1a-2 → R1b-2b devient public : chaque promotion bêta dans la fenêtre demande le go explicite du mainteneur, et le chrome mixte est annoncé dans les notes de version.</li>
+<li><strong>Première bêta à G3 (P18 d, décidé le 01/11).</strong> Les lots partent en dev un par un. La première bêta du nouveau chrome attend G3 (quatre éditeurs plein écran migrés, § 11.3), sans attendre R0c, R2b ni G4. Pendant la fenêtre R1a-2 → G3, aucune promotion bêta de <code>dev</code> n'a lieu, et un correctif urgent passe par <code>main</code>. Les surfaces déjà migrées y portent le nouveau chrome et les autres l'ancien : ce chrome mixte, pendant lequel C9 est dérogé (§ 9), n'existe qu'en dev. Les lots R1a-2, R1b-1, R1b-2a et R1b-2b s'enchaînent sans autre lot de l'éditeur entre eux, ce qui borne le gel (risque K17). La première bêta du nouveau chrome demande le go explicite du mainteneur. Raisons : pas de chrome mixte en public, un gel borné à la migration des quatre surfaces, ni interrupteur ni branche longue.</li>
 <li><strong>Retour arrière.</strong> Un défaut se retire par un revert adapté ou un correctif en avant, conservant les migrations, les marqueurs durables et les invariants d'envoi ; la restauration et l'envoi sont revérifiés sur une installation déjà mise à jour. Un revert brut du lot fautif ne suffit pas toujours : après R0c, un ancien chrome qui consommait <code>TextFieldValue</code> demande une adaptation au nouveau contrat ; retirer le stockage des tentatives de #1301-ST retirerait ses migrations ou ferait relire un envoi incertain comme un brouillon ordinaire (ED-170). La livraison suit la procédure de release : nouveau <code>versionCode</code> alloué par la CD, nouveau <code>versionName</code> pour toute bêta, entrée de changelog et notes Play fraîches, gardes bloquantes du workflow (<code>.github/workflows/release.yml:143</code>, <code>:262</code>). Aucun stade ni préférence ne masque un chrome.</li>
 </ul>
 <p>R0m, isolé et indépendant de la refonte, a sa propre porte avant promotion bêta, Gm (§ 11.3), et son repli de bibliothèque (annexe E).</p>
@@ -1272,7 +1271,7 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <h2 id="13-registre-des-risques">13. Registre des risques</h2>
 <p>Risques K1 à K17, probabilité, impact, parade et signal : <a href="#annexes-d-registre-des-risques">annexe D</a>.</p>
 <h2 id="14-décisions-en-attente">14. Décisions en attente</h2>
-<p>Les choix réservés au mainteneur ont été arbitrés le 01/11/2026, sauf P13 et les questions nouvelles P17 à P19. Les décisions D18 à D46, prises par délégation le 14/10/2026, sont tracées dans l'annexe de l'ADR-020 et validées le 01/11 (P10). M1 à M4 sont les questions du plan material3 1.5 du 14/10 : M1, épingler material3 1.5 avant R0a ; M2, hauteur compacte ; M3, choix des composables ; M4, thème Expressive. Retirées, numéros conservés : P2 (fondue dans P1), P3 (#1301-ST précède R1a-2, § 11.1) et P6 (fusionnée dans P13).</p>
+<p>Les choix réservés au mainteneur ont tous été arbitrés le 01/11/2026 ; P13 et les questions nouvelles P17 a, P17 b, P18 et P19 l'ont été dans un second temps, le même jour (« ok pour tout, je suis tes recommandations »). Les décisions D18 à D46, prises par délégation le 14/10/2026, sont tracées dans l'annexe de l'ADR-020 et validées le 01/11 (P10). M1 à M4 sont les questions du plan material3 1.5 du 14/10 : M1, épingler material3 1.5 avant R0a ; M2, hauteur compacte ; M3, choix des composables ; M4, thème Expressive. Retirées, numéros conservés : P2 (fondue dans P1), P3 (#1301-ST précède R1a-2, § 11.1) et P6 (fusionnée dans P13).</p>
 <h3 id="décisions-arbitrées-le-01112026">Décisions arbitrées le 01/11/2026</h3>
 <p>Une ligne par question : la question en clair, la réponse du mainteneur et ce qu'elle change dans la spec.</p>
 <table>
@@ -1340,6 +1339,12 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <td>Sujet et MP de test dédiés, compte XaTelitte.</td>
 </tr>
 <tr>
+<td>P13</td>
+<td>B5 (pas de bande) ou B1 (bande de 48 dp en portrait) ? Amende la décision n° 2 du 22/09.</td>
+<td><strong>B5</strong>, après la simulation des rendus w8d (<a href="https://forumhfr.github.io/artifacts/editeur-roborazzi/">editeur-roborazzi</a>)</td>
+<td>B5 est la règle (§ 3.3, ED-40) : champ cible de 214 dp, mesuré à G2 (§ 3.2), et aucune géométrie asynchrone, au prix d'un tap d'acquittement après une erreur (K5 ; justification : ADR-020, décision 3). B1 reste le repli décrit au § 3.3, mais n'est plus une option ouverte. R1a-1 n'attend plus que G0 et R0a concluant, ou le repli E (§ 11.1).</td>
+</tr>
+<tr>
 <td>P14</td>
 <td>Minimum de champ en hauteur compacte ?</td>
 <td>remplacée par M2</td>
@@ -1356,6 +1361,30 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <td>Raccourci : dans la phase (R6) ou issue à part ?</td>
 <td>dans la phase (R6)</td>
 <td>Catalogue et règles d'ED-36 à ED-39 tels que proposés. Défaut « Aucun » (recommandation, non redite par le mainteneur).</td>
+</tr>
+<tr>
+<td>P17 a</td>
+<td>Cible du sélecteur de smileys (ED-70 b), livrée hors phase chez rf2-smalldev, en S1 puis S2 ?</td>
+<td><strong>oui</strong></td>
+<td>ED-70 b est la cible ; S-D1 à S-D6 sont corrigés tout de suite, comme suite de #1154 (<a href="#annexes-ed-70">annexe A</a>) ; S1 porte les écarts TalkBack d'ED-90 et d'ED-95, exigés à G4 sauf dérogation bornée ; l'épingle « Garder ouvert » attend la mesure.</td>
+</tr>
+<tr>
+<td>P17 b</td>
+<td>Wiki : onglet, ou champ de recherche unique au-dessus de Favoris | Standard ?</td>
+<td><strong>champ unique</strong></td>
+<td>La recherche locale et Wiki partagent un champ ; Wiki n'est plus un onglet après S2, ce qui revient sur le choix du 29/10 (trois onglets). Le raccourci suit le code livré : « Smileys Wiki » tant que S2 n'est pas livré, « Rechercher un smiley » après (ED-37) ; ED-26, ED-80 et ED-93 sont rejoués à la livraison de S2.</td>
+</tr>
+<tr>
+<td>P18</td>
+<td>Promotion bêta sans interrupteur : a, b, c ou d ? Amende la décision n° 4 du 22/09 (bêta à la fin de la phase).</td>
+<td><strong>d</strong></td>
+<td>Les lots partent en dev un par un ; la première bêta du nouveau chrome part à G3, sur go du mainteneur, sans attendre R0c, R2b ni G4 ; gel bêta borné de R1a-2 à G3, correctifs urgents par <code>main</code> ; chrome mixte en dev seulement, ni interrupteur ni branche longue (§ 11 bis, annexe E.3, K17). Les lots R1a-2, R1b-1, R1b-2a et R1b-2b s'enchaînent sans autre lot de l'éditeur entre eux, ce qui borne le gel.</td>
+</tr>
+<tr>
+<td>P19</td>
+<td>#1301-ST et R0c : rf2-smalldev ou rf2-dev ?</td>
+<td><strong>rf2-smalldev</strong></td>
+<td>rf2-smalldev a fait l'audit de #1301 et retenu le correctif (<code>redface2-work/suivi/SUIVI-1301.md</code>, hors dépôt). #1301-ST part maintenant, en parallèle de R0m, R0a et R1a-1, menés par rf2-dev, ce qui avance R0b et G1. R0c : quatre PR préparées dès R0b mergé, en coordination sur les hôtes avec rf2-dev, aucune mergée pendant la fenêtre R1a-2 → R1b-2b (§ 11.1).</td>
 </tr>
 <tr>
 <td>M1</td>
@@ -1385,63 +1414,27 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 </table>
 <p>M1 fixe la <em>version</em> de la bibliothèque. M3 délègue le <em>choix des composants</em> (par exemple <code>TopAppBar</code> 48 dp contre une composition applicative), qui se fait par la mesure de R0a et se fige en R1a-1. Les deux ne se contredisent pas.</p>
 <h3 id="décisions-en-attente">Décisions en attente</h3>
-<p>Question fermée et recommandation.</p>
-<table>
-<thead>
-<tr>
-<th>#</th>
-<th>Question</th>
-<th>Recommandation</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>P13</td>
-<td>B5 ou B1 ? B5 (214 dp, un tap d'acquittement après erreur) ; repli B1 sans bande en hauteur compacte (166 dp) ; B7 écartée (§ 3.3). Amende la décision arbitrée n° 2 du 22/09 (bande de 32 dp). Critères de hauteur : § 3.2. Le mainteneur a demandé le 01/11 une simulation des deux options : rendus Roborazzi w8d, paires B5 / B1 au même contenu (scènes 01 / 19, 02 / 40, 33 / 41, 34 / 42, 28 / 43 et 44 / 20 ; 32 / 45 et 35 / 46 identiques par construction, sans bande B1 en hauteur compacte) (<a href="https://forumhfr.github.io/artifacts/editeur-roborazzi/">editeur-roborazzi</a>).</td>
-<td><strong>B5</strong> : +48 dp de champ en portrait et aucune géométrie asynchrone, au prix d'un tap d'acquittement après une erreur (K5) ; justification : ADR-020, décision 3. La spec garde B5 comme cible et B1 comme repli tant que P13 est ouverte.</td>
-</tr>
-<tr>
-<td>P17 a</td>
-<td>Sélecteur de smileys : accepter la cible d'ED-70 b, hors la question de Wiki (P17 b), et sa livraison hors phase chez rf2-smalldev, en S1 puis S2, l'épingle « Garder ouvert » seulement après mesure (contenus : ED-70 b) ?</td>
-<td><strong>Oui.</strong> Les défauts S-D1 à S-D6 de l'état livré (<a href="#annexes-ed-70">annexe A</a>) sont corrigés tout de suite, comme suite de #1154. Les deux écarts TalkBack de l'état livré (focus rendu à la cellule d'origine au sortir du détail, ED-90 ; annonce fiable des retours des favoris, ED-95) sont portés par le lot S1 de la suite de #1154 (rf2-smalldev) ; G4 les exige corrigés, ou bien une dérogation bornée actée par le mainteneur.</td>
-</tr>
-<tr>
-<td>P17 b</td>
-<td>Wiki reste-t-il un onglet, ou devient-il le champ de recherche unique au-dessus de Favoris | Standard, ce qui revient sur le choix du 29/10 (trois onglets) ? La réponse fixe la présentation de Wiki dans S2 et l'entrée du raccourci après S2 (ED-37).</td>
-<td><strong>Champ unique</strong>, proposé par deux des trois analyses indépendantes du 01/11 : la recherche locale et Wiki y partagent un champ. Le raccourci suit le code livré, pas la décision : « Smileys Wiki » tant que S2 n'est pas livré ; après, « Rechercher un smiley » si le champ unique est retenu, « Smileys Wiki » sinon (ED-37).</td>
-</tr>
-<tr>
-<td>P18</td>
-<td>Amende la décision arbitrée n° 4 du 22/09 (bêta à la fin de la phase) : b la conserve, a et d l'amendent. Livraison sans interrupteur (conséquence de P1) : a) chaque lot part en dev et en bêta dès qu'il est prêt, avec un chrome mixte entre surfaces pendant la fenêtre R1a-2 → R1b-2b ; b) <code>dev</code> non promouvable de R1a-2 jusqu'à G4, les correctifs urgents passant par <code>main</code> ; c) branche d'intégration pour R1a-2 à R1b-2b, mergée d'un bloc ; d) (option de Sol, challenge du 01/11) les lots partent en dev un par un ; la première bêta du nouveau chrome attend G3 (quatre surfaces migrées), sans attendre R0c, R2b ni G4 ; pendant la fenêtre R1a-2 → G3, aucune promotion bêta de <code>dev</code>, et un correctif urgent passe par <code>main</code>.</td>
-<td><strong>d</strong>. Pas de chrome mixte en public, un gel borné à la migration des quatre surfaces, ni interrupteur ni branche longue. Les lots R1a-2, R1b-1, R1b-2a et R1b-2b s'enchaînent sans autre lot de l'éditeur entre eux, ce qui borne le gel. a reste tenable et décrite (§ 11 bis) : si elle était choisie, la première bêta de R1a-2 dépendrait de G2, chaque promotion bêta avec chrome mixte demanderait le go explicite du mainteneur, et le chrome mixte serait annoncé dans les notes de version. b gèlerait la bêta jusqu'à G4. c ferait diverger une branche longue contre les changements de rf2-smalldev dans les mêmes fichiers (#1154 l'a montré).</td>
-</tr>
-<tr>
-<td>P19</td>
-<td>#1301-ST, prérequis de R0b et de G1, a été mis de côté le 13/10. Le relancer maintenant (rf2-smalldev, prioritaire) ou le rattacher à la phase (rf2-dev, avant R0b) ? Et R0c, en quatre PR, une par ViewModel : chez rf2-smalldev aussi ?</td>
-<td><strong>Le confier à rf2-smalldev maintenant ; R0c aussi.</strong> rf2-smalldev a fait l'audit et retenu le correctif (<code>redface2-work/suivi/SUIVI-1301.md</code>, hors dépôt) ; il peut le mener en parallèle de R0m et R0a, chez rf2-dev, ce qui avance R0b et G1. Sans lui, R0b et R1a-2 sont bloqués. Repli : le rattacher à rf2-dev après R0m. R0c : quatre PR préparées chez rf2-smalldev dès R0b mergé, en coordination sur les hôtes avec rf2-dev (§ 11.1).</td>
-</tr>
-</tbody>
-</table>
+<p>Aucune. P13, P17 a, P17 b, P18 et P19, encore ouvertes en v0.7, sont arbitrées depuis le 01/11 (table ci-dessus) ; les recommandations qui les accompagnaient sont dans l'historique de l'ADR-020 (v0.7, passes 3 et 4).</p>
 </section>
 <div class="doc-sep">Décision associée</div>
 <section id="adr">
 <h1 id="adr-adr-020--refonte-de-la-vue-éditeur-1417--chrome-fixe-champ-élastique-états-dans-lapp-bar">ADR-020 — Refonte de la vue Éditeur (#1417) : chrome fixe, champ élastique, états dans l'app bar</h1>
 <h2 id="adr-statut">Statut</h2>
-<p>Accepté — 2026-11-01 (v0.7 ; v0.3 du 2026-09-23 ; passes jusqu'à la v0.6.4 : Opus 5.5, Sol 6.1, Fable, Astra ; v0.7 : passes 1 et 2 (Opus) ; challenge de Sol : À REVOIR (0 / 6 / 3), intégré en passe 3 ; gate de Fable : OK avec amendements (0 / 6 / 6), intégrés en passe 4 ; gate d'Astra : GO avec conditions (01/11), conditions inscrites : cartes en hauteur compacte avant G1 (ED-140, critère J), C8 sur les trois surfaces R1b avant G3, trois corrections mineures reportées), sauf les points encore ouverts : P13 et P17 à P19. L'acceptation et la validation des choix pris par délégation sont la décision P10 de la <a href="#14-décisions-en-attente">spec de l'éditeur</a>, acceptée par le mainteneur le 01/11.</p>
+<p>Accepté — 2026-11-01 (v0.7.1 ; v0.3 du 2026-09-23 ; passes jusqu'à la v0.6.4 : Opus 5.5, Sol 6.1, Fable, Astra ; v0.7 : passes 1 et 2 (Opus) ; challenge de Sol : À REVOIR (0 / 6 / 3), intégré en passe 3 ; gate de Fable : OK avec amendements (0 / 6 / 6), intégrés en passe 4 ; gate d'Astra : GO avec conditions (01/11), conditions inscrites : cartes en hauteur compacte avant G1 (ED-140, critère J), C8 sur les trois surfaces R1b avant G3, trois corrections mineures reportées ; v0.7.1 : décisions du mainteneur sur P13, P17 a, P17 b, P18 et P19). L'acceptation et la validation des choix pris par délégation sont la décision P10 de la <a href="#14-décisions-en-attente">spec de l'éditeur</a>, acceptée par le mainteneur le 01/11.</p>
 <h2 id="adr-contexte">Contexte</h2>
 <p>La vue Éditeur regroupe cinq surfaces d'écriture : répondre ou modifier un message (<code>PostEditorScreen</code>), créer un sujet ou modifier son premier message (<code>TopicFormScreen</code>), écrire un nouveau MP (<code>PrivateMessageComposeScreen</code>), répondre dans une conversation MP (<code>PrivateMessageReplyScreen</code> / <code>MessageEditorComponents</code>), et la feuille de réponse rapide de la vue Topic (<code>QuickReplySheet</code>). Les quatre premières partagent les composants de <code>:core:ui/editor</code> (<code>BbcodeTextField</code>, <code>BbcodeToolbar</code>, <code>SmileyPickerSheet</code>, <code>EditorOptionsSheet</code>, <code>ArmedSubmitButton</code>, <code>EditorLayoutBudget</code>, <code>EditorUpload</code>) ; <code>QuoteCards</code> ne sert qu'à l'éditeur de post. La feuille a sa propre implémentation et ne réutilise que <code>QuoteCardsColumn</code>.</p>
 <p>L'objectif produit, posé par un testeur sur le topic DEV et repris par l'issue parapluie <a href="https://github.com/ForumHFR/redface2/issues/1417">#1417</a>, est que <strong>les bords haut et bas du champ restent visibles et que le texte défile dedans</strong>.</p>
 <p>Le problème : sur un téléphone de 360 × 740 dp clavier ouvert, il reste environ 330 dp de fenêtre utile. En 0.59.8, avant le correctif de densité #1432, le chrome (titre d'écran, barre d'outils BBCode d'au moins 56 dp, bouton d'aperçu de 48 dp, bandeaux empilés, 36 dp d'espacements, barre d'envoi d'au moins 65 dp) laisse au champ <strong>environ 97 à 128 dp</strong> — valeurs estimées par lecture de code, non mesurées : les composants M3 cliquables ont une taille interactive minimale de 48 dp. #1432 a garanti en 0.62.0 un plancher de 160 dp en rangeant le chrome haut dans une zone bornée défilante, au prix d'une barre d'outils rognée au milieu de ses chips et d'un bandeau de brouillon tronqué. Trois testeurs distincts demandent la même chose (densité, #872).</p>
 <p>Le champ repose sur BasicTextField 2 depuis 0.59.8 (#1427), livré en avance sous la pression d'un bug de sélection ; les ViewModels restent en <code>TextFieldValue</code>, reliés au champ par un pont <code>TextFieldValue</code> ↔︎ <code>TextFieldState</code>. La migration complète des ViewModels a été actée pour la refonte (mainteneur, 19/09) : c'est le lot R0c. Le lot « R5 BTF2 » de la v0.3 est donc caduc pour le champ seulement.</p>
 <p>Pile : BOM Compose 2026.09.00 (foundation et ui 1.12.1 ; material3 1.4.0 jusqu'à R0m), navigation3 1.1.2, OkHttp 5.5.0, targetSdk 36. Un bump de BOM rejoue les critères sur appareil ; pour le bump du 14/10 (#1459), c'est R0m qui porte la règle. La refonte se construit sur material3 1.5 (M1, décidé le 01/11) : le lot R0m épingle la 1.5.0-beta02 avant R0a, par-dessus la BOM stable et sans <code>compose-bom-beta</code>, puis passe à la BOM stable qui l'embarque, à sa sortie (#1474).</p>
-<p>Le plan a été cadré en cinq passes croisées (Claude, Sol, Claude Fable, Sol contre le code en lecture seule, relecture de cohérence par Claude Fable), arbitré par le mainteneur les 19 et 22/09, et maquetté (<a href="https://forumhfr.github.io/artifacts/editeur-1417/">maquettes</a>, <a href="https://forumhfr.github.io/artifacts/editeur-lexique/">vocabulaire</a>). La v0.4 a intégré six relectures du 13/10 (fidélité au code, cohérence, plateforme, issues, rendus, livraison), un challenge de Sol contre le code le 14/10 et les décisions déléguées D18 à D32 ; la v0.5 intègre le gate de Claude Fable du 14/10 et les décisions D33 (pas de bande) et D34 ; la v0.6 intègre le gate final d'Astra (NO-GO, trois bloquants et six majeurs, tous retenus : D35 à D43), qui a reçu son GO ; la v0.6.1 en corrige la rédaction (D44 à D46), sans changement de fond ; la v0.6.2 recale les références au code (221 revérifiées à <code>08d5b41c</code>, 16 décalées) et précise ED-81 ; la v0.6.3 reformule C1 (décision du mainteneur) ; la v0.6.4 ajoute le raccourci de la barre d'action, demandé par le mainteneur et proposé (P16) ; la v0.7 reporte les arbitrages du mainteneur du 01/11 (P1 refusée : pas d'interrupteur ; P13 en attente d'une simulation B5 / B1 ; M1 à M4), l'état livré de #1154 et la cible proposée du sélecteur de smileys (P17), avec des références au code revérifiées à <code>04d3039c</code> (79 décalages recalés), puis intègre le challenge de Sol (retour arrière, porte Gm, recommandation d de P18, dépendance R0a → R1a-1) et le gate de Fable (P17 scindée en P17 a et P17 b, S1 et S2 définis, R6 après G3, protocole d'envoi de R0c). Le lexique corrigé (v0.6.3) est la source du vocabulaire.</p>
+<p>Le plan a été cadré en cinq passes croisées (Claude, Sol, Claude Fable, Sol contre le code en lecture seule, relecture de cohérence par Claude Fable), arbitré par le mainteneur les 19 et 22/09, et maquetté (<a href="https://forumhfr.github.io/artifacts/editeur-1417/">maquettes</a>, <a href="https://forumhfr.github.io/artifacts/editeur-lexique/">vocabulaire</a>). La v0.4 a intégré six relectures du 13/10 (fidélité au code, cohérence, plateforme, issues, rendus, livraison), un challenge de Sol contre le code le 14/10 et les décisions déléguées D18 à D32 ; la v0.5 intègre le gate de Claude Fable du 14/10 et les décisions D33 (pas de bande) et D34 ; la v0.6 intègre le gate final d'Astra (NO-GO, trois bloquants et six majeurs, tous retenus : D35 à D43), qui a reçu son GO ; la v0.6.1 en corrige la rédaction (D44 à D46), sans changement de fond ; la v0.6.2 recale les références au code (221 revérifiées à <code>08d5b41c</code>, 16 décalées) et précise ED-81 ; la v0.6.3 reformule C1 (décision du mainteneur) ; la v0.6.4 ajoute le raccourci de la barre d'action, demandé par le mainteneur et proposé (P16) ; la v0.7 reporte les arbitrages du mainteneur du 01/11 (P1 refusée : pas d'interrupteur ; P13 en attente d'une simulation B5 / B1 ; M1 à M4), l'état livré de #1154 et la cible proposée du sélecteur de smileys (P17), avec des références au code revérifiées à <code>04d3039c</code> (79 décalages recalés), puis intègre le challenge de Sol (retour arrière, porte Gm, recommandation d de P18, dépendance R0a → R1a-1) et le gate de Fable (P17 scindée en P17 a et P17 b, S1 et S2 définis, R6 après G3, protocole d'envoi de R0c) ; la v0.7.1 reporte les décisions du mainteneur du 01/11 sur P13 (B5), P17 a (oui), P17 b (champ de recherche unique), P18 (d) et P19 (#1301-ST et R0c chez rf2-smalldev). Le lexique corrigé (v0.6.3) est la source du vocabulaire.</p>
 <p>Deux constats de la relecture contre le code orientent la décision. Les <strong>cartes de citation sont désactivées par défaut</strong> : dans le mode par défaut, la citation est insérée en BBCode éditable dans le champ. Le <strong>bouton armé</strong> n'existe que si la préférence « Confirmation avant publication » (#312) est active, et elle est désactivée par défaut : la protection contre le double post (#1301) ne peut pas reposer sur lui. L'audit #1301 relève en outre que l'éditeur se réarme après un succès, que l'envoi en cours est peu visible et que le POST d'écriture reste rejouable par la couche HTTP.</p>
 <h2 id="adr-décision">Décision</h2>
 <p>La norme détaillée vit dans la <a href="#spec">spec de l'éditeur</a>. Cet ADR en fixe les choix structurants.</p>
 <h3 id="adr-1-chrome-à-hauteur-fixe-champ-élastique">1. Chrome à hauteur fixe, champ élastique</h3>
 <p>Une app bar d'éditeur de 48 dp en haut (retour, titre d'écran, contexte en seconde ligne, icônes d'état, aperçu) et une barre d'action de 56 dp en bas (48 dp en hauteur compacte). Entre les deux, le champ prend toute la hauteur restante, avec le plancher de 160 dp existant. Le titre d'écran (<code>titleLarge</code>), la barre d'outils dans le flux, les bandeaux et le bouton « Afficher l'aperçu » disparaissent de la colonne. Il n'y a pas de bande (décision 3). Aucune de ces hauteurs ne varie pendant la vie de la surface.</p>
 <p>L'app bar ne grandit jamais : quand ses deux lignes ne tiennent pas dans 48 dp à l'échelle effective (fontScale du système × préréglage de lecture de l'app, pire cas 1,3 × L), la seconde ligne est masquée (D20) et le bloc titre reste l'entrée du panneau d'en-tête. La flèche de retour passe par la fermeture du ViewModel, comme le retour système : sauvegarde attendue, inerte pendant l'envoi.</p>
-<p>En <strong>hauteur compacte</strong> — classe de hauteur Material Compact (&lt; 480 dp), calculée sur la configuration et non sur les bounds de fenêtre, que l'IME réduit sous API 30 (D26) —, l'app bar s'efface avec son titre ; les icônes d'état, l'aperçu et l'entrée « En-tête » deviennent des emplacements fixes de la barre d'action, retenus par priorité quand la largeur manque — « Envoyer », puis « En-tête », « Aperçu », icônes d'état ; le reste défile (D38) ; le retour passe par le geste système. La variante compacte (M2, qui remplace P14) ramène la barre d'action à 48 dp et l'espacement à 0, et retire le label visuel du champ, nom accessible « Message » conservé : le champ y garde environ 102 dp sur un S10e en paysage (≈ 86 dp de viewport), en B5 comme en B1. Le seuil est C3, avec trois lignes du vrai champ à fontScale 1 et deux à 1,3 × L, pour une marge de 14 dp seulement ; un échec de la mesure est un arbitrage explicite du mainteneur. En portrait, « En-tête » n'entre jamais dans la barre : cinq icônes et « Envoyer » ne tiennent pas dans 360 dp.</p>
+<p>En <strong>hauteur compacte</strong> — classe de hauteur Material Compact (&lt; 480 dp), calculée sur la configuration et non sur les bounds de fenêtre, que l'IME réduit sous API 30 (D26) —, l'app bar s'efface avec son titre ; les icônes d'état, l'aperçu et l'entrée « En-tête » deviennent des emplacements fixes de la barre d'action, retenus par priorité quand la largeur manque — « Envoyer », puis « En-tête », « Aperçu », icônes d'état ; le reste défile (D38) ; le retour passe par le geste système. La variante compacte (M2, qui remplace P14) ramène la barre d'action à 48 dp et l'espacement à 0, et retire le label visuel du champ, nom accessible « Message » conservé : le champ y garde environ 102 dp sur un S10e en paysage (≈ 86 dp de viewport), en B5 comme dans le repli B1. Le seuil est C3, avec trois lignes du vrai champ à fontScale 1 et deux à 1,3 × L, pour une marge de 14 dp seulement ; un échec de la mesure est un arbitrage explicite du mainteneur. En portrait, « En-tête » n'entre jamais dans la barre : cinq icônes et « Envoyer » ne tiennent pas dans 360 dp.</p>
 <h3 id="adr-2-barre-daction-en-icônes-mode-format">2. Barre d'action en icônes, mode format</h3>
 <p>La barre d'action porte les actions permanentes en icônes seules — format, smileys, image, options — et « Envoyer » en toutes lettres ; un raccourci choisi par l'utilisateur s'y ajoute après smileys (ED-36 à ED-39, lot R6, P16 décidée le 01/11). La pastille d'une teinte choisie en raccourci est dessinée, pas un drawable tinté : exception explicite à l'ADR-015, même taille et même cible, lisibilité capturée sur les deux thèmes en R6. Chaque icône a un nom accessible et une info-bulle à l'appui long (<code>TooltipBox</code>). Les icônes suivent l'<a href="https://forumhfr.github.io/redface2/adr/015-iconographie-boutons-icones">ADR-015</a>.</p>
 <p>Les actions de format ne vivent plus dans un tiroir. L'icône format bascule la barre en <strong>mode format</strong>, à hauteur constante (D18) : l'icône reste en place, sélectionnée, et referme le mode ; smileys, raccourci, image et options cèdent la place à une rangée défilante d'icônes de format, avec un dégradé de bord ; « Envoyer » reste à droite. Le mode ne recouvre rien et ne change aucune hauteur : l'ouvrir ou le fermer ne déplace pas le texte (C6), et le caret ne peut pas passer dessous (C5). Il persiste à la frappe ; il se referme par l'icône format, le retour, l'ouverture d'une feuille, d'un panneau ou de l'aperçu ; l'armement de l'envoi le masque. Couleur et Image ouvrent un <strong>sous-niveau</strong> dans la même barre (teintes ou actions image, plus « Retour ») : aucune popup, donc aucun <code>DropdownMenu</code> focusable qui fermerait le clavier.</p>
@@ -1456,7 +1449,7 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <p>Seul le contenu change : à l'ouverture, sur un geste, à l'aboutissement d'une opération lancée par un geste et à l'arrivée asynchrone d'un état d'ouverture ; jamais sur une modification du texte ou de la sélection. Aucune hauteur ne change ; les cibles font 48 dp, le standard Android, sans dérogation ; aucun mécanisme nouveau n'est créé, l'armement masquant déjà les actions secondaires.</p>
 <p>Aucune géométrie ne dépend d'un état asynchrone, parce que des états arrivent sans geste pendant que l'utilisateur tape : le champ de l'éditeur de post est interactif pendant le chargement du formulaire (<code>PostEditorScreen.kt:174-176</code>, autofocus #555), et l'offre de restauration d'un brouillon (#1415) peut arriver après le premier rendu (<code>PostEditorViewModel.kt:372-404</code>). Une bande qui apparaîtrait alors déplacerait le champ sous les doigts ; une bande permanente (v0.4) le prive de 48 dp, le plus souvent vides.</p>
 <p>Conséquence sur le code : une erreur affichée ne s'efface plus sur une modification du texte ; elle attend « Masquer », le prochain geste qui lance une opération ou la fermeture. C'est un changement pour cinq surfaces — l'éditeur de post, le formulaire de sujet (corps et titre), l'erreur d'upload des deux éditeurs MP et la feuille, même sur un déplacement de sélection ; les éditeurs MP conservaient déjà leurs erreurs d'envoi. La règle est uniforme, et vaut pour l'ancien comme pour le nouveau chrome (R0b).</p>
-<p>Cette disposition (B5) amende la décision arbitrée n° 2 du 22/09 (bande de 32 dp) ; elle est soumise à la validation du mainteneur (P13, encore ouverte : il a demandé le 01/11 une simulation des deux options), avec un repli : bande permanente en portrait, absente en hauteur compacte (B1). Les critères de hauteur suivent l'option retenue : 214 dp en B5, 166 dp en B1 (D42).</p>
+<p>Cette disposition (B5) amende la décision arbitrée n° 2 du 22/09 (bande de 32 dp) ; le mainteneur l'a retenue le 01/11 (P13), après une simulation des deux options (rendus w8d). Le repli B1, bande permanente en portrait, absente en hauteur compacte, reste décrit, mais n'est plus une option ouverte. Le critère de hauteur est celui de B5 : 214 dp (D42).</p>
 <h3 id="adr-3-bis-les-en-têtes-quittent-la-colonne">3 bis. Les en-têtes quittent la colonne</h3>
 <p>Le titre et la sous-catégorie d'un sujet, les destinataires et le sujet d'un nouveau MP quittent la colonne : la seconde ligne de l'app bar les résume, et le bloc titre de l'app bar (48 dp, rôle de bouton, chevron) ouvre un <strong>panneau d'en-tête</strong>. Le panneau est ouvert d'office à l'ouverture d'un nouveau MP sans destinataire et d'un nouveau sujet sans titre. Aucun repli déclenché par le focus ou le clavier (ce serait une seconde animation, C6) ; le corps garde toute sa hauteur (C7 satisfait par construction).</p>
 <p>« Envoyer » a deux gardes (D28) : il est activable dès que le corps n'est pas vide et qu'aucun envoi ni upload n'est en cours ; un appui avec un en-tête incomplet n'arme pas, affiche la cause et l'action « Compléter », qui ouvre le panneau. L'autorisation du POST, dans le ViewModel, reste stricte.</p>
@@ -1476,7 +1469,7 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <li><strong>Hors phase</strong> : R4 (feuille unifiée, P5 b, décidé le 01/11). Le lot de retrait de l'ancien chemin est retiré avec l'interrupteur (P1 refusée) : chaque lot supprime l'ancien code de sa surface.</li>
 </ul>
 <p>Contenu, règles, dépendances, critères de sortie et portes : <a href="#11-lots">spec, § 11</a>.</p>
-<p>Livraison, sans interrupteur. Le mainteneur a décidé le 22/09 une promotion bêta à la fin de la phase complète, pas lot par lot ; la v0.4 a proposé en alternative un interrupteur de génération d'éditeur (P1), que le mainteneur a refusé le 01/11 (« on vire l'ancien éditeur »). Chaque lot d'interface remplace donc l'ancien chrome sur sa surface et supprime le code devenu mort dans la même PR ; ED-140 reste la règle transitoire. R0b et R0c changent le pipeline de l'ancien chrome, qui reste en place jusqu'à R1a-2 : toute promotion bêta pendant la phase, et pas seulement avant R1a-2, prouve l'envoi (protocole, cas 1) sur toutes les surfaces livrées, l'ancien chrome sur le nouveau pipeline compris, et chaque PR de R0c passe le protocole d'envoi sur la surface de son ViewModel. La promotion bêta est la question P18, encore ouverte, qui amende la décision n° 4 du 22/09 sous les options a et d (b la conserve) ; recommandation d, proposée par Sol au challenge du 01/11 : les lots partent en dev un par un, enchaînés sans autre lot de l'éditeur entre eux de R1a-2 à R1b-2b ; la première bêta du nouveau chrome attend G3 (quatre surfaces migrées), sans attendre R0c, R2b ni G4 ; pendant la fenêtre R1a-2 → G3, aucune promotion bêta de <code>dev</code>, et un correctif urgent passe par <code>main</code>. Le chrome mixte n'existe ainsi qu'en dev. L'option a (chaque lot en bêta dès qu'il est prêt, chrome mixte public et annoncé) reste décrite ; la première bêta de R1a-2 y dépendrait de G2. R0m a sa propre porte avant promotion bêta, Gm. Le retour arrière passe par un revert adapté ou un correctif en avant, conservant les migrations, les marqueurs durables et les invariants d'envoi, avec restauration et envoi revérifiés sur une installation déjà mise à jour ; chaque livraison suit la procédure de release (nouveau <code>versionCode</code>, nouveau <code>versionName</code> pour toute bêta, changelog et notes Play) (<a href="#11-bis-stratégie-de-livraison-sans-interrupteur">spec, § 11 bis</a>). Chaque PR de R0c adapte au <code>TextFieldState</code> le chrome en place sur la surface qu'elle migre (D40, amendée).</p>
+<p>Livraison, sans interrupteur. Le mainteneur a décidé le 22/09 une promotion bêta à la fin de la phase complète, pas lot par lot ; la v0.4 a proposé en alternative un interrupteur de génération d'éditeur (P1), que le mainteneur a refusé le 01/11 (« on vire l'ancien éditeur »). Chaque lot d'interface remplace donc l'ancien chrome sur sa surface et supprime le code devenu mort dans la même PR ; ED-140 reste la règle transitoire. R0b et R0c changent le pipeline de l'ancien chrome, qui reste en place jusqu'à R1a-2 : toute promotion bêta pendant la phase, et pas seulement avant R1a-2, prouve l'envoi (protocole, cas 1) sur toutes les surfaces livrées, l'ancien chrome sur le nouveau pipeline compris, et chaque PR de R0c passe le protocole d'envoi sur la surface de son ViewModel. La promotion bêta suit l'option d de P18, proposée par Sol au challenge du 01/11 et décidée par le mainteneur le même jour ; elle amende la décision n° 4 du 22/09 : les lots partent en dev un par un, enchaînés sans autre lot de l'éditeur entre eux de R1a-2 à R1b-2b ; la première bêta du nouveau chrome attend G3 (quatre surfaces migrées), sans attendre R0c, R2b ni G4 ; pendant la fenêtre R1a-2 → G3, aucune promotion bêta de <code>dev</code>, et un correctif urgent passe par <code>main</code>. Le chrome mixte n'existe ainsi qu'en dev. R0m a sa propre porte avant promotion bêta, Gm. Le retour arrière passe par un revert adapté ou un correctif en avant, conservant les migrations, les marqueurs durables et les invariants d'envoi, avec restauration et envoi revérifiés sur une installation déjà mise à jour ; chaque livraison suit la procédure de release (nouveau <code>versionCode</code>, nouveau <code>versionName</code> pour toute bêta, changelog et notes Play) (<a href="#11-bis-stratégie-de-livraison-sans-interrupteur">spec, § 11 bis</a>). Chaque PR de R0c adapte au <code>TextFieldState</code> le chrome en place sur la surface qu'elle migre (D40, amendée).</p>
 <p>Le « Citer la portion sélectionnée » (<a href="https://github.com/ForumHFR/redface2/issues/381">#381</a>) sort de la phase : la sélection concernée est celle du post lu (<code>SelectionContainer</code> de <code>PostRenderer</code>), pas celle du champ.</p>
 <h3 id="adr-8-un-échafaudage-commun-sans-métier">8. Un échafaudage commun, sans métier</h3>
 <p>Un <code>EditorScaffold</code> dans <code>:core:ui/editor</code> porte le chrome et ses emplacements — app bar et icônes d'état, champ, barre d'action et ses modes (événements compris), panneaux — et <strong>jamais</strong> de repository ni de pipeline métier (D32). Chaque écran adapte son état et ses intents aux emplacements. La feuille l'utilisera quand R4 sera traité, hors phase. Le découpage en suit la frontière : R1a-1 livre l'échafaudage et ses composants, R1a-2 les branche. Le choix des composables qui portent le chrome (enveloppes material3 1.5, <code>TopAppBar</code> à 48 dp par exemple, ou composition applicative) est une décision déléguée de R1a-1, prise sur la mesure de R0a (M3, décidé le 01/11) ; M1 fixe la version de la bibliothèque, M3 le choix des composants.</p>
@@ -1501,9 +1494,9 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <li><strong>−</strong> Le mode format coûte un tap pour revenir aux smileys et à l'image ; trois formats sont visibles à la fois à 360 dp au pire cas. R0a le mesure ; l'option E est le repli.</li>
 <li><strong>−</strong> Un résumé d'une ligne impose de réécrire et de mesurer tous les messages d'erreur ; le texte intégral passe derrière « Détails ».</li>
 <li><strong>−</strong> Icônes seules, formats compris : la découvrabilité repose sur l'info-bulle et TalkBack. Info-bulle = première utilisation de <code>TooltipBox</code>, API <code>@ExperimentalMaterial3Api</code> (opt-in déjà présent dans 35 fichiers du projet, dont 31 hors tests, à <code>04d3039c</code>).</li>
-<li><strong>−</strong> La migration des ViewModels vers <code>TextFieldState</code> (R0c) touche environ 4 093 lignes, en quatre PR ; elle ne conditionne que R2b, l'une des branches qui convergent vers G4. Elle peut être préparée chez rf2-smalldev dès R0b mergé, sans merge pendant la fenêtre R1a-2 → R1b-2b.</li>
-<li><strong>−</strong> Pendant la phase, deux générations d'éditeur coexistent, surface par surface : entre R1a-2 et R1b-2b, le chrome est mixte ; avec la recommandation d de P18, il ne l'est qu'en dev, la première bêta du nouveau chrome attendant G3, au prix d'un gel bêta pendant la fenêtre R1a-2 → G3. Chaque lot supprime l'ancien code de sa surface : aucun chemin ancien n'est conservé au-delà de son lot.</li>
-<li><strong>Risques principaux</strong> : la preuve d'interaction du mode format (R0a), une régression d'envoi pendant la phase, un gel bêta pendant la fenêtre R1a-2 → G3 (ou un chrome mixte en bêta sous l'option a de P18). Parades : repli E écrit avant R0a, #1301-ST avant R1a-2, livraison lot par lot sans interrupteur, lots enchaînés, correctif urgent par <code>main</code> et première bêta à G3 (P18 d).</li>
+<li><strong>−</strong> La migration des ViewModels vers <code>TextFieldState</code> (R0c) touche environ 4 093 lignes, en quatre PR ; elle ne conditionne que R2b, l'une des branches qui convergent vers G4. Elle est préparée chez rf2-smalldev (P19) dès R0b mergé, sans merge pendant la fenêtre R1a-2 → R1b-2b.</li>
+<li><strong>−</strong> Pendant la phase, deux générations d'éditeur coexistent, surface par surface : entre R1a-2 et R1b-2b, le chrome est mixte ; avec l'option d de P18, décidée le 01/11, il ne l'est qu'en dev, la première bêta du nouveau chrome attendant G3, au prix d'un gel bêta pendant la fenêtre R1a-2 → G3. Chaque lot supprime l'ancien code de sa surface : aucun chemin ancien n'est conservé au-delà de son lot.</li>
+<li><strong>Risques principaux</strong> : la preuve d'interaction du mode format (R0a), une régression d'envoi pendant la phase, un gel bêta pendant la fenêtre R1a-2 → G3. Parades : repli E écrit avant R0a, #1301-ST avant R1a-2, livraison lot par lot sans interrupteur, lots enchaînés, correctif urgent par <code>main</code> et première bêta à G3 (P18 d).</li>
 <li><strong>Preuves attendues</strong> : les critères C1–C10 de #1417 se vérifient sur appareil, filmés (S10e à 360 dp et Android 10), avec C1 reformulé (décidé le 14/10) et C8 amendé (décidé le 01/11, P9). Roborazzi (<a href="https://forumhfr.github.io/redface2/adr/016-roborazzi-screenshot-testing">ADR-016</a>) sert à l'inspection visuelle des états, pas à la preuve des insets, du clavier ni de la fenêtre Dialog.</li>
 </ul>
 <h2 id="adr-alternatives-considérées">Alternatives considérées</h2>
@@ -1515,7 +1508,7 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <li><strong>Tiroir inséré dans la colonne (option D)</strong> : chaque ouverture et repli déplacent le texte (C6).</li>
 <li><strong>Rangée unique défilante, insertion et formats mêlés, sans mode (option E)</strong> : garde la hauteur et supprime le tap de sortie, au prix de davantage de défilement. <strong>Repli documenté</strong> si R0a montre que le tap de sortie du mode format pénalise smileys et image.</li>
 <li><strong>Bande de 32 dp qui n'apparaît qu'à l'ouverture ou sur un geste (v0.3, puis recommandation du dossier v0.4)</strong> : 16 dp de champ en plus, mais des cibles de 32 dp de haut à côté d'« Envoyer », sous le standard Android de 48 dp, et une apparition asynchrone (offre de brouillon, échec de citation, chargement) qui déplace le champ pendant la frappe. Rejetée (D19).</li>
-<li><strong>Bande permanente de 48 dp (B1, v0.4)</strong> : cibles de 48 dp et aucune géométrie asynchrone, mais +6 dp seulement face à 0.62.0, une bande vide dans l'état dominant, et 34 dp de champ en paysage (C3 faux). <strong>Repli</strong> si le mainteneur refuse les outils masqués : bande en portrait, absente en hauteur compacte (P13).</li>
+<li><strong>Bande permanente de 48 dp (B1, v0.4)</strong> : cibles de 48 dp et aucune géométrie asynchrone, mais +6 dp seulement face à 0.62.0, une bande vide dans l'état dominant, et 34 dp de champ en paysage (C3 faux). Sa variante sans bande en hauteur compacte reste le <strong>repli</strong> décrit, mais n'est plus une option ouverte : le mainteneur a retenu B5 le 01/11 (P13).</li>
 <li><strong>Pas d'app bar en portrait (B7)</strong> : retour visible et contexte perdus, bande vide gardée, rien gagné en paysage. Écartée. Dispositions et budgets : <a href="#33-repli-et-variantes-écartées">spec, § 3.3</a>.</li>
 <li><strong>Bande sur deux lignes pendant une erreur</strong> : 150 dp au champ, sous le plancher, et un repli sous le doigt à la frappe suivante.</li>
 <li><strong>Aperçu plein écran ou réglage « replier le clavier »</strong> : le premier détruit la comparaison source / rendu, le second fige un doute en préférence.</li>
@@ -1523,8 +1516,6 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <li><strong>Refondre les cinq surfaces dans un seul lot</strong> : aucune géométrie n'a tourné sur appareil ; un retour du type « la bande gêne » obligerait à retoucher cinq écrans.</li>
 <li><strong>Inclure la feuille de réponse rapide dans le premier lot</strong> : c'est une autre implémentation (champ, ViewModel, brouillon, confirmation, fenêtre Dialog) ; l'y inclure revient à faire R4 d'abord.</li>
 <li><strong>Interrupteur <code>editorGeneration</code></strong> (refusé par le mainteneur le 01/11, P1) : un interrupteur unique de génération d'éditeur, lu à l'ouverture, avec un stade par canal, pour livrer lot par lot sans imposer le nouveau chrome à la bêta. Coût : deux chemins à maintenir pendant la phase, un lot d'interrupteur et un lot de retrait ; il ne rendait pas <code>dev</code> promouvable à lui seul.</li>
-<li><strong>Livraison en bloc à la fin de la phase, <code>dev</code> gelé et correctifs urgents depuis <code>main</code> ; ou branche d'intégration mergée d'un bloc</strong> : options b et c de la question P18, encore ouverte. La première gèlerait la bêta jusqu'à G4 ; la seconde ferait diverger une branche longue contre les changements de rf2-smalldev dans les mêmes fichiers. Recommandation : d (première bêta du nouveau chrome à G3).</li>
-<li><strong>Chaque lot en bêta dès qu'il est prêt, avec un chrome mixte public</strong> : option a de P18, recommandée jusqu'au challenge de Sol du 01/11 et toujours tenable. Elle montre en public des éditeurs d'aspects différents pendant la fenêtre R1a-2 → R1b-2b ; si elle était choisie, la première bêta de R1a-2 dépendrait de G2.</li>
 </ul>
 <h2 id="adr-annexe--décisions-règles-et-statut">Annexe — Décisions, règles et statut</h2>
 <p>« Arbitré » : décidé par le mainteneur. « Délégué » : pris par délégation (Claude et Sol), validé par le mainteneur le 01/11 (P10). Il n'existe pas de D1, et deux décisions portent le numéro D5 dans le suivi de la nuit du 22 au 23/09 (D5 de 23:48 et D5 de 23:55).</p>
@@ -1553,7 +1544,7 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <tr>
 <td>N° 2 — bande unique de 32 dp, pastilles dont « options modifiées », un événement compacte les pastilles</td>
 <td>22/09</td>
-<td>arbitré, <strong>amendé</strong> par D19 puis D33 (pas de bande), à valider (P13, ouverte) ; « options modifiées » : retirée (P8, 01/11)</td>
+<td>arbitré, <strong>amendé</strong> par D19 puis D33 (pas de bande), amendement validé le 01/11 (P13 : B5) ; « options modifiées » : retirée (P8, 01/11)</td>
 <td>ED-40 à ED-49</td>
 </tr>
 <tr>
@@ -1565,7 +1556,7 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <tr>
 <td>N° 4 — promotion bêta à la fin de la phase ; C9 dérogeable entre lots</td>
 <td>22/09</td>
-<td>arbitré ; interrupteur proposé en alternative (P1), refusé le 01/11 ; à amender par P18 (a ou d), ouverte</td>
+<td>arbitré ; interrupteur proposé en alternative (P1), refusé le 01/11 ; amendé le 01/11 par P18 d (première bêta du nouveau chrome à G3)</td>
 <td>§ 7, § 11, § 11 bis</td>
 </tr>
 <tr>
@@ -1781,7 +1772,7 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <tr>
 <td>D33 — pas de bande : états en icônes de l'app bar, événement dans la barre d'action, tap d'acquittement (B5, règle ED-40 du gate Fable)</td>
 <td>14/10</td>
-<td>délégué ; P13 ouverte ; P14 remplacée par M2 (01/11)</td>
+<td>délégué ; validé le 01/11 (P13 : B5) ; P14 remplacée par M2 (01/11)</td>
 <td>ED-02, ED-05, ED-40, ED-49, ED-167, § 3</td>
 </tr>
 <tr>
@@ -1841,7 +1832,7 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <tr>
 <td>D42 — critères de hauteur paramétrés par P13 ; P14 sur le minimum utilisable (majeur 5)</td>
 <td>14/10</td>
-<td>délégué ; P14 remplacée par M2 (01/11)</td>
+<td>délégué ; P14 remplacée par M2 (01/11) ; B5 retenue le 01/11 (P13) : critère de 214 dp</td>
 <td>§ 3.2, ED-05, § 11.2, G2</td>
 </tr>
 <tr>
@@ -1952,13 +1943,19 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <td>délégué ; P13, P17 a, P17 b, P18 et P19 restent <strong>proposées</strong> au mainteneur</td>
 <td>ED-32, ED-36, ED-37, ED-70, § 11, § 11 bis, § 14 ; annexes B.1, B.3, C, D, E, G, H ; lexique</td>
 </tr>
+<tr>
+<td>v0.7.1 : décisions du mainteneur du 01/11 (« ok pour tout, je suis tes recommandations »). P13 : B5, après la simulation w8d ; B1 reste le repli décrit au § 3.3, mais n'est plus une option ouverte ; R1a-1 n'attend plus que G0 et R0a concluant, ou le repli E ; G2 mesure 214 dp. P17 a : oui, cible d'ED-70 b livrée hors phase chez rf2-smalldev, en S1 puis S2, épingle « Garder ouvert » après mesure ; branche « suite limitée aux deux écarts TalkBack » retirée. P17 b : champ de recherche unique au-dessus de Favoris | Standard, Wiki n'est plus un onglet après S2 ; raccourci « Smileys Wiki » tant que S2 n'est pas livré, « Rechercher un smiley » après. P18 : d, première bêta du nouveau chrome à G3, gel bêta borné de R1a-2 à G3, correctifs urgents par <code>main</code> ; a, b et c écartées, décrites en une phrase dans l'annexe E.3. P19 : #1301-ST chez rf2-smalldev, maintenant, en parallèle de R0m, R0a et R1a-1 ; R0c chez rf2-smalldev après R0b. Statut « Accepté » sans réserve ; plus aucune décision en attente au § 14</td>
+<td>01/11</td>
+<td><strong>mainteneur</strong></td>
+<td>statut, conventions, ED-32, ED-36, ED-37, ED-70, ED-95, § 3.2, § 3.3, § 11, § 11 bis, § 14 ; annexes A, B.1, C, D, E, G, H ; lexique</td>
+</tr>
 </tbody>
 </table>
 </section>
 <div class="doc-sep">Annexes</div>
 <section id="annexes">
 <h1 id="annexes-annexes-du-contrat-de-léditeur">Annexes du contrat de l'éditeur</h1>
-<p>Compléments <strong>non normatifs</strong> du <a href="#spec">contrat de l'éditeur</a> (v0.7, 01/11/2026) : relevés de l'existant, stratégie de test, traçabilité détaillée, registre des risques, stratégie de livraison, questions ouvertes, graphe des lots, sujets hors phase. En cas d'écart, le contrat fait foi.</p>
+<p>Compléments <strong>non normatifs</strong> du <a href="#spec">contrat de l'éditeur</a> (v0.7.1, 01/11/2026) : relevés de l'existant, stratégie de test, traçabilité détaillée, registre des risques, stratégie de livraison, questions ouvertes, graphe des lots, sujets hors phase. En cas d'écart, le contrat fait foi.</p>
 <h2 id="annexes-a-relevé-de-lexistant">A. Relevé de l'existant</h2>
 <p>Relevé à <code>08d5b41c</code> (bêta 0.62.0), rangé par règle du contrat ; références <code>fichier:ligne</code> revérifiées et recalées à <code>04d3039c</code> (bêta 0.65.0, 01/11/2026), le chrome de l'éditeur étant inchangé entre les deux. Les relevés de la feuille smileys livrée par #1154 sont faits à <code>04d3039c</code>. Chaque passage décrit l'existant que la règle remplace ou conserve, avec sa preuve <code>fichier:ligne</code>.</p>
 <h3 id="annexes-citations--12">Citations (§ 1.2)</h3>
@@ -2054,7 +2051,7 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <li>Plafond <code>max(320 dp, 0,62 × screenHeightDp)</code> (<code>SmileyPickerSheet.kt:723-730</code>), appliqué à la grille (<code>:508</code>) et au détail (<code>SmileyDetailContent.kt:62</code>), pas à la feuille : poignée, onglets et recherche s'y ajoutent, et le bord haut bouge entre onglets et entre grille et détail.</li>
 <li>Tap = insertion puis <code>dismiss(INSERTION)</code>, dans les quatre hôtes (tableau ci-dessous).</li>
 </ul>
-<p><strong>Défauts relevés</strong> par au moins deux des trois analyses du 01/11 (synthèse : <code>redface2-work/reports/1417-v07/smileys-synthese.md</code>, hors dépôt) ; P17 a recommande de les corriger tout de suite, comme suite de #1154 :</p>
+<p><strong>Défauts relevés</strong> par au moins deux des trois analyses du 01/11 (synthèse : <code>redface2-work/reports/1417-v07/smileys-synthese.md</code>, hors dépôt) ; ils sont corrigés tout de suite, comme suite de #1154 (décidé le 01/11, P17 a) :</p>
 <table>
 <thead>
 <tr>
@@ -2410,7 +2407,7 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <td>R6</td>
 <td>Sélection vide et inversée ; teinte directe, barre restée en mode normal ; « Smiley perso » avec et sans sélection, caret résultant, Ctrl+Z ; disponibilité par surface (tableau d'ED-36) ; masquage et désactivation (ED-34, ED-35, ED-40) ; réglage persistant, « Aucun » par défaut ; intentions d'ouverture de la feuille smileys, consultation depuis « Smileys » et recherche depuis le raccourci, consommées, ou créées si R6 est le premier lot qui touche <code>open()</code> (ED-70)</td>
 <td>Barre avec et sans raccourci ; ouverture en intention recherche : focus de la recherche Wiki à l'ouverture, rendu au champ à la fermeture</td>
-<td>Barre avec raccourci (un format, une teinte sur les deux thèmes, une action image, l'entrée recherche effectivement livrée — « Smileys Wiki », ou champ unique après S2 selon P17 b —, « Smiley perso »), réglage</td>
+<td>Barre avec raccourci (un format, une teinte sur les deux thèmes, une action image, l'entrée recherche effectivement livrée — « Smileys Wiki », ou « Rechercher un smiley » et le champ unique après S2 (P17 b) —, « Smiley perso »), réglage</td>
 <td>C5, C6 (retours de la feuille Wiki, du dialogue URL, du sélecteur), C10, TalkBack, sur chaque surface migrée</td>
 <td>Barre sans raccourci identique à R1a-1</td>
 </tr>
@@ -2794,7 +2791,7 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 </tr>
 <tr>
 <td>Smileys Favoris / Standard / Wiki, page de détail, gestes favoris (0.65.0, #1154)</td>
-<td>Feuille conservée telle que livrée (ED-70 a) ; cible proposée hors phase (ED-70 b, P17 a et P17 b)</td>
+<td>Feuille conservée telle que livrée (ED-70 a) ; cible livrée hors phase (ED-70 b, décidé le 01/11, P17 a et P17 b)</td>
 <td>ED-70, ED-80, ED-85, ED-86</td>
 <td>R1a-2</td>
 <td>Roborazzi + device</td>
@@ -3010,7 +3007,7 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <td>tests JVM</td>
 </tr>
 <tr>
-<td>(accès nouveau, R6) Formats, teintes, actions image, onglet Wiki (champ de recherche unique après la livraison de S2, si P17 b le retient), <code>[:</code> <code>]</code></td>
+<td>(accès nouveau, R6) Formats, teintes, actions image, onglet Wiki (champ de recherche unique après la livraison de S2, P17 b), <code>[:</code> <code>]</code></td>
 <td>Aussi en un tap par le raccourci de la barre d'action</td>
 <td>ED-36 à ED-39</td>
 <td>R6</td>
@@ -3053,7 +3050,7 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <td><code>dev</code> non promouvable pendant la phase, correctifs bloqués</td>
 <td>certain sans parade</td>
 <td>élevé</td>
-<td>Livraison sans interrupteur (P1 refusée le 01/11) : les promotions bêta continuent avant R1a-2, avec preuve de l'ancien chrome sur le nouveau pipeline ; gel borné à la fenêtre R1a-2 → G3, correctif urgent par <code>main</code> (P18 d, recommandée, encore ouverte ; K17)</td>
+<td>Livraison sans interrupteur (P1 refusée le 01/11) : les promotions bêta continuent avant R1a-2, avec preuve de l'ancien chrome sur le nouveau pipeline ; gel borné à la fenêtre R1a-2 → G3, correctif urgent par <code>main</code> (P18 d, décidé le 01/11 ; K17)</td>
 <td>Une promotion repoussée à cause de #1417</td>
 </tr>
 <tr>
@@ -3069,7 +3066,7 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <td>Tap d'acquittement après erreur jugé coûteux ; offre ↺ peu découverte (icône seule)</td>
 <td>moyen</td>
 <td>moyen</td>
-<td>Annonce <code>Polite</code> de ↺ ; observation pendant G2 ; repli B1 (P13)</td>
+<td>Annonce <code>Polite</code> de ↺ ; observation pendant G2 ; repli B1 décrit au § 3.3 du contrat, qui n'est plus une option ouverte (B5 retenue le 01/11, P13)</td>
 <td>Retours « je ne retrouve pas les smileys » ou brouillons ignorés</td>
 </tr>
 <tr>
@@ -3117,7 +3114,7 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <td>Retours testeurs non attribuables (deux générations d'éditeur)</td>
 <td>moyen</td>
 <td>faible</td>
-<td>Changelog explicite : surfaces migrées par version ; chrome mixte limité à dev (P18 d), annoncé en bêta sous l'option a ; version dans le rapport de bug</td>
+<td>Changelog explicite : surfaces migrées par version ; chrome mixte limité à dev (P18 d) ; version dans le rapport de bug</td>
 <td>Retour non attribuable</td>
 </tr>
 <tr>
@@ -3162,23 +3159,23 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 </tr>
 <tr>
 <td>K17</td>
-<td>Gel bêta pendant la fenêtre R1a-2 → G3 (P18 d) : aucune promotion bêta de <code>dev</code>, correctifs urgents par <code>main</code> ; le chrome mixte, surfaces migrées et non migrées côte à côte, n'existe qu'en dev. Sous l'option a, le risque redevient un chrome mixte en bêta pendant la fenêtre R1a-2 → R1b-2b</td>
+<td>Gel bêta pendant la fenêtre R1a-2 → G3 (P18 d) : aucune promotion bêta de <code>dev</code>, correctifs urgents par <code>main</code> ; le chrome mixte, surfaces migrées et non migrées côte à côte, n'existe qu'en dev</td>
 <td>moyen</td>
 <td>moyen</td>
-<td>Enchaînement des lots R1a-2, R1b-1, R1b-2a et R1b-2b, sans autre lot de l'éditeur entre eux (aucun merge de R0c dans la fenêtre) ; première bêta à G3, sans attendre R0c, R2b ni G4 ; correctif urgent par <code>main</code>. Sous l'option a : go explicite du mainteneur à chaque promotion bêta dans la fenêtre, chrome mixte annoncé dans les notes de version</td>
+<td>Enchaînement des lots R1a-2, R1b-1, R1b-2a et R1b-2b, sans autre lot de l'éditeur entre eux (aucun merge de R0c dans la fenêtre) ; première bêta à G3, sans attendre R0c, R2b ni G4 ; correctif urgent par <code>main</code></td>
 <td>Fenêtre R1a-2 → G3 qui s'allonge (lot de R1b en attente de revue ou de l'appareil) ; correctif urgent demandé pendant la fenêtre ; retours testeurs dev sur l'écart entre surfaces</td>
 </tr>
 </tbody>
 </table>
 <h2 id="annexes-e-stratégie-de-livraison">E. Stratégie de livraison</h2>
-<p>Détail du <a href="#11-bis-stratégie-de-livraison-sans-interrupteur">contrat, § 11 bis</a>, qui fait foi. Le mainteneur a refusé l'interrupteur le 01/11 (P1 : « on vire l'ancien éditeur ») ; la stratégie suit la recommandation d de P18, encore ouverte ; l'option a reste décrite (E.3).</p>
+<p>Détail du <a href="#11-bis-stratégie-de-livraison-sans-interrupteur">contrat, § 11 bis</a>, qui fait foi. Le mainteneur a refusé l'interrupteur le 01/11 (P1 : « on vire l'ancien éditeur ») ; la stratégie est l'option d de P18, décidée le 01/11 (E.3).</p>
 <h3 id="annexes-e1-remplacement-par-surface">E.1 Remplacement par surface</h3>
 <p>Chaque lot d'interface (R1a-2, R1b-1, R1b-2a, R1b-2b) remplace l'ancien chrome sur sa surface et supprime, dans la même PR, le code devenu mort : composables de contenu anciens et leurs tests. Les ViewModels et leurs tests restent uniques. ED-140 reste la règle transitoire : aucun lot ne retire un parcours avant le lot qui le remplace. La feuille garde son chrome (R4 hors phase, P5 b) et reçoit #1301-ST et R0b.</p>
 <h3 id="annexes-e2-pipeline-et-promotions-bêta">E.2 Pipeline et promotions bêta</h3>
 <p>R0b et R0c changent le pipeline de l'ancien chrome, qui reste en place jusqu'à R1a-2 : #1301-ST, R0b et R0c sont de qualité bêta au merge. Toute promotion bêta pendant la phase, et pas seulement avant R1a-2, prouve le protocole d'envoi, cas 1 (<a href="#annexes-b3-protocole-denvoi-sur-appareil">annexe B.3</a>), sur toutes les surfaces livrées, chacune dans le chrome qu'elle porte : avant R1a-2, l'ancien chrome sur le nouveau pipeline ; ensuite, les surfaces migrées et celles qui ne le sont pas encore, la feuille comprise. Avec R0b, l'ancien chrome affiche le texte intégral des erreurs, et la persistance d'ED-131 part en bêta, annoncée dans les notes de version (P15). Chaque PR de R0c adapte au <code>TextFieldState</code> le chrome en place sur la surface qu'elle migre, ancien ou nouveau ; ses tests de mise en page restent verts, et elle passe le protocole d'envoi (B.3) sur cette surface (critères de sortie de R0c, B.1).</p>
 <h3 id="annexes-e3-gel-bêta-de-r1a-2-à-g3-p18-d">E.3 Gel bêta de R1a-2 à G3 (P18 d)</h3>
 <p>Les lots partent en dev un par un. La première bêta du nouveau chrome attend G3 (quatre éditeurs plein écran migrés), sans attendre R0c, R2b ni G4. Pendant la fenêtre R1a-2 → G3, aucune promotion bêta de <code>dev</code> n'a lieu, et un correctif urgent passe par <code>main</code>. Les surfaces migrées portent le nouveau chrome et les autres l'ancien : ce chrome mixte n'existe qu'en dev (risque K17, devenu le gel bêta pendant la fenêtre). Les lots R1a-2, R1b-1, R1b-2a et R1b-2b s'enchaînent sans autre lot de l'éditeur entre eux, ce qui borne le gel ; aucune PR de R0c n'est mergée dans la fenêtre R1a-2 → R1b-2b. La première bêta du nouveau chrome demande le go explicite du mainteneur. G3 ne remplace pas les preuves des changements de pipeline ultérieurs (PR de R0c, R2b), que chaque lot apporte par ses critères de sortie.</p>
-<p><strong>Option a, si elle était retenue.</strong> Chaque lot part en dev et en bêta dès qu'il est prêt, et la première bêta de R1a-2 dépend de G2. Pendant la fenêtre R1a-2 → R1b-2b, le chrome mixte est public : une promotion bêta avec chrome mixte demande le go explicite du mainteneur, et le chrome mixte est annoncé dans les notes de version. L'option b gèlerait la bêta jusqu'à G4 ; l'option c ferait diverger une branche longue contre les changements de rf2-smalldev dans les mêmes fichiers.</p>
+<p><strong>Options écartées (P18, décidé le 01/11).</strong> L'option a, chaque lot en bêta dès qu'il est prêt avec un chrome mixte public pendant la fenêtre R1a-2 → R1b-2b, est écartée, comme b, qui gelait la bêta jusqu'à G4, et c, dont la branche longue aurait divergé des changements de rf2-smalldev dans les mêmes fichiers.</p>
 <h3 id="annexes-e4-retour-arrière">E.4 Retour arrière</h3>
 <p>Un lot = une PR, sauf R0c (une PR par ViewModel), mais un revert brut du lot fautif ne suffit pas toujours : après R0c, un ancien chrome qui consommait <code>TextFieldValue</code> demande une adaptation au nouveau contrat ; retirer le stockage des tentatives de #1301-ST retirerait ses migrations ou ferait relire un envoi incertain comme un brouillon ordinaire (ED-170). Un défaut se retire donc par un revert adapté ou un correctif en avant, conservant les migrations, les marqueurs durables et les invariants d'envoi ; la restauration et l'envoi sont revérifiés sur une installation déjà mise à jour. La livraison suit la procédure de release : nouveau <code>versionCode</code> alloué par la CD, nouveau <code>versionName</code> pour toute bêta, entrée de changelog et notes Play fraîches ; le workflow refuse une bêta sans nouveau <code>versionName</code>, sauf s'il ne peut pas lire la version précédente : il avertit alors et continue (<code>.github/workflows/release.yml:180</code>). Le nouveau <code>versionName</code> reste donc une obligation de livraison, vérifiée à la main. Le workflow refuse aussi toute release sans entrée de changelog ni notes Play (<code>.github/workflows/release.yml:143</code>, <code>:262</code>). Aucun stade ni préférence ne masque un chrome.</p>
 <h3 id="annexes-e5-précondition-et-repli-de-bibliothèque-r0m">E.5 Précondition et repli de bibliothèque (R0m)</h3>
@@ -3214,7 +3211,7 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <p>Dépendances entre lots et portes du <a href="#11-lots">contrat, § 11</a> ; le tableau du § 11.1 fait foi.</p>
 <pre class="mermaid">flowchart LR
   ST[&quot;1301-ST&lt;br/&gt;(rf2-smalldev, P19)&quot;] --&gt; R0b[&quot;R0b&lt;br/&gt;contrat d&#39;erreur&quot;]
-  R0b --&gt; R0c[&quot;R0c&lt;br/&gt;pipeline texte&quot;]
+  R0b --&gt; R0c[&quot;R0c&lt;br/&gt;pipeline texte&lt;br/&gt;(rf2-smalldev, P19)&quot;]
   R0m[&quot;R0m&lt;br/&gt;material3 1.5&quot;] --&gt; R0a[&quot;R0a&lt;br/&gt;preuve appareil&quot;]
   R0m --&gt; Gm{&quot;Gm&lt;br/&gt;bêta de R0m&quot;}
   G0{&quot;G0&quot;} --&gt; R1a1[&quot;R1a-1&lt;br/&gt;composants&quot;]
@@ -3241,7 +3238,7 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
   R2b --&gt; G4
   G3 --&gt; R6[&quot;R6&lt;br/&gt;raccourci&quot;]
   R6 --&gt; G4</pre>
-<p><strong>Convergence vers G4.</strong> Faute de durées estimées, aucun chemin critique unique n'est désigné. G4 est la convergence de plusieurs branches : G3 (R0m → R0a → R1a-1 → G1 → R1a-2 → G2 → R1b-1, R1b-2a et R1b-2b ; G1 attend aussi #1301-ST et R0b), R2a (après R1a-2), R2b (après R1a-2 et R0c, donc après #1301-ST et R0b) et R6 (après G3). R1a-1 attend R0a concluant et P13 tranchée, en plus de G0 ; seule la préparation des composants qui ne dépendent pas de ces choix est permise avant, sans figer leur géométrie. R0b démarre dès que #1301-ST est mergé. R0c, en quatre PR, une par ViewModel, peut être préparé par rf2-smalldev dès R0b mergé, en coordination sur les hôtes ; aucune PR de R0c n'est mergée pendant la fenêtre R1a-2 → R1b-2b. R2a et R2b ne dépendent pas l'un de l'autre. R1b-1, R1b-2a et R1b-2b sont produits en parallèle après G2 et mergés en série. Gm ne conditionne que la promotion bêta de R0m. R4, hors phase, ne conditionne plus G4 ; ses liens en pointillés restent ses préconditions.</p>
+<p><strong>Convergence vers G4.</strong> Faute de durées estimées, aucun chemin critique unique n'est désigné. G4 est la convergence de plusieurs branches : G3 (R0m → R0a → R1a-1 → G1 → R1a-2 → G2 → R1b-1, R1b-2a et R1b-2b ; G1 attend aussi #1301-ST et R0b), R2a (après R1a-2), R2b (après R1a-2 et R0c, donc après #1301-ST et R0b) et R6 (après G3). R1a-1 attend R0a concluant, ou le repli E, en plus de G0 ; seule la préparation des composants qui ne dépendent pas de ce choix est permise avant, sans figer leur géométrie. #1301-ST part maintenant chez rf2-smalldev, en parallèle de R0m, R0a et R1a-1 (P19), et R0b démarre dès qu'il est mergé. R0c, en quatre PR, une par ViewModel, est préparé par rf2-smalldev dès R0b mergé (P19), en coordination sur les hôtes ; aucune PR de R0c n'est mergée pendant la fenêtre R1a-2 → R1b-2b. R2a et R2b ne dépendent pas l'un de l'autre. R1b-1, R1b-2a et R1b-2b sont produits en parallèle après G2 et mergés en série. Gm ne conditionne que la promotion bêta de R0m. R4, hors phase, ne conditionne plus G4 ; ses liens en pointillés restent ses préconditions.</p>
 <p><strong>Préconditions de R4, quand il sera traité, hors phase.</strong> La fenêtre Dialog est mesurée en R0a (titre, cartes, champ et barre dans environ 280 dp ; propriétaire explicite des insets) ; aucune preuve JVM ne vaut pour elle. Restent à reprendre : <code>ModalBottomSheet</code> de material3 1.5 (#1196), ton dans la feuille (#1441), plafond de 15 lignes (#949), course flush/seed (#951), retour de nicko (DEV #2802392).</p>
 <h2 id="annexes-h-sujets-hors-phase">H. Sujets hors phase</h2>
 <p>Liste du <a href="#13-hors-périmètre-de-cette-phase">contrat, § 1.3</a>, dont le principe fait foi. Dans la milestone « Vue · Éditeur 2 » restent #1154 et #1431 (décision du 22/09) et #381 (action de suivi).</p>
@@ -3263,7 +3260,7 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 </tr>
 <tr>
 <td>Cible du sélecteur de smileys (ED-70 b)</td>
-<td>proposée hors phase, chez rf2-smalldev, S1 puis S2 (P17 a ; présentation de Wiki : P17 b) ; S1 porte aussi les deux écarts TalkBack d'ED-90 et d'ED-95, exigés à G4 sauf dérogation bornée</td>
+<td>hors phase, chez rf2-smalldev, S1 puis S2 (décidé le 01/11, P17 a ; Wiki en champ de recherche unique après S2, P17 b) ; S1 porte aussi les deux écarts TalkBack d'ED-90 et d'ED-95, exigés à G4 sauf dérogation bornée</td>
 </tr>
 <tr>
 <td>#1022, #190, #472, #489, #796 (loupe, médias, Markdown, super-h, <code>commitContent</code>)</td>
