@@ -259,19 +259,19 @@ footer a{color:var(--accent)}
  backdrop-filter:none;-webkit-backdrop-filter:none}
 @media (max-width:520px){.artnav #vpick label{display:none}}
 </style>
-<div id="vpick"><label for="vpick-sel">Version</label><select id="vpick-sel" autocomplete="off" onchange="location.href=this.value"><option value="./" selected>v10 — courante</option><option value="v9/">v9</option><option value="v8/">v8</option><option value="v7/">v7</option><option value="v6/">v6</option><option value="v5/">v5</option><option value="v4/">v4</option><option value="v3/">v3</option><option value="v2/">v2</option><option value="v1/">v1</option></select><script>addEventListener("pageshow",function(){var s=document.getElementById("vpick-sel");if(s)for(var i=0;i<s.options.length;i++)s.options[i].selected=s.options[i].defaultSelected;});</script></div>
+<div id="vpick"><label for="vpick-sel">Version</label><select id="vpick-sel" autocomplete="off" onchange="location.href=this.value"><option value="./" selected>v11 — courante</option><option value="v10/">v10</option><option value="v9/">v9</option><option value="v8/">v8</option><option value="v7/">v7</option><option value="v6/">v6</option><option value="v5/">v5</option><option value="v4/">v4</option><option value="v3/">v3</option><option value="v2/">v2</option><option value="v1/">v1</option></select><script>addEventListener("pageshow",function(){var s=document.getElementById("vpick-sel");if(s)for(var i=0;i<s.options.length;i++)s.options[i].selected=s.options[i].defaultSelected;});</script></div>
 </nav>
 
 
 <header class="top">
-  <div class="eyebrow">Redface 2 · #1417 · vocabulaire de travail · v0.6.4 (28/10/2026)</div>
+  <div class="eyebrow">Redface 2 · #1417 · vocabulaire de travail · v0.7 (01/11/2026)</div>
   <h1>Anatomie de l'éditeur</h1>
   <p class="lede">Les mots qu'on emploie pour parler de la refonte, chacun rattaché à une zone
   précise de l'écran. Objectif&nbsp;: que « barre d'action », « icône d'état » ou « feuille »
   désignent la même chose des deux côtés de la conversation. Les maquettes qui utilisent ce
   vocabulaire sont dans <a href="../editeur-1417/">Vue Éditeur #1417</a>&nbsp;; la norme est le
-  <a href="../editeur-spec/">contrat de l'éditeur (spec v0.6.4)</a> et
-  l'<a href="../editeur-spec/#adr">ADR-019</a>.</p>
+  <a href="../editeur-spec/">contrat de l'éditeur (spec v0.7)</a> et
+  l'<a href="../editeur-spec/#adr">ADR-020</a>.</p>
 </header>
 
 <!-- ═══════════════════════════════════════════════════════════════════════ -->
@@ -350,8 +350,9 @@ footer a{color:var(--accent)}
           l'en-tête.</p>
           <p>En <b>hauteur compacte</b> (écran de moins de 480 dp de haut, clavier exclu&nbsp;:
           paysage téléphone), elle s'efface&nbsp;; les icônes d'état, l'aperçu et l'en-tête passent
-          dans la barre d'action. Si la largeur manque (écran scindé), ils y entrent par
-          priorité — Envoyer, en-tête, aperçu, icônes d'état — et le reste passe dans une rangée
+          dans la barre d'action, qui descend à <span class="dp">48 dp</span>, et le champ perd son
+          label visible (son nom TalkBack, « Message », reste). Si la largeur manque (écran scindé),
+          ils y entrent par priorité — Envoyer, en-tête, aperçu, icônes d'état — et le reste passe dans une rangée
           qui défile.</p>
           <p>Règle&nbsp;: rien de ce qui s'y trouve ne dépend de ce que tu es en train de taper.</p>
         </div>
@@ -361,7 +362,8 @@ footer a{color:var(--accent)}
         <div class="mini"><i class="m-app"></i><i class="m-body"></i><i class="m-bar hl"></i></div>
         <div class="txt">
           <h4>Barre d'action</h4><span class="en">action bar · bottom bar</span>
-          <p>La barre du bas, <span class="dp">56 dp</span>, épinglée juste au-dessus du clavier.
+          <p>La barre du bas, <span class="dp">56 dp</span> (<span class="dp">48 dp</span> en hauteur
+          compacte), épinglée juste au-dessus du clavier.
           Elle porte les actions qui <b>agissent sur le message en cours</b>&nbsp;: format, smileys,
           image, options, envoyer.</p>
           <p>Aujourd'hui elle existe déjà, avec « Options », « Smileys » et « Envoyer » en toutes
@@ -377,11 +379,13 @@ footer a{color:var(--accent)}
         <div class="txt">
           <h4>Raccourci</h4><span class="en">shortcut</span>
           <p>Une action choisie dans les réglages — un format, une teinte, une action image, les
-          smileys Wiki, ou « Smiley perso » qui insère <span class="mono">[: ]</span> — posée avec
+          smileys Wiki (« Rechercher un smiley » une fois S2 livré, si P17 b retient le champ de
+          recherche unique), ou « Smiley perso » qui insère <span class="mono">[: ]</span> — posée avec
           <b>sa propre icône</b> dans la barre d'action, juste après smileys, pour la déclencher
           <b>en un tap</b> au lieu de passer par le mode format ou un sous-niveau.</p>
-          <p>Un seul, aucun par défaut. Proposé (P16). À ne pas confondre avec les smileys favoris
-          (#1154, hors phase), une section de la feuille smileys.</p>
+          <p>Un seul, aucun par défaut. Décidé le 01/11 (P16), lot R6. À ne pas confondre avec les
+          smileys favoris (#1154, terminé hors phase), une section de l'onglet Favoris de la feuille
+          smileys.</p>
         </div>
       </div>
 
@@ -523,6 +527,9 @@ footer a{color:var(--accent)}
           bas.</p>
           <p>La <b>réponse rapide</b> est aussi une feuille. Une feuille M3 vit dans <b>sa propre
           fenêtre</b>, avec ses propres insets — c'est ce qui la sépare des quatre éditeurs.</p>
+          <p>La <b>feuille smileys</b> a trois onglets (Favoris, Standard, Wiki) et, à l'appui long
+          sur un smiley, une page de détail dans la même feuille&nbsp;: le retour ramène d'abord à la
+          grille, puis ferme.</p>
         </div>
       </div>
 
@@ -796,8 +803,8 @@ footer a{color:var(--accent)}
           n'a aujourd'hui ni format ni smileys, et son bouton <b>⤢ escalade</b> vers l'éditeur
           plein écran en emportant le texte et les citations — pas la sélection.</p>
           <p>Elle est <b>opt-in</b> par préréglage de surface depuis #951&nbsp;: l'éditeur plein écran
-          est le défaut. Sa refonte (lot R4) est proposée hors phase&nbsp;; elle reçoit quand même les
-          correctifs d'envoi et d'erreurs.</p>
+          est le défaut. Sa refonte (lot R4) est hors phase (décidé le 01/11)&nbsp;; elle reçoit quand
+          même les correctifs d'envoi et d'erreurs.</p>
         </div>
       </div>
 
@@ -864,24 +871,25 @@ footer a{color:var(--accent)}
           saut ni double animation à l'ouverture du clavier ou au retour d'une feuille ». C1 a été
           reformulé le 14/10&nbsp;: la poignée tirée au bord étend la sélection à chaque mouvement du
           doigt, comme dans un champ Android natif&nbsp;; le défilement continu sous un doigt immobile
-          n'est pas exigé. Proposé au mainteneur&nbsp;: C8 amendé (les cartes de citation ne survivent
+          n'est pas exigé. Décidé le 01/11&nbsp;: C8 amendé (les cartes de citation ne survivent
           pas à la mort du process).</p>
         </div>
       </div>
 
       <div class="term">
-        <div class="mini" style="justify-content:center; align-items:center; background:var(--paper-2); font-family:'IBM Plex Mono',monospace; font-size:8px; color:var(--accent)">R0a‑R5</div>
+        <div class="mini" style="justify-content:center; align-items:center; background:var(--paper-2); font-family:'IBM Plex Mono',monospace; font-size:8px; color:var(--accent)">R0m‑R6</div>
         <div class="txt">
           <h4>Lots</h4><span class="en">—</span>
           <p>Le découpage livrable de la refonte. <b>Préalables</b>&nbsp;: <b>#1301-ST</b> (invariants
-          d'envoi), <b>R0a</b> (preuve sur appareil du mode format), <b>R0b</b> (contrat d'erreur),
-          <b>R0c</b> (pipeline texte des ViewModels), <b>R0d</b> (interrupteur, s'il est retenu).
+          d'envoi), <b>R0m</b> (material3 1.5, avant R0a), <b>R0a</b> (preuve sur appareil du mode
+          format), <b>R0b</b> (contrat d'erreur), <b>R0c</b> (pipeline texte des ViewModels).
           <b>Interface</b>&nbsp;: <b>R1a-1</b> (composants), <b>R1a-2</b> (éditeur de post),
           <b>R1b-1</b> (sujet), <b>R1b-2a</b> (réponse MP), <b>R1b-2b</b> (nouveau MP), <b>R2a</b>
-          (panneau citations), <b>R2b</b> (aperçu en partage). <b>Hors phase ou
-          conditionnels</b>&nbsp;: <b>R4</b> (feuille), <b>R5</b> (retrait de l'ancien éditeur). R3
-          (citer une portion) est sorti (#381).</p>
-          <p>Un lot = une PR, une build dev, un retour terrain.</p>
+          (panneau citations), <b>R2b</b> (aperçu en partage), <b>R6</b> (raccourci). <b>Hors
+          phase</b>&nbsp;: <b>R4</b> (feuille). R3 (citer une portion) est sorti (#381). Pas
+          d'interrupteur ni de lot de retrait (refusés le 01/11)&nbsp;: chaque lot remplace l'ancien
+          éditeur sur sa surface et en supprime le code.</p>
+          <p>Un lot = une PR, une build dev, un retour terrain, sauf R0c (une PR par ViewModel).</p>
         </div>
       </div>
 
@@ -893,9 +901,12 @@ footer a{color:var(--accent)}
           <h4>Canaux</h4><span class="en">dev · bêta · prod</span>
           <p><b>dev</b> = build à chaque lot, GitHub et F-Droid, pour les testeurs du topic DEV.
           <b>bêta</b> = ce qui a survécu aux retours, Play en test ouvert. La promotion de dev vers
-          bêta demande un go explicite. <b>Décidé</b>&nbsp;: promotion en bêta à la fin de la phase.
-          <b>Proposé</b>&nbsp;: un interrupteur d'éditeur par canal, pour livrer lot par lot sans
-          imposer le nouvel éditeur à la bêta.</p>
+          bêta demande un go explicite. Pas d'interrupteur d'éditeur par canal (refusé le 01/11).
+          <b>Proposé</b> (P18 d)&nbsp;: les lots partent en dev un par un&nbsp;; la première bêta du
+          nouvel éditeur attend que les quatre éditeurs plein écran soient migrés (G3). De R1a-2 à
+          G3, aucune bêta ne part de dev, un correctif urgent passe par main, et l'éditeur mixte
+          d'une surface à l'autre ne se voit qu'en dev. Le lot R0m, à part, a sa propre porte avant
+          la bêta (Gm).</p>
         </div>
       </div>
 
@@ -959,7 +970,7 @@ footer a{color:var(--accent)}
       <p>Le <b>bouton armé</b> change de libellé et attend un second tap, sans rien bloquer.</p>
       <p>La <b>confirmation</b> de la réponse rapide (« Publier la réponse&nbsp;? ») est un vrai
       dialogue modal. Les deux n'existent que si la préférence « Confirmation avant publication »
-      est active, ou illisible. Les unifier sur le bouton armé fait partie de R4, proposé hors
+      est active, ou illisible. Les unifier sur le bouton armé fait partie de R4, hors
       phase.</p>
     </div>
 
@@ -974,8 +985,8 @@ footer a{color:var(--accent)}
 
 <footer>
   Vocabulaire de travail pour <a href="https://github.com/ForumHFR/redface2/issues/1417">#1417</a>,
-  v0.6.4 du 28/10/2026, établi sur la bêta 0.62.0 (dev 08d5b41c). Les termes en anglais
-  sont ceux qui servent à retrouver la chose dans le code ou dans la doc Material 3. Maquettes qui
+  v0.7 du 01/11/2026, établi sur la bêta 0.62.0 (08d5b41c), revérifié sur la bêta 0.65.0
+  (04d3039c). Les termes en anglais sont ceux qui servent à retrouver la chose dans le code ou dans la doc Material 3. Maquettes qui
   l'appliquent&nbsp;: <a href="../editeur-1417/">Vue Éditeur #1417</a>.
 </footer>
 
