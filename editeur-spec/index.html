@@ -99,16 +99,16 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
  backdrop-filter:none;-webkit-backdrop-filter:none}
 @media (max-width:520px){.artnav #vpick label{display:none}}
 </style>
-<div id="vpick"><label for="vpick-sel">Version</label><select id="vpick-sel" autocomplete="off" onchange="location.href=this.value"><option value="./" selected>v8 — courante</option><option value="v7/">v7</option><option value="v6/">v6</option><option value="v5/">v5</option><option value="v4/">v4</option><option value="v3/">v3</option><option value="v2/">v2</option><option value="v1/">v1</option></select><script>addEventListener("pageshow",function(){var s=document.getElementById("vpick-sel");if(s)for(var i=0;i<s.options.length;i++)s.options[i].selected=s.options[i].defaultSelected;});</script></div>
+<div id="vpick"><label for="vpick-sel">Version</label><select id="vpick-sel" autocomplete="off" onchange="location.href=this.value"><option value="./" selected>v9 — courante</option><option value="v8/">v8</option><option value="v7/">v7</option><option value="v6/">v6</option><option value="v5/">v5</option><option value="v4/">v4</option><option value="v3/">v3</option><option value="v2/">v2</option><option value="v1/">v1</option></select><script>addEventListener("pageshow",function(){var s=document.getElementById("vpick-sel");if(s)for(var i=0;i<s.options.length;i++)s.options[i].selected=s.options[i].defaultSelected;});</script></div>
 </nav>
-<p class="state">v0.7.1 (01/11/2026) — Accepté</p><p class="parts">Rendu de <code>docs/specs/editor.md</code> (<a href="#spec">contrat</a>), <code>docs/adr/020-refonte-vue-editeur.md</code> (<a href="#adr">ADR-020</a>) et <code>docs/specs/editor-annexes.md</code> (<a href="#annexes">annexes</a>), prêts à entrer dans le dépôt. Les renvois entre ces trois documents pointent vers cette page ; les autres liens vers la doc du projet visent forumhfr.github.io/redface2.</p>
+<p class="state">Accepté · v0.7.2 (07/11/2026)</p><p class="parts">Rendu de <code>docs/specs/editor.md</code> (<a href="#spec">contrat</a>), <code>docs/adr/020-refonte-vue-editeur.md</code> (<a href="#adr">ADR-020</a>) et <code>docs/specs/editor-annexes.md</code> (<a href="#annexes">annexes</a>), prêts à entrer dans le dépôt. Les renvois entre ces trois documents pointent vers cette page ; les autres liens vers la doc du projet visent forumhfr.github.io/redface2.</p>
 <section id="spec">
 <h1 id="contrat-de-léditeur">Contrat de l'éditeur</h1>
-<p>Le contrat normatif de la vue Éditeur refondue : géométrie, zones, règles de comportement, erreurs, invariants d'envoi, accessibilité, découpage et livraison. Refonte <a href="https://github.com/ForumHFR/redface2/issues/1417">#1417</a>, décisions structurantes dans l'<a href="#adr">ADR-020</a>. Version <strong>v0.7.1 (01/11/2026)</strong> — passes jusqu'à la v0.6.4 : Opus 5.5, Sol 6.1, Fable, Astra ; v0.7 : passes 1 et 2 (Opus) ; challenge de Sol : À REVOIR (0 / 6 / 3), intégré en passe 3 ; gate de Fable : OK avec amendements (0 / 6 / 6), intégrés en passe 4 ; gate d'Astra : GO avec conditions (01/11), conditions inscrites : cartes en hauteur compacte avant G1 (ED-140, critère J), C8 sur les trois surfaces R1b avant G3, trois corrections mineures reportées. La v0.6 (D35 à D43) a reçu le GO d'Astra ; la v0.6.1 corrige la rédaction (D44 à D46), sans changement de fond ; la v0.6.2 recale les références au code et précise ED-81 pour l'éditeur ouvert depuis la feuille ; la v0.6.3 reformule C1, décision du mainteneur ; la v0.6.4 ajoute le raccourci de la barre d'action (ED-36 à ED-39), demande du mainteneur, proposé (P16) ; challenge de Sol, gate de Fable et GO avec conditions d'Astra intégrés ; la v0.7 reporte les arbitrages du mainteneur du 01/11 (P1 refusée : pas d'interrupteur ; P13 en attente d'une simulation B5 / B1 ; M1 à M4) et l'état livré de #1154 ; la v0.7.1 reporte les dernières décisions du mainteneur du 01/11 : P13 (B5), P17 a (cible du sélecteur de smileys), P17 b (champ de recherche unique), P18 (d) et P19 (#1301-ST chez rf2-smalldev).</p>
+<p>Le contrat normatif de la vue Éditeur refondue : géométrie, zones, règles de comportement, erreurs, invariants d'envoi, accessibilité, découpage et livraison. Refonte <a href="https://github.com/ForumHFR/redface2/issues/1417">#1417</a>, décisions structurantes dans l'<a href="#adr">ADR-020</a>. Version <strong>v0.7.1 (01/11/2026)</strong> — passes jusqu'à la v0.6.4 : Opus 5.5, Sol 6.1, Fable, Astra ; v0.7 : passes 1 et 2 (Opus) ; challenge de Sol : À REVOIR (0 / 6 / 3), intégré en passe 3 ; gate de Fable : OK avec amendements (0 / 6 / 6), intégrés en passe 4 ; gate d'Astra : GO avec conditions (01/11), conditions inscrites : cartes en hauteur compacte avant G1 (ED-140, critère J), C8 sur les trois surfaces R1b avant G3, trois corrections mineures reportées. La v0.6 (D35 à D43) a reçu le GO d'Astra ; la v0.6.1 corrige la rédaction (D44 à D46), sans changement de fond ; la v0.6.2 recale les références au code et précise ED-81 pour l'éditeur ouvert depuis la feuille ; la v0.6.3 reformule C1, décision du mainteneur ; la v0.6.4 ajoute le raccourci de la barre d'action (ED-36 à ED-39), demande du mainteneur, proposé (P16) ; challenge de Sol, gate de Fable et GO avec conditions d'Astra intégrés ; la v0.7 reporte les arbitrages du mainteneur du 01/11 (P1 refusée : pas d'interrupteur ; P13 en attente d'une simulation B5 / B1 ; M1 à M4) et l'état livré de #1154 ; la v0.7.1 reporte les dernières décisions du mainteneur du 01/11 : P13 (B5), P17 a (cible du sélecteur de smileys), P17 b (champ de recherche unique), P18 (d) et P19 (#1301-ST chez rf2-smalldev). La v0.7.2 (07/11/2026 ; relue par Fable, recommandations challengées par Sol) reporte ce que les lots livrés ou en cours ont établi : R0b (#1539, #1551 ; ED-130 à ED-133, ED-162, ED-170, présentation de l'événement en un seul contrôle), la demande de citation durable (#1553), la sonde Ctrl+Z et la règle « Restaurer » de R0c (#1512 ; ED-37, ED-89), et les premières mesures de R0a (#1455 ; critères I et J : ED-05, ED-81, ED-140).</p>
 <blockquote>
-<p><strong>Statut : Accepté</strong> (01/11/2026, v0.7.1 ; v0.3 du 23/09/2026). Rien de ce contrat n'est implémenté. Relevé de l'existant sur <code>dev</code> à <code>08d5b41c</code> (bêta 0.62.0) ; références au code revérifiées à <code>04d3039c</code> (01/11/2026), bêta 0.65.0, dont le chrome d'éditeur est inchangé depuis 0.62.0 ; la feuille smileys est relevée à <code>04d3039c</code> (ED-70). Les hauteurs en dp sont des <strong>cibles calculées</strong>, non mesurées : elles ne valent critère qu'après confirmation filmée sur appareil. Tous les choix réservés au mainteneur ont été arbitrés le 01/11 ; aucun n'est en attente (<a href="#14-décisions-en-attente">§ 14</a>). Maquettes non contractuelles : <a href="https://forumhfr.github.io/artifacts/editeur-1417/">Vue Éditeur #1417</a>.</p>
+<p><strong>Statut : Accepté</strong> (01/11/2026, v0.7.1 ; v0.3 du 23/09/2026) ; v0.7.2 du 07/11/2026. Le nouveau chrome n'est pas implémenté ; R0m, R0b (dev 0.69.4) et une partie des règles transverses (ED-130, ED-131, ED-133, ED-162, ED-170, et ED-132 pour sa part R0b) sont livrés dans l'ancien chrome ; la durabilité de la demande de citation et la demande dormante relèvent de #1553, en cours. Relevé de l'existant sur <code>dev</code> à <code>08d5b41c</code> (bêta 0.62.0) ; références au code revérifiées à <code>04d3039c</code> (01/11/2026), bêta 0.65.0, dont le chrome d'éditeur est inchangé depuis 0.62.0 ; la feuille smileys est relevée à <code>04d3039c</code> (ED-70). Les hauteurs en dp sont des <strong>cibles calculées</strong>, non mesurées : elles ne valent critère qu'après confirmation filmée sur appareil. Tous les choix réservés au mainteneur ont été arbitrés le 01/11 ; les mesures de R0a en ont ouvert quatre : P20, P22 et P23 sont décidés le 07/11 après challenge de Sol, P21 attend la mesure sur S10e (<a href="#14-décisions-en-attente">§ 14</a>). Maquettes non contractuelles : <a href="https://forumhfr.github.io/artifacts/editeur-1417/">Vue Éditeur #1417</a>.</p>
 </blockquote>
-<p><strong>Conventions.</strong> Une règle normative porte un identifiant <code>ED-nn</code> ; elle est opposable en revue. Dans une règle, le présent de l'indicatif vaut obligation ; « doit » insiste sur une obligation ; « peut » ne marque qu'une permission. Une description de l'existant est introduite par « Relevé : » (ou rangée dans une colonne « Relevé ») : elle n'est pas normative et cite sa preuve (<code>fichier:ligne</code> à <code>04d3039c</code>). Une décision du mainteneur est citée « décidé le 01/11 (Pn) » ; toutes sont arbitrées, aucune règle ne reste « proposée » (§ 14). Les arbitrages <code>M1</code> à <code>M4</code> portent sur material3 1.5 (§ 14). Les critères d'acceptation <code>C1</code>–<code>C10</code> sont ceux de #1417 (<a href="#9-critères-dacceptation">§ 9</a>). Les lots sont définis au <a href="#11-lots">§ 11</a>. Les signes ❝ ↺ ✕ ⤢ désignent une icône (drawable selon l'ADR-015), pas le glyphe rendu. « 1,3 × L » : pire cas d'échelle de police (glossaire). Les compléments non normatifs sont dans les <a href="#annexes">annexes</a>.</p>
+<p><strong>Conventions.</strong> Une règle normative porte un identifiant <code>ED-nn</code> ; elle est opposable en revue. Dans une règle, le présent de l'indicatif vaut obligation ; « doit » insiste sur une obligation ; « peut » ne marque qu'une permission. Une description de l'existant est introduite par « Relevé : » (ou rangée dans une colonne « Relevé ») : elle n'est pas normative et cite sa preuve (<code>fichier:ligne</code> à <code>04d3039c</code>). Une décision du mainteneur est citée « décidé le 01/11 (Pn) » ; aucune règle ne reste « proposée » ; les arbitrages ouverts par les mesures ne changent aucune règle tant qu'ils ne sont pas tranchés (§ 14 ; P21 reste ouvert). Une mesure est citée avec son rapport et marquée « prétest » tant qu'elle ne vient pas de l'appareil de référence. Les arbitrages <code>M1</code> à <code>M4</code> portent sur material3 1.5 (§ 14). Les critères d'acceptation <code>C1</code>–<code>C10</code> sont ceux de #1417 (<a href="#9-critères-dacceptation">§ 9</a>). Les lots sont définis au <a href="#11-lots">§ 11</a>. Les signes ❝ ↺ ✕ ⤢ désignent une icône (drawable selon l'ADR-015), pas le glyphe rendu. « 1,3 × L » : pire cas d'échelle de police (glossaire). Les compléments non normatifs sont dans les <a href="#annexes">annexes</a>.</p>
 <p><strong>Pile.</strong> BOM Compose 2026.09.00 (foundation et ui 1.12.1 ; material3 1.4.0 jusqu'à R0m), navigation3 1.1.2 (<code>gradle/libs.versions.toml:16-17</code>, bump #1459 du 14/10/2026), OkHttp 5.5.0, targetSdk 36. Les comportements de BTF2 cités ici (suivi du caret, historique d'annulation, <code>IME_FLAG_NO_FULLSCREEN</code>) ont été relevés sur foundation 1.12.0 ; ils sont à reconfirmer en 1.12.1. Un bump de BOM rejoue les critères appareil : la règle s'applique au bump du 14/10, et c'est R0m qui la porte (§ 11.2), avant toute mesure de R0a. La refonte se construit sur material3 1.5 (M1, décidé le 01/11) : le lot R0m épingle material3 1.5.0-beta02 par-dessus la BOM stable 2026.09.00, sans <code>compose-bom-beta</code>, qui tirerait foundation 1.13 ; foundation et ui restent en 1.12.1. R0m passe ensuite à la BOM stable qui embarque material3 1.5, attendue entre le 18/11 et le 02/12 (#1474).</p>
 <h2 id="1-périmètre">1. Périmètre</h2>
 <h3 id="11-les-cinq-surfaces">1.1 Les cinq surfaces</h3>
@@ -258,7 +258,14 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <p><strong>ED-02</strong> — Seuls ont une hauteur propre : l'app bar (48 dp ; 0 en hauteur compacte), les espacements de colonne (12 dp ; 0 en hauteur compacte) et la barre d'action (56 dp ; 48 dp en hauteur compacte, ED-05 ; dans tous ses modes, événement compris). Il n'y a pas de bande (ED-40). Le champ prend tout le reste, sans descendre sous le plancher de 160 dp tant que la fenêtre utile le permet : hors hauteur compacte, il ne cède sous 160 dp que dans une fenêtre utile de moins de 276 dp (48 + 12 + 56 + 160). Aucune de ces hauteurs ne varie pendant la vie de la surface ; rien ne recouvre le champ.</p>
 <p><strong>ED-03</strong> — Aucun élément ne s'intercale entre l'app bar et le champ. Les en-têtes (titre et sous-catégorie d'un sujet, destinataires et sujet d'un MP) vivent dans un panneau d'en-tête (ED-101, ED-113). Seule dérogation : les cartes de citation jusqu'à R2a (ED-140).</p>
 <p><strong>ED-04</strong> — Insets. L'inset bas est unique, <code>WindowInsets.navigationBars.union(WindowInsets.ime)</code>, appliqué une seule fois à la barre d'action (#447, #1404). Les insets horizontaux — barre de navigation latérale en paysage, découpe d'écran — s'appliquent à <strong>toute</strong> la colonne, par <code>WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal)</code>. Le mode de fenêtre reste <code>adjustNothing</code> sur API 30+ et <code>adjustResize</code> sous API 30 (#1404). La refonte ne modifie pas la mécanique de l'inset bas. Relevé : <a href="#annexes-ed-04">annexe A</a>.</p>
-<p><strong>ED-05</strong> — Hauteur compacte. C'est la classe de hauteur Material Compact (&lt; 480 dp), calculée sur la taille d'écran de la <strong>configuration</strong>, jamais sur les bounds de fenêtre : sous API 30, en <code>adjustResize</code>, ceux-ci rétrécissent avec l'IME (740 − 386 = 354 dp, donc Compact dès l'ouverture du clavier). Elle est réévaluée à chaque changement de configuration (rotation, multi-fenêtre, pliable) ; ouvrir ou fermer le clavier ne la change jamais. Relevé : <a href="#annexes-ed-05">annexe A</a>. En hauteur compacte, l'app bar s'efface avec son titre ; les icônes d'état (ED-40), l'aperçu et, pour les surfaces à panneau d'en-tête (sujet, nouveau MP), l'entrée « En-tête » deviennent des emplacements fixes de la barre d'action (ED-25) ; le retour passe par le geste système. Le plancher de 160 dp ne s'applique pas. La <strong>variante compacte</strong> s'applique (M2, qui remplace P14) : la barre d'action mesure 48 dp, l'espacement de colonne tombe à 0, et le label <strong>visuel</strong> du champ est retiré, son nom accessible « Message » étant conservé (ED-12, ED-94). Dans cette barre de 48 dp, la pilule « Envoyer » et les icônes gardent une cible de 48 dp, mais leur forme visible fait 40 dp, centrée, ce qui laisse 4 dp d'écart visuel avec le cadre du champ sans rien lui prendre (rendu w8, défaut W8-1 : à espacement 0, une pilule visible de 48 dp touche le cadre). Calcul sur un S10e en paysage (clavier supposé de 186 dp, fenêtre utile de 150 dp) : 150 − 48 − 0 = <strong>≈ 102 dp</strong> de champ, soit <strong>≈ 86 dp</strong> de viewport, en B5 comme dans le repli B1, à mesurer en R0a (critère J). Le seuil est C3 sur tout le domaine couvert, avec au moins 3 lignes du vrai champ visibles à fontScale 1 et 2 lignes à 1,3 × L. La marge n'est que de 14 dp, avec un clavier de 186 dp supposé, non mesuré. Un échec du critère J est un arbitrage explicite du mainteneur, jamais une limite actée d'office ; un échec de C3 bloque l'intégration.</p>
+<p><strong>ED-05</strong> — Hauteur compacte. C'est la classe de hauteur Material Compact (&lt; 480 dp), calculée sur les <strong>métriques courantes de la fenêtre de l'activité</strong>, diminuées des insets verticaux stables (P20, ci-dessous), jamais sur une hauteur qui suit l'IME : sous API 30, en <code>adjustResize</code>, la zone de contenu rétrécit avec l'IME (740 − 386 = 354 dp, donc Compact dès l'ouverture du clavier). Jusqu'à la v0.7.1, la règle disait « taille d'écran de la configuration » ; c'est encore ce que mesure le banc de R0a. Elle est réévaluée à chaque changement de configuration (rotation, multi-fenêtre, pliable) ; ouvrir ou fermer le clavier ne la change jamais. Relevé : <a href="#annexes-ed-05">annexe A</a>. En hauteur compacte, l'app bar s'efface avec son titre ; les icônes d'état (ED-40), l'aperçu et, pour les surfaces à panneau d'en-tête (sujet, nouveau MP), l'entrée « En-tête » deviennent des emplacements fixes de la barre d'action (ED-25) ; le retour passe par le geste système. Le plancher de 160 dp ne s'applique pas. La <strong>variante compacte</strong> s'applique (M2, qui remplace P14) : la barre d'action mesure 48 dp, l'espacement de colonne tombe à 0, et le label <strong>visuel</strong> du champ est retiré, son nom accessible « Message » étant conservé (ED-12, ED-94). Dans cette barre de 48 dp, la pilule « Envoyer » et les icônes gardent une cible de 48 dp, mais leur forme visible fait 40 dp, centrée, ce qui laisse 4 dp d'écart visuel avec le cadre du champ sans rien lui prendre (rendu w8, défaut W8-1 : à espacement 0, une pilule visible de 48 dp touche le cadre). Calcul sur un S10e en paysage (clavier supposé de 186 dp, fenêtre utile de 150 dp) : 150 − 48 − 0 = <strong>≈ 102 dp</strong> de champ, soit <strong>≈ 86 dp</strong> de viewport, en B5 comme dans le repli B1, à mesurer en R0a (critère J). Le seuil est C3 sur tout le domaine couvert, avec au moins 3 lignes du vrai champ visibles à fontScale 1 et 2 lignes à 1,3 × L. La marge n'est que de 14 dp, avec un clavier de 186 dp supposé, non mesuré. Un échec du critère J est un arbitrage explicite du mainteneur, jamais une limite actée d'office ; un échec de C3 bloque l'intégration.</p>
+<p>Prétests de R0a sur émulateur (07/11, profil S10e 360 × 760 dp, Gboard ; <code>reports/1455-r0a-avd-p2/</code>, <code>reports/1455-r0a-avd29-p3/</code>), la référence restant la séance sur S10e :</p>
+<ul>
+<li><strong>Paysage.</strong> Le clavier réel mesure 235 à 239 dp, pas 186 : avec l'IME, le champ dispose de <strong>53 dp</strong> (viewport 37 dp, <strong>une ligne</strong>), sous les minima de C3 (88 dp à fontScale 1, 82 dp à 1,3 × L), cartes ou non. Le calcul de ≈ 102 dp ci-dessus ne tient pas sur ce profil. Sur API 29, navigation à trois boutons sur le côté, le même profil laisse 88 dp, 3 lignes à fontScale 1 et 2 à 1,3 × L : le résultat dépend du clavier et du mode de navigation, d'où la mesure sur S10e.</li>
+<li><strong>Seuil sur Android 15.</strong> Pour une application qui cible l'API 35 ou plus (targetSdk 36), <code>Configuration.screenHeightDp</code> compte les barres système sur un appareil en API 35 ou plus, pas en dessous (changement de comportement d'Android 15 pour les applications qui ciblent l'API 35, selon la documentation Android ; mesuré ici sur un seul APK, targetSdk 36) : la classe compacte bascule à <strong>480 dp</strong> de fenêtre réelle sur API 35, contre <strong>≈ 534 dp</strong> sur API 34 (même APK). Entre ces deux hauteurs, une fenêtre normale sur API 35 ne laisse avec l'IME que <strong>36 à 55 dp</strong> de champ, <strong>aucune ligne entière</strong> ; à hauteur égale, la variante compacte en donnerait ≈ 103 dp et 3 lignes. Sur API 29, la classe bascule entre 551 et 552 dp réels (<code>screenHeightDp</code> = hauteur − 72), sans trou : juste au-dessus, le champ garde 115 dp et 3 lignes.</li>
+<li><strong><code>adjustResize</code> (API 29).</strong> La classe vient bien de la configuration et ne change pas à l'ouverture du clavier (24 bascules, une émission par run) : la règle ci-dessus tient sous API 30.</li>
+</ul>
+<p><strong>Source de la classe (décidé le 07/11, P20, après challenge de Sol).</strong> La configuration ne convient pas : elle exclut les barres système jusqu'à l'API 34 et les inclut à partir de l'API 35 (applications qui ciblent l'API 35), et Android la déconseille pour calculer une disposition. La classe de hauteur se calcule sur les <strong>métriques courantes de la fenêtre de l'activité</strong> (<code>WindowMetricsCalculator .computeCurrentWindowMetrics</code>, AndroidX), diminuées des insets <strong>verticaux</strong> stables (barres système et découpe, jamais l'IME) ; une barre de navigation latérale réduit la largeur, pas la hauteur ; en multi-fenêtre, c'est la fenêtre courante qui compte, pas l'écran. Seuil inchangé : &lt; 480 dp. R1a-1 porte l'adaptateur et vérifie sur API 29 (<code>adjustResize</code>), 34 et 35, en vraie multi-fenêtre, que la classe ne change pas à l'ouverture du clavier. Le paysage avec IME (P21) attend la mesure sur S10e ; C3 exige la ligne courante et le caret visibles, les minima de 3 et 2 lignes viennent de la variante compacte et du critère J : une seule ligne n'est donc pas, à elle seule, un échec de C3.</p>
 <h3 id="32-budget-cible-360--740-dp-clavier-ouvert-fenêtre-utile-330-dp">3.2 Budget cible (360 × 740 dp, clavier ouvert, fenêtre utile 330 dp)</h3>
 <table>
 <thead>
@@ -432,7 +439,7 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <p><strong>ED-26</strong> — Clavier. Aucun raccourci clavier de format n'est ajouté (Ctrl+B, I, U n'existent pas aujourd'hui). La barre, ses deux modes et ses sous-niveaux sont atteignables au clavier (Tab, ED-93) ; une action d'insertion activée au clavier rend aussitôt le focus au champ ; une action qui ouvre une feuille, un dialogue ou le sélecteur d'images le rend à leur fermeture, selon ED-80.</p>
 <p><strong>ED-27</strong> — Repli. Si R0a montre que le tap de sortie du mode format pénalise smileys et image, le repli est l'option E : une rangée unique défilante qui regroupe insertion (smileys, image, options) et formats, « Envoyer » fixe, sans mode.</p>
 <h3 id="44-barre-daction">4.4 Barre d'action</h3>
-<p><strong>ED-30</strong> — En mode normal, la barre porte, de gauche à droite : [en hauteur compacte, emplacements fixes retenus d'ED-25], format, smileys, [raccourci, ED-36], image, options, espace, « Envoyer ». Les actions secondaires sont des icônes seules ; « Envoyer » garde son libellé et n'est jamais déclassé. Si la largeur manque (ED-25), les emplacements déclassés puis les actions du mode forment une rangée défilante à dégradé de bord, avant « Envoyer ». En mode format : [emplacements retenus], format (sélectionné), rangée de formats précédée des emplacements déclassés, « Envoyer ». Pendant un événement : [emplacements retenus], icône, résumé et action de l'événement, « Envoyer » (ED-40) ; la largeur du résumé (ED-133) prime, et un emplacement qui ne tient plus est masqué jusqu'à l'acquittement, comme les outils. En hauteur compacte, la barre mesure 48 dp dans tous ces modes (ED-05) ; ses cibles gardent 48 dp.</p>
+<p><strong>ED-30</strong> — En mode normal, la barre porte, de gauche à droite : [en hauteur compacte, emplacements fixes retenus d'ED-25], format, smileys, [raccourci, ED-36], image, options, espace, « Envoyer ». Les actions secondaires sont des icônes seules ; « Envoyer » garde son libellé et n'est jamais déclassé. Si la largeur manque (ED-25), les emplacements déclassés puis les actions du mode forment une rangée défilante à dégradé de bord, avant « Envoyer ». En mode format : [emplacements retenus], format (sélectionné), rangée de formats précédée des emplacements déclassés, « Envoyer ». Pendant un événement : [emplacements retenus], l'événement — un seul contrôle actionnable, icône et résumé (ED-40, ED-45) —, « Envoyer » ; la largeur du résumé (ED-133) prime, et un emplacement qui ne tient plus est masqué jusqu'à l'acquittement, comme les outils. En hauteur compacte, la barre mesure 48 dp dans tous ces modes (ED-05) ; ses cibles gardent 48 dp.</p>
 <p><strong>ED-31</strong> — L'action image bascule la barre dans le <strong>sous-niveau Image</strong>, qui porte toutes les actions image existantes de la surface et « Retour » : « Uploader une image » (quatre éditeurs plein écran), « Insérer par URL » (éditeur de post, formulaire de sujet ; ouvre le dialogue existant), « Baliser la sélection en [img] » (éditeurs MP, action <code>BbcodeAction.Image</code> actuelle). Aucune popup ; aucune action existante n'est perdue. Une action du sous-niveau le referme. Ces trois libellés sont nouveaux.</p>
 <p>Le lanceur du sélecteur d'images (<code>rememberEditorImagePicker</code>) est déclaré à la racine de l'écran, jamais dans un contenu temporaire de la barre : il serait désenregistré à sa disparition et le résultat perdu. Le brouillon est écrit immédiatement (<code>persistDraftNow()</code>) après chaque <code>[img]</code> inséré. Une sélection reçue avant que le compte actif soit connu (recréation, flux d'authentification asynchrone) est mise en attente jusqu'à sa résolution, pas ignorée. Relevé : <a href="#annexes-ed-31">annexe A</a>.</p>
 <p><strong>ED-32</strong> — Chaque icône a un nom accessible, repris par son info-bulle à l'appui long (<code>TooltipBox</code> + <code>PlainTooltip</code>) :</p>
@@ -484,7 +491,7 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <p>Relevé : <a href="#annexes-ed-34">annexe A</a>.</p>
 <p><strong>ED-35</strong> — « Envoyer » a <strong>deux gardes distinctes</strong> :</p>
 <ul>
-<li><strong>Activable</strong> (dans les quatre éditeurs plein écran) quand le formulaire de la surface est chargé, qu'aucun envoi ni upload n'est en cours et que le corps n'est pas vide (ou, en réponse, qu'au moins une carte de citation existe). Un appui alors que l'en-tête est incomplet n'arme pas et n'envoie pas : il affiche l'événement « Titre manquant », « Sous-catégorie manquante », « Aucun destinataire » ou « Sujet manquant » avec l'action « Compléter », qui ouvre le panneau d'en-tête (ED-45).</li>
+<li><strong>Activable</strong> (dans les quatre éditeurs plein écran) quand le formulaire de la surface est chargé, qu'aucun envoi ni upload n'est en cours et que le corps n'est pas vide (ou, en réponse, qu'au moins une carte de citation existe). Un appui alors que l'en-tête est incomplet n'arme pas et n'envoie pas : il affiche l'événement « Titre manquant », « Sous-catégorie manquante », « Aucun destinataire » ou « Sujet manquant » avec l'action « Compléter », qui ouvre le panneau d'en-tête (ED-45). Tant qu'une demande de citation inline est en attente (ED-132), « Envoyer » n'est pas activable, sans changer de libellé : la garde est indépendante de l'erreur affichée, et l'acquittement de celle-ci ne la lève pas. La règle vaut aussi pour la feuille de réponse rapide (livré par R0b, #1551).</li>
 <li><strong>Autorisation du POST</strong> (<code>canSubmit</code> du ViewModel) : elle reste stricte et exige en plus l'en-tête complet et le contexte complet (sujet, page, sous-catégorie valide, compte connecté). Aucun POST ne part sans elle.</li>
 </ul>
 <p>Pendant un upload, les actions qui modifient le texte — format, smileys, image, raccourci — sont désactivées. Le chargement du formulaire n'est pas un événement (D34) : outils et champ restent actifs, seule la barre de 2 dp d'ED-46 le signale, et « Envoyer » n'est activable qu'une fois le formulaire chargé. Côté MP, l'exigence « aucun upload en cours » est un <strong>changement voulu</strong>, porté dès #1301-ST (ED-172) : aujourd'hui un MP peut partir pendant un upload, sans le <code>[img]</code> en cours.</p>
@@ -547,11 +554,12 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <li>« Smiley perso » insère <code>[:</code> et <code>]</code>, sans espace ajouté, et place le caret entre les deux ; avec une sélection, il l'entoure (un nom sélectionné devient <code>[:nom]</code>) et place le caret après le <code>]</code>, sans sélection.</li>
 </ul>
 <p>Ctrl+Z annule l'insertion comme une insertion de format (en une fois à partir de R0c). Le texte inséré et le caret qui en résulte sont visibles (C5, ED-14).</p>
+<p>Sonde de R0c (#1512, <code>reports/1512-ctrlz-probe.md</code>, foundation 1.12.1, Robolectric) : une écriture programmatique du <code>TextFieldState</code> (<code>edit {}</code>, <code>setTextAndPlaceCursorAtEnd</code>, <code>clearText</code>) forme <strong>sa propre entrée</strong> d'annulation, que <code>undoState.undo()</code> défait en une fois, et l'historique antérieur survit. Le modèle permet donc la règle ci-dessus sans historique maison. La sonde laisse ouverts l'annulation séparée de la frappe et de l'insertion (S4) et l'enrobage en un pas (S5) ; ils sont prouvés par <code>undo()</code> dans les tests de R0c PR 1 (<code>TextFieldStateBbcodeIntegrationTest</code>). Conséquence : sans précaution, l'<strong>hydratation</strong> du champ (formulaire chargé, brouillon relu, graine d'ED-89) deviendrait elle aussi annulable, et Ctrl+Z viderait le champ ou rendrait l'état d'avant le chargement. L'hydratation automatique initiale (formulaire chargé, tentative restaurée) vide donc l'historique (<code>undoState.clearHistory()</code>), sauf si une frappe a précédé l'arrivée tardive du formulaire, dont l'historique reste annulable (R0c PR 1 et PR 3, non mergées ; le post suit avec R0c PR 2) ; « Restaurer » (ED-89) et les insertions restent annulables en un pas. Sous Robolectric, Ctrl+Z envoyé par <code>performKeyInput</code> n'est pas reconnu comme raccourci (il insère un « z ») : le raccourci matériel se prouve sur appareil, les tests JVM appellent <code>undo()</code>.</p>
 <p><strong>ED-38</strong> — Place. Le raccourci est une action secondaire du mode normal, placée après « Smileys » (ED-30) ; il n'a pas de rang parmi les emplacements fixes d'ED-25. Il suit les règles des actions secondaires : il cède la place à la rangée de formats (ED-21) ; il est masqué pendant l'armement (ED-34) et pendant un événement (ED-40) ; il est désactivé quand son action l'est, par exemple pendant un upload (ED-35) ; il est atteignable au clavier (ED-26, ED-93). Sur une surface qui ne porte pas son action (tableau d'ED-36), il est absent.</p>
 <p>Visibilité. Dans une fenêtre qui n'est pas compacte en hauteur, à partir de 360 dp de large et à toute échelle, le raccourci est entièrement visible au repos : troisième action, il finit à 144 dp sur les 213 dp que laissent les gouttières (32 dp) et « Envoyer » à 1,3 × L (≈ 115 dp). Quand la largeur manque, Options puis Image passent dans la rangée défilante d'ED-30 : c'est le prix assumé du raccourci. En hauteur compacte, paysage ou fenêtre basse (360 × 470 dp, par exemple), les emplacements fixes retenus passent d'abord (ED-25) et le raccourci vient après format et smileys, dans une rangée défilante d'au moins 48 dp : il y est toujours atteignable, au besoin en la faisant défiler. En paysage S10e, cinq actions et quatre emplacements fixes font ≈ 579 dp plus les insets horizontaux, mesurés en R0a (critère O). La promesse d'un seul tap ne vaut que là où R0a l'a mesurée.</p>
 <p><strong>ED-39</strong> — Réglage. Le raccourci se choisit dans les réglages, rubrique « Édition et publication » : le catalogue d'ED-36, avec ses icônes, et « Aucun ». Une entrée limitée à certaines surfaces le dit en texte secondaire (« éditeurs MP » ; « post et sujet »). Le choix vaut pour toutes les surfaces qui portent la barre d'action (§ 7) ; il est stocké sur l'appareil, comme les autres réglages d'édition. L'éditeur n'ouvre pas ce réglage (§ 1.3), et l'appui long sur le raccourci garde l'info-bulle (ED-32).</p>
 <h3 id="45-icônes-détat-et-événement-de-barre">4.5 Icônes d'état et événement de barre</h3>
-<p><strong>ED-40</strong> — Il n'y a pas de bande. Les états durables (↺ brouillon, ❝ N, N destinataires, sondage) sont des icônes à badge de l'app bar, deux au plus, cibles 48 dp, badge tonal (jamais <code>error</code>) qui ne recouvre pas le glyphe ; en hauteur compacte, ce sont des emplacements fixes de la barre d'action (ED-25). L'événement — un seul, rang d'ED-43 — occupe la barre d'action à la place des actions secondaires, comme l'armement : icône, résumé, une action (Détails / Compléter / Masquer) à au moins 8 dp d'« Envoyer », qui reste à droite ; la barre de progression de 2 dp (ED-46) y est dessinée. Une opération en cours (Envoi…, Image n/N…) masque des outils déjà désactivés (ED-35, ED-169) : aucun coût. Une erreur, une fin ou une information persistent (ED-44) et masquent les outils jusqu'à un tap d'acquittement — Masquer, Compléter, ou Détails (consulter le détail vaut acquittement : l'événement est retiré au retour) ; un événement de rang inférieur réapparaît alors. Aucune hauteur ne change jamais ; ED-41 (jamais sur le texte) et ED-95 (nœud live permanent, dans la barre) tiennent. Champ : 214 dp à 360 × 740 clavier ouvert, ≈ 102 dp en paysage S10e, avec une barre d'action de 48 dp (variante compacte, ED-05 ; à mesurer, R0a).</p>
+<p><strong>ED-40</strong> — Il n'y a pas de bande. Les états durables (↺ brouillon, ❝ N, N destinataires, sondage) sont des icônes à badge de l'app bar, deux au plus, cibles 48 dp, badge tonal (jamais <code>error</code>) qui ne recouvre pas le glyphe ; en hauteur compacte, ce sont des emplacements fixes de la barre d'action (ED-25). L'événement — un seul, rang d'ED-43 — occupe la barre d'action à la place des actions secondaires, comme l'armement : <strong>un seul contrôle actionnable</strong>, icône et résumé, à au moins 8 dp d'« Envoyer », qui reste à droite ; aucune action séparée n'est affichée à côté du résumé (décidé le 06/11 sur les avis concordants d'Astra et de Fable : à 360 dp et 1,3 × L, les libellés D44 ne laissent que ≈ 15 dp à côté d'« Envoyer », moins qu'une cible ; une rangée réservée aurait coûté 48 dp au champ). Le tap sur l'événement exécute son action (ED-45) ; la barre de progression de 2 dp (ED-46) y est dessinée. Une opération en cours (Envoi…, Image n/N…) masque des outils déjà désactivés (ED-35, ED-169) : aucun coût. Une erreur, une fin ou une information persistent (ED-44) et masquent les outils jusqu'à leur acquittement, un tap sur l'événement : Masquer, Compléter, ou Détails (consulter le détail vaut acquittement : l'événement est retiré au retour, sauf si un remède du détail l'a remplacé) ; un événement de rang inférieur réapparaît alors. Aucune hauteur ne change jamais ; ED-41 (jamais sur le texte) et ED-95 (nœud live permanent, dans la barre) tiennent. Champ : 214 dp à 360 × 740 clavier ouvert, ≈ 102 dp en paysage S10e, avec une barre d'action de 48 dp (variante compacte, ED-05 ; à mesurer, R0a).</p>
 <p>Icônes d'état, dans cet ordre quand elles coexistent :</p>
 <table>
 <thead>
@@ -589,7 +597,7 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 </tr>
 </tbody>
 </table>
-<p>Au plus deux par surface : réponse ❝ + ↺, feuille ❝ + ↺, réponse MP ↺ + destinataires, premier message ↺ + sondage, nouveau MP ↺. « Restaurer » restaure tous les champs du brouillon, en-têtes compris, et n'est jamais filtré (ED-52). Aucune icône de destinataires pour un non-owner ni pour un MP à deux (relevé : <a href="#annexes-ed-40">annexe A</a>). « Options modifiées » (22/09) n'est pas reprise, décidé le 01/11 (P8). « Recharger » (ED-45) est une action d'événement au même titre que celles qu'ED-40 énumère.</p>
+<p>Au plus deux par surface : réponse ❝ + ↺, feuille ❝ + ↺, réponse MP ↺ + destinataires, premier message ↺ + sondage, nouveau MP ↺. « Restaurer » restaure le corps (ED-89) et remplit les en-têtes laissés vides (titre, sujet, destinataires) ; un en-tête déjà saisi ou fourni par la route n'est pas remplacé (relevé : <code>TopicFormViewModel.kt:428-430</code> à <code>d0e2d80e</code>). « Restaurer » n'est jamais filtré (ED-52). Aucune icône de destinataires pour un non-owner ni pour un MP à deux (relevé : <a href="#annexes-ed-40">annexe A</a>). « Options modifiées » (22/09) n'est pas reprise, décidé le 01/11 (P8). « Recharger » et « Ignorer la citation » sont des remèdes portés par la surface de détail (ED-45), pas des actions de barre. Le contenu du champ après « Restaurer » suit ED-89.</p>
 <p><strong>ED-41</strong> — Les icônes d'état et l'événement ne changent que de <strong>contenu</strong> : ni l'app bar, ni la barre d'action, ni le champ ne changent de géométrie. Le contenu change à l'ouverture, sur un geste (retour d'un sélecteur ou d'un panneau, acquittement, Restaurer / Ignorer, retrait d'une carte), à l'aboutissement d'une opération lancée par un geste (envoi, upload) et à l'arrivée asynchrone d'un état d'ouverture (offre #1415, échec d'une citation d'ouverture). Il ne change <strong>jamais</strong> sur une modification du texte ou de la sélection du champ. L'autosave des brouillons est silencieuse : aucune icône, aucun événement.</p>
 <p><strong>ED-42</strong> — Remplacée en v0.5 par ED-40 (D33).</p>
 <p><strong>ED-43</strong> — Événement : un seul affiché à la fois, par rang : <strong>erreur</strong> &gt; <strong>opération en cours</strong> (« Envoi… », upload « Image n/N… », insertion de citation) &gt; <strong>fin ou information</strong> (« N images insérées », « Déjà citée », « Aucune image reçue », « 10 images max »). Un événement de rang inférieur n'est pas perdu : il réapparaît après l'acquittement de l'événement prioritaire. Chaque événement porte l'identité de son opération et du compte : aucun état terminal d'une opération ancienne ne réapparaît derrière une nouvelle, et un changement de compte retire les événements (ED-83).</p>
@@ -601,8 +609,11 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <li>Un geste qui lance une opération remplace toute erreur, fin ou information affichée. « Prochain envoi » désigne la confirmation (le second tap quand la préférence est active).</li>
 <li>Un lot d'upload arrêté par un échec affiche « k/N images insérées » ; les images déjà insérées sont conservées et la cause est dans le détail.</li>
 <li>Un événement survenu pendant qu'un panneau recouvre la barre d'action est affiché au retour.</li>
+<li>Une opération qui <strong>remplace</strong> la précédente résout son erreur : un nouveau lot d'upload effectivement lancé retire l'échec du lot précédent ; un formulaire chargé avec succès retire l'erreur de chargement. Jamais un envoi incertain (D44), ni une erreur d'envoi ou de validation (livré par R0b, #1551).</li>
+<li>L'acquittement d'« Échec citation » ne lève pas la demande de citation : seuls son insertion, « Ignorer la citation » ou la publication la lèvent (ED-132).</li>
+<li>L'échec d'enregistrement du brouillon (autosave, restauration) est une <strong>information</strong> distincte de l'échec d'écriture de la tentative (ED-170) : même résumé, détail propre, qui n'affirme rien de l'envoi. Il ne remplace jamais un envoi incertain ni l'échec de la tentative ; il est présenté après leur acquittement, et purgé après toute écriture durable réussie.</li>
 </ul>
-<p><strong>ED-45</strong> — Un seul emplacement d'action par événement : « Détails » quand un texte intégral existe ; « Compléter » pour un en-tête incomplet (il ouvre le panneau d'en-tête, dans la surface) ; « Recharger » pour un échec de chargement du formulaire (relance du chargement existant) ; « Masquer » sinon. Aucune action ne navigue hors de la surface (§ 1.3) : le remède est décrit dans le détail. Pendant une opération en cours, l'emplacement est vide : rien ne se masque ni ne s'annule. La surface de détail porte elle-même « Masquer ».</p>
+<p><strong>ED-45</strong> — Une seule action par événement, exécutée par le tap sur l'événement (ED-40) : « Compléter » pour un en-tête incomplet ou un destinataire inconnu (il ouvre le panneau d'en-tête, dans la surface) ; sinon « Détails » quand un texte intégral existe ; « Masquer » sinon (décidé le 07/11, M14). Le nœud accessible annonce l'action réellement exécutée par le tap, et le détail reste lisible avant l'acquittement, y compris pour une information qui disparaît au geste suivant (ED-44). La surface de détail porte le texte intégral et <strong>les remèdes de la cause</strong>, en boutons : « Recharger » pour un échec de chargement du formulaire (relance du chargement existant) ou d'une citation (GET seul, jamais de POST, ED-132) ; « Ignorer la citation » après deux échecs de la même demande, <strong>à côté</strong> de « Recharger », jamais à sa place ; « Masquer » toujours. Aucune action ne navigue hors de la surface (§ 1.3) : un remède hors surface est décrit dans le détail. Pendant une opération en cours, l'événement n'a pas d'action : rien ne se masque ni ne s'annule. Ancien chrome (R0b) : la bannière porte l'action de la cause, « Recharger » pour une citation ou un formulaire ; après deux échecs de la même demande, « Ignorer la citation » s'y ajoute (#1553 ; en dev 0.69.4, il remplaçait « Recharger », mineur relevé par la gate Fable de #1551).</p>
 <p><strong>ED-46</strong> — Pendant un upload, une barre de progression de 2 dp est dessinée dans la barre d'action, quel que soit l'événement affiché, sans en changer la hauteur (56 dp ; 48 dp en hauteur compacte, ED-05) : placée par alignement (<code>Box</code> + <code>align(Alignment.TopStart)</code>, au bord haut) ou dessinée (<code>drawBehind</code>), jamais par une marge négative. C'est un <code>LinearProgressIndicator</code> sans indicateur de fin ni espace (<code>drawStopIndicator = {}</code>, <code>gapSize = 0.dp</code> ; material3 1.4.0 les dessine par défaut, à revérifier dans R0m). Pendant le chargement du formulaire, elle est indéterminée et sans événement (D34). Relevé : <a href="#annexes-ed-46">annexe A</a>.</p>
 <p><strong>ED-47</strong> — Remplacée en v0.5 par ED-40 (largeur du résumé : ED-133).</p>
 <p><strong>ED-48</strong> — Remplacée en v0.5 par ED-40.</p>
@@ -621,7 +632,8 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
   EnCours --&gt; [*] : envoi réussi (succès terminal)
   Erreur --&gt; EnCours : Envoyer
   Fin --&gt; EnCours : Envoyer
-  Erreur --&gt; Outils : acquittement&lt;br/&gt;(Masquer, Compléter, Détails, Recharger)
+  Erreur --&gt; Outils : acquittement&lt;br/&gt;(tap sur l&#39;événement : Masquer, Compléter, Détails)
+  Erreur --&gt; Outils : Recharger (remède du détail, sans POST ;&lt;br/&gt;chargement signalé par la barre de 2 dp, D34)
   Fin --&gt; Outils : acquittement
   note right of Outils : aucun changement causé&lt;br/&gt;par le texte ou la sélection</pre>
 <h3 id="46-panneau-citations-mode-cartes">4.6 Panneau citations (mode cartes)</h3>
@@ -683,9 +695,9 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <p>Pour la feuille smileys, l'état du clavier d'avant l'ouverture est celui de l'éditeur, capturé par l'hôte à l'ouverture, quelles que soient ses variations dans la feuille : la recherche Wiki le demande, la page de détail le range, et le retour du détail ne rend pas le focus à la recherche (relevé : <a href="#annexes-ed-80">annexe A</a>). La règle vaut aussi après une ouverture sur Favoris, une insertion depuis la page de détail et une fermeture qui suit un passage par le détail.</p>
 <p><strong>ED-81</strong> — Rotation pendant un upload (ViewModel conservé) : l'upload se poursuit sans second lancement, compteur et barre compris. Mort du process : restauration <strong>silencieuse</strong>, sans icône ↺ pour la session interrompue (C8, #1415).</p>
 <ul>
-<li><code>SavedStateHandle</code> ne contient <strong>jamais</strong> le corps, le sujet ni les destinataires (règle existante, <code>EditorDraftStore.kt:59-60</code>) : il porte la clé et la version du brouillon, le compte propriétaire, la sélection, la position de défilement et l'état de tentative (ED-170).</li>
+<li><code>SavedStateHandle</code> ne contient <strong>jamais</strong> le corps, le sujet ni les destinataires (règle existante, <code>EditorDraftStore.kt:59-60</code>) : il porte la clé et la version du brouillon, le compte propriétaire, la sélection, la position de défilement, l'empreinte d'une offre refusée (#1415) et le compteur d'échecs de citation (ED-132) ; l'état de tentative est durable (ED-170). En dev 0.69.4, il porte aussi l'identité de la tentative préparée et les coordonnées de la citation demandée (R0b) ; #1553 les retire : la demande vit dans la ligne de brouillon (ED-132), et la ligne seule tranche à la restauration.</li>
 <li>Le contenu revient du stockage propriétaire (couple compte, clé), écrit <strong>sans délai</strong> à l'arrêt de l'écran (<code>ON_STOP</code> signalé au ViewModel, <code>persistDraftNow()</code>) en plus de l'autosave. Il est relu avant le premier rendu du champ ; une ligne absente ou d'une autre version laisse la place à l'offre #1415. L'éditeur ouvert depuis la feuille (<code>resumeSharedDraft</code>, #790) est compris : la garde de reprise unique n'empêche qu'un second ajout du texte de la feuille, jamais cette relecture.</li>
-<li>Un seul mécanisme : la seconde sauvegarde du composant (<code>rememberTextFieldState</code>, <code>BbcodeTextField.kt:123</code>) est supprimée ; l'historique d'annulation n'est pas sauvé.</li>
+<li>Un seul mécanisme : la seconde sauvegarde du composant (<code>rememberTextFieldState</code>, <code>BbcodeTextField.kt:123</code>) est supprimée ; l'historique d'annulation n'est pas sauvé. Prétest de R0a (critère I, émulateur API 34, 07/11 ; <code>reports/1455-r0a-witness-i/</code>) : avec cette seconde sauvegarde et le remplacement complet du texte par le pont (<code>BbcodeTextField.kt:221</code> à <code>d0e2d80e</code>, <code>replace(0, length, …)</code>), chaque insertion programmatique dans un texte de 20 000 caractères ajoutait ≈ 80 ko à l'état sauvegardé (deux copies du texte dans l'historique) : <code>TransactionTooLargeException</code> au passage en arrière-plan dès 10 insertions (≈ 850 ko), process tué. Le pont en remplacement minimal (R0c PR 0) ramène l'état à ≈ 51 ko à 20 insertions, sans plantage ; la suppression de la seconde sauvegarde reste due (R0c). Un pont du champ ne remplace jamais tout le texte pour une modification locale.</li>
 <li>Gardes d'hydratation : ni le GET du formulaire ni l'offre #1415 ne réécrasent l'état restauré.</li>
 <li>Le marqueur « publié » (ED-161) et la tentative durable (ED-170) l'emportent : un message publié n'est jamais restauré comme non envoyé ; une tentative sans résultat revient en « Envoi incertain ».</li>
 <li>Les cartes de citation ne sont pas restaurées (C8 amendé, décidé le 01/11, P9) ; les images déjà insérées restent dans le texte ; aucun upload n'est relancé ; le champ n'est pas verrouillé et aucun événement d'upload n'est affiché.</li>
@@ -694,22 +706,31 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <p>Relevé : <a href="#annexes-ed-81">annexe A</a>.</p>
 <p><strong>ED-82</strong> — Mode format + événement + clavier ouvert : l'événement prend la place de la rangée de formats ; après l'acquittement, la barre revient en mode format ; aucune hauteur ne change (barre d'action de 56 dp, ou de 48 dp en hauteur compacte, ED-05).</p>
 <p><strong>ED-83</strong> — Changement de compte pendant la saisie : l'upload et l'autosave en attente sont annulés, sans erreur fabriquée ; l'envoi armé est désarmé ; les événements sont retirés (ils portent le compte, ED-43) ; le brouillon reste attaché au couple (compte, clé d'éditeur) et n'est jamais proposé sous un autre compte. La refonte conserve l'isolation de la feuille smileys (#1507) : à chaque changement de compte, elle invalide ses favoris HFR, la mutation en cours et ses retours, ferme sa page de détail, et garde ses commandes HFR coupées jusqu'à un formulaire chargé sous le nouveau compte. L'aller-retour A → B → A pendant une mutation HFR est un défaut connu, hors refonte. Relevé : <a href="#annexes-ed-83">annexe A</a>. Le comportement est vérifié surface par surface en R1a-2 et R1b, feuille smileys comprise.</p>
-<p><strong>ED-84</strong> — Escalade feuille → plein écran (⤢) : le texte et les citations sont transmis, pas la sélection. L'ajout du texte de la feuille au brouillon de l'éditeur reste silencieux et n'a lieu qu'une fois (<code>resumeSharedDraft</code>, #790 ; <code>SHARED_DRAFT_RESUMED_KEY</code>, <code>PostEditorViewModel.kt:376-391</code>) : aucune icône ↺ dans ce cas. Relevé : l'escalade est désactivée pendant l'envoi et pendant le fetch de citation (<code>QuickReplySheet.kt:165</code>).</p>
+<p><strong>ED-84</strong> — Escalade feuille → plein écran (⤢) : le texte et les citations sont transmis, pas la sélection. Une demande de citation inline encore en attente est transmise avec eux, sans rejeu au retour : en dev 0.69.4 par un transfert de propriété en mémoire (R0b) ; à partir de #1553, par la ligne de brouillon commune, que l'éditeur relit (ED-132). Les citations en cartes restent des cartes et ne créent jamais de demande durable. L'ajout du texte de la feuille au brouillon de l'éditeur reste silencieux et n'a lieu qu'une fois (<code>resumeSharedDraft</code>, #790 ; <code>SHARED_DRAFT_RESUMED_KEY</code>, <code>PostEditorViewModel.kt:376-391</code>) : aucune icône ↺ dans ce cas. Relevé : l'escalade est désactivée pendant l'envoi et pendant le fetch de citation (<code>QuickReplySheet.kt:165</code>).</p>
 <p><strong>ED-85</strong> — Retour système (geste ou bouton). Il ferme le premier élément ouvert, dans cet ordre : page de détail de la feuille smileys (retour à la grille, sans fermer la feuille) ; feuille ouverte (smileys, options), qui consomme le retour avant l'éditeur ; info-bulle ; sous-niveau de barre (Couleur, Image) ; mode format ; envoi armé (désarmé) ; surface de détail d'un événement ; panneau (comme « Retour au message ») ; aperçu en partage. Sinon il quitte la surface avec la sauvegarde attendue (ED-10), sauf après un succès (ED-161). Un panneau ouvert d'office (ED-101, ED-113) se ferme au premier retour, sans quitter l'écran. Un panneau recouvre le champ sans le retirer de la composition — superposition opaque, champ exclu de la sémantique et non focusable pendant ce temps — pour garder l'état local du champ (<code>ScrollState</code>, historique d'annulation) ; au retour, ED-53 s'applique. Le <code>BackHandler</code> d'un panneau est enregistré après celui de l'éditeur pour l'emporter. Dans la feuille smileys, le retour du détail passe par un callback interne au contenu de la feuille, posé sur le dispatcher du dialogue après celui de material3 (<code>SmileyDetailBackHandler</code>) — un <code>BackHandler</code> Compose y résoudrait le dispatcher de l'activité —, avec la garde du geste résiduel de l'appui long (#1499). Ce mécanisme dépend de l'ordre interne de material3 1.4.0 : il est reprouvé dans R0m (critère de sortie du <a href="#112-critères-de-sortie">§ 11.2</a>, <a href="#annexes-b1-par-lot">annexe B.1</a>). Relevé : <a href="#annexes-ed-85">annexe A</a>.</p>
 <p><strong>ED-86</strong> — Rotation et changement de taille de fenêtre conservent l'état d'interface : mode de la barre et sous-niveau, panneau ouvert, partage et sa position (ramenée dans les bornes, ED-62), événement affiché, envoi armé (le délai continue sur l'horloge du ViewModel, ED-164, sans relance), feuille smileys ouverte avec son onglet, sa recherche et sa page de détail. Après une mort du process, seuls reviennent la sélection et la position de défilement (<code>SavedStateHandle</code>), le texte et les champs d'en-tête relus du stockage propriétaire (ED-81) : barre en mode normal, aucun panneau ni feuille (la feuille smileys est fermée, page de détail comprise, et la recherche restaurée par #824 est perdue), envoi non armé, aucun événement sauf « Envoi incertain » pour une tentative sans résultat (ED-170).</p>
 <p><strong>ED-87</strong> — Pendant l'envoi, les contrôles d'en-tête (titre et sous-catégorie, destinataires et sujet), les bascules d'options, les cartes de citation, l'escalade ⤢ et le corps (ED-169) sont désactivés. Relevé : <a href="#annexes-ed-87">annexe A</a>.</p>
 <p><strong>ED-88</strong> — Succès d'un envoi : après l'entrée dans l'état terminal (ED-161), les effets et relais actuels sont conservés à l'identique : <code>SubmitSucceeded</code> publié avant le pop, relais vers la vue Topic, Toast puis liste de la catégorie pour un nouveau sujet, publication vers le fil MP, retour à la liste après un nouveau MP, panier multi-citation vidé au succès seulement (relevé : <a href="#annexes-ed-88">annexe A</a>). Aucun événement n'annonce un succès : l'éditeur se ferme, la vue Topic ou le fil MP confirme (§ 1.3).</p>
+<p><strong>ED-89</strong> — « Restaurer » (offre ↺, #1415) : contenu du champ. Règle commune aux surfaces qui ont une <strong>graine</strong>, c'est-à-dire un contenu que la surface pose elle-même dans le champ à l'ouverture : le corps serveur en modification (post, premier message d'un sujet), la citation préremplie en réponse MP. Ailleurs, la graine est vide. La surface retient la graine (en mémoire, jamais dans <code>SavedStateHandle</code>) jusqu'à la décision sur l'offre. Avec C le champ, S la graine et D le corps du brouillon, dans cet ordre :</p>
+<ol type="1">
+<li>C blanc, C = D ou C = S : le champ devient D ;</li>
+<li>S non vide, C commence par S et le suffixe qui suit est blanc : le champ devient D ;</li>
+<li>S non vide, C commence par S et le suffixe n'est pas blanc : le champ devient D, <code>\n\n</code>, puis le suffixe sans ses blancs de tête ;</li>
+<li>sinon (graine vide et texte tapé, ou graine modifiée à l'intérieur) : le champ devient C sans ses blancs de fin, <code>\n\n</code>, puis D. Pour une graine modifiée à l'intérieur, c'est le comportement historique, conservé (décidé le 07/11, P23, après challenge de Sol), préféré à une fusion textuelle automatique. Le risque est accepté explicitement : deux versions presque identiques du message peuvent se retrouver l'une après l'autre et partir ainsi ; la coupe des blancs de fin retire aussi des caractères de C. D'où l'exigence d'une annulation en un pas sur chaque surface.</li>
+</ol>
+<p>« Restaurer » est <strong>inactif tant que la graine n'est pas connue</strong>, c'est-à-dire pendant le chargement du formulaire qui la porte (corps serveur, citation MP), et le ViewModel refuse la restauration dans cet état ; le bandeau reste affiché. Un chargement en échec rend la graine connue et vide : « Restaurer » redevient actif, pour qu'un brouillon reste reprenable hors connexion. Relevé (gate Fable de R0c PR 4) : restaurer avant l'arrivée du formulaire consommait l'hydratation, et la citation MP demandée n'était jamais posée, sans signal. La citation inline du post n'est pas une graine : c'est une demande durable, servie après la décision (ED-132).</p>
+<p>D n'est jamais retouché. Dans tous les cas : aucun POST ; une seule mutation du corps, annulable d'un coup par Ctrl+Z (à partir de R0c, ED-37) jusqu'à l'état d'avant la restauration ; brouillon enregistré par l'autosave, et sans délai à l'arrêt de l'écran (ED-81) ; caret replié en fin de champ, sans sélection, visible (C5). Les en-têtes suivent ED-40 : seuls les en-têtes vides sont remplis. Un aller-retour sans mort du process (modifier, revenir, rouvrir, « Restaurer ») donne un seul exemplaire du message. Relevé et origine : la restauration ajoutait D après C même quand C n'était que la graine, d'où un message doublé en modification (<code>reports/1455-r0a-restauration-verif.md</code>, 07/11). Porteurs : #1553 pour le post, R0c pour le sujet et la réponse MP ; le nouveau MP n'a pas de graine.</p>
 <h2 id="6-accessibilité">6. Accessibilité</h2>
-<p><strong>ED-90</strong> — L'ordre de parcours TalkBack et l'ordre de focus au clavier suivent l'ordre visuel : app bar (retour, titre, icônes d'état, aperçu) → champ → barre d'action (actions du mode courant, ou résumé puis action de l'événement) → « Envoyer ». Le besoin d'entendre un état ou un événement est couvert par l'annonce (ED-95), pas par un avancement dans l'ordre. En sortant de la page de détail de la feuille smileys, le focus TalkBack revient à la cellule d'origine, selon le principe d'ED-53 et d'ED-80 (écart de l'état livré : <a href="#annexes-ed-95">annexe A</a>). Cet écart est porté par le lot S1 de la suite de #1154 (rf2-smalldev) ; G4 l'exige corrigé, ou bien une dérogation bornée, actée par le mainteneur (ED-95).</p>
-<p><strong>ED-91</strong> — Le texte intégral d'un événement et son action restent accessibles à TalkBack, même quand le résumé visuel est tronqué.</p>
-<p><strong>ED-92</strong> — Les icônes d'état et l'action d'événement ont des cibles d'au moins 48 × 48 dp, sans recouvrir une cible voisine, y compris dans la barre d'action de 48 dp de la hauteur compacte (ED-05) ; l'action d'événement est à au moins 8 dp d'« Envoyer » (ED-167).</p>
+<p><strong>ED-90</strong> — L'ordre de parcours TalkBack et l'ordre de focus au clavier suivent l'ordre visuel : app bar (retour, titre, icônes d'état, aperçu) → champ → barre d'action (actions du mode courant, ou le contrôle unique de l'événement) → « Envoyer ». Le besoin d'entendre un état ou un événement est couvert par l'annonce (ED-95), pas par un avancement dans l'ordre. En sortant de la page de détail de la feuille smileys, le focus TalkBack revient à la cellule d'origine, selon le principe d'ED-53 et d'ED-80 (écart de l'état livré : <a href="#annexes-ed-95">annexe A</a>). Cet écart est porté par le lot S1 de la suite de #1154 (rf2-smalldev) ; G4 l'exige corrigé, ou bien une dérogation bornée, actée par le mainteneur (ED-95).</p>
+<p><strong>ED-91</strong> — Le texte intégral d'un événement et son action restent accessibles à TalkBack. Dans le domaine de référence (360 dp de large et plus, jusqu'à 1,3 × L), le résumé n'est jamais tronqué (ED-133). Hors de ce domaine, le repli visuel est mesuré avant l'intégration (R1a-1), sans réduction automatique de la police ; une troncature éventuelle ne retire rien au nœud accessible, qui porte le résumé entier.</p>
+<p><strong>ED-92</strong> — Les icônes d'état ont des cibles d'au moins 48 × 48 dp, et le contrôle d'événement une cible d'au moins 48 dp de haut sur toute la largeur de son icône et de son résumé (≈ 181 dp à 360 dp, ED-133), sans recouvrir une cible voisine, y compris dans la barre d'action de 48 dp de la hauteur compacte (ED-05) ; le contrôle d'événement est à au moins 8 dp d'« Envoyer » (ED-167) et visiblement interactif (ripple, conteneur tonal).</p>
 <p><strong>ED-93</strong> — Clavier physique : Maj+flèches suit les mêmes règles que les poignées (C10) ; Tab et Maj+Tab font sortir le focus du champ vers l'élément suivant ou précédent, sans insérer de tabulation (une tabulation n'a pas d'usage en BBCode HFR) ; la barre d'action, ses modes et ses sous-niveaux sont atteignables au clavier (ED-26) ; une action d'insertion activée au clavier rend aussitôt le focus au champ, une action qui ouvre une feuille, un dialogue ou le sélecteur d'images le rend à leur fermeture (ED-80). Relevé : <a href="#annexes-ed-93">annexe A</a>.</p>
 <p><strong>ED-94</strong> — Le champ reste un seul nœud défilable pour TalkBack ; nom accessible « Message » conservé, y compris en hauteur compacte, où le label visuel est retiré (ED-05, ED-12).</p>
-<p><strong>ED-95</strong> — Annonces. La barre d'action porte un nœud live <strong>permanent</strong> (ED-40) dont le contenu change : un nœud live qui apparaît n'est pas annoncé de façon fiable, et <code>View.announceForAccessibility</code> est déprécié en API 36 (patron déjà en place pour les cartes de citation, <code>QuoteCards.kt:139-149</code>). Une erreur est annoncée en mode <code>Assertive</code> ; une opération en cours, une fin et une information en mode <code>Polite</code>. Le contenu annoncé est le résumé suivi du nom de l'action. La progression d'un upload est annoncée au début et à la fin seulement. L'armement du bouton est annoncé (<code>stateDescription</code>), son désarmement aussi. L'arrivée d'une icône d'état (offre ↺ comprise) est annoncée en <code>Polite</code>. Dans la feuille smileys, les retours des favoris (ajout, retrait, refus, échec) sont annoncés de façon fiable, selon le même principe : par un nœud live présent avant le retour, jamais par une région live qui apparaît. Ce point et le retour du focus d'ED-90 sont des écarts de l'état livré (ED-70 a ; relevé : <a href="#annexes-ed-95">annexe A</a>) : R1a-2 étend sa passe TalkBack à la feuille smileys (actions de cellule, page de détail, retours des favoris) et les relève. Leur correction revient à la feuille elle-même, hors des lots de la phase : les deux écarts, focus rendu à la cellule d'origine au sortir du détail et annonce fiable des retours des favoris, sont portés par le <strong>lot S1</strong> de la suite de #1154 (rf2-smalldev, décidé le 01/11, P17 a). G4 les exige corrigés, ou bien une dérogation bornée à ces deux écarts, actée par le mainteneur, qui renvoie au lot S1 (<a href="#113-portes">§ 11.3</a>).</p>
+<p><strong>ED-95</strong> — Annonces. La barre d'action porte un nœud live <strong>permanent</strong> (ED-40) dont le contenu change : un nœud live qui apparaît n'est pas annoncé de façon fiable, et <code>View.announceForAccessibility</code> est déprécié en API 36 (patron déjà en place pour les cartes de citation, <code>QuoteCards.kt:139-149</code>). Une erreur est annoncée en mode <code>Assertive</code> ; une opération en cours, une fin et une information en mode <code>Polite</code>. Le contenu annoncé est le résumé suivi du nom de l'action. Le contrôle d'événement est <strong>un seul nœud</strong>, rôle bouton, dont l'action est nommée (« Échec citation, afficher les détails ») ; R0a le vérifie sous TalkBack (critère K). La progression d'un upload est annoncée au début et à la fin seulement. L'armement du bouton est annoncé (<code>stateDescription</code>), son désarmement aussi. L'arrivée d'une icône d'état (offre ↺ comprise) est annoncée en <code>Polite</code>. Dans la feuille smileys, les retours des favoris (ajout, retrait, refus, échec) sont annoncés de façon fiable, selon le même principe : par un nœud live présent avant le retour, jamais par une région live qui apparaît. Ce point et le retour du focus d'ED-90 sont des écarts de l'état livré (ED-70 a ; relevé : <a href="#annexes-ed-95">annexe A</a>) : R1a-2 étend sa passe TalkBack à la feuille smileys (actions de cellule, page de détail, retours des favoris) et les relève. Leur correction revient à la feuille elle-même, hors des lots de la phase : les deux écarts, focus rendu à la cellule d'origine au sortir du détail et annonce fiable des retours des favoris, sont portés par le <strong>lot S1</strong> de la suite de #1154 (rf2-smalldev, décidé le 01/11, P17 a). G4 les exige corrigés, ou bien une dérogation bornée à ces deux écarts, actée par le mainteneur, qui renvoie au lot S1 (<a href="#113-portes">§ 11.3</a>).</p>
 <h2 id="7-contrats-par-surface">7. Contrats par surface</h2>
 <h3 id="71-éditeur-de-post-posteditorscreen">7.1 Éditeur de post (<code>PostEditorScreen</code>)</h3>
 <p>Règles des § 3 à 6 sans exception. Sauvegarde attendue avant retour (ED-10, sauf après un succès, ED-161) et garde contre l'écrasement d'une saisie par un GET tardif (<code>PostEditorViewModel.kt:907-944</code>) : inchangées. Hydratation du formulaire : inchangée hors citation.</p>
-<p>Relevé : un fetch de citation inline en échec donne l'erreur d'envoi générique, et le nouvel essai publie la réponse <strong>sans</strong> la citation, sans avertissement (<a href="#annexes-échec-et-nouvel-essai--71">annexe A</a>). Cible pour la citation : ED-132. Le nouvel essai du chargement de formulaire hors citation passe par « Recharger » (ED-45).</p>
+<p>Relevé : un fetch de citation inline en échec donnait l'erreur d'envoi générique et laissait « Envoyer » inerte ; dans la feuille, la réponse pouvait partir <strong>sans</strong> la citation (<a href="#annexes-échec-et-nouvel-essai--71">annexe A</a>). Corrigé par R0b (#1551, dev 0.69.4) ; règle : ED-132. Le nouvel essai du chargement de formulaire hors citation passe par « Recharger » (ED-45).</p>
 <h3 id="72-formulaire-de-sujet-topicformscreen">7.2 Formulaire de sujet (<code>TopicFormScreen</code>)</h3>
 <p><strong>ED-100</strong> — Le titre du sujet (capitalisation de phrase) et la sous-catégorie quittent la colonne. Le sélecteur de sous-catégorie reste absent pour les catégories qui n'en ont pas (#213). La modification du premier message dans une catégorie sans sous-catégorie n'est pas envoyable, et le panneau d'en-tête ne laisse pas croire le contraire. Un chargement en échec offre « Recharger » (ED-45). Relevé : <a href="#annexes-ed-100">annexe A</a>.</p>
 <p><strong>ED-101</strong> — Aucun repli n'est déclenché par le focus, le caret ou l'IME. Dès l'ouverture du formulaire, la seconde ligne de l'app bar résume, dans cet ordre fixe, le titre puis la sous-catégorie (« titre · sous-catégorie » ; « Ajouter un titre » si le titre est vide) ; elle reste visible pendant l'édition du corps, sauf si elle ne tient pas (ED-10). Le bloc titre entier de l'app bar (deux lignes, 48 dp de haut, <code>Role.Button</code>, chevron en fin de ligne) ouvre un panneau d'en-tête contenant le champ de titre et, si la catégorie le permet, le sélecteur de sous-catégorie ; ligne 2 masquée, le bloc titre reste l'entrée ; en hauteur compacte, l'emplacement « En-tête » de la barre d'action l'ouvre (ED-25). Nom accessible : « Modifier le titre et la sous-catégorie » (« Modifier le titre » pour une catégorie sans sous-catégorie). À l'ouverture d'un nouveau sujet sans titre, le panneau est ouvert d'office, focus sur le titre (symétrie avec ED-113). « Retour au message » ferme le panneau (ED-53). Pendant l'envoi, ses contrôles sont désactivés (ED-87). L'icône ↺ restaure aussi le titre (ED-40). Un envoi avec en-tête incomplet suit ED-35. La hauteur du corps ne change ni à la frappe ni au déplacement du caret (C6, C7).</p>
@@ -727,12 +748,23 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <p>Préconditions de R4, quand il sera traité, hors phase : <a href="#annexes-g-graphe-des-lots-et-préconditions-de-r4">annexe G</a>.</p>
 <h2 id="8-erreurs">8. Erreurs</h2>
 <h3 id="81-contrat">8.1 Contrat</h3>
-<p><strong>ED-130</strong> — Toute erreur d'<strong>envoi</strong>, d'<strong>upload</strong> ou de <strong>citation</strong> affichée en événement de barre est une valeur d'un type unique porté par <code>:core:ui</code> : <strong>cause</strong>, <strong>classe</strong> (certain, ambigu, upload, information, validation), <strong>résumé</strong> (une ligne, sans ellipse), <strong>détail</strong> optionnel (texte intégral et remède), <strong>action</strong> (Détails, Compléter ou Masquer). Le résumé nomme la cause, pas le remède. Un seul jeu de chaînes par cause, partagé par les cinq surfaces (R0b), sauf l'envoi incertain MP, qui garde ses deux formulations (ED-112). Les autres erreurs restent à leurs surfaces respectives et hors de la barre d'action : chargement du formulaire MP (écran qui remplace tout l'éditeur, y compris après l'échec d'un rechargement sur <code>InvalidHashCheck</code> ; relevé : <a href="#annexes-ed-130">annexe A</a>), validation d'URL d'image, recherche de smileys, gestion des favoris de smileys et mots-clés du wiki (feuille smileys, #1154). Ces derniers messages restent dans la feuille et n'entrent pas dans les 33 chaînes de R0b. Classe <strong>upload</strong> : l'échec d'un upload n'empêche pas l'envoi — « Envoyer » reste activable selon ED-35, le corps n'est pas figé, les images déjà insérées (k/N) restent, et l'upload peut être relancé.</p>
-<p><strong>ED-131</strong> — Aucun événement d'erreur ne s'efface sur une modification du texte ou de la sélection, quelles que soient la cause et la surface (cycle de vie : ED-44). C'est un changement de comportement pour cinq surfaces (relevé : <a href="#annexes-ed-131">annexe A</a>). La règle vaut pour l'ancien et le nouveau chrome (R0b) ; elle part en bêta dans l'ancien chrome avec R0b, changement visible annoncé dans les notes de version (P15 acceptée).</p>
-<p><strong>ED-132</strong> — Échec du fetch de citation à l'ouverture, en mode inline (éditeur de post et feuille) : la cause affichée est « Citation non chargée », jamais l'erreur d'envoi générique ; le nouvel essai refait le fetch <strong>avec</strong> les citations, jamais le formulaire simple. La réponse MP garde son erreur de formulaire plein écran (§ 1.2). Relevé : § 7.1 pour l'éditeur de post ; la feuille a déjà cette cause (<code>QuickReplyViewModel.kt:316-327</code>, <code>quick_reply_error_quote_fetch</code>).</p>
-<p><strong>ED-133</strong> — Longueur des résumés. Chaque résumé final est <strong>mesuré</strong> : un test Robolectric vérifie qu'il tient, à 1,3 × L, dans la largeur réservée au résumé dans la barre d'action — 360 dp moins 32 dp de gouttières, « Envoyer », l'action et 8 dp d'écart, soit ≈ 150 dp, icône d'erreur comprise. La cible de rédaction est d'environ 18 caractères ; elle ne vaut pas garantie. Ordre de grandeur : <a href="#annexes-ed-133">annexe A</a>. Une troncature automatique couperait le sens : les textes sont réécrits jusqu'à passer le test.</p>
+<p><strong>ED-130</strong> — Toute erreur d'<strong>envoi</strong>, d'<strong>upload</strong> ou de <strong>citation</strong> affichée en événement de barre est une valeur d'un type unique porté par <code>:core:ui</code> (<code>EditorError</code>, catalogue <code>EditorErrors</code>, livrés par R0b, #1551) : <strong>cause</strong>, <strong>classe</strong> (certain, ambigu, upload, information, validation), <strong>résumé</strong> (une ligne, sans ellipse à la largeur de référence d'ED-133), <strong>détail</strong> optionnel (texte intégral et remède), <strong>action</strong> (Détails, Compléter, Masquer ou Recharger ; « Ignorer la citation » s'y ajoute en contexte, ED-132). Le résumé nomme la cause, pas le remède. Un seul jeu de chaînes par cause, partagé par les cinq surfaces (38 chaînes promues dans <code>core/ui</code> par R0b), sauf l'envoi incertain MP, qui garde ses deux formulations (ED-112). Les résultats métier (<code>ReplySubmitResult</code>, <code>UploadException</code>…) restent ; seule leur présentation passe par ce type. Les autres erreurs restent à leurs surfaces respectives et hors de la barre d'action : chargement du formulaire MP (écran qui remplace tout l'éditeur, y compris après l'échec d'un rechargement sur <code>InvalidHashCheck</code> ; relevé : <a href="#annexes-ed-130">annexe A</a>), validation d'URL d'image, recherche de smileys, gestion des favoris de smileys et mots-clés du wiki (feuille smileys, #1154). Ces derniers messages restent dans la feuille et n'entrent pas dans les 38 chaînes de R0b. Classe <strong>upload</strong> : l'échec d'un upload n'empêche pas l'envoi — « Envoyer » reste activable selon ED-35, le corps n'est pas figé, les images déjà insérées (k/N) restent, et l'upload peut être relancé.</p>
+<p><strong>ED-131</strong> — Aucun événement d'erreur ne s'efface sur une modification du texte ou de la sélection, quelles que soient la cause et la surface (cycle de vie : ED-44). C'est un changement de comportement pour cinq surfaces (relevé : <a href="#annexes-ed-131">annexe A</a>). La règle vaut pour l'ancien et le nouveau chrome (R0b) ; elle part en bêta dans l'ancien chrome avec R0b, changement visible annoncé dans les notes de version (P15 acceptée). Aucune insertion programmatique ni modification d'en-tête n'efface non plus l'erreur ; la frappe désarme toujours la confirmation (ED-164). Une opération qui remplace la précédente résout en revanche son erreur (ED-44). Livré par R0b (#1551, dev 0.69.4).</p>
+<p><strong>ED-132</strong> — Citation inline demandée (éditeur de post et feuille). Une <strong>demande de citation</strong> est distincte de l'erreur : elle naît du geste « Citer » (simple, appui long, « Citer N »), vit jusqu'à l'insertion de ses citations dans le corps, et ne se lève que par cette insertion, par « Ignorer la citation » ou par la publication. La réponse MP garde son erreur de formulaire plein écran (§ 1.2).</p>
+<ul>
+<li><strong>Échec du fetch</strong> : la cause affichée est « Échec citation » (certaine : rien n'est parti), jamais l'erreur d'envoi générique. Tant que la demande est en attente, « Envoyer » n'est pas activable (ED-35), sans changer de libellé : aucun POST ne part sans la citation demandée, et un second appui au même endroit ne peut jamais publier.</li>
+<li><strong>« Recharger »</strong> refait le fetch <strong>avec</strong> les citations, jamais le formulaire simple, et ne POSTe jamais : un seul rechargement actif, confirmations désarmées et invalidées, insertion unique, dans l'ordre de la demande, dans le corps <strong>courant</strong>, sans perdre la frappe. Les citations dont le <code>[quotemsg]</code> est déjà présent dans le corps ne sont pas réinsérées.</li>
+<li>Après <strong>deux échecs</strong> de la même demande, « Ignorer la citation » s'ajoute à « Recharger » : il retire la demande seule, sans rien insérer ni envoyer, le texte restant. L'abandon est toujours un geste explicite.</li>
+<li><strong>Offre de restauration</strong> (#1415) en attente : la demande attend la décision, avec l'information « Citation en attente » et sans action de chargement (#1553 ; en dev 0.69.4, « Envoyer » est inactif sans information) ; « Restaurer » réconcilie avec le corps restauré (ED-89), « Ignorer » vide le brouillon proposé en conservant la demande, qui est ensuite servie.</li>
+<li><strong>Envoi incertain</strong> (ED-163) : une demande qui arrive sur une tentative sans résultat reste <strong>dormante</strong>, sans GET ni ajout au corps, et aucun POST ne part avant une décision explicite : « Après vérification, reprendre la citation » (acquitte l'incertitude, puis sert la demande) ou « Ignorer la citation » (retire la demande, l'incertitude reste).</li>
+<li><strong>Feuille</strong> : même garde ; ancien chrome sans bouton d'erreur toute la phase (R4 hors phase), le détail invite à refaire « Citer » ou à ouvrir l'éditeur complet ; sur un envoi incertain, elle reçoit les deux décisions explicites ci-dessus (#1553). La demande survit à la fermeture, à la réouverture et à l'escalade (ED-84). Les cartes ne créent jamais de demande inline ; le choix cartes ou inline se fait au geste.</li>
+<li><strong>Durabilité</strong> (#1553, avant R0c PR 2 et R1a-1) : la demande vit dans la <strong>ligne du brouillon</strong> (colonne nullable, JSON versionné : portée catégorie et sujet, citations ordonnées et dédupliquées par numéro dans la portée, aucun contenu ni jeton HFR), écrite avant l'ouverture de l'éditeur ; la livraison écrit le corps cité et efface la demande dans la même transaction ; la publication l'efface. À la restauration, la ligne seule tranche : demande absente, aucun rejeu ; demande présente, elle est servie ; « publié », rien n'est restauré ; une demande illisible donne une erreur contrôlée, ligne préservée, sans GET ni abandon silencieux. À la première ouverture après la migration Room 20 → 21, les coordonnées encore présentes dans un ancien <code>SavedStateHandle</code> sont ignorées, avec une information explicite et sans import (décidé le 07/11) ; corps et tentatives restent. En dev 0.69.4 (R0b), les coordonnées vivent dans <code>SavedStateHandle</code>, avec deux compromis que #1553 lève : une citation supprimée puis autosauvegardée revient après une mort du process si la demande était encore dans l'état sauvegardé ; et, borne relevée par la gate Astra r6 de #1551, un instantané pris pendant un armement A puis restauré après la publication d'un armement B peut faire réapparaître une citation déjà publiée (mort du process au premier plan seulement).</li>
+<li>Citations en cartes : l'échec du GET de matérialisation avant le POST garde son remède dans le détail (renvoyer, ou retirer la carte) ; « Envoyer » n'est pas bloqué.</li>
+</ul>
+<p>Relevé : § 7.1 pour l'éditeur de post ; <a href="#annexes-échec-et-nouvel-essai--71">annexe A</a>.</p>
+<p><strong>ED-133</strong> — Longueur des résumés. Le contrôle d'événement (ED-40) dispose, à 360 dp, de ≈ 181 dp : 360 dp moins 32 dp de gouttières, « Envoyer » ou « Confirmer » à 1,3 × L (≈ 139 dp) et 8 dp d'écart. Son icône (16 dp) et l'écart qui la suit (4 dp) laissent au <strong>texte</strong> du résumé un créneau de ≈ 161 dp ; le texte y tient dans <strong>150 dp nets</strong> (<code>EDITOR_SUMMARY_TEXT_WIDTH_DP</code>, livré par R0b), les ≈ 11 dp restants absorbant les écarts de police et d'appareil ; le créneau est un plafond, pas une permission d'ajouter des marges. Chaque résumé final est <strong>mesuré</strong> : un banc Robolectric (écran de 360 dp, gouttières 2 × 16 dp, fontScale 1,3 et préréglage L, paramètres à leur valeur maximale) vérifie une ligne, aucune ellipse, le dernier caractère présent et une largeur ≤ 150 dp, avec une garde sur la largeur d'<code>ArmedSubmitButton</code>. La cible de rédaction est d'environ 19 caractères ; elle ne vaut pas garantie. Une troncature automatique couperait le sens : les textes sont réécrits jusqu'à passer le test (mesures livrées : <a href="#annexes-ed-133">annexe A</a>). Le test du créneau dans la barre réelle, en mode normal et en variante compacte, revient à R1a-1.</p>
 <h3 id="82-résumés">8.2 Résumés</h3>
-<p>Classes : ED-130, ED-162, ED-163 ; validation : ED-35 ; persistance : ED-44. Les résumés sont des cibles de rédaction, validées par le test d'ED-133.</p>
+<p>Classes : ED-130, ED-162, ED-163 ; validation : ED-35 ; persistance : ED-44. Résumés livrés par R0b (#1551, dev 0.69.4, <code>core/ui/.../editor/EditorErrors.kt</code>), mesurés par le banc d'ED-133. « Action » est l'action du catalogue, bouton de la bannière dans l'ancien chrome. Dans la barre (R1a-1), le tap sur l'événement exécute « Compléter » quand c'est l'action, ouvre le détail dès qu'il en existe un (ED-45), y compris pour « Message vide » et les deux informations à détail, et exécute « Masquer » sinon ; « Recharger » passe toujours par le détail (un geste de reprise n'est jamais sous le doigt sans la cause, ED-132). « Masquer » est toujours un remède du détail.</p>
 <table>
 <thead>
 <tr>
@@ -741,6 +773,7 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <th>Résumé</th>
 <th>Détail (remède compris)</th>
 <th>Action</th>
+<th>Autres remèdes du détail</th>
 </tr>
 </thead>
 <tbody>
@@ -748,22 +781,25 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <td>Message vide</td>
 <td>certain</td>
 <td>Message vide</td>
-<td>—</td>
+<td>oui — HFR refuse les réponses vides</td>
 <td>Masquer</td>
+<td>—</td>
 </tr>
 <tr>
-<td>Hash invalide (formulaire rechargé en silence)</td>
+<td>Hash invalide (formulaire expiré)</td>
 <td>certain</td>
-<td>Formulaire rechargé</td>
-<td>oui — texte conservé, renvoyer quand prêt</td>
+<td>Formulaire expiré</td>
+<td>oui — texte conservé, nouveau formulaire avant l'envoi</td>
 <td>Détails</td>
+<td>—</td>
 </tr>
 <tr>
 <td>Anti-flood</td>
 <td>certain</td>
 <td>Anti-flood HFR</td>
-<td>oui — 3 réponses par 10 min, patienter</td>
+<td>oui — patienter quelques minutes avant de renvoyer, sans seuil chiffré</td>
 <td>Détails</td>
+<td>—</td>
 </tr>
 <tr>
 <td>Sujet fermé</td>
@@ -771,20 +807,23 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <td>Sujet fermé</td>
 <td>oui — envoi impossible</td>
 <td>Détails</td>
+<td>—</td>
 </tr>
 <tr>
 <td>Connexion requise</td>
 <td>certain</td>
-<td>Connexion requise</td>
+<td>Non connecté</td>
 <td>oui — se connecter depuis le compte, le texte est conservé</td>
 <td>Détails</td>
+<td>—</td>
 </tr>
 <tr>
-<td>Session expirée</td>
+<td>Session expirée (page de connexion avant émission, ED-162)</td>
 <td>certain</td>
 <td>Session expirée</td>
 <td>oui — se reconnecter, le texte est conservé</td>
 <td>Détails</td>
+<td>—</td>
 </tr>
 <tr>
 <td>Échec avant toute émission du POST (DNS, refus ou délai de connexion)</td>
@@ -792,76 +831,111 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <td>Hors connexion</td>
 <td>oui — rien n'est parti, renvoi possible</td>
 <td>Détails</td>
+<td>—</td>
 </tr>
 <tr>
 <td>Échec du GET de matérialisation des cartes avant le POST</td>
 <td>certain</td>
-<td>Citation non chargée</td>
-<td>oui — rien n'est parti</td>
-<td>Détails</td>
+<td>Échec citation</td>
+<td>oui — rien n'est parti ; renvoyer, ou retirer la carte</td>
+<td>Recharger</td>
+<td>—</td>
 </tr>
 <tr>
 <td>Écriture de la tentative en échec (ED-170)</td>
 <td>certain</td>
 <td>Brouillon non écrit</td>
-<td>oui — rien n'est parti</td>
+<td>oui — rien n'est parti ; vérifier l'espace disponible</td>
 <td>Détails</td>
+<td>—</td>
 </tr>
 <tr>
-<td>Échec du chargement du formulaire (réseau ou réponse inattendue)</td>
+<td>Enregistrement du brouillon en échec (autosave, restauration ; ED-44)</td>
+<td>information</td>
+<td>Brouillon non écrit</td>
+<td>oui — le texte reste affiché ; rien n'est dit de l'envoi</td>
+<td>Détails</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Échec du chargement du formulaire (réseau ou réponse illisible)</td>
 <td>certain</td>
-<td>Hors connexion · Réponse inattendue</td>
-<td>oui</td>
+<td>Hors connexion · Réponse illisible</td>
+<td>oui — rien n'est parti</td>
 <td>Recharger</td>
+<td>—</td>
 </tr>
 <tr>
-<td>Échec après émission (délai d'écriture ou global, rupture, annulation, non-2xx, réponse inconnue) ; tentative restaurée sans résultat (ED-170)</td>
+<td>Échec après émission (délai d'écriture ou global, rupture, annulation, non-2xx, réponse inconnue, page de connexion reçue sur le POST) ; tentative restaurée sans résultat (ED-170)</td>
 <td>ambigu</td>
 <td>Envoi incertain</td>
 <td>oui — le message a peut-être été publié : vérifier le sujet ou la conversation avant de renvoyer ; MP : deux formulations (ED-112)</td>
 <td>Détails</td>
+<td>—</td>
 </tr>
 <tr>
-<td>Sous-catégorie absente du sujet</td>
+<td>Sous-catégorie absente du sujet en cache</td>
 <td>certain</td>
-<td>Sujet à actualiser</td>
+<td>Sujet périmé</td>
 <td>oui — actualiser le sujet depuis la vue Topic</td>
 <td>Détails</td>
+<td>—</td>
 </tr>
 <tr>
-<td>Citation non récupérée à l'ouverture</td>
+<td>Citation inline non récupérée (ED-132)</td>
 <td>certain</td>
-<td>Citation non chargée</td>
-<td>oui</td>
-<td>Détails</td>
+<td>Échec citation</td>
+<td>oui — rien n'est parti ; « Recharger », puis possibilité d'ignorer la citation</td>
+<td>Recharger</td>
+<td>« Ignorer la citation » après deux échecs, à côté de « Recharger »</td>
 </tr>
 <tr>
 <td>Titre, sous-catégorie, destinataires ou sujet manquant</td>
 <td>validation</td>
-<td>Titre manquant · Sous-catégorie manquante · Aucun destinataire · Sujet manquant</td>
-<td>—</td>
+<td>Titre manquant · Sous-cat. absente · Destinataire vide · Sujet manquant</td>
+<td>sous-catégorie seulement</td>
 <td>Compléter</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Destinataire inexistant (nouveau MP)</td>
+<td>certain</td>
+<td>Pseudo inconnu</td>
+<td>oui — vérifier les destinataires</td>
+<td>Compléter</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Envoi refusé par HFR (réponse MP)</td>
+<td>certain</td>
+<td>Envoi refusé</td>
+<td>oui — le message n'est pas parti</td>
+<td>Détails</td>
+<td>—</td>
 </tr>
 <tr>
 <td>Aucune image reçue (y compris annulation du sélecteur)</td>
 <td>information</td>
-<td>Aucune image reçue</td>
+<td>Image absente</td>
 <td>oui — explorateur, redémarrage, réglage du sélecteur (#1128)</td>
 <td>Masquer</td>
+<td>—</td>
 </tr>
 <tr>
 <td>Lot d'upload arrêté par un échec</td>
 <td>upload</td>
-<td>k/N images insérées</td>
-<td>oui — cause de l'échec</td>
+<td>k/N insérée(s)</td>
+<td>oui — k/N images insérées, cause de l'échec</td>
 <td>Détails</td>
+<td>—</td>
 </tr>
 <tr>
 <td>Image trop lourde</td>
 <td>upload</td>
-<td>Image trop lourde</td>
+<td>Image lourde</td>
 <td>oui</td>
 <td>Détails</td>
+<td>—</td>
 </tr>
 <tr>
 <td>Type refusé</td>
@@ -869,13 +943,15 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <td>Format refusé</td>
 <td>oui</td>
 <td>Détails</td>
+<td>—</td>
 </tr>
 <tr>
 <td>Refus de l'hébergeur</td>
 <td>upload</td>
-<td>Refus hébergeur %1$d</td>
+<td>Image refusée %1$d</td>
 <td>oui — nom de l'hébergeur, code HTTP</td>
 <td>Détails</td>
+<td>—</td>
 </tr>
 <tr>
 <td>Réponse illisible de l'hébergeur</td>
@@ -883,13 +959,15 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <td>Hébergeur illisible</td>
 <td>oui — nom de l'hébergeur</td>
 <td>Détails</td>
+<td>—</td>
 </tr>
 <tr>
 <td>Hébergeur non configuré</td>
 <td>upload</td>
-<td>Hébergeur non réglé</td>
+<td>Hébergeur absent</td>
 <td>oui — régler l'hébergeur dans les réglages</td>
 <td>Détails</td>
+<td>—</td>
 </tr>
 <tr>
 <td>Réseau à l'upload</td>
@@ -897,30 +975,35 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <td>Hors connexion</td>
 <td>oui</td>
 <td>Détails</td>
+<td>—</td>
 </tr>
 <tr>
 <td>Sélecteur indisponible (<code>ActivityNotFoundException</code>, #1382)</td>
 <td>upload</td>
-<td>Sélecteur absent</td>
-<td>oui</td>
+<td>Sans sélecteur</td>
+<td>oui — autre sélecteur ou gestionnaire de fichiers</td>
 <td>Détails</td>
+<td>—</td>
 </tr>
 <tr>
 <td>Sélection tronquée à 10 images (#1382)</td>
 <td>information</td>
 <td>10 images max</td>
-<td>oui</td>
+<td>oui — les dix premières, dans l'ordre de sélection</td>
 <td>Masquer</td>
+<td>—</td>
 </tr>
 <tr>
-<td>Accès restreint (#242, cause réservée jusqu'à la capture)</td>
+<td>Accès restreint (#242)</td>
 <td>certain</td>
 <td>Accès restreint</td>
 <td>oui</td>
 <td>Détails</td>
+<td>—</td>
 </tr>
 </tbody>
 </table>
+<p>« Accès restreint » reste réservé au catalogue de la spec jusqu'à la capture de #242 : R0b ne l'implémente pas (pas de code mort). Sur les deux surfaces MP, <code>TopicLocked</code>, réponse HFR sans équivalent MP, est un envoi incertain, et non un échec certain (R0b).</p>
 <p>Le jeu d'envoi suit la classification par <strong>étape</strong> d'ED-162 et ED-163 : le type d'exception seul ne suffit pas.</p>
 <p>Relevé : <a href="#annexes-chaînes-derreur-actuelles--82">annexe A</a>.</p>
 <h2 id="8-bis-invariants-denvoi">8 bis. Invariants d'envoi</h2>
@@ -931,7 +1014,7 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <p><strong>ED-162</strong> — Échec <strong>certain</strong> : renvoi permis. La classe est fixée par l'<strong>étape</strong>, puis par la cause :</p>
 <ul>
 <li>échec avant toute émission du POST : DNS, refus de connexion, délai de connexion, échec du GET de matérialisation des cartes qui précède le POST (<code>PostEditorViewModel.kt:1085-1089</code>), même sur un délai de lecture de ce GET ;</li>
-<li>refus reconnu, par le parser de la réponse : hash invalide (formulaire rechargé, sans renvoi automatique), message vide, anti-flood, sujet fermé (<code>ReplySubmitResponseParser.kt:34-52</code>) ; par une garde locale avant tout POST : connexion requise (formulaire anonyme), hash ou message vide (<code>DefaultReplyRepository.kt:211-218</code>, <code>PostEditorViewModel.kt:995-997</code>) ; par <code>HfrClient</code> : session expirée, sur une page de connexion reçue (<code>HfrClient.kt:1051-1078</code>), un 3xx sur le POST restant ambigu (ED-168) ;</li>
+<li>refus reconnu, par le parser de la réponse : hash invalide (formulaire rechargé, sans renvoi automatique), message vide, anti-flood, sujet fermé (<code>ReplySubmitResponseParser.kt:34-52</code>) ; par une garde locale avant tout POST : connexion requise (formulaire anonyme), hash ou message vide (<code>DefaultReplyRepository.kt:211-218</code>, <code>PostEditorViewModel.kt:995-997</code>) ; par <code>HfrClient</code> : session expirée, sur une page de connexion reçue <strong>avant</strong> toute émission du POST (GET de préparation), un 3xx sur le POST restant ambigu (ED-168). Une page de connexion reçue en réponse au POST, donc après une émission possible, est <strong>ambiguë</strong> (ED-163) : sa détection par le HTML ne prouve pas que HFR n'a rien enregistré (R0b PR 1, #1539, gate Astra ; les surfaces MP et la feuille comprises) ;</li>
 <li>échec de l'écriture de la tentative durable (ED-170) : rien n'est parti (libellé : ED-170) ;</li>
 <li>annulation pendant une étape locale qui précède l'émission, lecture du compte pour le comptage d'usage comprise (<code>captureOwner()</code>, #1154) : rien n'est parti.</li>
 </ul>
@@ -939,10 +1022,10 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <p><strong>ED-164</strong> — Bouton armé (préférence active ou inconnue, ED-171). Le premier appui ne POSTe jamais ; il crée une <strong>identité d'armement</strong> dans le ViewModel. La confirmation est vérifiée <strong>dans le ViewModel</strong> avec cette identité et une horloge <strong>monotone</strong> : une confirmation périmée, d'une autre identité ou reçue après le désarmement est ignorée. Le désarmement suit l'horloge, pas l'animation : délai = <code>calculateRecommendedTimeoutMillis(4000, containsIcons = false, containsText = true, containsControls = true)</code> (4 000 ms par défaut), donc il fonctionne avec « Supprimer les animations » ; le balayage visuel suit le temps écoulé. Une frappe, un retour ou un changement de compte désarment. Une recréation ne relance pas le délai (ED-86). Relevé : <a href="#annexes-ed-164">annexe A</a>.</p>
 <p><strong>ED-165</strong> — Aucune recomposition d'un chrome vers l'autre n'a lieu pendant un envoi, tant que l'envoi n'a pas abouti. Sans interrupteur (P1 refusée le 01/11, ED-141 retirée), le chrome d'une surface est fixé par la build : la règle est vraie par construction et n'a plus de lot porteur.</p>
 <p><strong>ED-166</strong> — Délai minimal de confirmation : une confirmation reçue moins de <strong>400 ms</strong> après l'armement est ignorée, vérifiée dans le ViewModel avec l'horloge d'ED-164. Ces 400 ms sont une politique d'ergonomie à mesurer (R0a), pas la preuve d'un second geste délibéré.</p>
-<p><strong>ED-167</strong> — L'action d'un événement est à au moins 8 dp d'« Envoyer », et la cible d'« Envoyer » ne dépasse pas le bord haut de la barre d'action, y compris à 48 dp en hauteur compacte, où cible et barre ont la même hauteur (ED-05) : un appui sur l'action d'un événement (Détails, Compléter, Recharger, Masquer) n'émet jamais d'intent d'envoi (test de frappe Robolectric).</p>
+<p><strong>ED-167</strong> — L'action d'un événement est à au moins 8 dp d'« Envoyer », et la cible d'« Envoyer » ne dépasse pas le bord haut de la barre d'action, y compris à 48 dp en hauteur compacte, où cible et barre ont la même hauteur (ED-05) : un appui sur le contrôle d'un événement ou sur un remède de sa surface de détail (Recharger, Ignorer la citation, Masquer) n'émet jamais d'intent d'envoi (test de frappe Robolectric).</p>
 <p><strong>ED-168</strong> — Verrou transport. Un POST d'écriture n'est jamais rejoué par la couche HTTP : corps à usage unique (one-shot), aucune redirection ni relance suivie pour un POST d'écriture ; un 3xx, 421 ou 503 reçu sur un tel POST est un échec ambigu (ED-163). Relevé : <a href="#annexes-ed-168">annexe A</a>. Porté par #1301-ST. Preuve : un test <code>MockWebServer</code> <strong>compte les requêtes reçues</strong> pour 307, 308, 421, 503 <code>Retry-After: 0</code> et une rupture après émission, sur chaque chemin d'écriture (réponse, édition, sujet, réponse MP, nouveau MP, feuille) : une seule requête par geste, et un échec ambigu. Précédent : les POST de favoris HFR (#1154), chemin d'écriture hors éditeur, appliquent déjà ce verrou, avec un client sans redirection ni relance et un corps à usage unique, <code>FavoriteSmileyRequestBody</code>, qui enveloppe un <code>FormBody</code> (relevé : <a href="#annexes-ed-168">annexe A</a>) ; ce chemin reste hors de la preuve de #1301-ST, qui porte sur les chemins de l'éditeur. Le corps à usage unique de l'éditeur laisse lisible le <code>FormBody</code>, que le comptage d'usage relit après le succès (ED-161).</p>
 <p><strong>ED-169</strong> — Le corps est <strong>figé pendant l'envoi</strong> : le champ est en lecture seule de la confirmation (ou du tap unique) jusqu'à l'issue, et le ViewModel refuse toute autre mutation (ED-172). Aucune saisie ne peut être perdue entre le snapshot d'envoi et la suppression du brouillon. Relevé : <a href="#annexes-ed-169">annexe A</a>.</p>
-<p><strong>ED-170</strong> — Tentative durable. Avant l'émission du POST, l'identité et la version de la tentative et l'état « tentative en cours » sont écrits dans le stockage durable du brouillon, et l'écriture est attendue : si elle échoue, rien ne part (échec certain, ED-162). La tentative s'écrit dans le stockage du brouillon de la surface, sous le couple (compte, clé d'éditeur), par le ViewModel, avant l'appel du chemin d'écriture ; la lecture du compte pour le comptage d'usage (<code>captureOwner()</code>, #1154) vient ensuite, dans ce chemin, et reste une étape locale avant l'émission (ED-162). Une mort du process entre les deux laisse une tentative « en cours » sans POST : restaurée, elle revient en « Envoi incertain », du côté sûr. L'issue remplace cet état : « publié » (ED-161), effacé sur un échec certain, « incertain » sur un échec ambigu (effacé à l'acquittement ou au prochain envoi). À toute restauration (ED-81, offre #1415), une tentative « en cours » ou « incertaine » ramène le texte avec l'événement « Envoi incertain » (ED-163), jamais comme brouillon ordinaire ; une écriture du marqueur « publié » en échec y ramène aussi. Les causes « Envoi incertain » et « Brouillon non écrit » entrent avec #1301-ST, libellés définitifs mesurés (ED-133), dans le système d'erreurs actuel ; R0b les migre vers le type unique sans en changer le texte (D44). Relevé : <a href="#annexes-ed-170">annexe A</a>.</p>
+<p><strong>ED-170</strong> — Tentative durable. Avant l'émission du POST, l'identité et la version de la tentative et l'état « tentative en cours » sont écrits dans le stockage durable du brouillon, et l'écriture est attendue : si elle échoue, rien ne part (échec certain, ED-162). La tentative s'écrit dans le stockage du brouillon de la surface, sous le couple (compte, clé d'éditeur), par le ViewModel, avant l'appel du chemin d'écriture. L'identité de tentative est un UUID fourni par la liaison d'envoi et écrit tel quel par le stockage (<code>EditorDraftStore.beginAttempt</code>, R0b ; colonnes et format inchangés). En dev 0.69.4, elle est préparée dès l'armement, pour que l'instantané du <code>SavedStateHandle</code> la connaisse ; #1553 retire cette anticipation, l'UUID est alloué au lancement. La liaison d'envoi ignore un permis non réservé ou une exécution déjà en cours ; la lecture du compte pour le comptage d'usage (<code>captureOwner()</code>, #1154) vient ensuite, dans ce chemin, et reste une étape locale avant l'émission (ED-162). Une mort du process entre les deux laisse une tentative « en cours » sans POST : restaurée, elle revient en « Envoi incertain », du côté sûr. L'issue remplace cet état : « publié » (ED-161), effacé sur un échec certain, « incertain » sur un échec ambigu (effacé à l'acquittement ou au prochain envoi). À toute restauration (ED-81, offre #1415), une tentative « en cours » ou « incertaine » ramène le texte avec l'événement « Envoi incertain » (ED-163), jamais comme brouillon ordinaire ; une écriture du marqueur « publié » en échec y ramène aussi. Les causes « Envoi incertain » et « Brouillon non écrit » entrent avec #1301-ST, libellés définitifs mesurés (ED-133), dans le système d'erreurs actuel ; R0b les migre vers le type unique sans en changer le texte (D44). Relevé : <a href="#annexes-ed-170">annexe A</a>.</p>
 <p><strong>ED-171</strong> — Préférence de confirmation <strong>inconnue ≠ désactivée</strong>. Tant qu'aucune valeur n'est lue, ou si la lecture échoue, la confirmation est requise (ED-34, ED-164) : aucun POST ne part sans confirmation tant que la désactivation n'est pas établie par une valeur lue (clé absente comprise, défaut P4). Une lecture en erreur ne vaut jamais « désactivée ». Relevé : <a href="#annexes-ed-171">annexe A</a>.</p>
 <p><strong>ED-172</strong> — Exclusion mutuelle envoi / upload, sur les cinq surfaces (la feuille n'a pas d'upload) : aucun envoi pendant un upload, aucun upload pendant un envoi. Pendant l'envoi, le ViewModel refuse <strong>toute</strong> mutation du corps — saisie, insertions programmatiques, callbacks d'upload, restauration (offre #1415, <code>resumeSharedDraft</code>) —, pas seulement par le <code>readOnly</code> du champ, qui ne bloque pas une insertion programmatique. Rien n'attend R1b. Relevé : <a href="#annexes-ed-172">annexe A</a>.</p>
 <h3 id="8-bis2-automate-armement-et-envoi">8 bis.2 Automate armement et envoi</h3>
@@ -997,7 +1080,7 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <p>Chaque fonction de 0.62.0, sa place dans la refonte, ses règles, son lot et sa preuve : <a href="#annexes-c-traçabilité-des-fonctions-existantes">annexe C</a>. Les règles portées par chaque lot sont dans la colonne « Règles » du <a href="#111-tableau-des-lots">§ 11.1</a>.</p>
 <h2 id="11-lots">11. Lots</h2>
 <p>Un lot = une PR = une build dev = un retour testeurs, sauf R0a (preuve sur appareil, hors dépôt), R1a-1 (composants non branchés, sans retour testeurs) et R0c (une PR par ViewModel). La livraison se fait sans interrupteur (P1 refusée le 01/11) : chaque lot remplace l'ancien chrome sur sa surface, selon la stratégie du <a href="#11-bis-stratégie-de-livraison-sans-interrupteur">§ 11 bis</a>. Les lots qui touchent aux ViewModels d'envoi (#1301-ST, R0b, R0c) passent <strong>en série</strong>, jamais en même temps.</p>
-<p><strong>ED-140</strong> — Règle transitoire : aucun lot ne retire un parcours avant le lot qui le remplace. Jusqu'à R2a, en mode cartes, les cartes de citation restent affichées et utilisables en tête du champ, par dérogation à ED-03, dans une zone plafonnée et défilante qui garde au champ les minima d'ED-02 en portrait et d'ED-05 en hauteur compacte (C3, 3 lignes à fontScale 1, 2 lignes à 1,3 × L), et non un plancher fixe de 160 dp. Le critère J de R0a mesure aussi ce cas, citations en cartes présentes et utilisables en hauteur compacte ; s'il échoue, un repli explicite est arrêté avant G1, sans déroger à C3 (condition d'Astra du 01/11) ; l'icône d'état ❝ n'est pas affichée. La présence et la hauteur de cette zone sont fixées <strong>avant la première composition du champ</strong> : quand la requête porte des citations, la lecture de la préférence de rendu (ED-01) est attendue derrière l'écran de chargement (relevé : cartes posées après une lecture suspendue, <code>PostEditorViewModel.kt:295-296</code>). À défaut, ED-140 vaut <strong>dérogation transitoire explicite</strong> à ED-02 et ED-41 : l'arrivée de la zone peut réduire le champ une fois, à l'ouverture, jusqu'à R2a. Jusqu'à R2b, sur toute surface migrée (R1a-2, R1b-1, R1b-2a, R1b-2b), l'aperçu reste une bascule plein champ depuis l'app bar (depuis la barre d'action en hauteur compacte). Le critère de hauteur (§ 3.2) se mesure sans carte.</p>
+<p><strong>ED-140</strong> — Règle transitoire : aucun lot ne retire un parcours avant le lot qui le remplace. Jusqu'à R2a, en mode cartes, les cartes de citation restent affichées et utilisables en tête du champ, par dérogation à ED-03, dans une zone plafonnée et défilante qui garde au champ les minima d'ED-02 en portrait et d'ED-05 en hauteur compacte (C3, 3 lignes à fontScale 1, 2 lignes à 1,3 × L), et non un plancher fixe de 160 dp. Le critère J de R0a mesure aussi ce cas, citations en cartes présentes et utilisables en hauteur compacte ; s'il échoue, un repli explicite est arrêté avant G1, sans déroger à C3 (condition d'Astra du 01/11) ; l'icône d'état ❝ n'est pas affichée. La présence et la hauteur de cette zone sont fixées <strong>avant la première composition du champ</strong> : quand la requête porte des citations, la lecture de la préférence de rendu (ED-01) est attendue derrière l'écran de chargement (relevé : cartes posées après une lecture suspendue, <code>PostEditorViewModel.kt:295-296</code>). À défaut, ED-140 vaut <strong>dérogation transitoire explicite</strong> à ED-02 et ED-41 : l'arrivée de la zone peut réduire le champ une fois, à l'ouverture, jusqu'à R2a. Prétests de R0a (07/11, émulateur ; zone = place restante moins le minimum du champ, plafonnée à 112 dp) : en portrait, la zone garde deux cartes entières et le champ ses minima ; en fenêtre basse 360 × 470 dp, les minima du champ tiennent mais la zone ne reçoit que 7,7 à 13,7 dp, une bande de carte inutilisable ; en paysage, 0 dp. Les cartes restent alors atteignables par l'action ❝ épinglée dans la barre, qui ouvre le panneau. <strong>Repli décidé le 07/11 (P22, après challenge de Sol)</strong> : quand la zone ne peut pas montrer une carte entière, à sa hauteur réelle mesurée (pas une valeur fixe de 48 dp), elle vaut 0 et les cartes passent par ❝. L'allocation reste figée avant la première composition du champ, comme ci-dessus. Ce repli avance une partie de R2a : il n'est livré qu'avec le parcours complet du panneau citations (« Tout vider » compris, annonces et focus, ED-50 à ED-53) et l'icône ❝ en hauteur compacte, par dérogation à la phrase qui l'interdit avant R2a. Jusqu'à R2b, sur toute surface migrée (R1a-2, R1b-1, R1b-2a, R1b-2b), l'aperçu reste une bascule plein champ depuis l'app bar (depuis la barre d'action en hauteur compacte). Le critère de hauteur (§ 3.2) se mesure sans carte.</p>
 <h3 id="111-tableau-des-lots">11.1 Tableau des lots</h3>
 <table>
 <thead>
@@ -1413,14 +1496,101 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 </tbody>
 </table>
 <p>M1 fixe la <em>version</em> de la bibliothèque. M3 délègue le <em>choix des composants</em> (par exemple <code>TopAppBar</code> 48 dp contre une composition applicative), qui se fait par la mesure de R0a et se fige en R1a-1. Les deux ne se contredisent pas.</p>
+<h3 id="décisions-prises-pendant-les-lots-v072">Décisions prises pendant les lots (v0.7.2)</h3>
+<table>
+<thead>
+<tr>
+<th>Date</th>
+<th>Question</th>
+<th>Réponse</th>
+<th>Effet dans la spec</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>06/11</td>
+<td>R0b en une ou deux PR ?</td>
+<td>deux PR en série (frontière d'émission ; contrat d'erreur)</td>
+<td>#1539 puis #1551, une release dev chacune.</td>
+</tr>
+<tr>
+<td>06/11</td>
+<td>ED-133 : rangée réservée ou résumé cliquable ? (avis demandés à Astra et Fable par le mainteneur)</td>
+<td><strong>résumé cliquable</strong>, avis concordants</td>
+<td>ED-30, ED-40, ED-45, ED-90 à ED-92, ED-95, ED-133, § 8.2.</td>
+</tr>
+<tr>
+<td>06/11</td>
+<td>ED-132 : relibeller « Envoyer » en « Recharger », ou demande en attente ? (mêmes avis)</td>
+<td><strong>demande en attente</strong>, « Envoyer » inactif sans relibellé</td>
+<td>ED-35, ED-44, ED-132, § 8.2.</td>
+</tr>
+<tr>
+<td>07/11</td>
+<td>Piste Room de la gate Fable de #1551 (#1553) : lot autonome ? demande dormante sur un envoi incertain ?</td>
+<td><strong>lot autonome</strong>, une PR, avant R0c PR 2 ; <strong>demande dormante</strong> avec deux décisions explicites</td>
+<td>ED-81, ED-84, ED-132.</td>
+</tr>
+<tr>
+<td>07/11</td>
+<td>#1553 : demandes encore dans le <code>SavedStateHandle</code> d'une version d'avant la migration 20 → 21 ?</td>
+<td>ignorées, avec une information explicite, sans import</td>
+<td>ED-132.</td>
+</tr>
+<tr>
+<td>07/11</td>
+<td>R0a, critère G : clavier physique ?</td>
+<td>non : prétest sur émulateur seulement, critère « partiellement vérifié »</td>
+<td>Annexe B.5.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="arbitrages-ouverts-par-r0a-v072">Arbitrages ouverts par R0a (v0.7.2)</h3>
+<p>Recommandations acceptées par le mainteneur le 07/11 sous réserve d'un challenge de Sol (<code>logs/codex/sol61-1417-v072-challenge-r1-answer.md</code>) ; un point contesté lui revient.</p>
+<table>
+<thead>
+<tr>
+<th>Question</th>
+<th>Challenge de Sol</th>
+<th>Décision</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P20 — Source et seuil de la classe compacte (ED-05)</td>
+<td><strong>contre</strong> « configuration moins barres système » : double comptage jusqu'à l'API 34 ; métriques de fenêtre et insets verticaux</td>
+<td><strong>décidé le 07/11</strong> (mainteneur, version de Sol) : métriques de la fenêtre de l'activité moins barres système et découpe, hors IME ; &lt; 480 dp ; vérifié par R1a-1 sur API 29, 34, 35</td>
+</tr>
+<tr>
+<td>P21 — Paysage avec IME (ED-05, critère J) : une ligne de champ mesurée sur émulateur</td>
+<td>d'accord avec réserve : une décision produit serait possible, la validation sur S10e reste nécessaire</td>
+<td><strong>ouvert</strong> : trancher sur la mesure S10e, avant G1</td>
+</tr>
+<tr>
+<td>P22 — Zone de cartes en hauteur compacte (ED-140)</td>
+<td>d'accord avec réserve : cela avance le panneau de R2a</td>
+<td><strong>décidé le 07/11</strong> : zone à 0 si une carte entière (hauteur réelle) ne tient pas ; livré avec le parcours complet du panneau</td>
+</tr>
+<tr>
+<td>P23 — « Restaurer » sur une graine modifiée à l'intérieur (ED-89)</td>
+<td>d'accord avec réserve : risque de versions juxtaposées à accepter explicitement</td>
+<td><strong>décidé le 07/11</strong> : ajout historique, risque accepté, annulation en un pas exigée</td>
+</tr>
+<tr>
+<td>M14 — Tap sur un événement à détail dont l'action est « Masquer » (ED-45, § 8.2)</td>
+<td>d'accord : annoncer l'action réelle, garder le détail lisible avant l'acquittement</td>
+<td><strong>décidé le 07/11</strong> : le tap ouvre le détail dès qu'il existe, « Compléter » d'abord</td>
+</tr>
+</tbody>
+</table>
 <h3 id="décisions-en-attente">Décisions en attente</h3>
-<p>Aucune. P13, P17 a, P17 b, P18 et P19, encore ouvertes en v0.7, sont arbitrées depuis le 01/11 (table ci-dessus) ; les recommandations qui les accompagnaient sont dans l'historique de l'ADR-020 (v0.7, passes 3 et 4).</p>
+<p>P21 (v0.7.2, tableau « Arbitrages ouverts par R0a » ci-dessus). P13, P17 a, P17 b, P18 et P19, encore ouvertes en v0.7, sont arbitrées depuis le 01/11 (table ci-dessus) ; les recommandations qui les accompagnaient sont dans l'historique de l'ADR-020 (v0.7, passes 3 et 4).</p>
 </section>
 <div class="doc-sep">Décision associée</div>
 <section id="adr">
 <h1 id="adr-adr-020--refonte-de-la-vue-éditeur-1417--chrome-fixe-champ-élastique-états-dans-lapp-bar">ADR-020 — Refonte de la vue Éditeur (#1417) : chrome fixe, champ élastique, états dans l'app bar</h1>
 <h2 id="adr-statut">Statut</h2>
-<p>Accepté — 2026-11-01 (v0.7.1 ; v0.3 du 2026-09-23 ; passes jusqu'à la v0.6.4 : Opus 5.5, Sol 6.1, Fable, Astra ; v0.7 : passes 1 et 2 (Opus) ; challenge de Sol : À REVOIR (0 / 6 / 3), intégré en passe 3 ; gate de Fable : OK avec amendements (0 / 6 / 6), intégrés en passe 4 ; gate d'Astra : GO avec conditions (01/11), conditions inscrites : cartes en hauteur compacte avant G1 (ED-140, critère J), C8 sur les trois surfaces R1b avant G3, trois corrections mineures reportées ; v0.7.1 : décisions du mainteneur sur P13, P17 a, P17 b, P18 et P19). L'acceptation et la validation des choix pris par délégation sont la décision P10 de la <a href="#14-décisions-en-attente">spec de l'éditeur</a>, acceptée par le mainteneur le 01/11.</p>
+<p>Accepté — 2026-11-01 (v0.7.1 ; v0.3 du 2026-09-23 ; passes jusqu'à la v0.6.4 : Opus 5.5, Sol 6.1, Fable, Astra ; v0.7 : passes 1 et 2 (Opus) ; challenge de Sol : À REVOIR (0 / 6 / 3), intégré en passe 3 ; gate de Fable : OK avec amendements (0 / 6 / 6), intégrés en passe 4 ; gate d'Astra : GO avec conditions (01/11), conditions inscrites : cartes en hauteur compacte avant G1 (ED-140, critère J), C8 sur les trois surfaces R1b avant G3, trois corrections mineures reportées ; v0.7.1 : décisions du mainteneur sur P13, P17 a, P17 b, P18 et P19 ; v0.7.2 du 2026-11-07 : report du lot livré R0b (dev 0.69.4), du cadrage et des décisions de #1553 (en cours, non mergé), de la sonde Ctrl+Z et de la règle « Restaurer » de R0c (PR non mergées) et des prétests de R0a ; P20, P22, P23 et M14 décidés le 07/11 après challenge de Sol, P21 ouvert). L'acceptation et la validation des choix pris par délégation sont la décision P10 de la <a href="#14-décisions-en-attente">spec de l'éditeur</a>, acceptée par le mainteneur le 01/11.</p>
 <h2 id="adr-contexte">Contexte</h2>
 <p>La vue Éditeur regroupe cinq surfaces d'écriture : répondre ou modifier un message (<code>PostEditorScreen</code>), créer un sujet ou modifier son premier message (<code>TopicFormScreen</code>), écrire un nouveau MP (<code>PrivateMessageComposeScreen</code>), répondre dans une conversation MP (<code>PrivateMessageReplyScreen</code> / <code>MessageEditorComponents</code>), et la feuille de réponse rapide de la vue Topic (<code>QuickReplySheet</code>). Les quatre premières partagent les composants de <code>:core:ui/editor</code> (<code>BbcodeTextField</code>, <code>BbcodeToolbar</code>, <code>SmileyPickerSheet</code>, <code>EditorOptionsSheet</code>, <code>ArmedSubmitButton</code>, <code>EditorLayoutBudget</code>, <code>EditorUpload</code>) ; <code>QuoteCards</code> ne sert qu'à l'éditeur de post. La feuille a sa propre implémentation et ne réutilise que <code>QuoteCardsColumn</code>.</p>
 <p>L'objectif produit, posé par un testeur sur le topic DEV et repris par l'issue parapluie <a href="https://github.com/ForumHFR/redface2/issues/1417">#1417</a>, est que <strong>les bords haut et bas du champ restent visibles et que le texte défile dedans</strong>.</p>
@@ -1434,7 +1604,7 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <h3 id="adr-1-chrome-à-hauteur-fixe-champ-élastique">1. Chrome à hauteur fixe, champ élastique</h3>
 <p>Une app bar d'éditeur de 48 dp en haut (retour, titre d'écran, contexte en seconde ligne, icônes d'état, aperçu) et une barre d'action de 56 dp en bas (48 dp en hauteur compacte). Entre les deux, le champ prend toute la hauteur restante, avec le plancher de 160 dp existant. Le titre d'écran (<code>titleLarge</code>), la barre d'outils dans le flux, les bandeaux et le bouton « Afficher l'aperçu » disparaissent de la colonne. Il n'y a pas de bande (décision 3). Aucune de ces hauteurs ne varie pendant la vie de la surface.</p>
 <p>L'app bar ne grandit jamais : quand ses deux lignes ne tiennent pas dans 48 dp à l'échelle effective (fontScale du système × préréglage de lecture de l'app, pire cas 1,3 × L), la seconde ligne est masquée (D20) et le bloc titre reste l'entrée du panneau d'en-tête. La flèche de retour passe par la fermeture du ViewModel, comme le retour système : sauvegarde attendue, inerte pendant l'envoi.</p>
-<p>En <strong>hauteur compacte</strong> — classe de hauteur Material Compact (&lt; 480 dp), calculée sur la configuration et non sur les bounds de fenêtre, que l'IME réduit sous API 30 (D26) —, l'app bar s'efface avec son titre ; les icônes d'état, l'aperçu et l'entrée « En-tête » deviennent des emplacements fixes de la barre d'action, retenus par priorité quand la largeur manque — « Envoyer », puis « En-tête », « Aperçu », icônes d'état ; le reste défile (D38) ; le retour passe par le geste système. La variante compacte (M2, qui remplace P14) ramène la barre d'action à 48 dp et l'espacement à 0, et retire le label visuel du champ, nom accessible « Message » conservé : le champ y garde environ 102 dp sur un S10e en paysage (≈ 86 dp de viewport), en B5 comme dans le repli B1. Le seuil est C3, avec trois lignes du vrai champ à fontScale 1 et deux à 1,3 × L, pour une marge de 14 dp seulement ; un échec de la mesure est un arbitrage explicite du mainteneur. En portrait, « En-tête » n'entre jamais dans la barre : cinq icônes et « Envoyer » ne tiennent pas dans 360 dp.</p>
+<p>En <strong>hauteur compacte</strong> — classe de hauteur Material Compact (&lt; 480 dp), calculée sur les métriques de la fenêtre de l'activité moins les barres système et la découpe, jamais sur une hauteur que l'IME réduit sous API 30 (D26 ; source précisée le 07/11, P20, v0.7.2) —, l'app bar s'efface avec son titre ; les icônes d'état, l'aperçu et l'entrée « En-tête » deviennent des emplacements fixes de la barre d'action, retenus par priorité quand la largeur manque — « Envoyer », puis « En-tête », « Aperçu », icônes d'état ; le reste défile (D38) ; le retour passe par le geste système. La variante compacte (M2, qui remplace P14) ramène la barre d'action à 48 dp et l'espacement à 0, et retire le label visuel du champ, nom accessible « Message » conservé : le champ y garde environ 102 dp sur un S10e en paysage (≈ 86 dp de viewport), en B5 comme dans le repli B1. Le seuil est C3, avec trois lignes du vrai champ à fontScale 1 et deux à 1,3 × L, pour une marge de 14 dp seulement ; un échec de la mesure est un arbitrage explicite du mainteneur. En portrait, « En-tête » n'entre jamais dans la barre : cinq icônes et « Envoyer » ne tiennent pas dans 360 dp.</p>
 <h3 id="adr-2-barre-daction-en-icônes-mode-format">2. Barre d'action en icônes, mode format</h3>
 <p>La barre d'action porte les actions permanentes en icônes seules — format, smileys, image, options — et « Envoyer » en toutes lettres ; un raccourci choisi par l'utilisateur s'y ajoute après smileys (ED-36 à ED-39, lot R6, P16 décidée le 01/11). La pastille d'une teinte choisie en raccourci est dessinée, pas un drawable tinté : exception explicite à l'ADR-015, même taille et même cible, lisibilité capturée sur les deux thèmes en R6. Chaque icône a un nom accessible et une info-bulle à l'appui long (<code>TooltipBox</code>). Les icônes suivent l'<a href="https://forumhfr.github.io/redface2/adr/015-iconographie-boutons-icones">ADR-015</a>.</p>
 <p>Les actions de format ne vivent plus dans un tiroir. L'icône format bascule la barre en <strong>mode format</strong>, à hauteur constante (D18) : l'icône reste en place, sélectionnée, et referme le mode ; smileys, raccourci, image et options cèdent la place à une rangée défilante d'icônes de format, avec un dégradé de bord ; « Envoyer » reste à droite. Le mode ne recouvre rien et ne change aucune hauteur : l'ouvrir ou le fermer ne déplace pas le texte (C6), et le caret ne peut pas passer dessous (C5). Il persiste à la frappe ; il se referme par l'icône format, le retour, l'ouverture d'une feuille, d'un panneau ou de l'aperçu ; l'armement de l'envoi le masque. Couleur et Image ouvrent un <strong>sous-niveau</strong> dans la même barre (teintes ou actions image, plus « Retour ») : aucune popup, donc aucun <code>DropdownMenu</code> focusable qui fermerait le clavier.</p>
@@ -1444,7 +1614,7 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <p>Tout ce qui était un bandeau empilé se range dans le chrome fixe, sans bande (D33) :</p>
 <ul>
 <li>les <strong>états durables</strong> — brouillon retrouvé (↺), citations en cartes (❝ N), destinataires d'un DT, sondage préservé — sont des <strong>icônes à badge de l'app bar</strong>, deux au plus par surface, cibles de 48 dp ; en hauteur compacte, des emplacements fixes de la barre d'action ;</li>
-<li>l'<strong>événement</strong> du moment — envoi, upload, erreur, fin, information, un seul à la fois — occupe la <strong>barre d'action à la place des actions secondaires</strong>, comme l'armement le fait déjà : icône, résumé d'une ligne, une action (« Détails », « Compléter », « Recharger » ou « Masquer ») à au moins 8 dp d'« Envoyer », qui reste à droite. Une erreur, une fin ou une information masquent les outils jusqu'à un tap d'acquittement.</li>
+<li>l'<strong>événement</strong> du moment — envoi, upload, erreur, fin, information, un seul à la fois — occupe la <strong>barre d'action à la place des actions secondaires</strong>, comme l'armement le fait déjà : un seul contrôle, icône et résumé d'une ligne, à au moins 8 dp d'« Envoyer », qui reste à droite ; le tap exécute l'action de la cause (« Détails », « Compléter » ou « Masquer »), et les remèdes (« Recharger », « Ignorer la citation ») sont dans le détail (v0.7.2 : à 360 dp et 1,3 × L, une action séparée ne tient pas à côté d'« Envoyer »). Une erreur, une fin ou une information masquent les outils jusqu'à un tap d'acquittement.</li>
 </ul>
 <p>Seul le contenu change : à l'ouverture, sur un geste, à l'aboutissement d'une opération lancée par un geste et à l'arrivée asynchrone d'un état d'ouverture ; jamais sur une modification du texte ou de la sélection. Aucune hauteur ne change ; les cibles font 48 dp, le standard Android, sans dérogation ; aucun mécanisme nouveau n'est créé, l'armement masquant déjà les actions secondaires.</p>
 <p>Aucune géométrie ne dépend d'un état asynchrone, parce que des états arrivent sans geste pendant que l'utilisateur tape : le champ de l'éditeur de post est interactif pendant le chargement du formulaire (<code>PostEditorScreen.kt:174-176</code>, autofocus #555), et l'offre de restauration d'un brouillon (#1415) peut arriver après le premier rendu (<code>PostEditorViewModel.kt:372-404</code>). Une bande qui apparaîtrait alors déplacerait le champ sous les doigts ; une bande permanente (v0.4) le prive de 48 dp, le plus souvent vides.</p>
@@ -1949,13 +2119,19 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <td><strong>mainteneur</strong></td>
 <td>statut, conventions, ED-32, ED-36, ED-37, ED-70, ED-95, § 3.2, § 3.3, § 11, § 11 bis, § 14 ; annexes A, B.1, C, D, E, G, H ; lexique</td>
 </tr>
+<tr>
+<td>v0.7.2 : report de ce que les lots ont établi depuis le 01/11. R0b (#1539, #1551, dev 0.69.4) : type d'erreur commun et 38 chaînes (ED-130), ED-131 livré, demande de citation en attente et « Envoyer » inactif sans relibellé (ED-35, ED-44, ED-132), résumés mesurés en 150 dp nets (ED-133, § 8.2), événement en un seul contrôle (ED-30, ED-40, ED-45, ED-90 à ED-92, ED-95 ; décisions du 06/11 sur avis d'Astra et de Fable), page de connexion après émission ambiguë (ED-162), identité de tentative fournie par l'appelant (ED-170). #1553 : demande de citation durable dans la ligne de brouillon, demande dormante sur un envoi incertain (ED-81, ED-84, ED-132). R0c : sonde Ctrl+Z, hydratation exclue de l'historique (ED-37) ; règle « Restaurer » commune (ED-89, nouvelle). R0a, prétests sur émulateur : critère I (ED-81 : pont en remplacement minimal), critère J (ED-05 : paysage à une ligne, seuil d'Android 15 ; ED-140 : zone de cartes inutilisable en fenêtre basse) ; P20 (classe compacte sur les métriques de fenêtre), P22 (zone de cartes à 0, panneau complet avancé), P23 (ajout historique, risque accepté) et M14 décidés le 07/11 après challenge de Sol ; P21 ouvert jusqu'à la mesure S10e ; « Restaurer » inactif tant que la graine n'est pas connue (gate Fable de R0c PR 4). Annexes A (§ 7.1 corrigé, ED-131, ED-133) et B.5 (G, K)</td>
+<td>07/11</td>
+<td>Opus 5.5 (rf2-dev) ; relecture Fable (OK avec corrections, intégrées) ; challenge Sol des recommandations ; décisions du mainteneur</td>
+<td>statut, conventions, ED-05, ED-30, ED-35, ED-37, ED-40, ED-44, ED-45, ED-81, ED-84, ED-89, ED-90, ED-91, ED-92, ED-95, ED-130 à ED-133, ED-140, ED-162, ED-170, § 7.1, § 8.2, § 14 ; annexes A, B.5 ; ADR décision 3</td>
+</tr>
 </tbody>
 </table>
 </section>
 <div class="doc-sep">Annexes</div>
 <section id="annexes">
 <h1 id="annexes-annexes-du-contrat-de-léditeur">Annexes du contrat de l'éditeur</h1>
-<p>Compléments <strong>non normatifs</strong> du <a href="#spec">contrat de l'éditeur</a> (v0.7.1, 01/11/2026) : relevés de l'existant, stratégie de test, traçabilité détaillée, registre des risques, stratégie de livraison, questions ouvertes, graphe des lots, sujets hors phase. En cas d'écart, le contrat fait foi.</p>
+<p>Compléments <strong>non normatifs</strong> du <a href="#spec">contrat de l'éditeur</a> (v0.7.2, 07/11/2026) : relevés de l'existant, stratégie de test, traçabilité détaillée, registre des risques, stratégie de livraison, questions ouvertes, graphe des lots, sujets hors phase. En cas d'écart, le contrat fait foi.</p>
 <h2 id="annexes-a-relevé-de-lexistant">A. Relevé de l'existant</h2>
 <p>Relevé à <code>08d5b41c</code> (bêta 0.62.0), rangé par règle du contrat ; références <code>fichier:ligne</code> revérifiées et recalées à <code>04d3039c</code> (bêta 0.65.0, 01/11/2026), le chrome de l'éditeur étant inchangé entre les deux. Les relevés de la feuille smileys livrée par #1154 sont faits à <code>04d3039c</code>. Chaque passage décrit l'existant que la règle remplace ou conserve, avec sa preuve <code>fichier:ligne</code>.</p>
 <h3 id="annexes-citations--12">Citations (§ 1.2)</h3>
@@ -2237,11 +2413,11 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <h3 id="annexes-ed-95">ED-95</h3>
 <p>Écarts de la feuille smileys (#1154) au principe d'ED-95 et au retour du focus d'ED-90. Les retours des favoris sont des régions live qui apparaissent : statut (<code>SmileyFavoriteControls.kt:125-133</code>), surcouche hors Favoris (<code>SmileyPickerSheet.kt:286-296</code>), élément de grille sur Favoris (<code>:532-536</code>), bas du détail (<code>SmileyDetailContent.kt:85-88</code>). Sur Favoris défilé, ce retour est hors écran et non composé, donc ni vu ni annoncé (défaut probable, non reproduit). Au retour du détail, la grille est recréée et le focus TalkBack n'est pas rendu à la cellule d'origine (<code>SmileyPickerSheet.kt:202-210</code>). Ces deux écarts sont portés par le lot S1 de la suite de #1154 (rf2-smalldev) ; G4 les exige corrigés, ou bien une dérogation bornée actée par le mainteneur (<a href="#6-accessibilité">contrat, ED-95</a>). Conformes : cibles d'au moins 48 dp, titres sémantiques, <code>paneTitle</code> qui suit la page (<code>SmileyPickerSheet.kt:172-174</code>, <code>:190</code>), actions personnalisées (« Afficher le détail », favoris de l'appareil et HFR).</p>
 <h3 id="annexes-échec-et-nouvel-essai--71">Échec et nouvel essai (§ 7.1)</h3>
-<p>Relevé de l'échec et du nouvel essai :</p>
+<p>Relevé à <code>04d3039c</code> (bêta 0.65.0) pour le point 1, à <code>10349073</code> (R0b PR 1) pour les points 2 et 3 ; corrigé par R0b PR 2 (#1551, dev 0.69.4 ; règle : ED-132) :</p>
 <ol type="1">
 <li>un fetch de citation inline en échec produit l'erreur d'envoi générique (« Erreur réseau… », « HFR a renvoyé une réponse inattendue… »), sans mention de la citation (<code>PostEditorViewModel.kt:315-356</code>, <code>:947-970</code>) ;</li>
-<li><code>loadedForm</code> reste nul : le tap suivant sur « Envoyer » recharge le formulaire <strong>simple</strong>, sans citation, puis rend la main sans rien envoyer ni l'indiquer (<code>:987-994</code>, <code>:804-815</code>) ;</li>
-<li>le tap d'après publie la réponse <strong>sans</strong> la citation, sans avertissement.</li>
+<li><code>loadedForm</code> reste nul : le tap suivant sur « Envoyer » ne recharge rien et rend la main aussitôt (<code>PostEditorViewModel.kt:998-1001</code> à <code>10349073</code> ; la v0.7.1 décrivait à tort un rechargement du formulaire simple, faux à <code>10349073</code>, non revérifié à <code>04d3039c</code> ; relevé par Astra et Fable le 06/11) ;</li>
+<li>dans la feuille, l'envoi suivant pouvait publier le corps <strong>sans</strong> la citation (<code>QuickReplyViewModel.kt:542</code> à <code>10349073</code>).</li>
 </ol>
 <h3 id="annexes-ed-100">ED-100</h3>
 <p>Titre, sous-catégorie et barre d'outils occupent aujourd'hui une zone défilante plafonnée (<code>EditorLayoutBudget</code>) ; l'édition du premier message sans sous-catégorie est refusée faute de contrat de formulaire capturé (<code>TopicFormState.kt:126-151</code>) ; après un échec de chargement, <code>selectedSubcat</code> reste nul, « Envoyer » reste inactif pour toute catégorie (<code>hasSubcategorySelect</code> vaut <code>true</code> par défaut), et l'écran n'offre aucun nouvel essai (<code>TopicFormViewModel.kt:1073</code>, <code>TopicFormState.kt:46</code>, <code>:169-170</code> ; § 12, Q2).</p>
@@ -2255,9 +2431,10 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 <p>Erreurs de chargement du formulaire MP : <code>messages_reply_form_error</code>, <code>messages_compose_form_error</code> ; écran plein, y compris après l'échec d'un rechargement sur <code>InvalidHashCheck</code> (<code>PrivateMessageReplyViewModel.kt:430-435</code>, <code>PrivateMessageReplyScreen.kt:161</code>).</p>
 <p>Feuille smileys (#1154) : quatorze retours <code>SmileyFavoriteFeedback</code> (<code>SmileyPickerState.kt:86-101</code>), dont dix issus des mutations HFR, affichés dans la feuille (<code>SmileyFavoriteControls.kt:135-157</code>) ; échec des mots-clés du wiki avec « Réessayer » (<code>SmileyWikiKeywordsContent.kt:46-49</code>).</p>
 <h3 id="annexes-ed-131">ED-131</h3>
-<p>Effacement actuel à la frappe : l'éditeur de post (<code>submitError</code> et <code>uploadError</code> effacés par <code>withDraft</code>, <code>PostEditorState.kt:176-187</code>), le formulaire de sujet sur le corps et le titre (<code>TopicFormState.kt:280-285</code>, <code>TopicFormViewModel.kt:643</code>), l'erreur d'upload des deux éditeurs MP (<code>PrivateMessageReplyViewModel.kt:671</code>, <code>PrivateMessageComposeViewModel.kt:666</code>) et la feuille, même sur un déplacement de sélection (<code>QuickReplyViewModel.kt:361-363</code>). Les éditeurs MP conservaient déjà leurs erreurs d'envoi.</p>
+<p>Effacement actuel à la frappe : l'éditeur de post (<code>submitError</code> et <code>uploadError</code> effacés par <code>withDraft</code>, <code>PostEditorState.kt:176-187</code>), le formulaire de sujet sur le corps et le titre (<code>TopicFormState.kt:280-285</code>, <code>TopicFormViewModel.kt:643</code>), l'erreur d'upload des deux éditeurs MP (<code>PrivateMessageReplyViewModel.kt:671</code>, <code>PrivateMessageComposeViewModel.kt:666</code>) et la feuille, même sur un déplacement de sélection (<code>QuickReplyViewModel.kt:361-363</code>). Les éditeurs MP conservaient déjà leurs erreurs d'envoi. Corrigé par R0b (#1551) sur les cinq surfaces.</p>
 <h3 id="annexes-ed-133">ED-133</h3>
-<p>Ordre de grandeur relevé sur un rendu : 5,4 dp par caractère en <code>labelSmall</code> à fontScale 1, moyenne sur une seule chaîne, pas une capacité garantie ; 150 dp ≈ 28 caractères à 1,0, ≈ 18 à 1,3 × L.</p>
+<p>Ordre de grandeur relevé sur un rendu : 5,4 dp par caractère en <code>labelSmall</code> à fontScale 1, moyenne sur une seule chaîne, pas une capacité garantie ; 150 dp ≈ 28 caractères à 1,0, ≈ 18 à 1,3 × L. Mesure de R0b : ≈ 7,8 dp par caractère à 1,3 × L, d'où la cible de ≈ 19 caractères d'ED-133.</p>
+<p>Mesures livrées par R0b (#1551, banc Robolectric, 360 dp, 1,3 × L, paramètres maximaux) : les 31 résumés tiennent sur une ligne, sans ellipse, en 150 dp au plus ; les plus larges sont « Image refusée 999 » (147,83 dp), « Brouillon non écrit » (D44, 145,83 dp) et « Sous-cat. absente » (143,17 dp). <code>ArmedSubmitButton</code> mesure 138,67 dp. La sonde de la v0.7.1 portait sur 392 dp d'écran (360 utiles) ; sur 360 dp, une action séparée ne laissait que 69,3 dp au résumé, icône comprise (49,3 dp de texte), d'où la décision du 06/11 (contrôle unique, ED-40). Résumés réécrits par R0b par rapport à la v0.7.1, notamment : « Échec citation », « Formulaire expiré », « Sous-cat. absente », « Image refusée %1$d », « k/N insérées », « Non connecté », « Sujet périmé », « Image absente », « Sans sélecteur ».</p>
 <h3 id="annexes-chaînes-derreur-actuelles--82">Chaînes d'erreur actuelles (§ 8.2)</h3>
 <p>Relevé actuel, borné aux erreurs d'envoi, d'upload et de citation : 33 chaînes — 7 d'upload (<code>:core:ui</code>), 9 d'envoi (<code>:feature:editor</code>), 9 de la feuille dont 8 copies mot pour mot (<code>:feature:topic</code>), 8 des MP (<code>:feature:messages</code>, dont 2 « peut-être envoyé »). Les neuf chaînes « d'envoi » du post et du sujet servent aussi aux échecs de chargement du formulaire (<code>PostEditorViewModel.kt:947-970</code>, <code>TopicFormViewModel.kt:726-743</code>). « Erreur réseau, réessayez » et « Réponse inattendue, réessayez » invitent à renvoyer après un échec qui peut être ambigu : c'est le défaut n° 6 de l'audit #1301 ; la correspondance aplatit toute <code>IOException</code> en <code>Network</code> (<code>PostEditorViewModel.kt:1157-1161</code>). Le sélecteur indisponible fait planter l'écran et la sélection est tronquée à 10 sans le dire (#1382) ; aucune chaîne n'existe pour ces deux cas ni pour l'accès restreint (#242).</p>
 <h3 id="annexes-ed-161">ED-161</h3>
@@ -2472,8 +2649,8 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 </tr>
 <tr>
 <td>G</td>
-<td>Clavier physique : Maj+flèches ; Tab et Maj+Tab sortent du champ ; barre et modes atteignables ; Entrée sur une action insère et rend le focus au champ ; Ctrl+Z annule l'insertion</td>
-<td>ED-26, ED-93</td>
+<td>Clavier physique : Maj+flèches ; Tab et Maj+Tab sortent du champ ; barre et modes atteignables ; Entrée sur une action insère et rend le focus au champ ; Ctrl+Z annule l'insertion. Sans clavier physique pour la séance (décidé le 07/11) : prétest sur émulateur seulement, critère « partiellement vérifié »</td>
+<td>ED-26, ED-37, ED-93</td>
 </tr>
 <tr>
 <td>H</td>
@@ -2487,12 +2664,12 @@ h1[id],h2[id],h3[id],h4[id]{scroll-margin-top:48px}
 </tr>
 <tr>
 <td>J</td>
-<td>Paysage S10e : rien sous la découpe d'écran ni sous la barre latérale ; variante compacte (barre d'action de 48 dp, espacement 0, label visuel retiré) ; hauteur réelle du champ et du viewport, clavier ouvert, relevée (≈ 102 dp et ≈ 86 dp calculés) ; C3 sur tout le domaine couvert, au moins 3 lignes du vrai champ à fontScale 1 et 2 lignes à 1,3 × L ; un échec est un arbitrage explicite du mainteneur (contrat, § 11.2) ; classe de hauteur compacte calculée sur la configuration, inchangée à l'ouverture du clavier, y compris sur Android 10 en <code>adjustResize</code> ; écart d'Android 15 au seuil de 480 dp relevé</td>
+<td>Paysage S10e : rien sous la découpe d'écran ni sous la barre latérale ; variante compacte (barre d'action de 48 dp, espacement 0, label visuel retiré) ; hauteur réelle du champ et du viewport, clavier ouvert, relevée (≈ 102 dp et ≈ 86 dp calculés) ; C3 sur tout le domaine couvert, au moins 3 lignes du vrai champ à fontScale 1 et 2 lignes à 1,3 × L ; un échec est un arbitrage explicite du mainteneur (contrat, § 11.2) ; classe de hauteur compacte inchangée à l'ouverture du clavier, y compris sur Android 10 en <code>adjustResize</code> (le banc la calcule sur la configuration ; la cible est P20, ED-05) ; écart d'Android 15 au seuil de 480 dp relevé</td>
 <td>ED-04, ED-05</td>
 </tr>
 <tr>
 <td>K</td>
-<td>TalkBack : ordre de parcours ; annonce d'une erreur et d'une fin d'upload pendant la saisie ; annonce d'une icône d'état ↺ ; Accessibility Scanner sur l'app bar et la barre d'action</td>
+<td>TalkBack : ordre de parcours ; annonce d'une erreur et d'une fin d'upload pendant la saisie ; annonce d'une icône d'état ↺ ; contrôle d'événement unique (un nœud, rôle bouton, action nommée) ; Accessibility Scanner sur l'app bar et la barre d'action</td>
 <td>ED-90, ED-92, ED-95</td>
 </tr>
 <tr>
