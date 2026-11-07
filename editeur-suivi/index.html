@@ -135,7 +135,7 @@ footer{font-size:12px;color:var(--ink-3);border-top:1px solid var(--line);paddin
   <header>
     <span class="eyebrow">Redface 2 · refonte de l'éditeur · plan v0.7.1</span>
     <h1>Suivi de l'éditeur #1417</h1>
-    <p class="lede">Avancement des lots du plan de phases, des portes de passage et de la revue en cours. État au <b>samedi 7 novembre 2026, 15:05</b>. Depuis le 7/11, le développement avance en continu et <b>aucune bêta ne sortira avant la fin de la refonte</b> (décision du mainteneur).</p>
+    <p class="lede">Avancement des lots du plan de phases, des portes de passage et de la revue en cours. État au <b>samedi 7 novembre 2026, 15:35</b>. Depuis le 7/11, le développement avance en continu et <b>aucune bêta ne sortira avant la fin de la refonte</b> (décision du mainteneur).</p>
     <p class="key">Un <b>lot</b> = une ou plusieurs PR, chacune livrée en release dev. Une <b>porte</b> = les conditions à remplir avant d'ouvrir les lots suivants. Un <b>gate</b> = la relecture du code, écrit par Sol, par un second modèle, Astra. Sessions : rf2-dev porte la refonte, rf2-smalldev les lots parallèles. Conditions : ✓ remplie, › en cours, · à faire. Les codes ED-xxx, C1 à C10, B.3 et « repli E » renvoient à la spec.</p>
     <nav class="links" aria-label="Pages de la phase éditeur">
       <a href="https://forumhfr.github.io/artifacts/editeur-spec/">Spec de l'éditeur</a>
@@ -146,15 +146,15 @@ footer{font-size:12px;color:var(--ink-3);border-top:1px solid var(--line);paddin
   </header>
 
   <section class="strip" aria-label="Résumé">
-    <div class="cell"><span>Lots livrés</span><b>3 / 13</b><span>R0b complet (2 PR) le 7/11</span></div>
-    <div class="cell hot"><span>En cours</span><b>R0a · R0c</b><span>preuve sur appareil (#1455) ; cadrage de #1512</span></div>
+    <div class="cell"><span>Lots livrés</span><b>3 / 14</b><span>R0b complet (2 PR) le 7/11</span></div>
+    <div class="cell hot"><span>En cours</span><b>R0a · R0c · #1553</b><span>preuve sur appareil ; PR 1 de R0c ; citation en attente stockée</span></div>
     <div class="cell"><span>Version dev</span><b class="mono">0.69.4</b><span>bêta publique : 0.68.0</span></div>
     <div class="cell"><span>Prochaine bêta</span><b>Fin de la refonte</b><span>pas de bêta intermédiaire</span></div>
   </section>
 
   <section class="rail" aria-label="Avancement par lot">
-    <div class="bar" role="img" aria-label="13 lots : 3 livrés, 2 en cours, 8 pas commencés">
-      <i class="done" title="R0m"></i><i class="done" title="#1301-ST"></i><i class="done" title="R0b"></i><i class="run" title="R0c (cadrage en cours)"></i><i class="run" title="R0a (en cours)"></i><i title="R1a-1"></i><i title="R1a-2"></i><i title="R1b-1"></i><i title="R1b-2a"></i><i title="R1b-2b"></i><i title="R6"></i><i title="R2a"></i><i title="R2b"></i>
+    <div class="bar" role="img" aria-label="14 lots : 3 livrés, 3 en cours, 8 pas commencés">
+      <i class="done" title="R0m"></i><i class="done" title="#1301-ST"></i><i class="done" title="R0b"></i><i class="run" title="R0c (PR 1 en cours)"></i><i class="run" title="R0a (en cours)"></i><i class="run" title="#1553 (cadrage fait)"></i><i title="R1a-1"></i><i title="R1a-2"></i><i title="R1b-1"></i><i title="R1b-2a"></i><i title="R1b-2b"></i><i title="R6"></i><i title="R2a"></i><i title="R2b"></i>
     </div>
     <div class="legend"><span style="--k:var(--done);--kb:var(--done)">livré</span><span style="--k:var(--run);--kb:var(--run)">en cours</span><span style="--k:var(--wait-soft)">pas commencé</span></div>
   </section>
@@ -169,8 +169,9 @@ footer{font-size:12px;color:var(--ink-3);border-top:1px solid var(--line);paddin
           <tr><td class="ph">—</td><td class="lot"><b>#1301-ST</b> <a href="https://github.com/ForumHFR/redface2/issues/1301">#1301</a></td><td class="what">Invariants d'envoi ED-160 à ED-172</td><td>rf2-smalldev</td><td><span class="pill p-done">livré</span></td><td>PR <a href="https://github.com/ForumHFR/redface2/pull/1522">#1522</a>, dev 0.66.0 (2/11). Fin du protocole B.3 sur S10e (rotation, TalkBack)</td></tr>
           <tr><td class="ph">4</td><td class="lot"><b>R0b</b> PR 1 <a href="https://github.com/ForumHFR/redface2/issues/1456">#1456</a></td><td class="what">Frontière d'émission, ED-162 et ED-163</td><td>rf2-dev</td><td><span class="pill p-done">livré</span></td><td>PR <a href="https://github.com/ForumHFR/redface2/pull/1539">#1539</a>, dev 0.69.0 (6/11)</td></tr>
           <tr><td class="ph">4</td><td class="lot"><b>R0b</b> PR 2 <a href="https://github.com/ForumHFR/redface2/issues/1456">#1456</a></td><td class="what">Contrat d'erreur côté UI, chaînes, ED-131 à ED-133</td><td>rf2-dev</td><td><span class="pill p-done">livré</span></td><td>PR <a href="https://github.com/ForumHFR/redface2/pull/1551">#1551</a>, dev 0.69.4 (7/11). Mineurs suivis dans <a href="https://github.com/ForumHFR/redface2/issues/1553">#1553</a></td></tr>
-          <tr><td class="ph">—</td><td class="lot"><b>R0c</b> <a href="https://github.com/ForumHFR/redface2/issues/1512">#1512</a></td><td class="what">Quatre ViewModels sur <code class="mono">TextFieldState</code>, une PR chacun</td><td>rf2-smalldev</td><td><span class="pill p-run">cadrage</span></td><td>Cadrage en trois parties (conception commune, éditeur, MP), puis quatre PR</td></tr>
+          <tr><td class="ph">—</td><td class="lot"><b>R0c</b> <a href="https://github.com/ForumHFR/redface2/issues/1512">#1512</a></td><td class="what">Quatre ViewModels sur <code class="mono">TextFieldState</code>, une PR chacun</td><td>rf2-smalldev</td><td><span class="pill p-run">en cours</span></td><td>Cadrage fait, Ctrl+Z vérifié (une insertion s'annule en une fois). PR 1 : nouveau MP et socle commun ; puis post, sujet, réponse MP</td></tr>
           <tr class="now"><td class="ph">2</td><td class="lot"><b>R0a</b> <a href="https://github.com/ForumHFR/redface2/issues/1455">#1455</a></td><td class="what">Preuve d'interaction sur S10e, critères A à O</td><td>rf2-dev</td><td><span class="pill p-run">en cours</span></td><td>Ouvert le 7/11 : cadrage, repli E et mesures sur émulateur, puis mesures sur S10e (trois jours au plus)</td></tr>
+          <tr><td class="ph">—</td><td class="lot"><b>#1553</b> <a href="https://github.com/ForumHFR/redface2/issues/1553">#1553</a></td><td class="what">Citation en attente stockée dans le brouillon, mineurs de R0b</td><td>rf2-dev</td><td><span class="pill p-run">cadrage</span></td><td>Lot ajouté le 7/11, une PR ; avant R1a-1 et avant la PR « post » de R0c</td></tr>
           <tr><td class="ph">3</td><td class="lot"><b>R1a-1</b> <a href="https://github.com/ForumHFR/redface2/issues/1513">#1513</a></td><td class="what"><code class="mono">EditorScaffold</code> et composants non branchés</td><td>rf2-dev</td><td><span class="pill p-wait">à venir</span></td><td>R0a concluant, ou repli E</td></tr>
           <tr><td class="ph">5</td><td class="lot"><b>R1a-2</b> <a href="https://github.com/ForumHFR/redface2/issues/1450">#1450</a></td><td class="what">Intégration dans <code class="mono">PostEditorScreen</code></td><td>rf2-dev</td><td><span class="pill p-wait">à venir</span></td><td>Porte G1</td></tr>
           <tr><td class="ph">6</td><td class="lot"><b>R1b-1</b> <a href="https://github.com/ForumHFR/redface2/issues/1451">#1451</a></td><td class="what">Nouveau sujet</td><td>rf2-dev</td><td><span class="pill p-wait">à venir</span></td><td>Porte G2</td></tr>
@@ -212,7 +213,7 @@ footer{font-size:12px;color:var(--ink-3);border-top:1px solid var(--line);paddin
         <div class="lrow"><span class="t">r5</span><span class="track" aria-hidden="true"><i class="closed"></i><i></i></span><span class="v">07:15 · NO GO, 1 bloquant</span></div>
         <div class="lrow"><span class="t">r6</span><span class="track" aria-hidden="true"><i class="closed"></i></span><span class="v">10:01 · <b>GO</b>, 1 mineur</span></div>
       </div>
-      <p class="note">Depuis r3, les bloquants touchent tous la citation en attente (ED-132) : doublon possible sur HFR quand un envoi réussit puis que l'application est tuée, ou citation perdue. Le bloquant de r5 exigeait qu'Android tue l'application au premier plan pendant que « Confirmer avant d'envoyer » est armé. <b>r6 rend GO à 10:01</b>, puis le gate de Fable aussi : la conception d'ED-132 tient sans refonte avant R0c. PR #1551 mergée le 7/11, dev 0.69.4. Les six mineurs de Fable et celui de r6 sont suivis dans #1553 ; Fable propose, avant R1a-1, de porter la demande de citation dans le brouillon stocké, ce qui supprimerait le compromis au prix d'une migration.</p>
+      <p class="note">Depuis r3, les bloquants touchent tous la citation en attente (ED-132) : doublon possible sur HFR quand un envoi réussit puis que l'application est tuée, ou citation perdue. Le bloquant de r5 exigeait qu'Android tue l'application au premier plan pendant que « Confirmer avant d'envoyer » est armé. <b>r6 rend GO à 10:01</b>, puis le gate de Fable aussi : la conception d'ED-132 tient sans refonte avant R0c. PR #1551 mergée le 7/11, dev 0.69.4. Les six mineurs de Fable et celui de r6 sont suivis dans #1553 ; Fable propose, avant R1a-1, de porter la demande de citation dans le brouillon stocké, ce qui supprimerait le compromis au prix d'une migration. <b>Retenu le 7/11 comme lot autonome (#1553).</b></p>
     </section>
 
     <section class="panel">
@@ -227,7 +228,7 @@ footer{font-size:12px;color:var(--ink-3);border-top:1px solid var(--line);paddin
       <h2>Ce qui attend le mainteneur</h2>
       <ol class="asks">
         <li>Brancher le S10e pour les mesures de R0a et la fin de B.3 (rotation, TalkBack).</li>
-        <li>Trancher #1553 (demande de citation en colonne Room) avant R1a-1.</li>
+        <li>Deux choix de comportement dans #1553 (citation en attente quand l'envoi est incertain ; anciennes demandes non reprises).</li>
         <li>Confirmer les merges dans <code class="mono">dev</code> au fil des lots.</li>
       </ol>
     </section>
