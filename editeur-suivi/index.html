@@ -75,6 +75,7 @@ header{display:grid;gap:8px}
 .bar i.run{background:var(--run);border-color:var(--run)}
 .bar i.block{background:var(--block-soft);border-color:var(--block)}
 .legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12px;color:var(--ink-2)}
+.legend em{font-style:normal;color:var(--ink-3)}
 .legend span::before{content:"";display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;vertical-align:-1px;background:var(--k);border:1px solid var(--kb,var(--line))}
 
 /* pills */
@@ -86,7 +87,7 @@ header{display:grid;gap:8px}
 
 /* lots table */
 .tablebox{overflow-x:auto;border:1px solid var(--line);border-radius:8px;background:var(--paper-2)}
-table{border-collapse:collapse;width:100%;min-width:760px;font-size:13px}
+table{border-collapse:collapse;width:100%;min-width:940px;font-size:13px}
 th{font-family:var(--f-mono);font-weight:500;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);text-align:left;padding:7px 10px;border-bottom:1px solid var(--line);background:var(--paper-3)}
 td{padding:6px 10px;border-bottom:1px solid var(--line-2);vertical-align:top}
 tr:last-child td{border-bottom:0}
@@ -97,6 +98,11 @@ td.what{color:var(--ink-2);max-width:30ch}
 tr.now td{background:var(--run-soft)}
 tr.now td.ph{color:var(--run)}
 tr.now .pill{--b:var(--paper-2)}
+td.size{min-width:190px}
+.sz{display:inline-block;min-width:26px;text-align:center;font-family:var(--f-mono);font-size:11px;font-weight:600;line-height:1;padding:3px 5px;border-radius:4px;border:1px solid var(--line);color:var(--ink-2);background:var(--paper-3);margin-right:6px;vertical-align:1px}
+.sz-l{color:var(--ink);border-color:var(--ink-3)}
+.sz-xl{color:var(--paper-2);background:var(--ink-2);border-color:var(--ink-2)}
+.szd{font-size:12px;color:var(--ink-3)}
 
 /* lower grid */
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:20px;align-items:start}
@@ -135,8 +141,9 @@ footer{font-size:12px;color:var(--ink-3);border-top:1px solid var(--line);paddin
   <header>
     <span class="eyebrow">Redface 2 · refonte de l'éditeur · plan v0.7.1</span>
     <h1>Suivi de l'éditeur #1417</h1>
-    <p class="lede">Avancement des lots du plan de phases, des portes de passage et de la revue en cours. État au <b>samedi 7 novembre 2026, 22:10</b>. Depuis le 7/11, le développement avance en continu et <b>aucune bêta ne sortira avant la fin de la refonte</b> (décision du mainteneur).</p>
+    <p class="lede">Avancement des lots du plan de phases, des portes de passage et de la revue en cours. État au <b>samedi 7 novembre 2026, 22:35</b>. Depuis le 7/11, le développement avance en continu et <b>aucune bêta ne sortira avant la fin de la refonte</b> (décision du mainteneur).</p>
     <p class="key">Un <b>lot</b> = une ou plusieurs PR, chacune livrée en release dev. Une <b>porte</b> = les conditions à remplir avant d'ouvrir les lots suivants. Un <b>gate</b> = la relecture du code, écrit par Sol, par un second modèle, Astra. Sessions : rf2-dev porte la refonte, rf2-smalldev les lots parallèles. Conditions : ✓ remplie, › en cours, · à faire. Les codes ED-xxx, C1 à C10, B.3 et « repli E » renvoient à la spec.</p>
+    <p class="key"><b>Taille</b> d'un lot, en lignes modifiées (code et tests) : <span class="sz">S</span>moins de 1 000, <span class="sz">M</span>1 000 à 3 000, <span class="sz sz-l">L</span>3 000 à 6 000, <span class="sz sz-xl">XL</span>au-delà. Lot livré : diff réel. Lot en cours : estimation du cadrage. Lot à venir : estimation d'après le nombre de règles de la spec qu'il porte, à confirmer au cadrage. Les jours sont des estimations d'effort ; au rythme actuel, une PR prend souvent moins d'une journée de calendrier.</p>
     <nav class="links" aria-label="Pages de la phase éditeur">
       <a href="https://forumhfr.github.io/artifacts/editeur-spec/">Spec de l'éditeur</a>
       <a href="https://forumhfr.github.io/artifacts/editeur-lexique/">Anatomie de l'éditeur</a>
@@ -146,40 +153,40 @@ footer{font-size:12px;color:var(--ink-3);border-top:1px solid var(--line);paddin
   </header>
 
   <section class="strip" aria-label="Résumé">
-    <div class="cell"><span>Lots livrés</span><b>3 / 14</b><span>R0b complet (2 PR) le 7/11</span></div>
-    <div class="cell hot"><span>En cours</span><b>R0a · R0c · #1553</b><span>prétests faits ; PR 0 de R0c mergée, PR 1 en CI ; #1553 passe 2b</span></div>
-    <div class="cell"><span>Version dev</span><b class="mono">0.69.4</b><span>bêta publique : 0.68.0</span></div>
+    <div class="cell"><span>Lots livrés</span><b>3 / 14</b><span>environ un quart du travail, en taille estimée</span></div>
+    <div class="cell hot"><span>En cours</span><b>R0a · R0c · #1553</b><span>prétests faits ; 2 PR de R0c sur 5 livrées ; #1553 passe 2b</span></div>
+    <div class="cell"><span>Version dev</span><b class="mono">0.69.5</b><span>bêta publique : 0.68.0</span></div>
     <div class="cell"><span>Prochaine bêta</span><b>Fin de la refonte</b><span>pas de bêta intermédiaire</span></div>
   </section>
 
   <section class="rail" aria-label="Avancement par lot">
-    <div class="bar" role="img" aria-label="14 lots : 3 livrés, 3 en cours, 8 pas commencés">
-      <i class="done" title="R0m"></i><i class="done" title="#1301-ST"></i><i class="done" title="R0b"></i><i class="run" title="R0c (PR 1 en cours)"></i><i class="run" title="R0a (en cours)"></i><i class="run" title="#1553 (cadrage fait)"></i><i title="R1a-1"></i><i title="R1a-2"></i><i title="R1b-1"></i><i title="R1b-2a"></i><i title="R1b-2b"></i><i title="R6"></i><i title="R2a"></i><i title="R2b"></i>
+    <div class="bar" role="img" aria-label="14 lots, largeur selon la taille : 3 livrés, 3 en cours, 8 pas commencés">
+      <i class="done" style="flex-grow:1" title="R0m · S"></i><i class="done" style="flex-grow:6" title="#1301-ST · XL"></i><i class="done" style="flex-grow:4" title="R0b · L"></i><i class="half" style="flex-grow:6" title="R0c · XL (2 PR sur 5 livrées)"></i><i class="run" style="flex-grow:2" title="R0a · M"></i><i class="run" style="flex-grow:2" title="#1553 · M"></i><i style="flex-grow:6" title="R1a-1 · XL"></i><i style="flex-grow:4" title="R1a-2 · L"></i><i style="flex-grow:2" title="R1b-1 · M"></i><i style="flex-grow:2" title="R1b-2a · M"></i><i style="flex-grow:2" title="R1b-2b · M"></i><i style="flex-grow:2" title="R6 · M"></i><i style="flex-grow:2" title="R2a · M"></i><i style="flex-grow:2" title="R2b · M"></i>
     </div>
-    <div class="legend"><span style="--k:var(--done);--kb:var(--done)">livré</span><span style="--k:var(--run);--kb:var(--run)">en cours</span><span style="--k:var(--wait-soft)">pas commencé</span></div>
+    <div class="legend"><span style="--k:var(--done);--kb:var(--done)">livré</span><span style="--k:linear-gradient(90deg,var(--done) 50%,var(--run) 50%);--kb:var(--run)">en partie livré</span><span style="--k:var(--run);--kb:var(--run)">en cours</span><span style="--k:var(--wait-soft)">pas commencé</span><em>largeur d'un segment = taille du lot (S 1, M 2, L 4, XL 6)</em></div>
   </section>
 
   <section class="panel">
     <h2>Lots</h2>
     <div class="tablebox">
       <table>
-        <thead><tr><th>Ph.</th><th>Lot</th><th>Contenu</th><th>Session</th><th>État</th><th>Prochaine étape</th></tr></thead>
+        <thead><tr><th>Ph.</th><th>Lot</th><th>Taille</th><th>Contenu</th><th>Session</th><th>État</th><th>Prochaine étape</th></tr></thead>
         <tbody>
-          <tr><td class="ph">1</td><td class="lot"><b>R0m</b> <a href="https://github.com/ForumHFR/redface2/issues/1509">#1509</a></td><td class="what">material3 1.5.0-beta02, 17 feuilles testées</td><td>rf2-dev</td><td><span class="pill p-done">livré</span></td><td>PR <a href="https://github.com/ForumHFR/redface2/pull/1524">#1524</a>, dev 0.69.2 (6/11). Partira en bêta avec la refonte finie</td></tr>
-          <tr><td class="ph">—</td><td class="lot"><b>#1301-ST</b> <a href="https://github.com/ForumHFR/redface2/issues/1301">#1301</a></td><td class="what">Invariants d'envoi ED-160 à ED-172</td><td>rf2-smalldev</td><td><span class="pill p-done">livré</span></td><td>PR <a href="https://github.com/ForumHFR/redface2/pull/1522">#1522</a>, dev 0.66.0 (2/11). Fin du protocole B.3 sur S10e (rotation, TalkBack)</td></tr>
-          <tr><td class="ph">4</td><td class="lot"><b>R0b</b> PR 1 <a href="https://github.com/ForumHFR/redface2/issues/1456">#1456</a></td><td class="what">Frontière d'émission, ED-162 et ED-163</td><td>rf2-dev</td><td><span class="pill p-done">livré</span></td><td>PR <a href="https://github.com/ForumHFR/redface2/pull/1539">#1539</a>, dev 0.69.0 (6/11)</td></tr>
-          <tr><td class="ph">4</td><td class="lot"><b>R0b</b> PR 2 <a href="https://github.com/ForumHFR/redface2/issues/1456">#1456</a></td><td class="what">Contrat d'erreur côté UI, chaînes, ED-131 à ED-133</td><td>rf2-dev</td><td><span class="pill p-done">livré</span></td><td>PR <a href="https://github.com/ForumHFR/redface2/pull/1551">#1551</a>, dev 0.69.4 (7/11). Mineurs suivis dans <a href="https://github.com/ForumHFR/redface2/issues/1553">#1553</a></td></tr>
-          <tr><td class="ph">—</td><td class="lot"><b>R0c</b> <a href="https://github.com/ForumHFR/redface2/issues/1512">#1512</a></td><td class="what">Quatre ViewModels sur <code class="mono">TextFieldState</code>, une PR chacun</td><td>rf2-smalldev</td><td><span class="pill p-run">en cours</span></td><td>PR 0 (correctif du pont : sauvegarde de 842 ko ramenée à 41 ko) mergée le 7/11, <a href="https://github.com/ForumHFR/redface2/pull/1555">#1555</a> ; PR 1 (nouveau MP) <a href="https://github.com/ForumHFR/redface2/pull/1558">#1558</a> en CI ; PR 3 (sujet) validée, PR 4 (réponse MP) en validation ; PR 2 (post) après #1553</td></tr>
-          <tr class="now"><td class="ph">2</td><td class="lot"><b>R0a</b> <a href="https://github.com/ForumHFR/redface2/issues/1455">#1455</a></td><td class="what">Preuve d'interaction sur S10e, critères A à O</td><td>rf2-dev</td><td><span class="pill p-run">en cours</span></td><td>Prétests sur émulateurs API 29, 34 et 35 : critère I (taille de la sauvegarde) corrigé par la PR 0 de R0c ; J (paysage) en écart, à arbitrer. Séance S10e en cours de préparation</td></tr>
-          <tr><td class="ph">—</td><td class="lot"><b>#1553</b> <a href="https://github.com/ForumHFR/redface2/issues/1553">#1553</a></td><td class="what">Citation en attente stockée dans le brouillon, mineurs de R0b</td><td>rf2-dev</td><td><span class="pill p-run">en cours</span></td><td>Lot ajouté le 7/11, une PR : passes 1 et 2a validées, 2b écrite et en validation. Avant R1a-1 et avant la PR « post » de R0c</td></tr>
-          <tr><td class="ph">3</td><td class="lot"><b>R1a-1</b> <a href="https://github.com/ForumHFR/redface2/issues/1513">#1513</a></td><td class="what"><code class="mono">EditorScaffold</code> et composants non branchés</td><td>rf2-dev</td><td><span class="pill p-wait">à venir</span></td><td>R0a concluant, ou repli E</td></tr>
-          <tr><td class="ph">5</td><td class="lot"><b>R1a-2</b> <a href="https://github.com/ForumHFR/redface2/issues/1450">#1450</a></td><td class="what">Intégration dans <code class="mono">PostEditorScreen</code></td><td>rf2-dev</td><td><span class="pill p-wait">à venir</span></td><td>Porte G1</td></tr>
-          <tr><td class="ph">6</td><td class="lot"><b>R1b-1</b> <a href="https://github.com/ForumHFR/redface2/issues/1451">#1451</a></td><td class="what">Nouveau sujet</td><td>rf2-dev</td><td><span class="pill p-wait">à venir</span></td><td>Porte G2</td></tr>
-          <tr><td class="ph">7</td><td class="lot"><b>R1b-2a</b> <a href="https://github.com/ForumHFR/redface2/issues/1514">#1514</a></td><td class="what">Réponse MP</td><td>rf2-dev</td><td><span class="pill p-wait">à venir</span></td><td>Après R1b-1, sans autre lot entre les deux</td></tr>
-          <tr><td class="ph">8</td><td class="lot"><b>R1b-2b</b> <a href="https://github.com/ForumHFR/redface2/issues/1515">#1515</a></td><td class="what">Nouveau MP</td><td>rf2-dev</td><td><span class="pill p-wait">à venir</span></td><td>Après R1b-2a, puis porte G3</td></tr>
-          <tr><td class="ph">9</td><td class="lot"><b>R6</b> <a href="https://github.com/ForumHFR/redface2/issues/1516">#1516</a></td><td class="what">Raccourci de la barre d'action, défaut « Aucun »</td><td>rf2-dev</td><td><span class="pill p-wait">à venir</span></td><td>Porte G3</td></tr>
-          <tr><td class="ph">10</td><td class="lot"><b>R2a</b> <a href="https://github.com/ForumHFR/redface2/issues/1452">#1452</a></td><td class="what">Panneau de citations, mode cartes</td><td>rf2-dev</td><td><span class="pill p-wait">à venir</span></td><td>Après R1a-2</td></tr>
-          <tr><td class="ph">11</td><td class="lot"><b>R2b</b> <a href="https://github.com/ForumHFR/redface2/issues/1452">#1452</a></td><td class="what">Aperçu en partage, smileys perso (#873)</td><td>rf2-dev</td><td><span class="pill p-wait">à venir</span></td><td>Après R1a-2 et R0c</td></tr>
+          <tr><td class="ph">1</td><td class="lot"><b>R0m</b> <a href="https://github.com/ForumHFR/redface2/issues/1509">#1509</a></td><td class="size"><span class="sz">S</span><span class="szd">+399 −5, 12 fichiers</span></td><td class="what">material3 1.5.0-beta02, 17 feuilles testées</td><td>rf2-dev</td><td><span class="pill p-done">livré</span></td><td>PR <a href="https://github.com/ForumHFR/redface2/pull/1524">#1524</a>, dev 0.69.2 (6/11). Partira en bêta avec la refonte finie</td></tr>
+          <tr><td class="ph">—</td><td class="lot"><b>#1301-ST</b> <a href="https://github.com/ForumHFR/redface2/issues/1301">#1301</a></td><td class="size"><span class="sz sz-xl">XL</span><span class="szd">+8 666 −1 852, 94 fichiers</span></td><td class="what">Invariants d'envoi ED-160 à ED-172</td><td>rf2-smalldev</td><td><span class="pill p-done">livré</span></td><td>PR <a href="https://github.com/ForumHFR/redface2/pull/1522">#1522</a>, dev 0.66.0 (2/11). Fin du protocole B.3 sur S10e (rotation, TalkBack)</td></tr>
+          <tr><td class="ph">4</td><td class="lot"><b>R0b</b> PR 1 <a href="https://github.com/ForumHFR/redface2/issues/1456">#1456</a></td><td class="size"><span class="sz">S</span><span class="szd">+922 −71, 31 fichiers</span></td><td class="what">Frontière d'émission, ED-162 et ED-163</td><td>rf2-dev</td><td><span class="pill p-done">livré</span></td><td>PR <a href="https://github.com/ForumHFR/redface2/pull/1539">#1539</a>, dev 0.69.0 (6/11)</td></tr>
+          <tr><td class="ph">4</td><td class="lot"><b>R0b</b> PR 2 <a href="https://github.com/ForumHFR/redface2/issues/1456">#1456</a></td><td class="size"><span class="sz sz-l">L</span><span class="szd">+4 057 −806, 62 fichiers</span></td><td class="what">Contrat d'erreur côté UI, chaînes, ED-131 à ED-133</td><td>rf2-dev</td><td><span class="pill p-done">livré</span></td><td>PR <a href="https://github.com/ForumHFR/redface2/pull/1551">#1551</a>, dev 0.69.4 (7/11). Mineurs suivis dans <a href="https://github.com/ForumHFR/redface2/issues/1553">#1553</a></td></tr>
+          <tr><td class="ph">—</td><td class="lot"><b>R0c</b> <a href="https://github.com/ForumHFR/redface2/issues/1512">#1512</a></td><td class="size"><span class="sz sz-xl">XL</span><span class="szd">5 PR, environ 4 100 lignes à recâbler, estimé 11 à 17 j ; livré : +1 470 −188</span></td><td class="what">Quatre ViewModels sur <code class="mono">TextFieldState</code>, une PR chacun</td><td>rf2-smalldev</td><td><span class="pill p-run">en cours</span></td><td>PR 0 (correctif du pont : sauvegarde de 842 ko ramenée à 41 ko, <a href="https://github.com/ForumHFR/redface2/pull/1555">#1555</a>) et PR 1 (nouveau MP, <a href="https://github.com/ForumHFR/redface2/pull/1558">#1558</a>) livrées en dev 0.69.5 ; PR 3 (sujet) validée, PR 4 (réponse MP) en validation ; PR 2 (post) après #1553</td></tr>
+          <tr class="now"><td class="ph">2</td><td class="lot"><b>R0a</b> <a href="https://github.com/ForumHFR/redface2/issues/1455">#1455</a></td><td class="size"><span class="sz">M</span><span class="szd">hors dépôt, 3 j au plus ; 15 règles à prouver ou mesurer</span></td><td class="what">Preuve d'interaction sur S10e, critères A à O</td><td>rf2-dev</td><td><span class="pill p-run">en cours</span></td><td>Prétests sur émulateurs API 29, 34 et 35 : critère I (taille de la sauvegarde) corrigé par la PR 0 de R0c ; J (paysage) en écart, à arbitrer. Séance S10e en cours de préparation</td></tr>
+          <tr><td class="ph">—</td><td class="lot"><b>#1553</b> <a href="https://github.com/ForumHFR/redface2/issues/1553">#1553</a></td><td class="size"><span class="sz">M</span><span class="szd">estimé 1 250 à 2 200 lignes, 4 à 6 j</span></td><td class="what">Citation en attente stockée dans le brouillon, mineurs de R0b</td><td>rf2-dev</td><td><span class="pill p-run">en cours</span></td><td>Lot ajouté le 7/11, une PR : passes 1 et 2a validées, 2b écrite et en validation. Avant R1a-1 et avant la PR « post » de R0c</td></tr>
+          <tr><td class="ph">3</td><td class="lot"><b>R1a-1</b> <a href="https://github.com/ForumHFR/redface2/issues/1513">#1513</a></td><td class="size"><span class="sz sz-xl">XL</span><span class="szd">35 règles, tous les nouveaux composants</span></td><td class="what"><code class="mono">EditorScaffold</code> et composants non branchés</td><td>rf2-dev</td><td><span class="pill p-wait">à venir</span></td><td>R0a concluant, ou repli E</td></tr>
+          <tr><td class="ph">5</td><td class="lot"><b>R1a-2</b> <a href="https://github.com/ForumHFR/redface2/issues/1450">#1450</a></td><td class="size"><span class="sz sz-l">L</span><span class="szd">20 règles, la surface principale</span></td><td class="what">Intégration dans <code class="mono">PostEditorScreen</code></td><td>rf2-dev</td><td><span class="pill p-wait">à venir</span></td><td>Porte G1</td></tr>
+          <tr><td class="ph">6</td><td class="lot"><b>R1b-1</b> <a href="https://github.com/ForumHFR/redface2/issues/1451">#1451</a></td><td class="size"><span class="sz">M</span><span class="szd">4 règles, une surface</span></td><td class="what">Nouveau sujet</td><td>rf2-dev</td><td><span class="pill p-wait">à venir</span></td><td>Porte G2</td></tr>
+          <tr><td class="ph">7</td><td class="lot"><b>R1b-2a</b> <a href="https://github.com/ForumHFR/redface2/issues/1514">#1514</a></td><td class="size"><span class="sz">M</span><span class="szd">4 règles, une surface</span></td><td class="what">Réponse MP</td><td>rf2-dev</td><td><span class="pill p-wait">à venir</span></td><td>Après R1b-1, sans autre lot entre les deux</td></tr>
+          <tr><td class="ph">8</td><td class="lot"><b>R1b-2b</b> <a href="https://github.com/ForumHFR/redface2/issues/1515">#1515</a></td><td class="size"><span class="sz">M</span><span class="szd">3 règles, destinataires en puces</span></td><td class="what">Nouveau MP</td><td>rf2-dev</td><td><span class="pill p-wait">à venir</span></td><td>Après R1b-2a, puis porte G3</td></tr>
+          <tr><td class="ph">9</td><td class="lot"><b>R6</b> <a href="https://github.com/ForumHFR/redface2/issues/1516">#1516</a></td><td class="size"><span class="sz">M</span><span class="szd">4 règles, sur les quatre surfaces</span></td><td class="what">Raccourci de la barre d'action, défaut « Aucun »</td><td>rf2-dev</td><td><span class="pill p-wait">à venir</span></td><td>Porte G3</td></tr>
+          <tr><td class="ph">10</td><td class="lot"><b>R2a</b> <a href="https://github.com/ForumHFR/redface2/issues/1452">#1452</a></td><td class="size"><span class="sz">M</span><span class="szd">4 règles</span></td><td class="what">Panneau de citations, mode cartes</td><td>rf2-dev</td><td><span class="pill p-wait">à venir</span></td><td>Après R1a-2</td></tr>
+          <tr><td class="ph">11</td><td class="lot"><b>R2b</b> <a href="https://github.com/ForumHFR/redface2/issues/1452">#1452</a></td><td class="size"><span class="sz">M</span><span class="szd">6 règles</span></td><td class="what">Aperçu en partage, smileys perso (#873)</td><td>rf2-dev</td><td><span class="pill p-wait">à venir</span></td><td>Après R1a-2 et R0c</td></tr>
         </tbody>
       </table>
     </div>
@@ -223,6 +230,7 @@ footer{font-size:12px;color:var(--ink-3);border-top:1px solid var(--line);paddin
         <li><span class="mono">0.69.0</span><span>6/11 · R0b PR 1, échecs d'envoi classés par étape</span></li>
         <li><span class="mono">0.69.2</span><span>6/11 · R0m, material3 1.5.0-beta02</span></li>
         <li><span class="mono">0.69.4</span><span>7/11 · R0b PR 2, contrat d'erreur côté UI</span></li>
+        <li><span class="mono">0.69.5</span><span>7/11 · R0c PR 0 (correctif du pont) et PR 1 (nouveau MP)</span></li>
         <li><span class="mono muted">0.69.1, 0.69.3</span><span class="muted">correctifs hors refonte</span></li>
       </ul>
       <h2>Ce qui attend le mainteneur</h2>
