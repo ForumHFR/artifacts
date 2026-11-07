@@ -135,7 +135,7 @@ footer{font-size:12px;color:var(--ink-3);border-top:1px solid var(--line);paddin
   <header>
     <span class="eyebrow">Redface 2 · refonte de l'éditeur · plan v0.7.1</span>
     <h1>Suivi de l'éditeur #1417</h1>
-    <p class="lede">Avancement des lots du plan de phases, des portes de passage et de la revue en cours. État au <b>samedi 7 novembre 2026, 10:05</b>.</p>
+    <p class="lede">Avancement des lots du plan de phases, des portes de passage et de la revue en cours. État au <b>samedi 7 novembre 2026, 10:40</b>.</p>
     <p class="key">Un <b>lot</b> = une ou plusieurs PR, chacune livrée en release dev. Une <b>porte</b> = les conditions à remplir avant d'ouvrir les lots suivants. Un <b>gate</b> = la relecture du code, écrit par Sol, par un second modèle, Astra. Sessions : rf2-dev porte la refonte, rf2-smalldev les lots parallèles. Conditions : ✓ remplie, › en cours, · à faire. Les codes ED-xxx, C1 à C10, B.3 et « repli E » renvoient à la spec.</p>
     <nav class="links" aria-label="Pages de la phase éditeur">
       <a href="https://forumhfr.github.io/artifacts/editeur-spec/">Spec de l'éditeur</a>
@@ -147,13 +147,13 @@ footer{font-size:12px;color:var(--ink-3);border-top:1px solid var(--line);paddin
 
   <section class="strip" aria-label="Résumé">
     <div class="cell"><span>Lots livrés</span><b>2 / 13</b><span>+ R0b à moitié (PR 1 sur 2)</span></div>
-    <div class="cell hot"><span>En cours</span><b>R0b · PR 2</b><span>gate r6 GO, build 10 en cours</span></div>
+    <div class="cell hot"><span>En cours</span><b>R0b · PR 2</b><span>PR #1551 ouverte, CI en cours</span></div>
     <div class="cell"><span>Version dev</span><b class="mono">0.69.3</b><span>bêta publique : 0.68.0</span></div>
     <div class="cell"><span>Prochaine porte</span><b>Gm</b><span>trois jours de R0m en dev, lun. 9/11 ~16:45</span></div>
   </section>
 
   <section class="rail" aria-label="Avancement par lot">
-    <div class="bar" role="img" aria-label="13 lots : 2 livrés, R0b à moitié (PR 1 livrée, PR 2 validée par le gate), 10 pas commencés">
+    <div class="bar" role="img" aria-label="13 lots : 2 livrés, R0b à moitié (PR 1 livrée, PR 2 ouverte), 10 pas commencés">
       <i class="done" title="R0m"></i><i class="done" title="#1301-ST"></i><i class="half" title="R0b (PR 1 livrée, PR 2 en cours)"></i><i title="R0c (attend R0b)"></i><i title="R0a"></i><i title="R1a-1"></i><i title="R1a-2"></i><i title="R1b-1"></i><i title="R1b-2a"></i><i title="R1b-2b"></i><i title="R6"></i><i title="R2a"></i><i title="R2b"></i>
     </div>
     <div class="legend"><span style="--k:var(--done);--kb:var(--done)">livré</span><span style="--k:linear-gradient(90deg,var(--done) 50%,var(--run) 50%);--kb:var(--run)">en partie livré, suite en cours</span><span style="--k:var(--wait-soft)">pas commencé</span></div>
@@ -168,7 +168,7 @@ footer{font-size:12px;color:var(--ink-3);border-top:1px solid var(--line);paddin
           <tr><td class="ph">1</td><td class="lot"><b>R0m</b> <a href="https://github.com/ForumHFR/redface2/issues/1509">#1509</a></td><td class="what">material3 1.5.0-beta02, 17 feuilles testées</td><td>rf2-dev</td><td><span class="pill p-done">livré</span></td><td>PR <a href="https://github.com/ForumHFR/redface2/pull/1524">#1524</a>, dev 0.69.2 (6/11). Porte Gm, puis go bêta du mainteneur</td></tr>
           <tr><td class="ph">—</td><td class="lot"><b>#1301-ST</b> <a href="https://github.com/ForumHFR/redface2/issues/1301">#1301</a></td><td class="what">Invariants d'envoi ED-160 à ED-172</td><td>rf2-smalldev</td><td><span class="pill p-done">livré</span></td><td>PR <a href="https://github.com/ForumHFR/redface2/pull/1522">#1522</a>, dev 0.66.0 (2/11). Fin du protocole B.3 sur S10e (rotation, TalkBack)</td></tr>
           <tr><td class="ph">4</td><td class="lot"><b>R0b</b> PR 1 <a href="https://github.com/ForumHFR/redface2/issues/1456">#1456</a></td><td class="what">Frontière d'émission, ED-162 et ED-163</td><td>rf2-dev</td><td><span class="pill p-done">livré</span></td><td>PR <a href="https://github.com/ForumHFR/redface2/pull/1539">#1539</a>, dev 0.69.0 (6/11)</td></tr>
-          <tr class="now"><td class="ph">4</td><td class="lot"><b>R0b</b> PR 2 <a href="https://github.com/ForumHFR/redface2/issues/1456">#1456</a></td><td class="what">Contrat d'erreur côté UI, chaînes, ED-131 à ED-133</td><td>rf2-dev</td><td><span class="pill p-run">gate GO</span></td><td>Gate r6 GO (10:01). Build 10 avec dev fusionnée, puis PR, merge et dev 0.69.4, chacun sur confirmation du mainteneur</td></tr>
+          <tr class="now"><td class="ph">4</td><td class="lot"><b>R0b</b> PR 2 <a href="https://github.com/ForumHFR/redface2/issues/1456">#1456</a></td><td class="what">Contrat d'erreur côté UI, chaînes, ED-131 à ED-133</td><td>rf2-dev</td><td><span class="pill p-run">PR ouverte</span></td><td>PR <a href="https://github.com/ForumHFR/redface2/pull/1551">#1551</a> (gates Astra et Fable GO, build 10 vert, 6 159 tests). CI en cours, puis merge et dev 0.69.4 sur confirmation du mainteneur</td></tr>
           <tr><td class="ph">—</td><td class="lot"><b>R0c</b> <a href="https://github.com/ForumHFR/redface2/issues/1512">#1512</a></td><td class="what">Quatre ViewModels sur <code class="mono">TextFieldState</code>, une PR chacun</td><td>rf2-smalldev</td><td><span class="pill p-wait">attend R0b</span></td><td>Démarre au merge de R0b PR 2</td></tr>
           <tr><td class="ph">2</td><td class="lot"><b>R0a</b> <a href="https://github.com/ForumHFR/redface2/issues/1455">#1455</a></td><td class="what">Preuve d'interaction sur S10e, critères A à O</td><td>rf2-dev</td><td><span class="pill p-wait">à venir</span></td><td>Après R0b (décision du 6/11), trois jours au plus</td></tr>
           <tr><td class="ph">3</td><td class="lot"><b>R1a-1</b> <a href="https://github.com/ForumHFR/redface2/issues/1513">#1513</a></td><td class="what"><code class="mono">EditorScaffold</code> et composants non branchés</td><td>rf2-dev</td><td><span class="pill p-wait">à venir</span></td><td>R0a concluant, ou repli E</td></tr>
@@ -191,7 +191,7 @@ footer{font-size:12px;color:var(--ink-3);border-top:1px solid var(--line);paddin
         <li class="gate"><div class="hd"><b>Gm</b><span class="pill p-run">en cours</span></div>
           <ul class="conds"><li class="y">R0m livré en dev 0.69.2 le 6/11 à 16:43</li><li class="r">Trois jours en dev, au plus tôt lun. 9/11 ~16:45</li><li class="r">Aucun retour bloquant des testeurs sur la 0.69.2</li><li class="n">Go du mainteneur avant toute bêta</li></ul></li>
         <li class="gate"><div class="hd"><b>G1</b><span class="pill p-wait">1 / 5 conditions</span></div>
-          <ul class="conds"><li class="y">#1301-ST mergé</li><li class="r">R0b mergé (PR 1 faite, PR 2 validée par le gate)</li><li class="n">R0a concluant</li><li class="n">ADR accepté</li><li class="r">Ancien éditeur capturé avec R0m (un point restant sur appareil)</li></ul></li>
+          <ul class="conds"><li class="y">#1301-ST mergé</li><li class="r">R0b mergé (PR 1 faite, PR 2 ouverte : #1551)</li><li class="n">R0a concluant</li><li class="n">ADR accepté</li><li class="r">Ancien éditeur capturé avec R0m (un point restant sur appareil)</li></ul></li>
         <li class="gate"><div class="hd"><b>G2</b><span class="pill p-wait">à venir</span></div>
           <ul class="conds"><li class="n">R1a-2 trois jours en dev</li></ul></li>
         <li class="gate"><div class="hd"><b>G3</b><span class="pill p-wait">à venir</span></div>
@@ -212,7 +212,7 @@ footer{font-size:12px;color:var(--ink-3);border-top:1px solid var(--line);paddin
         <div class="lrow"><span class="t">r5</span><span class="track" aria-hidden="true"><i class="closed"></i><i></i></span><span class="v">07:15 · NO GO, 1 bloquant</span></div>
         <div class="lrow"><span class="t">r6</span><span class="track" aria-hidden="true"><i class="closed"></i></span><span class="v">10:01 · <b>GO</b>, 1 mineur</span></div>
       </div>
-      <p class="note">Depuis r3, les bloquants touchent tous la citation en attente (ED-132) : doublon possible sur HFR quand un envoi réussit puis que l'application est tuée, ou citation perdue. Le bloquant de r5 exigeait qu'Android tue l'application au premier plan pendant que « Confirmer avant d'envoyer » est armé. <b>r6 rend GO à 10:01.</b> Un mineur reste, lui aussi limité à une mort du processus au premier plan : documenté dans la PR et reporté à la spec v0.7.2.</p>
+      <p class="note">Depuis r3, les bloquants touchent tous la citation en attente (ED-132) : doublon possible sur HFR quand un envoi réussit puis que l'application est tuée, ou citation perdue. Le bloquant de r5 exigeait qu'Android tue l'application au premier plan pendant que « Confirmer avant d'envoyer » est armé. <b>r6 rend GO à 10:01</b>, puis le gate de Fable aussi : la conception d'ED-132 tient sans refonte avant R0c. Six mineurs restent au suivi (corps de la PR) ; Fable propose, avant R1a-1, de porter la demande de citation dans le brouillon stocké, ce qui supprimerait le compromis au prix d'une migration.</p>
     </section>
 
     <section class="panel">
@@ -226,7 +226,7 @@ footer{font-size:12px;color:var(--ink-3);border-top:1px solid var(--line);paddin
       </ul>
       <h2>Ce qui attend le mainteneur</h2>
       <ol class="asks">
-        <li>Confirmer l'ouverture, le merge et la release de R0b PR 2 (gate r6 GO).</li>
+        <li>Confirmer le merge de R0b PR 2 (#1551) après la CI, puis la release dev 0.69.4.</li>
         <li>Go bêta de R0m après la porte Gm, au plus tôt le 9/11.</li>
         <li>Garder le S10e disponible pour R0a et la fin de B.3 (rotation, TalkBack).</li>
       </ol>
