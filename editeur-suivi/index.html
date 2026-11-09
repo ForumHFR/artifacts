@@ -141,7 +141,7 @@ footer{font-size:12px;color:var(--ink-3);border-top:1px solid var(--line);paddin
   <header>
     <span class="eyebrow">Redface 2 · refonte de l'éditeur · plan v0.7.1</span>
     <h1>Suivi de l'éditeur #1417</h1>
-    <p class="lede">Avancement des lots du plan de phases, des portes de passage et de la revue en cours. État au <b>lundi 9 novembre 2026, 15:15</b>. Depuis le 7/11, le développement avance en continu et <b>aucune bêta ne sortira avant la fin de la refonte</b> (décision du mainteneur). R0 est terminé et validé. R1a-1 et R1a-2 sont prêts en local (10 PR vertes et relues) et attendent le go du mainteneur pour être mergés. Le quota hebdomadaire de Claude (93 % le 9/11 à 15:10, remise à zéro jeudi 12/11 à 18:00) limite le rythme jusqu'à jeudi.</p>
+    <p class="lede">Avancement des lots du plan de phases, des portes de passage et de la revue en cours. État au <b>lundi 9 novembre 2026, 18:20</b>. Depuis le 7/11, le développement avance en continu et <b>aucune bêta ne sortira avant la fin de la refonte</b> (décision du mainteneur). R0 est terminé et validé. R1a-1 et R1a-2 sont prêts en local (10 PR vertes et relues) et attendent le go du mainteneur pour être mergés. Le quota hebdomadaire de Claude (94 % le 9/11 à 18:17, remise à zéro jeudi 12/11 à 18:00) limite le rythme jusqu'à jeudi.</p>
     <p class="key">Un <b>lot</b> = une ou plusieurs PR, chacune livrée en release dev. Une <b>porte</b> = les conditions à remplir avant d'ouvrir les lots suivants. Un <b>gate</b> = la relecture du code, écrit par Sol, par un second modèle, Astra. Sessions : rf2-dev porte la refonte, rf2-smalldev les lots parallèles. Conditions : ✓ remplie, › en cours, · à faire. Les codes ED-xxx, C1 à C10, B.3 et « repli E » renvoient à la spec.</p>
     <p class="key"><b>Taille</b> d'un lot, en lignes modifiées (code et tests) : <span class="sz">S</span>moins de 1 000, <span class="sz">M</span>1 000 à 3 000, <span class="sz sz-l">L</span>3 000 à 6 000, <span class="sz sz-xl">XL</span>au-delà. Lot livré : diff réel. Lot en cours : estimation du cadrage. Lot à venir : estimation d'après le nombre de règles de la spec qu'il porte, à confirmer au cadrage. Les jours sont des estimations d'effort ; au rythme actuel, une PR prend souvent moins d'une journée de calendrier.</p>
     <nav class="links" aria-label="Pages de la phase éditeur">
@@ -197,7 +197,7 @@ footer{font-size:12px;color:var(--ink-3);border-top:1px solid var(--line);paddin
       <h2>Portes de passage</h2>
       <ul class="gates">
         <li class="gate"><div class="hd"><b>Gm</b><span class="pill p-wait">sans bêta</span></div>
-          <ul class="conds"><li class="y">R0m livré en dev 0.69.2 le 6/11 à 16:43</li><li class="r">Trois jours en dev, au plus tôt lun. 9/11 ~16:45</li><li class="r">Aucun retour bloquant des testeurs sur la 0.69.2</li><li class="n">Plus de bêta intermédiaire (7/11) : R0m sortira en bêta avec la refonte</li></ul></li>
+          <ul class="conds"><li class="y">R0m livré en dev 0.69.2 le 6/11 à 16:43</li><li class="y">Trois jours en dev, atteints lun. 9/11 à 16:45</li><li class="r">Aucun retour bloquant des testeurs sur la 0.69.2</li><li class="n">Plus de bêta intermédiaire (7/11) : R0m sortira en bêta avec la refonte</li></ul></li>
         <li class="gate"><div class="hd"><b>G1</b><span class="pill p-wait">2 / 5 conditions</span></div>
           <ul class="conds"><li class="y">#1301-ST mergé</li><li class="y">R0b mergé (dev 0.69.4, 7/11)</li><li class="y">R0a concluant (avec réserves, 8/11)</li><li class="n">Observation de B5 intégré sur S10e (six séquences, deux claviers)</li><li class="n">ADR accepté</li><li class="r">Ancien éditeur capturé avec R0m (un point restant sur appareil)</li></ul></li>
         <li class="gate"><div class="hd"><b>G2</b><span class="pill p-wait">à venir</span></div>
@@ -239,10 +239,9 @@ footer{font-size:12px;color:var(--ink-3);border-top:1px solid var(--line);paddin
         <li><span class="mono muted">0.69.1, 0.69.3</span><span class="muted">correctifs hors refonte</span></li>
       </ul>
       <p class="note">R0c est entier dans <code class="mono">dev</code> depuis le 8/11 : la règle « aucun merge de R0c entre R1a-2 et R1b-2b » n'a plus d'objet.</p>
-      <p class="note">La 0.69.9 plantait au lancement : KSP 2.3.13 (google/ksp#3286) perdait parfois les modules Hilt d'un module de l'application, sans faire échouer ni le build ni les tests. Retour à KSP 2.3.12 en 0.69.10, version 2.3.13 bloquée pour Dependabot ; une garde qui contrôle l'APK avant chaque publication est proposée (#1581).</p>
+      <p class="note">La 0.69.9 plantait au lancement : KSP 2.3.13 (google/ksp#3286) perdait parfois les modules Hilt d'un module de l'application, sans faire échouer ni le build ni les tests. Retour à KSP 2.3.12 en 0.69.10, version 2.3.13 bloquée pour Dependabot ; depuis le 9/11, une garde de <code class="mono">release.yml</code> refuse de publier un APK ou un AAB auquel il manque des entrées Hilt (#1582).</p>
       <h2>Ce qui attend le mainteneur</h2>
       <ol class="asks">
-        <li>Garde de publication #1581 : contrôle des modules Hilt de l'APK avant chaque release.</li>
         <li>R1a-2 : cadrage en quatre PR (exception à « un lot = une PR », gel dès la première fusion), ED-85, titre du sujet, changement visible de la PR 1.</li>
         <li>Séance sur appareil : R1a-1 et R1a-2, observation de B5 intégré, B.3.</li>
         <li>Publication de la spec v0.7.3 ; clôture de #1455.</li>
