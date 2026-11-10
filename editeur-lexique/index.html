@@ -259,18 +259,18 @@ footer a{color:var(--accent)}
  backdrop-filter:none;-webkit-backdrop-filter:none}
 @media (max-width:520px){.artnav #vpick label{display:none}}
 </style>
-<div id="vpick"><label for="vpick-sel">Version</label><select id="vpick-sel" autocomplete="off" onchange="location.href=this.value"><option value="./" selected>v14 — courante</option><option value="v13/">v13</option><option value="v12/">v12</option><option value="v11/">v11</option><option value="v10/">v10</option><option value="v9/">v9</option><option value="v8/">v8</option><option value="v7/">v7</option><option value="v6/">v6</option><option value="v5/">v5</option><option value="v4/">v4</option><option value="v3/">v3</option><option value="v2/">v2</option><option value="v1/">v1</option></select><script>addEventListener("pageshow",function(){var s=document.getElementById("vpick-sel");if(s)for(var i=0;i<s.options.length;i++)s.options[i].selected=s.options[i].defaultSelected;});</script></div>
+<div id="vpick"><label for="vpick-sel">Version</label><select id="vpick-sel" autocomplete="off" onchange="location.href=this.value"><option value="./" selected>v15 — courante</option><option value="v14/">v14</option><option value="v13/">v13</option><option value="v12/">v12</option><option value="v11/">v11</option><option value="v10/">v10</option><option value="v9/">v9</option><option value="v8/">v8</option><option value="v7/">v7</option><option value="v6/">v6</option><option value="v5/">v5</option><option value="v4/">v4</option><option value="v3/">v3</option><option value="v2/">v2</option><option value="v1/">v1</option></select><script>addEventListener("pageshow",function(){var s=document.getElementById("vpick-sel");if(s)for(var i=0;i<s.options.length;i++)s.options[i].selected=s.options[i].defaultSelected;});</script></div>
 </nav>
 
 
 <header class="top">
-  <div class="eyebrow">Redface 2 · #1417 · vocabulaire de travail · v0.7.3 (09/11/2026)</div>
+  <div class="eyebrow">Redface 2 · #1417 · vocabulaire de travail · v0.7.4 (09/11/2026)</div>
   <h1>Anatomie de l'éditeur</h1>
   <p class="lede">Les mots qu'on emploie pour parler de la refonte, chacun rattaché à une zone
   précise de l'écran. Objectif&nbsp;: que « barre d'action », « icône d'état » ou « feuille »
   désignent la même chose des deux côtés de la conversation. Les maquettes qui utilisent ce
   vocabulaire sont dans <a href="../editeur-1417/">Vue Éditeur #1417</a>&nbsp;; la norme est le
-  <a href="../editeur-spec/">contrat de l'éditeur (spec v0.7.3)</a> et
+  <a href="../editeur-spec/">contrat de l'éditeur (spec v0.7.4)</a> et
   l'<a href="../editeur-spec/#adr">ADR-020</a>.</p>
 </header>
 
@@ -415,8 +415,9 @@ footer a{color:var(--accent)}
           (décidé le 08/11, ED-21). En hauteur compacte, les emplacements fixes d'ED-25 peuvent
           laisser moins de formats entiers visibles.</p>
           <p>Il persiste pendant la frappe&nbsp;; il se referme par l'icône, le retour, ou en ouvrant
-          une feuille, un panneau ou l'aperçu. En envoi armé, le retour désarme d'abord et garde le mode
-          masqué&nbsp;; le retour suivant le ferme (ED-85). Les formats insèrent des balises&nbsp;: ce ne sont pas
+          une feuille, un panneau ou l'aperçu. L'armement et un événement peuvent le masquer sans le
+          réinitialiser&nbsp;; l'ordre de Retour est défini en ED-85, avec le choix autonome de 22:12
+          à ratifier par XaTriX. Les formats insèrent des balises&nbsp;: ce ne sont pas
           des bascules de style, aucun n'a d'état « actif ».</p>
           <p>Après un format, le contenu enveloppé reste sélectionné&nbsp;: politique <span class="mono">keep</span>,
           retenue le 08/11 après A/B sur S25. Le smiley suivant remplace cette sélection (ED-22).</p>
@@ -465,16 +466,16 @@ footer a{color:var(--accent)}
           l'événement. « Envoyer » reste toujours à droite. Un seul à la fois, l'erreur d'abord&nbsp;;
           à rang égal, FIFO (premier reçu, premier présenté). Une nouvelle livraison de la même
           opération remplace les événements caducs et prend sa propre place dans l'ordre d'arrivée.
-          Cela ne purge pas toutes les opérations de la même espèce (ED-43).</p>
+          Ce remplacement de livraison (ED-43) est distinct des retraits au lancement d'une
+          opération, définis en ED-44.</p>
           <p>La clé exacte réunit compte, identité d'opération et identité de livraison. Fermer le
           détail acquitte cette clé seule, jamais celle d'un remplaçant (ED-45).</p>
           <p>Une erreur ou une fin persiste jusqu'à l'acquittement ou au geste d'opération prévu en
           ED-44. Une information s'efface au geste d'action suivant, consommé&nbsp;; frappe et sélection
           exclues. Chaque événement a une sortie. Rien ne change de hauteur, et jamais à cause
           d'une frappe.</p>
-          <p>Le contrôle mesure environ 185&nbsp;dp à 360&nbsp;dp&nbsp;: il s'étend de 4&nbsp;dp dans la
-          gouttière de départ, avec un inset de 4&nbsp;dp. L'icône reste à 16&nbsp;dp du bord utile&nbsp;; le
-          texte garde environ 161&nbsp;dp, dont 150&nbsp;dp de rédaction et 11&nbsp;dp de réserve (ED-49, ED-133).</p>
+          <p>Sa géométrie suit ED-41, ED-49 et ED-133. Pour les emplacements fixes et l'extension dans
+          la gouttière sous événement, voir ED-30.</p>
           <p>Pourquoi pas une bande&nbsp;: des états arrivent sans geste pendant qu'on tape (offre de
           brouillon tardive, échec d'une citation)&nbsp;; une bande qui apparaîtrait déplacerait le
           champ, et une bande permanente lui prendrait 48&nbsp;dp le plus souvent vides.</p>
@@ -538,6 +539,16 @@ footer a{color:var(--accent)}
           « Envoyer » reste inactif tant qu'elle attend. Elle s'en va quand la citation est insérée,
           quand on choisit « Ignorer la citation », ou quand le message est publié. Avec #1553, elle
           est gardée avec le brouillon et survit à la fermeture de l'application.</p>
+        </div>
+      </div>
+
+      <div class="term">
+        <div class="mini"><i class="m-app"></i><i class="m-body hl"></i><i class="m-bar"></i></div>
+        <div class="txt">
+          <h4>Checkpoint de session</h4><span class="en">métadonnées de reprise</span>
+          <p>Les petites métadonnées qui permettent de reprendre une session interrompue, rattachées au
+          compte, à la clé et à la version du brouillon. Leur contenu et leurs gardes sont définis en
+          ED-81. À distinguer du contenu privé du brouillon et de l'offre de restauration ↺.</p>
         </div>
       </div>
 
@@ -730,6 +741,16 @@ footer a{color:var(--accent)}
           <p>L'étiquette d'état de l'ancienne bande de contexte. Remplacée par l'<b>icône
           d'état</b>. Les destinataires d'un nouveau MP, eux, sont des puces (<i>input chips</i>) dans
           le panneau d'en-tête.</p>
+        </div>
+      </div>
+
+      <div class="term">
+        <div class="mini"><i class="m-app"></i><i class="m-rail hl"></i><i class="m-body"></i><i class="m-bar"></i></div>
+        <div class="txt">
+          <h4>Tampon de destinataire</h4><span class="en">texte de saisie en cours</span>
+          <p>Dans un nouveau MP, le texte qui n'est pas encore devenu une puce par une virgule. ED-110
+          porte son cycle de vie et sa sauvegarde distincte des puces&nbsp;: D4, option prudente à
+          ratifier par XaTriX.</p>
         </div>
       </div>
 
@@ -1027,10 +1048,9 @@ footer a{color:var(--accent)}
           phase</b>&nbsp;: <b>R4</b> (feuille). R3 (citer une portion) est sorti (#381). Pas
           d'interrupteur ni de lot de retrait (refusés le 01/11)&nbsp;: chaque lot remplace l'ancien
           éditeur sur sa surface et en supprime le code.</p>
-          <p>Un lot = une PR, une build dev, un retour terrain, sauf R0a (preuve hors dépôt), R0c
-          (une PR par ViewModel), R1a-1 (six PR de composants non branchés, sans retour terrain) et
-          R1a-2 (quatre PR, la quatrième bascule le chrome). Le repli P22 des cartes est livré dans
-          R1a-2 PR 3.</p>
+          <p>Un lot = une PR, une build dev, un retour terrain, avec les exceptions R0a, R0c, R1a-1,
+          R1a-2 et R1b définies au § 11 du contrat. Le repli P22 des cartes est livré dans R1a-2
+          PR 3.</p>
         </div>
       </div>
 
@@ -1126,7 +1146,7 @@ footer a{color:var(--accent)}
 
 <footer>
   Vocabulaire de travail pour <a href="https://github.com/ForumHFR/redface2/issues/1417">#1417</a>,
-  v0.7.3 (09/11/2026), établi sur la bêta 0.62.0 (08d5b41c), revérifié sur la bêta 0.65.0
+  v0.7.4 (09/11/2026), établi sur la bêta 0.62.0 (08d5b41c), revérifié sur la bêta 0.65.0
   (04d3039c). Les termes en anglais sont ceux qui servent à retrouver la chose dans le code ou dans la doc Material 3. Maquettes qui
   l'appliquent&nbsp;: <a href="../editeur-1417/">Vue Éditeur #1417</a>.
 </footer>
