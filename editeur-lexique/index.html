@@ -259,18 +259,18 @@ footer a{color:var(--accent)}
  backdrop-filter:none;-webkit-backdrop-filter:none}
 @media (max-width:520px){.artnav #vpick label{display:none}}
 </style>
-<div id="vpick"><label for="vpick-sel">Version</label><select id="vpick-sel" autocomplete="off" onchange="location.href=this.value"><option value="./" selected>v15 — courante</option><option value="v14/">v14</option><option value="v13/">v13</option><option value="v12/">v12</option><option value="v11/">v11</option><option value="v10/">v10</option><option value="v9/">v9</option><option value="v8/">v8</option><option value="v7/">v7</option><option value="v6/">v6</option><option value="v5/">v5</option><option value="v4/">v4</option><option value="v3/">v3</option><option value="v2/">v2</option><option value="v1/">v1</option></select><script>addEventListener("pageshow",function(){var s=document.getElementById("vpick-sel");if(s)for(var i=0;i<s.options.length;i++)s.options[i].selected=s.options[i].defaultSelected;});</script></div>
+<div id="vpick"><label for="vpick-sel">Version</label><select id="vpick-sel" autocomplete="off" onchange="location.href=this.value"><option value="./" selected>v16 — courante</option><option value="v15/">v15</option><option value="v14/">v14</option><option value="v13/">v13</option><option value="v12/">v12</option><option value="v11/">v11</option><option value="v10/">v10</option><option value="v9/">v9</option><option value="v8/">v8</option><option value="v7/">v7</option><option value="v6/">v6</option><option value="v5/">v5</option><option value="v4/">v4</option><option value="v3/">v3</option><option value="v2/">v2</option><option value="v1/">v1</option></select><script>addEventListener("pageshow",function(){var s=document.getElementById("vpick-sel");if(s)for(var i=0;i<s.options.length;i++)s.options[i].selected=s.options[i].defaultSelected;});</script></div>
 </nav>
 
 
 <header class="top">
-  <div class="eyebrow">Redface 2 · #1417 · vocabulaire de travail · v0.7.4 (09/11/2026)</div>
+  <div class="eyebrow">Redface 2 · #1417 · vocabulaire de travail · v0.7.5 (11/11/2026)</div>
   <h1>Anatomie de l'éditeur</h1>
   <p class="lede">Les mots qu'on emploie pour parler de la refonte, chacun rattaché à une zone
   précise de l'écran. Objectif&nbsp;: que « barre d'action », « icône d'état » ou « feuille »
   désignent la même chose des deux côtés de la conversation. Les maquettes qui utilisent ce
   vocabulaire sont dans <a href="../editeur-1417/">Vue Éditeur #1417</a>&nbsp;; la norme est le
-  <a href="../editeur-spec/">contrat de l'éditeur (spec v0.7.4)</a> et
+  <a href="../editeur-spec/">contrat de l'éditeur (spec v0.7.5)</a> et
   l'<a href="../editeur-spec/#adr">ADR-020</a>.</p>
 </header>
 
@@ -642,8 +642,39 @@ footer a{color:var(--accent)}
           source BBCode et son rendu. <b>Dessous</b> en portrait, <b>à droite</b> quand la fenêtre
           est large ou en hauteur compacte. Position initiale 50/50, mémorisée ensuite.</p>
           <p>Le point de bascule est la <i>size class</i> de la fenêtre, pas l'orientation du
-          téléphone&nbsp;: un écran scindé large se comporte comme un paysage. Si les deux ne tiennent
-          pas, l'aperçu redevient une bascule plein champ.</p>
+          téléphone&nbsp;: un écran scindé large se comporte comme un paysage. Si les planchers du
+          source, du séparateur et de l'aperçu ne tiennent pas mais tiendraient dans la même fenêtre
+          clavier fermé, le <b>clavier est prioritaire</b>&nbsp;: l'aperçu reste ouvert, sa position
+          ED-63 est gardée, mais il n'est pas affiché tant que le clavier est ouvert. Le champ
+          focalisé, quel qu'il soit (corps, sujet ou titre, destinataire), garde focus, sélection et
+          clavier. Le partage revient à la fermeture du clavier, sans commande clavier (ED-61), y
+          compris après rotation (ED-86). Si les planchers ne tiendraient pas non plus clavier fermé,
+          l'aperçu redevient une bascule plein champ&nbsp;; le corps rend son focus en gardant sa
+          sélection et le retrouve à la fermeture de l'aperçu (ED-62).</p>
+          <p>Après une recréation (ED-86, critère H de l'annexe), le corps qui avait le focus le
+          reprend dans une <b>tentative unique bornée à 500&nbsp;ms</b>. Sous l'aperçu, un état
+          « bloqué » transitoire ne fait pas abandonner la tentative avant cette échéance. À
+          l'échéance, elle s'arrête sans reprise ultérieure&nbsp;; l'issue est
+          <span class="mono">preview-blocked</span> seulement si un repli couvrant déterminé est
+          encore présent, ou <span class="mono">deadline</span> si l'échéance tombe sans mesure. Une
+          action de l'utilisateur l'annule toujours.</p>
+        </div>
+      </div>
+
+      <div class="term">
+        <div class="mini" style="justify-content:center; align-items:center; background:var(--paper-2)">
+          <span style="position:relative; font-size:15px; color:var(--accent); line-height:1">◉<span style="position:absolute; top:-6px; right:-10px; background:var(--accent-soft); color:var(--accent); border-radius:6px; font-size:7px; line-height:10px; padding:0 3px">✓</span></span>
+        </div>
+        <div class="txt">
+          <h4>Œil</h4><span class="en">preview toggle · IconToggleButton</span>
+          <p>Le bouton à bascule de l'aperçu&nbsp;: nom accessible stable <b>« Aperçu »</b>, coché
+          quand l'aperçu est ouvert, non coché sinon. Son info-bulle porte « Afficher l'aperçu » ou
+          « Masquer l'aperçu »&nbsp;: c'est l'exception à la reprise du nom accessible en info-bulle
+          (ED-32). Le même Œil, avec son nom et ses états, apparaît dans la barre d'action en hauteur
+          compacte.</p>
+          <p>Quand l'aperçu reste ouvert mais masqué par le clavier prioritaire, l'Œil reste coché et
+          porte l'état complémentaire « Aperçu ouvert, masqué pendant la frappe », annoncé une fois
+          (ED-62).</p>
         </div>
       </div>
 
@@ -1146,7 +1177,7 @@ footer a{color:var(--accent)}
 
 <footer>
   Vocabulaire de travail pour <a href="https://github.com/ForumHFR/redface2/issues/1417">#1417</a>,
-  v0.7.4 (09/11/2026), établi sur la bêta 0.62.0 (08d5b41c), revérifié sur la bêta 0.65.0
+  v0.7.5 (11/11/2026), établi sur la bêta 0.62.0 (08d5b41c), revérifié sur la bêta 0.65.0
   (04d3039c). Les termes en anglais sont ceux qui servent à retrouver la chose dans le code ou dans la doc Material 3. Maquettes qui
   l'appliquent&nbsp;: <a href="../editeur-1417/">Vue Éditeur #1417</a>.
 </footer>
