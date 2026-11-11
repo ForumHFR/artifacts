@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Trait des icônes RF2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Roboto:wght@400;500&family=Space+Grotesk:wght@500;600&display=swap">
+<style>
+/* Layout: one reading column; controls on top, then the two editor bars as a phone mock, then a full icon sheet by stroke width. */
+:root {
+  --bg: #f7f3f3;
+  --surface: #ffffff;
+  --fg: #231a1b;
+  --muted: #6d5f60;
+  --line: #e4d9d9;
+  --accent: #8e1d24;
+  --chip: #f6e6e7;
+  --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Space Grotesk", "Inter", system-ui, sans-serif;
+  --font-app: "Roboto", system-ui, sans-serif;
+  /* app mock palette, sampled from the Roborazzi renders (light) */
+  --app-bar: #fcebea;
+  --app-body: #fff8f7;
+  --app-icon: #231919;
+  --app-primary: #8e1d24;
+  --app-on-primary: #ffffff;
+  --app-selected: #ffdad9;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #171213; --surface: #211a1b; --fg: #f1e8e8; --muted: #b6a7a8; --line: #3a2f30;
+    --accent: #f0a5a8; --chip: #3a2427; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #171213; --surface: #211a1b; --fg: #f1e8e8; --muted: #b6a7a8; --line: #3a2f30;
+  --accent: #f0a5a8; --chip: #3a2427; color-scheme: dark;
+}
+.mock-dark {
+  --app-bar: #271d1d; --app-body: #1a1111; --app-icon: #f0dedc;
+  --app-primary: #ffb3b1; --app-on-primary: #561d20; --app-selected: #73333a;
+}
+body {
+  background: var(--bg); color: var(--fg); font: 15px/1.55 var(--font-body);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 28px 64px;
+}
+main { max-width: 1100px; margin: 0 auto; display: grid; gap: 32px; }
+h1, h2 { font-family: var(--font-display); text-wrap: balance; margin: 0; }
+h1 { font-size: 1.75rem; font-weight: 600; }
+h2 { font-size: 1.15rem; font-weight: 600; }
+p { margin: 0; max-width: 70ch; }
+.muted { color: var(--muted); }
+section { display: grid; gap: 14px; }
+.controls { display: flex; flex-wrap: wrap; gap: 18px 28px; align-items: center; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
+.group { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.group > span { font-size: 0.8rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; }
+.seg button { font: 500 0.92rem var(--font-body); color: var(--fg); background: transparent; border: 0; padding: 6px 12px; cursor: pointer; font-variant-numeric: tabular-nums; }
+.seg button + button { border-left: 1px solid var(--line); }
+.seg button[aria-pressed="true"] { background: var(--accent); color: var(--bg); }
+.seg button:focus-visible { outline: 3px solid var(--accent); outline-offset: -3px; }
+.phone-wrap { overflow-x: auto; padding-bottom: 4px; }
+.phone { --dp: 1px; width: calc(411 * var(--dp)); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--app-body); font-family: var(--font-app); color: var(--app-icon); }
+.bar { position: relative; height: calc(56 * var(--dp)); background: var(--app-bar); }
+.topbar { height: calc(48 * var(--dp)); }
+.ico { position: absolute; width: calc(48 * var(--dp)); height: calc(48 * var(--dp)); display: grid; place-items: center; top: calc(4 * var(--dp)); }
+.topbar .ico { top: 0; }
+.ico svg { width: calc(24 * var(--dp)); height: calc(24 * var(--dp)); overflow: visible; }
+.ico.sel::before { content: ""; position: absolute; inset: 0; background: var(--app-selected); border-radius: calc(12 * var(--dp)); }
+.ico.sel svg { position: relative; }
+.title { position: absolute; left: calc(52 * var(--dp)); top: calc(6 * var(--dp)); line-height: 1.25; }
+.title b { display: block; font-weight: 500; font-size: calc(14 * var(--dp)); }
+.title i { display: block; font-style: normal; font-weight: 500; font-size: calc(12 * var(--dp)); letter-spacing: 0.02em; }
+.send { position: absolute; left: calc(284 * var(--dp)); top: calc(4 * var(--dp)); width: calc(111 * var(--dp)); height: calc(48 * var(--dp)); border-radius: 999px; background: var(--app-primary); color: var(--app-on-primary); display: grid; place-items: center; font-weight: 500; font-size: calc(14 * var(--dp)); letter-spacing: 0.01em; }
+.textarea { height: calc(64 * var(--dp)); padding: calc(10 * var(--dp)) calc(16 * var(--dp)); font-size: calc(16 * var(--dp)); line-height: 1.5; }
+.sheet-wrap { overflow-x: auto; }
+table { border-collapse: collapse; font-variant-numeric: tabular-nums; }
+th, td { padding: 6px 10px; text-align: center; }
+th { font: 500 0.82rem var(--font-body); color: var(--muted); }
+th[scope="row"] { text-align: left; font-weight: 400; white-space: nowrap; }
+tbody tr + tr td, tbody tr + tr th { border-top: 1px solid var(--line); }
+td svg { width: 48px; height: 48px; overflow: visible; color: var(--fg); }
+td.cur { background: var(--chip); }
+.ref { display: grid; gap: 8px; }
+.ref img { border: 1px solid var(--line); border-radius: 8px; max-width: 100%; height: auto; display: block; }
+.note { border-left: 3px solid var(--accent); padding: 4px 0 4px 14px; }
+</style>
+</head>
+<body>
+
+<main>
+  <section>
+    <h1>Épaisseur du trait des icônes</h1>
+    <p>Les 29 icônes de l'éditeur (Format, gras, italique, souligné, barré, smileys, image, options…) sont dessinées en trait de <b>2,5</b> sur une grille de 24. C'est la règle de l'ADR-015 (juin 2026), choisie après un retour de nicko qui trouvait la flèche retour trop fine. Les icônes Material standard tournent autour de 2 en graisse normale, c'est pourquoi tout paraît en gras, et le B ne se distingue plus de I, U et S.</p>
+    <p class="muted">Les tracés ci-dessous sont ceux du code de la 0.69.11, redessinés en SVG avec la largeur choisie. La géométrie des barres et les couleurs viennent du rendu Roborazzi.</p>
+  </section>
+
+  <div class="controls" role="group" aria-label="Réglages de la simulation">
+    <div class="group"><span>Trait</span><div class="seg" id="seg-stroke"></div></div>
+    <div class="group"><span>Thème</span><div class="seg" id="seg-theme"></div></div>
+    <div class="group"><span>Zoom</span><div class="seg" id="seg-zoom"></div></div>
+  </div>
+
+  <section>
+    <h2>Barres de l'éditeur</h2>
+    <div class="phone-wrap"><div class="phone" id="phone"></div></div>
+    <p class="muted">À 1×, 1 dp = 1 pixel d'écran : c'est la taille perçue sur le téléphone. Le zoom aide à juger le trait.</p>
+  </section>
+
+  <section>
+    <h2>Toutes les icônes, par épaisseur</h2>
+    <p class="muted">La colonne surlignée est l'état actuel. La dernière ligne montre des icônes Material Symbols du reste de l'app (barre de navigation), pour comparer.</p>
+    <div class="sheet-wrap"><table id="sheet"></table></div>
+  </section>
+
+  <section class="ref">
+    <h2>Contrôle : rendu réel actuel (Roborazzi, trait 2,5)</h2>
+    <img src="ref-barre-repos-A.png" alt="Barre d'action au repos, rendu réel" width="1078" height="158">
+    <img src="ref-barre-format-A.png" alt="Barre d'action en mode Format, rendu réel" width="1078" height="158">
+  </section>
+
+  <p class="note">Portée à choisir avec l'épaisseur : les icônes de l'éditeur seulement, ou toute la famille de l'ADR-015 (flèche retour, chevrons, crayon). Le B peut aussi garder un trait plus épais que les autres pour rester lisible comme « gras ».</p>
+</main>
+
+<script>
+const ICONS = {"stroke": {"format": "M4,5 L20,5 M12,5 L12,20 M8,20 L16,20 M5,10 L8,10 M5,10 L5,16 M3,16 L7,16", "smileys": "M21,12 A9,9 0,1 1,3 12 A9,9 0,1 1,21 12 M8,9 L8,9.1 M16,9 L16,9.1 M7,14 Q12,20 17,14", "image": "M3,3 L21,3 L21,21 L3,21 Z M3,17 L9,10 L16,18 M14,15 L17,12 L21,17 M16,7 L16,7.1", "options": "M5,12 L5,12.1 M12,12 L12,12.1 M19,12 L19,12.1", "bold": "M7,4 L7,20 L13,20 Q21,20 18,14 Q17,12 13,12 L7,12 M7,4 L13,4 Q16,4 17,6 Q20,12 13,12 L7,12", "italic": "M10,4 L19,4 M5,20 L14,20 M15,4 L9,20", "underline": "M6,4 L6,12 Q6,18 12,18 Q18,18 18,12 L18,4 M4,22 L20,22", "strike": "M18,6 Q16,3 12,3 Q5,3 6,8 Q7,11 12,12 M6,18 Q8,21 13,21 Q20,21 18,16 M3,12 L21,12", "quote_text": "M4,4 L8,4 L8,7 Q8,10 5,11 M4,4 L4,7 L8,7 M13,4 L17,4 L17,7 Q17,10 14,11 M13,4 L13,7 L17,7 M4,15 L20,15 M4,20 L16,20", "code": "M8,6 L2,12 L8,18 M16,6 L22,12 L16,18 M14,3 L10,21", "fixed": "M3,5 L21,5 L21,19 L3,19 Z M7,9 L10,12 L7,15 M13,15 L17,15", "spoiler": "M3,12 Q12,1 21,12 Q12,23 3,12 Z M15,12 A3,3 0,1 1,9 12 A3,3 0,1 1,15 12 M3,3 L21,21", "link": "M10,8 L13,5 Q17,1 21,5 Q23,8 19,12 L16,15 M14,16 L11,19 Q7,23 3,19 Q1,16 5,12 L8,9 M8,16 L16,8", "color": "M5,18 L12,3 L19,18 M8,13 L16,13 M4,22 L20,22", "header": "M4,4 L20,4 L20,20 L4,20 Z M4,10 L20,10 M8,7 L13,7 M8,14 L16,14 M8,17 L14,17", "preview": "M2,12 Q12,0 22,12 Q12,24 2,12 Z M16,12 A4,4 0,1 1,8 12 A4,4 0,1 1,16 12", "quote": "M4,6 L10,6 L10,13 Q10,18 5,19 M4,6 L4,12 L10,12 M14,6 L20,6 L20,13 Q20,18 15,19 M14,6 L14,12 L20,12", "restore": "M4,9 A9,9 0,1 1,4 16 M4,3 L4,9 L10,9", "personal_smiley": "M7,4 L3,4 L3,20 L7,20 M17,4 L21,4 L21,20 L17,20 M11,9 L11.01,9 M11,15 L11.01,15", "search_smileys": "M17,10 A7,7 0,1 1,3 10 A7,7 0,1 1,17 10 M15,15 L21,21", "image_url": "M10,3 L3,3 L3,21 L21,21 L21,14 M3,17 L8,11 L15,21 M7,7 L7,7.1 M16,4 L17,3 Q19,1 21,3 Q23,5 21,7 L20,8 M17,9 L16,10 Q14,12 12,10 Q10,8 12,6 L13,5 M14,8 L19,4", "image_selection": "M5,3 L2,3 L2,21 L5,21 M19,3 L22,3 L22,21 L19,21 M7,6 L17,6 L17,18 L7,18 Z M7,15 L11,11 L17,17 M14,9 L14,9.1", "poll": "M4,20 L4,12 M12,20 L12,4 M20,20 L20,8", "recipients": "M15,7 A3,3 0,1 1,9 7 A3,3 0,1 1,15 7 M5,21 L5,18 Q5,13 12,13 Q19,13 19,18 L19,21 M4,6 L4,10 M2,8 L6,8 M20,6 L20,10 M18,8 L22,8", "info": "M21,12 A9,9 0,1 1,3 12 A9,9 0,1 1,21 12 M12,11 L12,17 M12,7 L12,7.1", "done": "M4,12 L9,17 L20,6", "expand": "M14,3 L21,3 L21,10 M21,3 L13,11 M10,21 L3,21 L3,14 M3,21 L11,13", "progress": "M12,3 A9,9 0,1 1,3 12 M12,7 L12,12 L16,14", "submission_warning": "M12,3 L22,21 L2,21 Z M12,9 L12,14 M12,17 L12,17.1", "arrow_back": "M20,12 L4.5,12 M11.5,5 L4.5,12 L11.5,19"}, "ms": {"flag": ["M200-120v-680h360l16 80h224v400H520l-16-80H280v280h-80Zm300-440Zm86 160h134v-240H510l-16-80H280v240h290l16 80Z"], "forum": ["M280-240q-17 0-28.5-11.5T240-280v-80h520v-360h80q17 0 28.5 11.5T880-680v600L720-240H280ZM80-280v-560q0-17 11.5-28.5T120-880h520q17 0 28.5 11.5T680-840v360q0 17-11.5 28.5T640-440H240L80-280Zm520-240v-280H160v280h440Zm-440 0v-280 280Z"], "search": ["M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"], "mail": ["M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm320-280L160-640v400h640v-400L480-440Zm0-80 320-200H160l320 200ZM160-640v-80 480-400Z"], "settings": ["m370-80-16-128q-13-5-24.5-12T307-235l-119 50L78-375l103-78q-1-7-1-13.5v-27q0-6.5 1-13.5L78-585l110-190 119 50q11-8 23-15t24-12l16-128h220l16 128q13 5 24.5 12t22.5 15l119-50 110 190-103 78q1 7 1 13.5v27q0 6.5-2 13.5l103 78-110 190-118-50q-11 8-23 15t-24 12L590-80H370Zm70-80h79l14-106q31-8 57.5-23.5T639-327l99 41 39-68-86-65q5-14 7-29.5t2-31.5q0-16-2-31.5t-7-29.5l86-65-39-68-99 42q-22-23-48.5-38.5T533-694l-13-106h-79l-14 106q-31 8-57.5 23.5T321-633l-99-41-39 68 86 64q-5 15-7 30t-2 32q0 16 2 31t7 30l-86 65 39 68 99-42q22 23 48.5 38.5T427-266l13 106Zm42-180q58 0 99-41t41-99q0-58-41-99t-99-41q-59 0-99.5 41T342-480q0 58 40.5 99t99.5 41Zm-2-140Z"]}};
+const WIDTHS = [2.5, 2.25, 2.0, 1.75, 1.5];
+const LABELS = { format: "Format", bold: "Gras", italic: "Italique", underline: "Souligné", strike: "Barré",
+  quote_text: "Citation", code: "Code", fixed: "Fixe", spoiler: "Spoiler", link: "Lien", color: "Couleur",
+  smileys: "Smileys", image: "Image", options: "Options", preview: "Aperçu", arrow_back: "Retour",
+  header: "En-tête", quote: "Citations", restore: "Restaurer", personal_smiley: "Smiley perso",
+  search_smileys: "Recherche smileys", image_url: "Image (URL)", image_selection: "Image (galerie)",
+  poll: "Sondage", recipients: "Destinataires", info: "Info", done: "Valider", expand: "Déplier",
+  progress: "En cours", submission_warning: "Alerte envoi" };
+const state = { stroke: 2.5, theme: "light", zoom: 2 };
+try { const s = JSON.parse(localStorage.getItem("rf2-icones") || "{}"); Object.assign(state, s); } catch (e) {}
+
+function strokeSvg(name, w) {
+  return `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="${ICONS.stroke[name]}" fill="none" stroke="currentColor" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+}
+function msSvg(name) {
+  const paths = (ICONS.ms[name] || []).map(d => `<path d="${d}" fill="currentColor"/>`).join("");
+  return `<svg viewBox="0 0 960 960" aria-hidden="true"><g transform="translate(0 960)">${paths}</g></svg>`;
+}
+function ico(name, x, w, extra = "") {
+  return `<div class="ico ${extra}" style="left:calc(${x} * var(--dp))" title="${LABELS[name] || name}">${strokeSvg(name, w)}</div>`;
+}
+function renderPhone() {
+  const w = state.stroke, ph = document.getElementById("phone");
+  ph.classList.toggle("mock-dark", state.theme === "dark");
+  ph.style.setProperty("--dp", state.zoom + "px");
+  const fmt = ["bold", "italic", "underline", "strike", "quote_text", "code"];
+  ph.innerHTML =
+    `<div class="bar topbar">${ico("arrow_back", 5, w)}<div class="title"><b>Répondre</b><i>Claviers mécaniques : retours et conseils</i></div>${ico("preview", 356, w)}</div>` +
+    `<div class="textarea">Je viens de recevoir le clavier dont je parlais la semaine dernière.</div>` +
+    `<div class="bar">${ico("format", 16, w)}${ico("smileys", 64, w)}${ico("image", 112, w)}${ico("options", 160, w)}<div class="send">Envoyer</div></div>` +
+    `<div class="bar" style="margin-top:calc(8 * var(--dp))">${ico("format", 16, w, "sel")}${fmt.map((n, i) => ico(n, 64 + 48 * i, w)).join("")}<div class="send">Envoyer</div></div>`;
+}
+function renderSheet() {
+  const names = Object.keys(LABELS).filter(n => ICONS.stroke[n]);
+  let h = `<thead><tr><th scope="col">Icône</th>${WIDTHS.map(w => `<th scope="col">${String(w).replace(".", ",")}${w === 2.5 ? " (actuel)" : ""}</th>`).join("")}</tr></thead><tbody>`;
+  for (const n of names) {
+    h += `<tr><th scope="row">${LABELS[n]}</th>${WIDTHS.map(w => `<td class="${w === 2.5 ? "cur" : ""}">${strokeSvg(n, w)}</td>`).join("")}</tr>`;
+  }
+  const ms = Object.keys(ICONS.ms);
+  h += `<tr><th scope="row">Reste de l'app (Material Symbols)</th><td colspan="${WIDTHS.length}" style="text-align:left">${ms.map(msSvg).join(" ")}</td></tr></tbody>`;
+  document.getElementById("sheet").innerHTML = h;
+}
+function seg(id, key, options) {
+  const el = document.getElementById(id);
+  el.innerHTML = options.map(([v, l]) => `<button type="button" data-v="${v}" aria-pressed="${String(state[key]) === String(v)}">${l}</button>`).join("");
+  el.addEventListener("click", e => {
+    const b = e.target.closest("button"); if (!b) return;
+    const v = b.dataset.v; state[key] = isNaN(+v) ? v : +v;
+    el.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+    try { localStorage.setItem("rf2-icones", JSON.stringify(state)); } catch (err) {}
+    renderPhone();
+  });
+}
+seg("seg-stroke", "stroke", WIDTHS.map(w => [w, String(w).replace(".", ",") + (w === 2.5 ? " actuel" : "")]));
+seg("seg-theme", "theme", [["light", "Clair"], ["dark", "Sombre"]]);
+seg("seg-zoom", "zoom", [[1, "1×"], [2, "2×"], [3, "3×"]]);
+renderPhone(); renderSheet();
+</script>
+
+</body>
+</html>
