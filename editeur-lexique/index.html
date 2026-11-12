@@ -259,18 +259,18 @@ footer a{color:var(--accent)}
  backdrop-filter:none;-webkit-backdrop-filter:none}
 @media (max-width:520px){.artnav #vpick label{display:none}}
 </style>
-<div id="vpick"><label for="vpick-sel">Version</label><select id="vpick-sel" autocomplete="off" onchange="location.href=this.value"><option value="./" selected>v18 — courante</option><option value="v17/">v17</option><option value="v16/">v16</option><option value="v15/">v15</option><option value="v14/">v14</option><option value="v13/">v13</option><option value="v12/">v12</option><option value="v11/">v11</option><option value="v10/">v10</option><option value="v9/">v9</option><option value="v8/">v8</option><option value="v7/">v7</option><option value="v6/">v6</option><option value="v5/">v5</option><option value="v4/">v4</option><option value="v3/">v3</option><option value="v2/">v2</option><option value="v1/">v1</option></select><script>addEventListener("pageshow",function(){var s=document.getElementById("vpick-sel");if(s)for(var i=0;i<s.options.length;i++)s.options[i].selected=s.options[i].defaultSelected;});</script></div>
+<div id="vpick"><label for="vpick-sel">Version</label><select id="vpick-sel" autocomplete="off" onchange="location.href=this.value"><option value="./" selected>v19 — courante</option><option value="v18/">v18</option><option value="v17/">v17</option><option value="v16/">v16</option><option value="v15/">v15</option><option value="v14/">v14</option><option value="v13/">v13</option><option value="v12/">v12</option><option value="v11/">v11</option><option value="v10/">v10</option><option value="v9/">v9</option><option value="v8/">v8</option><option value="v7/">v7</option><option value="v6/">v6</option><option value="v5/">v5</option><option value="v4/">v4</option><option value="v3/">v3</option><option value="v2/">v2</option><option value="v1/">v1</option></select><script>addEventListener("pageshow",function(){var s=document.getElementById("vpick-sel");if(s)for(var i=0;i<s.options.length;i++)s.options[i].selected=s.options[i].defaultSelected;});</script></div>
 </nav>
 
 
 <header class="top">
-  <div class="eyebrow">Redface 2 · #1417 · vocabulaire de travail · v0.7.7 (12/11/2026)</div>
+  <div class="eyebrow">Redface 2 · #1417 · vocabulaire de travail · v0.7.8 (12/11/2026)</div>
   <h1>Anatomie de l'éditeur</h1>
   <p class="lede">Les mots qu'on emploie pour parler de la refonte, chacun rattaché à une zone
   précise de l'écran. Objectif&nbsp;: que « barre d'action », « icône d'état » ou « feuille »
   désignent la même chose des deux côtés de la conversation. Les maquettes qui utilisent ce
   vocabulaire sont dans <a href="../editeur-1417/">Vue Éditeur #1417</a>&nbsp;; la norme est le
-  <a href="../editeur-spec/">contrat de l'éditeur (spec v0.7.7)</a> et
+  <a href="../editeur-spec/">contrat de l'éditeur (spec v0.7.8)</a> et
   l'<a href="../editeur-spec/#adr">ADR-020</a>.</p>
 </header>
 
@@ -504,6 +504,9 @@ footer a{color:var(--accent)}
           couvrir le dessin. Un tap mène à ce qui gouverne l'état (feuille de l'offre avec Restaurer /
           Ignorer, panneau citations, gestionnaire des destinataires). En hauteur compacte, elles passent dans la barre
           d'action.</p>
+          <p>Depuis le 12/11 (v0.7.8&nbsp;; décidé, à implémenter), ↺ porte un <b>point</b> tant
+          qu'aucun choix n'est fait sur le brouillon&nbsp;; TalkBack l'annonce avec l'icône (ED-40,
+          ED-95).</p>
           <p>L'autosave, elle, est silencieuse&nbsp;: aucune icône.</p>
         </div>
       </div>
@@ -527,13 +530,15 @@ footer a{color:var(--accent)}
           <p>Une erreur ou une fin persiste jusqu'à l'acquittement ou au geste d'opération prévu en
           ED-44. Une information s'efface au geste d'action suivant, consommé&nbsp;; frappe et sélection
           exclues.</p>
-          <p><b>Seule exception</b> (ED-44, décidé le 11/11)&nbsp;: « Brouillon retrouvé, citation en
-          attente », dans l'éditeur de post. Elle disparaît seule après 5&nbsp;s, allongées selon le
-          délai d'accessibilité recommandé par Android et comptées au premier plan seulement, avec un
-          délai complet au retour&nbsp;; masquée par un autre événement, son décompte est annulé et un
-          délai complet recommence à son réaffichage&nbsp;: elle reste visible au moins 5&nbsp;s
-          d'affilée&nbsp;; ce retrait vaut acquittement. Sous elle, le premier tap sur ↺ ouvre la
-          feuille de l'offre. Son détail est cette même feuille (ED-45).</p>
+          <p>Depuis le 12/11 (v0.7.8), cette règle n'a <b>plus d'exception</b>&nbsp;: aucune
+          information n'a de minuterie. Décidé, à implémenter (ED-44).</p>
+          <p>Jusqu'à la v0.7.7, une seule exception (décidée le 11/11)&nbsp;: « Brouillon retrouvé,
+          citation en attente », dans l'éditeur de post. Elle disparaissait seule après 5&nbsp;s,
+          allongées selon le délai d'accessibilité recommandé par Android et comptées au premier
+          plan seulement&nbsp;; masquée par un autre événement, son décompte recommençait à son
+          réaffichage&nbsp;; ce retrait valait acquittement. Sous elle, le premier tap sur ↺ ouvrait
+          la feuille de l'offre, qui était aussi son détail (ED-45). Cette information est
+          supprimée&nbsp;: la citation n'attend plus.</p>
           <p>Chaque événement a une sortie. Rien ne change de hauteur, et jamais à cause
           d'une frappe.</p>
           <p>Sa géométrie suit ED-41, ED-49 et ED-133. Pour les emplacements fixes et l'extension dans
@@ -564,9 +569,11 @@ footer a{color:var(--accent)}
           barre, même si les outils reviennent dans le même emplacement sous le doigt. Cela vaut
           aussi pour le geste suivant qui efface une information et pour la fermeture du détail&nbsp;:
           il faut un nouveau geste pour ouvrir Options, armer ou envoyer (ED-40, ED-44, ED-45).</p>
-          <p>Seule exception&nbsp;: sous l'information « Brouillon retrouvé, citation en attente », le
-          premier tap sur ↺ acquitte l'information et ouvre la feuille de l'offre&nbsp;; Envoyer et
-          Confirmer restent consommés (ED-35, ED-44).</p>
+          <p>Depuis le 12/11 (v0.7.8), sans exception&nbsp;: aucun tap ne traverse une information
+          (ED-44).</p>
+          <p>Jusqu'à la v0.7.7, une seule exception&nbsp;: sous l'information « Brouillon retrouvé,
+          citation en attente », le premier tap sur ↺ acquittait l'information et ouvrait la feuille
+          de l'offre&nbsp;; Envoyer et Confirmer restaient consommés (ED-35, ED-44).</p>
         </div>
       </div>
 
@@ -587,16 +594,42 @@ footer a{color:var(--accent)}
           <h4>Offre de restauration</h4><span class="en">restoration offer</span>
           <p>Le choix « Restaurer » ou « Ignorer le brouillon » d'un brouillon retrouvé. Dans les
           quatre éditeurs plein écran, ↺ l'ouvre dans une <b>feuille du bas</b>, « Brouillon
-          retrouvé », jamais ouverte d'office, avec la mention « Citation en attente » si une citation
-          attend la décision. La fermer sans décider n'écrit rien&nbsp;: l'offre attend et ↺ reste
-          (ED-40).</p>
-          <p>Dès #1553, sous offre indécise, le post et la feuille autosauvegardent le champ courant C
-          dans la ligne principale&nbsp;; le brouillon proposé D reste en mémoire. Après écriture de C
-          puis mort du processus, seul C peut être relu, l'ancien D est perdu. La réponse rapide
-          refuse l'agrandissement avant décision, avec une raison accessible, et garde son bandeau
-          jusqu'à R4, hors phase. Hors demande inline, elle conserve l'application directe du
-          brouillon. Ce contrat transitoire ne remplace pas la
-          restauration silencieuse visée par ED-81 (ED-121, ED-132).</p>
+          retrouvé », jamais ouverte d'office. La fermer sans décider n'écrit rien&nbsp;: l'offre
+          attend et ↺ reste (ED-40).</p>
+          <p>Depuis le 12/11 (v0.7.8&nbsp;; décidé, à implémenter)&nbsp;: la feuille montre la
+          <b>date</b> et un <b>extrait</b> du brouillon&nbsp;; ↺ porte un point tant qu'aucun choix
+          n'est fait&nbsp;; le brouillon n'est jamais restauré d'office. En réponse, « Restaurer »
+          garde le brouillon <b>et</b> la citation&nbsp;: le brouillon, puis les citations dans
+          l'ordre, puis la nouvelle saisie, sans citation en double&nbsp;; sans citation, le brouillon
+          puis la saisie (ED-89). S'il reste plusieurs brouillons offerts, la feuille les liste, le
+          plus récent en haut. « Ignorer » retire cette offre seule, sans toucher au champ. Le
+          brouillon offert est <b>durable</b>&nbsp;: il n'est jamais écrasé en silence, et il est
+          gardé après un envoi réussi fait sans ouvrir ↺. Il est purgé 30&nbsp;jours après sa
+          dernière écriture, règle actuelle du code (ED-121).</p>
+          <p>La réponse rapide refuse l'agrandissement avant décision, avec une raison accessible, et
+          garde son bandeau jusqu'à R4, hors phase&nbsp;: ses écritures sont protégées de la même
+          façon, son affichage ne change pas (défaut du cadrage, ratifié le 12/11 vers 15:10). Hors
+          demande inline, elle conserve l'application directe du brouillon.</p>
+          <p>Jusqu'à la v0.7.7&nbsp;: la feuille portait la mention « Citation en attente » si une
+          citation attendait la décision. Sous offre indécise, le post et la feuille
+          autosauvegardaient le champ courant C dans la ligne principale&nbsp;; le brouillon proposé D
+          restait en mémoire. Après écriture de C puis mort du processus, seul C pouvait être relu,
+          l'ancien D était perdu (ED-121, ED-132).</p>
+        </div>
+      </div>
+
+      <div class="term">
+        <div class="mini"><i class="m-app hl"></i><i class="m-body hl"></i><i class="m-bar"></i></div>
+        <div class="txt">
+          <h4>Brouillon</h4><span class="en">draft · current draft, offered draft</span>
+          <p>Le texte non envoyé que l'app garde pour une réponse. Depuis le 12/11 (v0.7.8), on en
+          distingue deux. Le <b>brouillon courant</b>, C&nbsp;: ce qui est dans le champ,
+          autosauvegardé en silence. Le <b>brouillon offert</b>, D&nbsp;: l'ancien texte retrouvé,
+          rangé sous ↺ tant qu'on n'a pas choisi « Restaurer » ou « Ignorer ». Écrire C ne détruit
+          jamais D&nbsp;: D est copié à part avant la première écriture qui le remplacerait. Envoyer C
+          ne vaut pas abandon de D. D garde sa date, montrée dans la feuille avec un extrait (ED-40,
+          ED-121). Une citation seule, non modifiée, ne devient pas un brouillon offert. Décidé, à
+          implémenter.</p>
         </div>
       </div>
 
@@ -609,6 +642,25 @@ footer a{color:var(--accent)}
           « Envoyer » reste inactif tant qu'elle attend. Elle s'en va quand la citation est insérée,
           quand on choisit « Ignorer la citation », ou quand le message est publié. Avec #1553, elle
           est gardée avec le brouillon et survit à la fermeture de l'application.</p>
+          <p>Depuis le 12/11 (v0.7.8&nbsp;; décidé, à implémenter), elle est servie <b>tout de
+          suite</b>, en réponse à un sujet comme en réponse MP&nbsp;: elle n'attend plus le choix sur
+          le brouillon retrouvé. Avec le réglage « citations en cartes », la carte est visible tout
+          de suite (ED-132).</p>
+        </div>
+      </div>
+
+      <div class="term">
+        <div class="mini"><i class="m-app"></i><i class="m-body hl"></i><i class="m-bar"></i></div>
+        <div class="txt">
+          <h4>Citation en attente</h4><span class="en">pending quote</span>
+          <p>Aujourd'hui&nbsp;: une demande de citation dont la récupération est en cours, a échoué
+          ou dort derrière un envoi incertain. « Envoyer » est inactif pendant ce temps (ED-35,
+          ED-132).</p>
+          <p>Jusqu'à la v0.7.7, c'était aussi la citation retenue tant qu'on n'avait pas choisi
+          « Restaurer » ou « Ignorer »&nbsp;: information « Brouillon retrouvé, citation en
+          attente » et mention « Citation en attente » dans la feuille de l'offre. Ce sens disparaît
+          le 12/11 dans les éditeurs plein écran. La réponse rapide le garde jusqu'à R4, avec son
+          information « Citation en attente » (ED-121).</p>
         </div>
       </div>
 
@@ -640,6 +692,9 @@ footer a{color:var(--accent)}
           <p>Ce que l'écran met lui-même dans le champ à l'ouverture&nbsp;: le message à modifier, ou
           la citation préremplie d'une réponse MP. Sert à « Restaurer »&nbsp;: si on n'a rien tapé, le
           brouillon remplace la graine au lieu de s'ajouter derrière (ED-89).</p>
+          <p>Depuis le 12/11 (v0.7.8), la citation d'une réponse MP n'est plus une graine&nbsp;:
+          « Restaurer » la garde, après le brouillon. Seul le message à modifier reste une
+          graine.</p>
           <p>Après un échec de chargement, restaurer un corps résultant non blanc vaut décision&nbsp;:
           un GET ultérieur ne le réhydrate plus, même si l'utilisateur l'a effacé. Si le corps
           proposé D est blanc, corps, sélection, caret et historique ne changent pas&nbsp;; seuls les
@@ -1256,7 +1311,7 @@ footer a{color:var(--accent)}
 
 <footer>
   Vocabulaire de travail pour <a href="https://github.com/ForumHFR/redface2/issues/1417">#1417</a>,
-  v0.7.7 (12/11/2026), établi sur la bêta 0.62.0 (08d5b41c), revérifié sur la bêta 0.65.0
+  v0.7.8 (12/11/2026), établi sur la bêta 0.62.0 (08d5b41c), revérifié sur la bêta 0.65.0
   (04d3039c). Les termes en anglais sont ceux qui servent à retrouver la chose dans le code ou dans la doc Material 3. Maquettes qui
   l'appliquent&nbsp;: <a href="../editeur-1417/">Vue Éditeur #1417</a>.
 </footer>
