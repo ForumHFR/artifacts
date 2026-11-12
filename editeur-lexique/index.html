@@ -259,18 +259,18 @@ footer a{color:var(--accent)}
  backdrop-filter:none;-webkit-backdrop-filter:none}
 @media (max-width:520px){.artnav #vpick label{display:none}}
 </style>
-<div id="vpick"><label for="vpick-sel">Version</label><select id="vpick-sel" autocomplete="off" onchange="location.href=this.value"><option value="./" selected>v17 — courante</option><option value="v16/">v16</option><option value="v15/">v15</option><option value="v14/">v14</option><option value="v13/">v13</option><option value="v12/">v12</option><option value="v11/">v11</option><option value="v10/">v10</option><option value="v9/">v9</option><option value="v8/">v8</option><option value="v7/">v7</option><option value="v6/">v6</option><option value="v5/">v5</option><option value="v4/">v4</option><option value="v3/">v3</option><option value="v2/">v2</option><option value="v1/">v1</option></select><script>addEventListener("pageshow",function(){var s=document.getElementById("vpick-sel");if(s)for(var i=0;i<s.options.length;i++)s.options[i].selected=s.options[i].defaultSelected;});</script></div>
+<div id="vpick"><label for="vpick-sel">Version</label><select id="vpick-sel" autocomplete="off" onchange="location.href=this.value"><option value="./" selected>v18 — courante</option><option value="v17/">v17</option><option value="v16/">v16</option><option value="v15/">v15</option><option value="v14/">v14</option><option value="v13/">v13</option><option value="v12/">v12</option><option value="v11/">v11</option><option value="v10/">v10</option><option value="v9/">v9</option><option value="v8/">v8</option><option value="v7/">v7</option><option value="v6/">v6</option><option value="v5/">v5</option><option value="v4/">v4</option><option value="v3/">v3</option><option value="v2/">v2</option><option value="v1/">v1</option></select><script>addEventListener("pageshow",function(){var s=document.getElementById("vpick-sel");if(s)for(var i=0;i<s.options.length;i++)s.options[i].selected=s.options[i].defaultSelected;});</script></div>
 </nav>
 
 
 <header class="top">
-  <div class="eyebrow">Redface 2 · #1417 · vocabulaire de travail · v0.7.6 (11/11/2026)</div>
+  <div class="eyebrow">Redface 2 · #1417 · vocabulaire de travail · v0.7.7 (12/11/2026)</div>
   <h1>Anatomie de l'éditeur</h1>
   <p class="lede">Les mots qu'on emploie pour parler de la refonte, chacun rattaché à une zone
   précise de l'écran. Objectif&nbsp;: que « barre d'action », « icône d'état » ou « feuille »
   désignent la même chose des deux côtés de la conversation. Les maquettes qui utilisent ce
   vocabulaire sont dans <a href="../editeur-1417/">Vue Éditeur #1417</a>&nbsp;; la norme est le
-  <a href="../editeur-spec/">contrat de l'éditeur (spec v0.7.6)</a> et
+  <a href="../editeur-spec/">contrat de l'éditeur (spec v0.7.7)</a> et
   l'<a href="../editeur-spec/#adr">ADR-020</a>.</p>
 </header>
 
@@ -377,11 +377,62 @@ footer a{color:var(--accent)}
           compacte), épinglée juste au-dessus du clavier.
           Elle porte les actions qui <b>agissent sur le message en cours</b>&nbsp;: format, smileys,
           image, options, envoyer.</p>
-          <p>Aujourd'hui elle existe déjà, avec « Options », « Smileys » et « Envoyer » en toutes
-          lettres. La refonte y ajoute le format et l'image, et passe tout en <b>icônes seules</b>
-          pour rendre la largeur à « Envoyer ». Les libellés survivent comme nom accessible
-          TalkBack, et un appui long les affiche en info-bulle. Elle porte aussi les
-          <b>événements</b> (voir Événement de barre).</p>
+          <p>Dans l'ancien chrome, elle existait déjà, avec « Options », « Smileys » et « Envoyer »
+          en toutes lettres&nbsp;; « Envoyer » est resté en toutes lettres jusqu'à la v0.7.6. La
+          refonte y ajoute le format et l'image, et passe tout en <b>icônes seules</b>. Depuis le
+          12/11 (v0.7.7), « Envoyer » est une icône lui aussi&nbsp;: un avion en papier dans un disque
+          (voir Envoyer). Les libellés survivent comme nom accessible TalkBack, et un appui long les
+          affiche en info-bulle (voir Info-bulle). Les icônes de l'éditeur sont tracées avec un trait
+          de <span class="dp">2 dp</span> (voir Trait). Elle porte aussi les <b>événements</b> (voir
+          Événement de barre).</p>
+        </div>
+      </div>
+
+      <div class="term">
+        <div class="mini" style="justify-content:center; align-items:center; background:var(--paper-2)">
+          <span style="display:flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:50%; background:var(--accent); color:var(--paper)"><svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true" style="fill:currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg></span>
+        </div>
+        <div class="txt">
+          <h4>Envoyer</h4><span class="en">send · submit</span>
+          <p>Le bouton d'envoi, toujours à droite de la barre d'action, jamais déclassé. Depuis le
+          12/11 (v0.7.7), dans les quatre éditeurs plein écran, c'est une <b>icône seule</b>&nbsp;: un
+          avion en papier dans un disque plein de <span class="dp">48 dp</span> (<span class="dp">40 dp</span>
+          en hauteur compacte), avec une cible de <span class="dp">48 dp</span>&nbsp;; ces tailles
+          viennent du cadrage du 12/11, ratifié par XaTriX. « Envoyer » reste son nom accessible et
+          son info-bulle&nbsp;; on continue de l'appeler ainsi. Avant, c'était une pilule libellée,
+          d'environ <span class="dp">139 dp</span> à 1,3 × L. La réponse rapide garde son bouton
+          texte « Envoyer » jusqu'à R4 (ED-30, ED-34).</p>
+        </div>
+      </div>
+
+      <div class="term">
+        <div class="mini" style="justify-content:center; align-items:center; gap:4px; background:var(--paper-2)">
+          <span style="background:var(--ink-2); color:var(--paper); border-radius:4px; font-size:7px; padding:2px 4px; line-height:1.2">Envoyer</span>
+          <span style="display:flex; align-items:center; justify-content:center; width:18px; height:18px; border-radius:50%; background:var(--accent); color:var(--paper)"><svg viewBox="0 0 24 24" width="10" height="10" aria-hidden="true" style="fill:currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg></span>
+        </div>
+        <div class="txt">
+          <h4>Info-bulle</h4><span class="en">tooltip</span>
+          <p>Le petit texte qui apparaît à l'appui long sur une icône. Elle reprend le nom accessible
+          de l'icône, sauf pour l'Œil (« Afficher l'aperçu » / « Masquer l'aperçu ») et pour le
+          bouton d'envoi armé (« Confirmer l'envoi », alors que son nom est « Confirmer »). L'appui
+          long n'exécute pas l'action&nbsp;: il n'arme pas et n'envoie pas (ED-32, ED-34).</p>
+        </div>
+      </div>
+
+      <div class="term">
+        <div class="mini" style="justify-content:center; align-items:center; gap:3px; background:var(--paper-2)">
+          <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" style="fill:none; stroke:var(--accent); stroke-width:2; stroke-linecap:round; stroke-linejoin:round"><path d="M7 4h6a4 4 0 0 1 0 8H7zM7 12h7a4 4 0 0 1 0 8H7z"/></svg>
+          <span style="font-family:'IBM Plex Mono',monospace; font-size:7px; color:var(--ink-3)">2 dp</span>
+        </div>
+        <div class="txt">
+          <h4>Trait</h4><span class="en">stroke</span>
+          <p>L'épaisseur du tracé d'une icône dessinée, sur une grille de 24. Icônes propres à
+          l'éditeur&nbsp;: <span class="dp">2 dp</span>, B du gras compris (décidé le 12/11&nbsp;; le
+          11/11, le B restait à 3). Famille hors éditeur (flèche retour, chevrons, crayon, chevrons
+          d'ouverture)&nbsp;: <span class="dp">2,5 dp</span>, portée en attente, même quand l'éditeur
+          l'emprunte. Les Material Symbols pleins (<span class="mono">ic_ms_*</span>) n'ont pas de
+          trait (ED-33, ADR-015). À ne pas confondre avec le caret, le trait clignotant du
+          champ.</p>
         </div>
       </div>
 
@@ -409,9 +460,11 @@ footer a{color:var(--accent)}
           <b>rangée défilante d'icônes de format</b> (gras, italique, souligné, barré, citation,
           code, bloc fixé, spoiler, lien, couleur)&nbsp;; « Envoyer » reste à droite. <b>Hauteur
           constante</b>&nbsp;: rien ne recouvre le champ, rien ne bouge. Hors hauteur compacte, à
-          360 dp et 1,3 × L, « Envoyer » réserve environ <span class="dp">139 dp</span>&nbsp;: deux
-          formats entiers tiennent dans les <span class="dp">141 dp</span> restants&nbsp;; les suivants
-          sont accessibles par défilement. Les cibles restent de <span class="dp">48 dp</span>
+          360 dp, « Envoyer » en icône réserve <span class="dp">48 dp</span>&nbsp;: quatre formats
+          entiers tiennent dans les <span class="dp">232 dp</span> restants, par calcul&nbsp;; les
+          suivants sont accessibles par défilement. Avant la v0.7.7, la pilule réservait environ
+          <span class="dp">139 dp</span> à 1,3 × L et n'en laissait que deux. Les cibles restent de
+          <span class="dp">48 dp</span>
           (décidé le 08/11, ED-21). En hauteur compacte, les emplacements fixes d'ED-25 peuvent
           laisser moins de formats entiers visibles.</p>
           <p>Il persiste pendant la frappe&nbsp;; il se referme par l'icône, le retour, ou en ouvrant
@@ -778,7 +831,8 @@ footer a{color:var(--accent)}
           <p>La paire d'emphase Material&nbsp;: le <b>tonal</b> (fond clair teinté) pour les actions
           secondaires, le <b>rempli</b> (fond plein) pour l'action principale. Aujourd'hui&nbsp;:
           tonal pour Options et Smileys, rempli pour Envoyer. Dans la refonte, seul Envoyer reste un
-          bouton rempli&nbsp;; les autres sont des boutons-icônes.</p>
+          bouton rempli&nbsp;; les autres sont des boutons-icônes. Depuis le 12/11 (v0.7.7), ce
+          bouton rempli est un disque qui porte une icône.</p>
         </div>
       </div>
 
@@ -844,7 +898,7 @@ footer a{color:var(--accent)}
 
       <div class="term">
         <div class="mini" style="justify-content:center; align-items:center; background:var(--paper-2)">
-          <span style="background:var(--accent); color:var(--paper); border-radius:12px; font-size:8px; padding:3px 8px">Confirmer</span>
+          <span style="display:flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:50%; background:var(--cool); color:var(--paper); font-size:12px; line-height:1">✓</span>
         </div>
         <div class="txt">
           <h4>Bouton armé</h4><span class="en">armed submit</span>
@@ -853,7 +907,12 @@ footer a{color:var(--accent)}
           devient « Confirmer » au lieu d'envoyer. Tant que l'app ne sait pas que la confirmation est
           désactivée, elle la demande. Un garde-fou sans dialogue modal. Les boutons secondaires et
           le mode format disparaissent pendant l'armement, pour que la barre ne présente que la
-          décision en cours&nbsp;; le bouton garde une largeur fixe.</p>
+          décision en cours&nbsp;; le bouton garde une taille fixe.</p>
+          <p>Depuis le 12/11 (v0.7.7), l'avion en papier devient une <b>coche</b>, dans un disque de
+          même taille, aux couleurs tertiaires du thème&nbsp;; le balayage qui montre le temps
+          restant est gardé, sans morphing ni vibration. La coche veut dire « confirme », pas
+          « envoyé ». Nom accessible « Confirmer », info-bulle « Confirmer l'envoi ». Le bouton armé
+          du signalement, hors éditeur, ne change pas (cadrage du 12/11, ratifié par XaTriX).</p>
           <p>Le délai suit une horloge, pas l'animation&nbsp;: il marche aussi avec « Supprimer les
           animations ». Sans la préférence, un tap envoie.</p>
         </div>
@@ -1178,7 +1237,8 @@ footer a{color:var(--accent)}
 
     <div class="pair">
       <h4>Bouton armé ≠ confirmation</h4>
-      <p>Le <b>bouton armé</b> change de libellé et attend un second tap, sans rien bloquer.</p>
+      <p>Le <b>bouton armé</b> change d'icône (avion, puis coche) et de nom accessible, et attend
+      un second tap, sans rien bloquer.</p>
       <p>La <b>confirmation</b> de la réponse rapide (« Publier la réponse&nbsp;? ») est un vrai
       dialogue modal. Les deux n'existent que si la préférence « Confirmation avant publication »
       est active, ou illisible. Les unifier sur le bouton armé fait partie de R4, hors
@@ -1196,7 +1256,7 @@ footer a{color:var(--accent)}
 
 <footer>
   Vocabulaire de travail pour <a href="https://github.com/ForumHFR/redface2/issues/1417">#1417</a>,
-  v0.7.6 (11/11/2026), établi sur la bêta 0.62.0 (08d5b41c), revérifié sur la bêta 0.65.0
+  v0.7.7 (12/11/2026), établi sur la bêta 0.62.0 (08d5b41c), revérifié sur la bêta 0.65.0
   (04d3039c). Les termes en anglais sont ceux qui servent à retrouver la chose dans le code ou dans la doc Material 3. Maquettes qui
   l'appliquent&nbsp;: <a href="../editeur-1417/">Vue Éditeur #1417</a>.
 </footer>
