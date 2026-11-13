@@ -259,18 +259,18 @@ footer a{color:var(--accent)}
  backdrop-filter:none;-webkit-backdrop-filter:none}
 @media (max-width:520px){.artnav #vpick label{display:none}}
 </style>
-<div id="vpick"><label for="vpick-sel">Version</label><select id="vpick-sel" autocomplete="off" onchange="location.href=this.value"><option value="./" selected>v19 — courante</option><option value="v18/">v18</option><option value="v17/">v17</option><option value="v16/">v16</option><option value="v15/">v15</option><option value="v14/">v14</option><option value="v13/">v13</option><option value="v12/">v12</option><option value="v11/">v11</option><option value="v10/">v10</option><option value="v9/">v9</option><option value="v8/">v8</option><option value="v7/">v7</option><option value="v6/">v6</option><option value="v5/">v5</option><option value="v4/">v4</option><option value="v3/">v3</option><option value="v2/">v2</option><option value="v1/">v1</option></select><script>addEventListener("pageshow",function(){var s=document.getElementById("vpick-sel");if(s)for(var i=0;i<s.options.length;i++)s.options[i].selected=s.options[i].defaultSelected;});</script></div>
+<div id="vpick"><label for="vpick-sel">Version</label><select id="vpick-sel" autocomplete="off" onchange="location.href=this.value"><option value="./" selected>v20 — courante</option><option value="v19/">v19</option><option value="v18/">v18</option><option value="v17/">v17</option><option value="v16/">v16</option><option value="v15/">v15</option><option value="v14/">v14</option><option value="v13/">v13</option><option value="v12/">v12</option><option value="v11/">v11</option><option value="v10/">v10</option><option value="v9/">v9</option><option value="v8/">v8</option><option value="v7/">v7</option><option value="v6/">v6</option><option value="v5/">v5</option><option value="v4/">v4</option><option value="v3/">v3</option><option value="v2/">v2</option><option value="v1/">v1</option></select><script>addEventListener("pageshow",function(){var s=document.getElementById("vpick-sel");if(s)for(var i=0;i<s.options.length;i++)s.options[i].selected=s.options[i].defaultSelected;});</script></div>
 </nav>
 
 
 <header class="top">
-  <div class="eyebrow">Redface 2 · #1417 · vocabulaire de travail · v0.7.8 (12/11/2026)</div>
+  <div class="eyebrow">Redface 2 · #1417 · vocabulaire de travail · v0.7.9 (13/11/2026)</div>
   <h1>Anatomie de l'éditeur</h1>
   <p class="lede">Les mots qu'on emploie pour parler de la refonte, chacun rattaché à une zone
   précise de l'écran. Objectif&nbsp;: que « barre d'action », « icône d'état » ou « feuille »
   désignent la même chose des deux côtés de la conversation. Les maquettes qui utilisent ce
   vocabulaire sont dans <a href="../editeur-1417/">Vue Éditeur #1417</a>&nbsp;; la norme est le
-  <a href="../editeur-spec/">contrat de l'éditeur (spec v0.7.8)</a> et
+  <a href="../editeur-spec/">contrat de l'éditeur (spec v0.7.9)</a> et
   l'<a href="../editeur-spec/#adr">ADR-020</a>.</p>
 </header>
 
@@ -504,9 +504,12 @@ footer a{color:var(--accent)}
           couvrir le dessin. Un tap mène à ce qui gouverne l'état (feuille de l'offre avec Restaurer /
           Ignorer, panneau citations, gestionnaire des destinataires). En hauteur compacte, elles passent dans la barre
           d'action.</p>
-          <p>Depuis le 12/11 (v0.7.8&nbsp;; décidé, à implémenter), ↺ porte un <b>point</b> tant
+          <p>Depuis le 12/11 (v0.7.8&nbsp;; livré le 13/11, 0.69.16), ↺ porte un <b>point</b> tant
           qu'aucun choix n'est fait sur le brouillon&nbsp;; TalkBack l'annonce avec l'icône (ED-40,
           ED-95).</p>
+          <p>Depuis le 13/11 (v0.7.9)&nbsp;: le point est en couleur <span class="mono">secondary</span>,
+          lisible sur la barre, et non dans la couleur du badge&nbsp;; l'état annoncé est
+          « Brouillon à traiter ».</p>
           <p>L'autosave, elle, est silencieuse&nbsp;: aucune icône.</p>
         </div>
       </div>
@@ -531,7 +534,7 @@ footer a{color:var(--accent)}
           ED-44. Une information s'efface au geste d'action suivant, consommé&nbsp;; frappe et sélection
           exclues.</p>
           <p>Depuis le 12/11 (v0.7.8), cette règle n'a <b>plus d'exception</b>&nbsp;: aucune
-          information n'a de minuterie. Décidé, à implémenter (ED-44).</p>
+          information n'a de minuterie. Livré le 13/11 (ED-44).</p>
           <p>Jusqu'à la v0.7.7, une seule exception (décidée le 11/11)&nbsp;: « Brouillon retrouvé,
           citation en attente », dans l'éditeur de post. Elle disparaissait seule après 5&nbsp;s,
           allongées selon le délai d'accessibilité recommandé par Android et comptées au premier
@@ -596,13 +599,16 @@ footer a{color:var(--accent)}
           quatre éditeurs plein écran, ↺ l'ouvre dans une <b>feuille du bas</b>, « Brouillon
           retrouvé », jamais ouverte d'office. La fermer sans décider n'écrit rien&nbsp;: l'offre
           attend et ↺ reste (ED-40).</p>
-          <p>Depuis le 12/11 (v0.7.8&nbsp;; décidé, à implémenter)&nbsp;: la feuille montre la
+          <p>Depuis le 12/11 (v0.7.8&nbsp;; livré le 13/11, 0.69.16)&nbsp;: la feuille montre la
           <b>date</b> et un <b>extrait</b> du brouillon&nbsp;; ↺ porte un point tant qu'aucun choix
           n'est fait&nbsp;; le brouillon n'est jamais restauré d'office. En réponse, « Restaurer »
           garde le brouillon <b>et</b> la citation&nbsp;: le brouillon, puis les citations dans
           l'ordre, puis la nouvelle saisie, sans citation en double&nbsp;; sans citation, le brouillon
           puis la saisie (ED-89). S'il reste plusieurs brouillons offerts, la feuille les liste, le
-          plus récent en haut. « Ignorer » retire cette offre seule, sans toucher au champ. Le
+          plus récent en haut. Depuis le 13/11 (v0.7.9)&nbsp;: la date est <b>relative</b> (« il y a
+          5&nbsp;min », « hier à 14:02 »), puis absolue au-delà de sept jours&nbsp;; l'extrait tient
+          en <b>deux lignes</b>, sans BBCode, une citation y étant réduite au libellé « Citation
+          de&nbsp;… ». « Ignorer » retire cette offre seule, sans toucher au champ. Le
           brouillon offert est <b>durable</b>&nbsp;: il n'est jamais écrasé en silence, et il est
           gardé après un envoi réussi fait sans ouvrir ↺. Il est purgé 30&nbsp;jours après sa
           dernière écriture, règle actuelle du code (ED-121).</p>
@@ -628,8 +634,34 @@ footer a{color:var(--accent)}
           rangé sous ↺ tant qu'on n'a pas choisi « Restaurer » ou « Ignorer ». Écrire C ne détruit
           jamais D&nbsp;: D est copié à part avant la première écriture qui le remplacerait. Envoyer C
           ne vaut pas abandon de D. D garde sa date, montrée dans la feuille avec un extrait (ED-40,
-          ED-121). Une citation seule, non modifiée, ne devient pas un brouillon offert. Décidé, à
-          implémenter.</p>
+          ED-121). Une citation seule, non modifiée, ne devient pas un brouillon offert. Livré le
+          13/11.</p>
+        </div>
+      </div>
+
+      <div class="term">
+        <div class="mini"><i class="m-app"></i><i class="m-body" style="background:rgba(0,0,0,.18)"></i><i class="m-bar"></i></div>
+        <div class="txt">
+          <h4>Dialogue de fermeture</h4><span class="en">unsaved-close dialog</span>
+          <p>Le dialogue « Brouillon non enregistré » des quatre éditeurs plein écran. Il apparaît
+          quand on ferme l'éditeur et que la dernière écriture du brouillon est <b>refusée</b>&nbsp;:
+          échec, conflit, champ modifié pendant l'écriture, citation livrée non scellée. « Rester »
+          garde l'écran&nbsp;; un nouveau retour retente l'écriture. « Quitter sans enregistrer »
+          ferme sans écrire&nbsp;: c'est le <b>seul abandon</b>. Retour et tap à côté valent
+          « Rester ». La réponse rapide ne l'a pas (ED-10, ED-85). Depuis le 13/11 (v0.7.9).</p>
+        </div>
+      </div>
+
+      <div class="term">
+        <div class="mini"><i class="m-app"></i><i class="m-body hl"></i><i class="m-bar"></i></div>
+        <div class="txt">
+          <h4>Panier multi-citation</h4><span class="en">multi-quote basket</span>
+          <p>La sélection de messages que sert « Citer N », dans un sujet ou une conversation MP.
+          Depuis le 13/11 (v0.7.9&nbsp;; décidé, à implémenter, #1616), il est vidé <b>dès que ses
+          citations sont livrées durablement</b> dans le brouillon. Il reste armé si la livraison
+          échoue ou si la demande reste dormante. Le vidage au succès de l'envoi reste en filet
+          (ED-88).</p>
+          <p>Jusqu'à la v0.7.8&nbsp;: vidé au succès de l'envoi seulement.</p>
         </div>
       </div>
 
@@ -642,7 +674,7 @@ footer a{color:var(--accent)}
           « Envoyer » reste inactif tant qu'elle attend. Elle s'en va quand la citation est insérée,
           quand on choisit « Ignorer la citation », ou quand le message est publié. Avec #1553, elle
           est gardée avec le brouillon et survit à la fermeture de l'application.</p>
-          <p>Depuis le 12/11 (v0.7.8&nbsp;; décidé, à implémenter), elle est servie <b>tout de
+          <p>Depuis le 12/11 (v0.7.8&nbsp;; livré le 13/11, 0.69.16), elle est servie <b>tout de
           suite</b>, en réponse à un sujet comme en réponse MP&nbsp;: elle n'attend plus le choix sur
           le brouillon retrouvé. Avec le réglage « citations en cartes », la carte est visible tout
           de suite (ED-132).</p>
@@ -1311,7 +1343,7 @@ footer a{color:var(--accent)}
 
 <footer>
   Vocabulaire de travail pour <a href="https://github.com/ForumHFR/redface2/issues/1417">#1417</a>,
-  v0.7.8 (12/11/2026), établi sur la bêta 0.62.0 (08d5b41c), revérifié sur la bêta 0.65.0
+  v0.7.9 (13/11/2026), établi sur la bêta 0.62.0 (08d5b41c), revérifié sur la bêta 0.65.0
   (04d3039c). Les termes en anglais sont ceux qui servent à retrouver la chose dans le code ou dans la doc Material 3. Maquettes qui
   l'appliquent&nbsp;: <a href="../editeur-1417/">Vue Éditeur #1417</a>.
 </footer>
