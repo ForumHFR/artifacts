@@ -259,18 +259,18 @@ footer a{color:var(--accent)}
  backdrop-filter:none;-webkit-backdrop-filter:none}
 @media (max-width:520px){.artnav #vpick label{display:none}}
 </style>
-<div id="vpick"><label for="vpick-sel">Version</label><select id="vpick-sel" autocomplete="off" onchange="location.href=this.value"><option value="./" selected>v20 — courante</option><option value="v19/">v19</option><option value="v18/">v18</option><option value="v17/">v17</option><option value="v16/">v16</option><option value="v15/">v15</option><option value="v14/">v14</option><option value="v13/">v13</option><option value="v12/">v12</option><option value="v11/">v11</option><option value="v10/">v10</option><option value="v9/">v9</option><option value="v8/">v8</option><option value="v7/">v7</option><option value="v6/">v6</option><option value="v5/">v5</option><option value="v4/">v4</option><option value="v3/">v3</option><option value="v2/">v2</option><option value="v1/">v1</option></select><script>addEventListener("pageshow",function(){var s=document.getElementById("vpick-sel");if(s)for(var i=0;i<s.options.length;i++)s.options[i].selected=s.options[i].defaultSelected;});</script></div>
+<div id="vpick"><label for="vpick-sel">Version</label><select id="vpick-sel" autocomplete="off" onchange="location.href=this.value"><option value="./" selected>v21 — courante</option><option value="v20/">v20</option><option value="v19/">v19</option><option value="v18/">v18</option><option value="v17/">v17</option><option value="v16/">v16</option><option value="v15/">v15</option><option value="v14/">v14</option><option value="v13/">v13</option><option value="v12/">v12</option><option value="v11/">v11</option><option value="v10/">v10</option><option value="v9/">v9</option><option value="v8/">v8</option><option value="v7/">v7</option><option value="v6/">v6</option><option value="v5/">v5</option><option value="v4/">v4</option><option value="v3/">v3</option><option value="v2/">v2</option><option value="v1/">v1</option></select><script>addEventListener("pageshow",function(){var s=document.getElementById("vpick-sel");if(s)for(var i=0;i<s.options.length;i++)s.options[i].selected=s.options[i].defaultSelected;});</script></div>
 </nav>
 
 
 <header class="top">
-  <div class="eyebrow">Redface 2 · #1417 · vocabulaire de travail · v0.7.9 (13/11/2026)</div>
+  <div class="eyebrow">Redface 2 · #1417 · vocabulaire de travail · v0.7.10 (13/11/2026)</div>
   <h1>Anatomie de l'éditeur</h1>
   <p class="lede">Les mots qu'on emploie pour parler de la refonte, chacun rattaché à une zone
   précise de l'écran. Objectif&nbsp;: que « barre d'action », « icône d'état » ou « feuille »
   désignent la même chose des deux côtés de la conversation. Les maquettes qui utilisent ce
   vocabulaire sont dans <a href="../editeur-1417/">Vue Éditeur #1417</a>&nbsp;; la norme est le
-  <a href="../editeur-spec/">contrat de l'éditeur (spec v0.7.9)</a> et
+  <a href="../editeur-spec/">contrat de l'éditeur (spec v0.7.10)</a> et
   l'<a href="../editeur-spec/#adr">ADR-020</a>.</p>
 </header>
 
@@ -448,6 +448,9 @@ footer a{color:var(--accent)}
           <p>Un seul, aucun par défaut. Décidé le 01/11 (P16), lot R6. À ne pas confondre avec les
           smileys favoris (#1154, terminé hors phase), une section de l'onglet Favoris de la feuille
           smileys.</p>
+          <p>Depuis le 13/11 (v0.7.10&nbsp;; livré en 0.69.17)&nbsp;: Puce et E-mail s'ajoutent aux
+          formats du catalogue, et les réglages où on le choisit s'ouvrent aussi depuis l'éditeur, par
+          la ligne « Réglages de l'éditeur » de la feuille options (ED-36, ED-39, ED-71).</p>
         </div>
       </div>
 
@@ -457,12 +460,18 @@ footer a{color:var(--accent)}
           <h4>Mode format</h4><span class="en">format mode</span>
           <p>Le mode de la barre d'action ouvert par l'icône format. L'icône reste en place,
           sélectionnée, et referme le mode&nbsp;; smileys, raccourci, image et options cèdent la place à une
-          <b>rangée défilante d'icônes de format</b> (gras, italique, souligné, barré, citation,
-          code, bloc fixé, spoiler, lien, couleur)&nbsp;; « Envoyer » reste à droite. <b>Hauteur
+          <b>rangée défilante d'icônes de format</b>&nbsp;; « Envoyer » reste à droite. Depuis le 13/11
+          (v0.7.10), XaTriX a décidé l'<b>option B</b>&nbsp;: rangée réordonnée, puce et e-mail
+          ajoutés. Ordre constaté dans la PR, livrée en 0.69.17&nbsp;: gras, italique, souligné, barré,
+          lien, spoiler, couleur, puce, citation, code, bloc fixé, e-mail&nbsp;; la place de puce et
+          d'e-mail reste à confirmer. Jusqu'à la v0.7.9&nbsp;: gras, italique, souligné, barré,
+          citation, code, bloc fixé, spoiler, lien, couleur. <b>Hauteur
           constante</b>&nbsp;: rien ne recouvre le champ, rien ne bouge. Hors hauteur compacte, à
           360 dp, « Envoyer » en icône réserve <span class="dp">48 dp</span>&nbsp;: quatre formats
           entiers tiennent dans les <span class="dp">232 dp</span> restants, par calcul&nbsp;; les
-          suivants sont accessibles par défilement. Avant la v0.7.7, la pilule réservait environ
+          suivants sont accessibles par défilement. Depuis la v0.7.10, ces quatre sont gras, italique,
+          souligné et barré&nbsp;; lien est amorcé, et la rangée compte <b>douze icônes</b> (ED-21).
+          Avant la v0.7.7, la pilule réservait environ
           <span class="dp">139 dp</span> à 1,3 × L et n'en laissait que deux. Les cibles restent de
           <span class="dp">48 dp</span>
           (décidé le 08/11, ED-21). En hauteur compacte, les emplacements fixes d'ED-25 peuvent
@@ -475,6 +484,32 @@ footer a{color:var(--accent)}
           <p>Après un format, le contenu enveloppé reste sélectionné&nbsp;: politique <span class="mono">keep</span>,
           retenue le 08/11 après A/B sur S25. Le smiley suivant remplace cette sélection (ED-22).</p>
           <p>Il remplace le « tiroir de format » de la v0.3, qui se superposait au bas du champ.</p>
+        </div>
+      </div>
+
+      <div class="term">
+        <div class="mini"><i class="m-app"></i><i class="m-body"></i><i class="m-bar hl" style="height:12px; font-style:normal; font-family:'IBM Plex Mono',monospace; font-size:6.5px; line-height:12px; text-align:center; color:var(--paper)">• [*]</i></div>
+        <div class="txt">
+          <h4>Puce (format)</h4><span class="en">bullet</span>
+          <p>Le format qui insère <span class="mono">[*]</span> devant la sélection ou au curseur,
+          <b>sans balise fermante</b>, comme la barre web de HFR. L'aperçu rend chaque
+          <span class="mono">[*]</span> par « • » en tête de ligne, sauf dans un bloc fixé, du code ou
+          une image&nbsp;; la lecture rend les listes de HFR de la même façon. Dans la rangée et au
+          catalogue du raccourci depuis le 13/11 (v0.7.10, option B&nbsp;; ED-20, ED-68).</p>
+          <p>À ne pas confondre avec les puces de destinataires d'un nouveau MP (<i>input chips</i>,
+          ED-110) ni avec la puce « Relâcher pour fermer le clavier » du séparateur (ED-62).</p>
+        </div>
+      </div>
+
+      <div class="term">
+        <div class="mini"><i class="m-app"></i><i class="m-body"></i><i class="m-bar hl" style="height:12px; font-style:normal; font-family:'IBM Plex Mono',monospace; font-size:6.5px; line-height:12px; text-align:center; color:var(--paper)">@</i></div>
+        <div class="txt">
+          <h4>E-mail (format)</h4><span class="en">email</span>
+          <p>Le format qui encadre la sélection de <span class="mono">[email]</span> et
+          <span class="mono">[/email]</span>, ou pose les deux balises au curseur, comme Lien. Dernier
+          de la rangée, et au catalogue du raccourci, depuis le 13/11 (v0.7.10, option B&nbsp;;
+          ED-20).</p>
+          <p>À ne pas confondre avec la bascule « notification par e-mail » de la feuille options.</p>
         </div>
       </div>
 
@@ -851,6 +886,51 @@ footer a{color:var(--accent)}
           grille, puis ferme.</p>
           <p>Après S2, Wiki n'est plus un onglet&nbsp;: un champ de recherche unique au-dessus de
           Favoris et Standard sert la recherche locale et Wiki (décidé le 01/11, P17 b).</p>
+        </div>
+      </div>
+
+      <div class="term">
+        <div class="mini"><i class="m-app"></i><i class="m-body" style="background:rgba(0,0,0,.18)"></i><i class="m-sheet hl"></i></div>
+        <div class="txt">
+          <h4>Feuille options</h4><span class="en">options sheet</span>
+          <p>La feuille ouverte par « Options » dans la barre d'action. Elle porte les trois bascules
+          de HFR (signature, smileys désactivés, notification par e-mail) et, en post et en sujet, le
+          ton du message.</p>
+          <p>Depuis le 13/11 (v0.7.10&nbsp;; livré en 0.69.17)&nbsp;: elle se termine par la ligne
+          « Réglages de l'éditeur » sur les quatre éditeurs plein écran, et son contenu
+          <b>défile</b> quand il dépasse la hauteur disponible. Les éditeurs MP n'ont pas de
+          ton&nbsp;; la réponse rapide n'a pas la ligne (ED-71).</p>
+        </div>
+      </div>
+
+      <div class="term">
+        <div class="mini"><i class="m-app"></i><i class="m-body" style="background:rgba(0,0,0,.18)"></i><i class="m-sheet" style="border-top:4px solid var(--accent)"></i></div>
+        <div class="txt">
+          <h4>Réglages de l'éditeur</h4><span class="en">editor settings row</span>
+          <p>La dernière ligne de la feuille options, demandée par XaTriX le 11/11 et décidée le 13/11.
+          Un tap ferme la feuille, écrit le brouillon, puis ouvre la catégorie « Édition et
+          publication » des réglages <b>au-dessus de l'éditeur</b>, dans le même onglet. L'éditeur reste
+          vivant dessous et revient tel quel&nbsp;; la barre de navigation du bas reste cachée pendant
+          ce temps. Désactivée pendant l'envoi et pendant un upload.</p>
+          <p>C'est la <b>seule navigation</b> hors de l'éditeur (§ 1.3, ED-39, ED-71, ED-86).</p>
+        </div>
+      </div>
+
+      <div class="term">
+        <div class="mini" style="justify-content:center; align-items:center; padding:3px; background:var(--paper-2)">
+          <span style="display:grid; grid-template-columns:repeat(6,4px); gap:1px"><span style="width:4px; height:4px; background:var(--line)"></span><span style="width:4px; height:4px; background:var(--line)"></span><span style="width:4px; height:4px; background:var(--line)"></span><span style="width:4px; height:4px; background:var(--line)"></span><span style="width:4px; height:4px; background:var(--line)"></span><span style="width:4px; height:4px; background:var(--line)"></span><span style="width:4px; height:4px; background:var(--line)"></span><span style="width:4px; height:4px; background:var(--line)"></span><span style="width:4px; height:4px; background:var(--line)"></span><span style="width:4px; height:4px; background:var(--accent)"></span><span style="width:4px; height:4px; background:var(--line)"></span><span style="width:4px; height:4px; background:var(--line)"></span><span style="width:4px; height:4px; background:var(--line)"></span><span style="width:4px; height:4px; background:var(--line)"></span><span style="width:4px; height:4px; background:var(--line)"></span><span style="width:4px; height:4px; background:var(--line)"></span></span>
+        </div>
+        <div class="txt">
+          <h4>Ton du message</h4><span class="en">message tone (MsgIcon)</span>
+          <p>L'icône de message de HFR, choisie dans la feuille options en post et en sujet. Un
+          <b>état du message</b>, pas une action&nbsp;: il n'entre pas au catalogue du raccourci
+          (ED-36). Seize tons, dans l'ordre des valeurs de HFR&nbsp;: Aucun, Flèche, Idée, Attention,
+          Question, Cool, Sourire, En colère, Triste, Rire, Choqué, Clin d'œil, Pouce bas, Pouce haut,
+          Étonné, Blasé (noms validés par XaTriX le 13/11).</p>
+          <p>Grille de six colonnes, huit sur une feuille large, cases de <span class="dp">48 dp</span>
+          de haut, de largeur égale&nbsp;; le nom du ton choisi est dans l'en-tête&nbsp;; une case
+          montre son numéro pendant le chargement du sprite ou en cas d'erreur (ED-71, ED-95&nbsp;;
+          livré en 0.69.17). Le brouillon ne garde pas le ton&nbsp;: limite connue.</p>
         </div>
       </div>
 
@@ -1315,11 +1395,15 @@ footer a{color:var(--accent)}
     <div class="pair">
       <h4>Aperçu ≠ rendu de la vue Topic</h4>
       <p>L'<b>aperçu</b> passe déjà par le moteur de rendu des posts&nbsp;; ce qui diffère est le
-      <b>parser BBCode</b> qui l'alimente. Il reconnaît les smileys, mais un smiley perso n'y a pas
-      d'adresse d'image (#873)&nbsp;: la refonte la déduit de son nom, sans requête réseau pendant
-      la frappe.</p>
+      <b>parser BBCode</b> qui l'alimente. Il reconnaît les smileys. Historique&nbsp;: un smiley
+      perso n'y avait pas d'adresse d'image (#873)&nbsp;; la refonte la déduit de son nom, sans
+      requête de résolution pendant la frappe, et c'est livré au 13/11.</p>
       <p>Les émoticônes de ponctuation (#1442) et un aperçu rendu par le serveur (#1443) sont
       d'autres sujets.</p>
+      <p>Depuis le 13/11 (v0.7.10&nbsp;; livré en 0.69.17)&nbsp;: l'aperçu rend aussi une image
+      placée dans un lien, un style ou une couleur, donc l'image qu'on vient d'uploader, et les
+      puces <span class="mono">[*]</span>. Les images y sont inertes. Les médias en échec sont
+      retentés une fois à chaque ouverture de l'aperçu (ED-67, ED-68).</p>
     </div>
 
     <div class="pair">
@@ -1343,7 +1427,7 @@ footer a{color:var(--accent)}
 
 <footer>
   Vocabulaire de travail pour <a href="https://github.com/ForumHFR/redface2/issues/1417">#1417</a>,
-  v0.7.9 (13/11/2026), établi sur la bêta 0.62.0 (08d5b41c), revérifié sur la bêta 0.65.0
+  v0.7.10 (13/11/2026), établi sur la bêta 0.62.0 (08d5b41c), revérifié sur la bêta 0.65.0
   (04d3039c). Les termes en anglais sont ceux qui servent à retrouver la chose dans le code ou dans la doc Material 3. Maquettes qui
   l'appliquent&nbsp;: <a href="../editeur-1417/">Vue Éditeur #1417</a>.
 </footer>
