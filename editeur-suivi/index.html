@@ -8,9 +8,9 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
 <style>
-/* Layout: one 1040px column — status strip, segmented progress rail, dense lot table, then gates, the R0b PR 2 loop and releases side by side. Same family as the spec, lexicon and Roborazzi pages. */
+/* Layout: one 1040px column. Status strip and size rail, then the fresque (whole rework, day scale) with its loupe on the end of phase (hour scale), the end-of-phase board, the remarks table, gates and pending decisions side by side, releases, lots. Same family as the spec, lexicon and Roborazzi pages. Blue = body of the phase, red = end of phase, everywhere. */
 :root{
   --paper:#FAF5F4; --paper-2:#FFFFFF; --paper-3:#F3EAE9;
   --ink:#241A1B; --ink-2:#5C4A4A; --ink-3:#8B7573;
@@ -18,7 +18,8 @@
   --done:#2F6B47; --done-soft:#DDEFE3;
   --run:#9A5B00; --run-soft:#FBEBCF;
   --wait:#6D5C5B; --wait-soft:#EFE6E5;
-  --block:#8E1D24; --block-soft:#FBE0DF;
+  --c-body:#5A7FBE; --c-body-soft:#E4EBF7;
+  --c-end:#B8333B; --c-end-soft:#F9E0E1;
   --f-display:Archivo,"Helvetica Neue",Arial,sans-serif;
   --f-body:"Public Sans","Helvetica Neue",Arial,sans-serif;
   --f-mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
@@ -29,7 +30,8 @@
     --ink:#F0E2E0; --ink-2:#C9B4B2; --ink-3:#9B8583;
     --line:#3A2D2D; --line-2:#2A2020; --accent:#FFB3B1; --accent-soft:#3D1F21;
     --done:#8FD3A6; --done-soft:#1C3325; --run:#F2C27A; --run-soft:#3A2C14;
-    --wait:#C9B4B2; --wait-soft:#2A2020; --block:#FFB3B1; --block-soft:#3D1F21;
+    --wait:#C9B4B2; --wait-soft:#2A2020;
+    --c-body:#6A8FD6; --c-body-soft:#1F2636; --c-end:#DD5A60; --c-end-soft:#3A1E21;
     color-scheme:dark;
   }
 }
@@ -38,77 +40,159 @@
   --ink:#F0E2E0; --ink-2:#C9B4B2; --ink-3:#9B8583;
   --line:#3A2D2D; --line-2:#2A2020; --accent:#FFB3B1; --accent-soft:#3D1F21;
   --done:#8FD3A6; --done-soft:#1C3325; --run:#F2C27A; --run-soft:#3A2C14;
-  --wait:#C9B4B2; --wait-soft:#2A2020; --block:#FFB3B1; --block-soft:#3D1F21;
+  --wait:#C9B4B2; --wait-soft:#2A2020;
+  --c-body:#6A8FD6; --c-body-soft:#1F2636; --c-end:#DD5A60; --c-end-soft:#3A1E21;
   color-scheme:dark;
 }
 *{box-sizing:border-box}
 body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
-.wrap{max-width:1040px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 64px;display:grid;gap:28px}
+.wrap{max-width:1040px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 64px;display:grid;gap:30px}
+.wrap>*{min-width:0}
 a{color:var(--accent);text-underline-offset:2px}
-a:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px}
-h1,h2{font-family:var(--f-display);letter-spacing:-.01em;text-wrap:balance;margin:0}
+a:focus-visible,.fx:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px}
+h1,h2,h3{font-family:var(--f-display);letter-spacing:-.01em;text-wrap:balance;margin:0}
 h1{font-size:clamp(26px,4.4vw,36px);line-height:1.1}
-h2{font-size:17px;font-weight:600}
+h2{font-size:18px;font-weight:600}
+h3{font-size:14px;font-weight:600}
+code{font-family:var(--f-mono);font-size:.92em}
 .eyebrow{font-family:var(--f-mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
 .mono{font-family:var(--f-mono);font-size:12.5px}
 .muted{color:var(--ink-3)}
 header{display:grid;gap:8px}
-.lede{margin:0;color:var(--ink-2);max-width:68ch}
+.lede{margin:0;color:var(--ink-2);max-width:72ch}
 .key{margin:0;font-size:12.5px;color:var(--ink-3);max-width:96ch}
 .links{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px}
 .links a{font-weight:500}
+.sechd{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px}
+.sechd .muted{font-size:12.5px}
+.panel{display:grid;gap:10px;min-width:0}
+.note{font-size:12.5px;color:var(--ink-2);margin:0;max-width:96ch}
 
 /* status strip */
-.strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,190px),1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:8px;overflow:hidden}
-.cell{background:var(--paper-2);padding:10px 14px;display:grid;gap:2px;min-width:0}
+.strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.cell{background:var(--paper-2);padding:10px 14px;display:grid;gap:2px;align-content:start;min-width:0}
 .cell b{font-family:var(--f-display);font-size:19px;font-weight:600;font-variant-numeric:tabular-nums}
 .cell span{font-size:12.5px;color:var(--ink-2)}
-.cell.hot{background:var(--run-soft)}
-.cell.hot b{color:var(--run)}
+.cell.hot{background:var(--c-end-soft)}
 
-/* progress rail */
+/* size rail */
 .rail{display:grid;gap:8px}
-.bar{display:flex;gap:3px;height:12px}
-.bar i{flex:1 1 0;border-radius:2px;background:var(--wait-soft);border:1px solid var(--line)}
-.bar i.done{background:var(--done);border-color:var(--done)}
-.bar i.half{background:linear-gradient(90deg,var(--done) 50%,var(--run) 50%);border-color:var(--run)}
-.bar i.run{background:var(--run);border-color:var(--run)}
-.bar i.block{background:var(--block-soft);border-color:var(--block)}
-.legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12px;color:var(--ink-2)}
+.bar{display:flex;gap:2px;height:12px}
+.bar i{flex:1 1 0;border-radius:2px;background:var(--wait-soft);min-width:2px}
+.bar i.body{background:var(--c-body)}
+.bar i.end{background:var(--c-end)}
+.bar i.todo{background:repeating-linear-gradient(135deg,var(--c-end-soft) 0 3px,var(--paper-2) 3px 6px);box-shadow:inset 0 0 0 1px var(--c-end)}
+.bar i.cut{flex:0 0 2px;background:var(--ink-3);margin-inline:3px}
+.legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12px;color:var(--ink-2);margin:0}
 .legend em{font-style:normal;color:var(--ink-3)}
-.legend span::before{content:"";display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;vertical-align:-1px;background:var(--k);border:1px solid var(--kb,var(--line))}
+.legend span::before{content:"";display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;vertical-align:-1px;background:var(--k);box-shadow:inset 0 0 0 1px var(--kb,transparent)}
+.legend span.lg-dot::before{border-radius:50%}
+.legend span.lg-gate::before{width:8px;height:8px;border-radius:0;transform:rotate(45deg)}
+.legend span.lg-now::before{width:1px;height:12px;border-radius:0;vertical-align:-2px}
+.legend span.lg-hatch::before{background:repeating-linear-gradient(135deg,var(--c-body) 0 2px,var(--c-body-soft) 2px 4px)}
+
+/* fresque */
+.fx{overflow-x:auto;border:1px solid var(--line);border-radius:8px;background:var(--paper-2);overscroll-behavior-x:contain}
+.fx-in{position:relative;min-width:900px;padding-block:6px 8px;padding-right:14px;--lw:100px}
+.fx-row{display:grid;grid-template-columns:var(--lw) minmax(0,1fr)}
+.fx-l{position:sticky;left:0;z-index:3;background:var(--paper-2);display:flex;align-items:center;padding:0 8px 0 12px;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-3);line-height:1.2;border-right:1px solid var(--line-2)}
+.fx-t{position:relative;height:var(--h,24px);background-image:linear-gradient(to right,var(--line-2) 1px,transparent 1px);background-size:var(--grid) 100%}
+.fx-axis .fx-t{height:22px;background:none}
+.fx-tk{position:absolute;left:calc(var(--x) * 1%);top:4px;font-family:var(--f-mono);font-size:10.5px;color:var(--ink-3);white-space:nowrap;line-height:1.2}
+.fx-tk.c{transform:translateX(-50%)}
+.fx-tk.lt{padding-left:4px}
+.fx-tk.b{color:var(--ink);font-weight:600}
+.fx-t>:where(i,b,span:not(.fx-tk)){position:absolute;left:calc(var(--x) * 1%);top:var(--y,50%)}
+.fx-t .k-body{--k:var(--c-body);--ks:var(--c-body-soft)}
+.fx-t .k-end{--k:var(--c-end);--ks:var(--c-end-soft)}
+.fx-t .k-ink{--k:var(--ink-2)}
+.fx-dot{width:9px;height:9px;border-radius:50%;transform:translate(-50%,-50%);background:var(--k);box-shadow:0 0 0 2px var(--paper-2)}
+.fx-dot.hollow{background:var(--paper-2);box-shadow:inset 0 0 0 2px var(--k),0 0 0 2px var(--paper-2)}
+.fx-bar{width:max(calc(var(--w) * 1%),4px);height:10px;transform:translateY(-50%);border-radius:3px;background:var(--k)}
+.fx-bar.hatch{background:repeating-linear-gradient(135deg,var(--k) 0 3px,var(--ks) 3px 6px)}
+.fx-lab{transform:translate(8px,-50%);font-family:var(--f-mono);font-size:10.5px;font-weight:500;color:var(--ink-2);white-space:nowrap;line-height:1.15}
+.fx-lab.rt{transform:translate(calc(-100% - 8px),-50%)}
+.fx-lab.c{transform:translate(-50%,-50%)}
+.fx-lab.rt.up,.fx-lab.c.up{--y:8px}
+.fx-lab.up{--y:8px}
+.fx-lab.dn{--y:30px}
+.fx-lab.muted{color:var(--ink-3)}
+.fx-lab.lo{--y:24px;transform:translate(0,-50%)}
+.fx-lab.lo.rt{transform:translate(-100%,-50%)}
+.fx-lab.two{--y:7px;transform:translate(8px,0)}
+.fx-lab.two span{display:block;font-weight:400;color:var(--ink-3)}
+.fx-band{width:calc(var(--w) * 1%);top:3px;height:20px;border-left:2px solid var(--paper-2);border-radius:3px;background:var(--ks,var(--paper-3));color:var(--ink);font-size:11.5px;font-weight:600;display:flex;align-items:center;padding-left:8px;white-space:nowrap}
+.fx-t .fx-band.k-pre{--ks:var(--paper-3);color:var(--ink-2);font-weight:500}
+.st{background:none;height:26px}
+.fx-zone{width:calc(var(--w) * 1%);top:4px;bottom:4px;background:var(--c-end-soft);border-radius:4px 0 0 4px}
+.fx-rel{top:auto;bottom:4px;width:2px;height:12px;transform:translateX(-50%);background:var(--k);border-radius:1px}
+.fx-rel.beta{width:3px;height:16px;background:var(--ink)}
+.fx-gate{width:9px;height:9px;transform:translate(-50%,-50%) rotate(45deg);background:var(--ink);box-shadow:0 0 0 2px var(--paper-2)}
+.fx-brk{width:calc(var(--w) * 1%);top:7px;height:6px;border:1.5px solid var(--ink-3);border-bottom:0}
+.fx-pill{transform:translate(-50%,-50%);font-family:var(--f-mono);font-size:11px;font-weight:600;line-height:1;padding:4px 7px;border-radius:999px;background:var(--ink);color:var(--paper-2);white-space:nowrap}
+.fx-histo .fx-t::after{content:"";position:absolute;left:0;right:0;bottom:6px;border-top:1px solid var(--line)}
+.fx-t>.fx-g{top:auto;left:0;right:0;bottom:calc(6px + var(--n) * 5px);border-top:1px solid var(--line-2)}
+.fx-g em{position:absolute;left:4px;top:-13px;font-style:normal;font-family:var(--f-mono);font-size:10px;color:var(--ink-3)}
+.fx-t>.fx-col{top:auto;bottom:7px;width:16px;transform:translateX(-50%);display:flex;flex-direction:column-reverse;gap:2px}
+.fx-col i{display:block;height:calc(var(--n) * 5px);background:var(--k)}
+.fx-col i+i{height:calc(var(--n) * 5px - 2px)}
+.fx-col i:last-of-type{border-radius:4px 4px 0 0}
+.fx-col em{font-style:normal;font-family:var(--f-mono);font-size:10.5px;font-weight:600;color:var(--ink);text-align:center;line-height:1;margin-bottom:2px}
+.fx-now{position:absolute;top:0;bottom:0;z-index:1;left:calc(var(--lw) + (100% - var(--lw) - 14px) * var(--x) / 100);border-left:1px solid var(--ink-3);pointer-events:none}
+.fx-hint{font-size:12px;color:var(--ink-3);margin:0}
+@media (max-width:600px){.fx-in{--lw:78px}.fx-l{padding:0 6px 0 8px;font-size:9.5px;letter-spacing:.03em}}
+@media (min-width:960px){.fx-hint{display:none}}
 
 /* pills */
 .pill{display:inline-block;font-size:11.5px;font-weight:600;line-height:1;padding:4px 7px;border-radius:999px;white-space:nowrap;color:var(--c);background:var(--b)}
 .p-done{--c:var(--done);--b:var(--done-soft)}
 .p-run{--c:var(--run);--b:var(--run-soft)}
 .p-wait{--c:var(--wait);--b:var(--wait-soft)}
-.p-block{--c:var(--block);--b:var(--block-soft)}
+.p-ask{--c:var(--ink);--b:transparent;box-shadow:inset 0 0 0 1px var(--ink-3)}
 
-/* lots table */
+/* end-of-phase board */
+.board{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));gap:14px;align-items:start}
+.col{border:1px solid var(--line);border-radius:8px;background:var(--paper-2);padding:10px 14px 12px;display:grid;gap:8px;min-width:0}
+.col .hd{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+.col ul,.col ol{margin:0;padding-left:18px;display:grid;gap:5px;font-size:13px}
+.col li::marker{color:var(--ink-3)}
+.col li span{color:var(--ink-3)}
+
+/* tables */
 .tablebox{overflow-x:auto;border:1px solid var(--line);border-radius:8px;background:var(--paper-2)}
-table{border-collapse:collapse;width:100%;min-width:940px;font-size:13px}
-th{font-family:var(--f-mono);font-weight:500;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);text-align:left;padding:7px 10px;border-bottom:1px solid var(--line);background:var(--paper-3)}
-td{padding:6px 10px;border-bottom:1px solid var(--line-2);vertical-align:top}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th{font-family:var(--f-mono);font-weight:500;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);text-align:left;padding:6px 10px;border-bottom:1px solid var(--line);background:var(--paper-3)}
+td{padding:5px 10px;border-bottom:1px solid var(--line-2);vertical-align:top;line-height:1.4}
 tr:last-child td{border-bottom:0}
+tr.grp th{background:var(--paper-2);color:var(--ink-2);font-size:10.5px;padding-top:9px;border-bottom:1px solid var(--line)}
+tr.grp.end th{box-shadow:inset 3px 0 0 var(--c-end)}
+tr.grp.body th{box-shadow:inset 3px 0 0 var(--c-body)}
+.rq table{min-width:900px}
+.rq td.n{font-family:var(--f-mono);font-weight:600;color:var(--ink);white-space:nowrap;width:34px;font-variant-numeric:tabular-nums}
+.rq td.what{width:31%}
+.rq td.src{width:21%;color:var(--ink-2);font-size:12.5px}
+.rq td.st{white-space:nowrap;width:104px}
+.rq td.next{color:var(--ink-2)}
+.tag{display:inline-block;font-family:var(--f-mono);font-size:10.5px;line-height:1;padding:3px 5px;border-radius:3px;margin-right:4px;vertical-align:1px;color:var(--ink-2);background:var(--paper-3)}
+.tag.t-test{color:var(--paper-2);background:var(--ink-2)}
+.lots table{min-width:900px}
 td.ph{font-family:var(--f-mono);color:var(--ink-3);white-space:nowrap;font-variant-numeric:tabular-nums}
 td.lot{white-space:nowrap}
 td.lot b{font-family:var(--f-display);font-weight:600}
-td.what{color:var(--ink-2);max-width:30ch}
-tr.now td{background:var(--run-soft)}
-tr.now td.ph{color:var(--run)}
-tr.now .pill{--b:var(--paper-2)}
-td.size{min-width:190px}
+td.what2{color:var(--ink-2);min-width:22ch;max-width:34ch}
+td.size{white-space:nowrap}
 .sz{display:inline-block;min-width:26px;text-align:center;font-family:var(--f-mono);font-size:11px;font-weight:600;line-height:1;padding:3px 5px;border-radius:4px;border:1px solid var(--line);color:var(--ink-2);background:var(--paper-3);margin-right:6px;vertical-align:1px}
 .sz-l{color:var(--ink);border-color:var(--ink-3)}
 .sz-xl{color:var(--paper-2);background:var(--ink-2);border-color:var(--ink-2)}
 .szd{font-size:12px;color:var(--ink-3)}
+.rel table{min-width:560px}
+.rel td:first-child{font-family:var(--f-mono);white-space:nowrap;font-weight:500}
+.rel td.d{font-family:var(--f-mono);font-size:12px;color:var(--ink-3);white-space:nowrap;font-variant-numeric:tabular-nums}
 
 /* lower grid */
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:20px;align-items:start}
-.panel{display:grid;gap:10px;min-width:0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:22px;align-items:start}
 .gates{display:grid;gap:8px;margin:0;padding:0;list-style:none}
-.gate{border:1px solid var(--line);border-radius:8px;background:var(--paper-2);padding:9px 12px;display:grid;gap:4px}
+.gate{border:1px solid var(--line);border-radius:8px;background:var(--paper-2);padding:8px 12px;display:grid;gap:4px}
 .gate .hd{display:flex;justify-content:space-between;gap:8px;align-items:baseline;flex-wrap:wrap}
 .gate .hd b{font-family:var(--f-display);font-weight:600}
 .conds{margin:0;padding:0;list-style:none;display:grid;gap:2px;font-size:12.5px;color:var(--ink-2)}
@@ -117,147 +201,376 @@ td.size{min-width:190px}
 .conds li.y::before{content:"✓";color:var(--done)}
 .conds li.n::before{content:"·";color:var(--ink-3);font-weight:700}
 .conds li.r::before{content:"›";color:var(--run);font-weight:700}
-
-/* gate loop chart */
-.loop{display:grid;gap:5px}
-.lrow{display:grid;grid-template-columns:44px 1fr auto;gap:10px;align-items:center;font-size:12.5px}
-.lrow .t{font-family:var(--f-mono);color:var(--ink-3);font-variant-numeric:tabular-nums}
-.track{display:flex;gap:3px;min-height:14px;align-items:center}
-.track i{width:22px;height:12px;border-radius:2px;background:var(--block)}
-.track i.closed{background:var(--block-soft);border:1px solid var(--block)}
-.track em{font-style:normal;font-size:12px;color:var(--ink-2)}
-.lrow .v{font-size:12px;color:var(--ink-2);text-align:right;white-space:nowrap}
-.note{font-size:12.5px;color:var(--ink-2);margin:0}
-.rel{margin:0;padding:0;list-style:none;display:grid;gap:4px;font-size:12.5px}
-.rel li{display:grid;grid-template-columns:62px 1fr;gap:10px;align-items:baseline}
-.rel .mono{color:var(--ink)}
-.asks{margin:0;padding-left:18px;display:grid;gap:4px;font-size:13px}
+.asks{margin:0;padding-left:20px;display:grid;gap:5px;font-size:13px}
+.asks li::marker{font-family:var(--f-mono);color:var(--ink-3);font-size:12px}
 footer{font-size:12px;color:var(--ink-3);border-top:1px solid var(--line);padding-top:10px}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
 </style>
 </head>
 <body>
 
 <div class="wrap">
   <header>
-    <span class="eyebrow">Redface 2 · refonte de l'éditeur · plan v0.7.1</span>
+    <span class="eyebrow">Redface 2 · refonte de l'éditeur · plan v0.7.1 · fin de phase</span>
     <h1>Suivi de l'éditeur #1417</h1>
-    <p class="lede">Avancement des lots du plan de phases, des portes de passage et de la revue en cours. État au <b>mercredi 11 novembre 2026, 16:20</b>. Depuis le 7/11, le développement avance en continu et <b>aucune bêta ne sortira avant la fin de la refonte</b> (décision du mainteneur). R0 est terminé et validé. <b>R1a-1 est mergé dans dev</b> : sept PR dans la nuit du 9 au 10/11, chacune après une relecture de Fable, puis une PR de finition le 10/11. <b>Toute la phase R1 est mergée dans dev le 11/11 au matin</b>, sur go du mainteneur : huit PR de 09:26 à 11:25, la porte G2 levée en chemin. Les quatre surfaces (post, sujet, réponse MP, nouveau MP) passent au nouveau chrome. <b>R2a et R2b suivent</b>, terminés dans la nuit du 10 au 11/11 et intégrés ensemble (recette sur S10e : 9 cas sur 9) : mergés à 11:40 et 11:54. R6 suit à 12:11 et 12:24 : <b>tout le développement de la refonte est dans dev</b>, sorti en <b>release dev 0.69.11</b> le 11/11 vers 12:50 (Play test interne, F-Droid). Spec v0.7.5 publiée. Restent les recettes vers les portes G3 et G4 (séance sur appareil, protocole d'envoi, C1 à C10 filmés), puis la bêta, sur go du mainteneur. Premier retour des testeurs sur la 0.69.11 : un défaut du brouillon en attente avec la citation et les favoris HFR (#1450), en cours de confirmation. Depuis le 9/11 au soir, un second abonnement Claude, pris jusqu'au 14/11, lève la limite de quota qui freinait le rythme.</p>
-    <p class="key">Un <b>lot</b> = une ou plusieurs PR, chacune livrée en release dev. Une <b>porte</b> = les conditions à remplir avant d'ouvrir les lots suivants. Un <b>gate</b> = la relecture du code, écrit par Sol, par un second modèle, Astra ou Fable. Sessions : rf2-dev porte la refonte, rf2-smalldev les lots parallèles. Conditions : ✓ remplie, › en cours, · à faire. Les codes ED-xxx, C1 à C10, B.3 et « repli E » renvoient à la spec.</p>
-    <p class="key"><b>Taille</b> d'un lot, en lignes modifiées (code et tests) : <span class="sz">S</span>moins de 1 000, <span class="sz">M</span>1 000 à 3 000, <span class="sz sz-l">L</span>3 000 à 6 000, <span class="sz sz-xl">XL</span>au-delà. Lot livré : diff réel. Lot en cours : estimation du cadrage. Lot à venir : estimation d'après le nombre de règles de la spec qu'il porte, à confirmer au cadrage. Les jours sont des estimations d'effort ; au rythme actuel, une PR prend souvent moins d'une journée de calendrier.</p>
+    <p class="lede">État au <b>vendredi 13 novembre 2026, 11:45</b>. Le développement de la refonte est terminé : <b>les quatorze lots sont dans dev depuis la release 0.69.11</b> du 11/11. La phase est entrée dans sa <b>fin de phase</b> : le code est livré, on fait la recette vers les portes G3 et G4 et on ajuste ce que le mainteneur et les testeurs relèvent sur appareil. Six ajustements sont sortis en dev, de la 0.69.12 à la <b>0.69.16</b> ; le suivant, en cours, protège la réponse rapide contre la perte de texte. <b>La bêta sortira à la fin de la refonte, sur go du mainteneur</b>, pas avant.</p>
+    <p class="key"><b>Corps de phase</b> : les lots du plan, du 1/11 au 11/11. <b>Fin de phase</b> : recette et petits ajustements, depuis le 11/11 à 12:39. Sur toute la page, le bleu marque le corps de phase et le rouge la fin de phase. Un <b>lot</b> = une ou plusieurs PR, chacune livrée en release dev. Une <b>porte</b> = les conditions à remplir avant l'étape suivante. Un <b>gate</b> = la relecture du code par un second modèle, Astra ou Fable. Les codes ED-xxx, C1 à C10 et B.3 renvoient à la spec.</p>
     <nav class="links" aria-label="Pages de la phase éditeur">
-      <a href="https://forumhfr.github.io/artifacts/editeur-spec/">Spec de l'éditeur</a>
+      <a href="https://forumhfr.github.io/artifacts/editeur-spec/">Spec de l'éditeur (v0.7.9)</a>
       <a href="https://forumhfr.github.io/artifacts/editeur-lexique/">Anatomie de l'éditeur</a>
       <a href="https://forumhfr.github.io/artifacts/editeur-roborazzi/">Rendus Roborazzi</a>
       <a href="https://github.com/ForumHFR/redface2/issues/1417">Issue #1417</a>
+      <a href="https://github.com/ForumHFR/redface2/issues/1450">Issue #1450</a>
     </nav>
   </header>
 
   <section class="strip" aria-label="Résumé">
-    <div class="cell"><span>Lots livrés ou mergés</span><b>14 / 14</b><span>tout le développement est dans dev</span></div>
-    <div class="cell hot"><span>En cours</span><b>Recettes G3 · G4</b><span>séance sur appareil, protocole d'envoi, C1 à C10 filmés ; décisions du mainteneur</span></div>
-    <div class="cell"><span>Version dev</span><b class="mono">0.69.11</b><span>bêta publique : 0.68.0</span></div>
-    <div class="cell"><span>Prochaine bêta</span><b>Après G4</b><span>sur go du mainteneur, pas de bêta intermédiaire</span></div>
+    <div class="cell"><span>Corps de phase</span><b>14 / 14 lots</b><span>dans dev depuis la 0.69.11 (11/11, 12:39)</span></div>
+    <div class="cell hot"><span>Fin de phase</span><b>Recette et ajustements</b><span>6 remarques livrées, 1 en cours, 2 prévues, 6 à décider</span></div>
+    <div class="cell"><span>Version dev</span><b class="mono">0.69.16</b><span>13/11, 09:01 · bêta publique : 0.68.0</span></div>
+    <div class="cell"><span>Portes</span><b>G3 1/2 · G4 1/4</b><span>bêta à la fin de la refonte, sur go du mainteneur</span></div>
   </section>
 
-  <section class="rail" aria-label="Avancement par lot">
-    <div class="bar" role="img" aria-label="14 lots, largeur selon la taille : 14 livrés ou mergés">
-      <i class="done" style="flex-grow:1" title="R0m · S"></i><i class="done" style="flex-grow:6" title="#1301-ST · XL"></i><i class="done" style="flex-grow:4" title="R0b · L"></i><i class="done" style="flex-grow:6" title="R0c · XL"></i><i class="done" style="flex-grow:2" title="R0a · M"></i><i class="done" style="flex-grow:6" title="#1553 · XL"></i><i class="done" style="flex-grow:6" title="R1a-1 · XL (mergé)"></i><i class="done" style="flex-grow:6" title="R1a-2 · XL (mergé)"></i><i class="done" style="flex-grow:6" title="R1b-1 · XL (mergé)"></i><i class="done" style="flex-grow:4" title="R1b-2a · L (mergé)"></i><i class="done" style="flex-grow:4" title="R1b-2b · L (mergé)"></i><i class="done" style="flex-grow:4" title="R6 · L (mergé)"></i><i class="done" style="flex-grow:2" title="R2a · M (mergé)"></i><i class="done" style="flex-grow:4" title="R2b · L (mergé)"></i>
+  <section class="rail" aria-label="Volume livré, pondéré par taille">
+    <div class="bar" role="img" aria-label="Corps de phase : 14 lots livrés. Fin de phase : 6 ajustements livrés, 3 prévus. Largeur selon la taille.">
+      <i class="body" style="flex-grow:1" title="R0m · S"></i><i class="body" style="flex-grow:6" title="#1301-ST · XL"></i><i class="body" style="flex-grow:4" title="R0b · L"></i><i class="body" style="flex-grow:6" title="R0c · XL"></i><i class="body" style="flex-grow:2" title="R0a · M"></i><i class="body" style="flex-grow:6" title="#1553 · XL"></i><i class="body" style="flex-grow:6" title="R1a-1 · XL"></i><i class="body" style="flex-grow:6" title="R1a-2 · XL"></i><i class="body" style="flex-grow:6" title="R1b-1 · XL"></i><i class="body" style="flex-grow:4" title="R1b-2a · L"></i><i class="body" style="flex-grow:4" title="R1b-2b · L"></i><i class="body" style="flex-grow:4" title="R6 · L"></i><i class="body" style="flex-grow:2" title="R2a · M"></i><i class="body" style="flex-grow:4" title="R2b · L"></i><i class="cut"></i><i class="end" style="flex-grow:2" title="#1606 · M"></i><i class="end" style="flex-grow:2" title="#1608 · M"></i><i class="end" style="flex-grow:1" title="#1610 · S"></i><i class="end" style="flex-grow:1" title="#1612 · S"></i><i class="end" style="flex-grow:4" title="#1614 · L"></i><i class="end" style="flex-grow:4" title="#1615 · L"></i><i class="todo" style="flex-grow:1" title="Réponse rapide · taille non estimée"></i><i class="todo" style="flex-grow:1" title="#1616 · taille non estimée"></i><i class="todo" style="flex-grow:1" title="Tagbug #2805926 · taille non estimée"></i>
     </div>
-    <div class="legend"><span style="--k:var(--done);--kb:var(--done)">livré</span><span style="--k:linear-gradient(90deg,var(--done) 50%,var(--run) 50%);--kb:var(--run)">en partie livré</span><span style="--k:var(--run);--kb:var(--run)">en cours</span><span style="--k:var(--wait-soft)">pas commencé</span><em>largeur d'un segment = taille du lot (S 1, M 2, L 4, XL 6)</em></div>
+    <p class="legend"><span style="--k:var(--c-body)">corps de phase, 14 lots</span><span style="--k:var(--c-end)">fin de phase, 6 PR livrées</span><span style="--k:var(--paper-2);--kb:var(--c-end)">prévues, 3 (taille non estimée)</span><em>largeur = taille en lignes modifiées : S 1, M 2, L 4, XL 6. La fin de phase pèse déjà plus que le plus gros lot du corps : +10 972 −2 676 lignes et 2 203 captures Roborazzi réenregistrées.</em></p>
   </section>
 
-  <section class="panel">
-    <h2>Lots</h2>
+  <section class="panel" aria-labelledby="h-fresque">
+    <div class="sechd"><h2 id="h-fresque">Fresque de la refonte</h2><span class="muted">du 1/11 au 13/11 · une colonne par jour · heures des merges dans dev</span></div>
+    <p class="fx-hint">Sur téléphone, la fresque s'ouvre sur les derniers jours : glissez le doigt vers la droite pour remonter au 1/11.</p>
+<div class="fx" tabindex="0" role="region" aria-label="Fresque de la refonte, du 1er au 13 novembre ; défilement horizontal" data-end>
+<div class="fx-in" style="--grid:calc(100% / 13)">
+<span class="fx-now" style="--x:96.07" title="13/11 11:45" aria-hidden="true"></span>
+<div class="fx-row fx-axis"><span class="fx-l">nov. 2026</span><div class="fx-t">
+<span class="fx-tk c" style="--x:3.85">di 1</span>
+<span class="fx-tk c" style="--x:11.54">lu 2</span>
+<span class="fx-tk c" style="--x:19.23">ma 3</span>
+<span class="fx-tk c" style="--x:26.92">me 4</span>
+<span class="fx-tk c" style="--x:34.62">je 5</span>
+<span class="fx-tk c" style="--x:42.31">ve 6</span>
+<span class="fx-tk c" style="--x:50.00">sa 7</span>
+<span class="fx-tk c" style="--x:57.69">di 8</span>
+<span class="fx-tk c" style="--x:65.38">lu 9</span>
+<span class="fx-tk c" style="--x:73.08">ma 10</span>
+<span class="fx-tk c" style="--x:80.77">me 11</span>
+<span class="fx-tk c" style="--x:88.46">je 12</span>
+<span class="fx-tk c" style="--x:96.15">ve 13</span>
+</div></div>
+<div class="fx-row"><span class="fx-l">Étapes</span><div class="fx-t st">
+<span class="fx-band k-pre" style="--x:0.00;--w:7.69" title="Spec v0.7.1 acceptée le 01/11">Spec</span>
+<span class="fx-band k-pre" style="--x:7.69;--w:30.77" title="#1301-ST, bêta 0.68.0, préparation de R0m">Préalables</span>
+<span class="fx-band k-body" style="--x:38.46;--w:26.92" title="R0m, R0b, R0c, R0a, #1553 : 6/11 → 9/11">R0 · socle</span>
+<span class="fx-band k-body" style="--x:65.38;--w:15.59" title="Nouveau chrome sur les quatre éditeurs : 9/11 → 11/11 12:39">R1 · R2 · R6</span>
+<span class="fx-band k-end" style="--x:80.98;--w:19.02" title="Recette et ajustements depuis la 0.69.11">Fin de phase</span>
+</div></div>
+<div class="fx-row"><span class="fx-l">Spec</span><div class="fx-t" style="--h:38px">
+<i class="fx-dot k-ink" style="--x:4.62" title="Spec v0.7.1 acceptée le 01/11 14:25"></i><b class="fx-lab up" style="--x:4.62">v0.7.1 acceptée</b>
+<i class="fx-dot k-ink" style="--x:53.26" title="Spec v0.7.2 publiée le 07/11 22:10"></i><b class="fx-lab c dn" style="--x:53.26">7.2</b>
+<i class="fx-dot k-ink" style="--x:67.48" title="Spec v0.7.3 publiée le 09/11 18:32"></i><b class="fx-lab c up" style="--x:67.48">7.3</b>
+<i class="fx-dot k-ink" style="--x:73.26" title="Spec v0.7.4 publiée le 10/11 12:34"></i><b class="fx-lab c dn" style="--x:73.26">7.4</b>
+<i class="fx-dot k-ink" style="--x:80.49" title="Spec v0.7.5 publiée le 11/11 11:07"></i><b class="fx-lab c up" style="--x:80.49">7.5</b>
+<i class="fx-dot k-ink" style="--x:84.60" title="Spec v0.7.6 publiée le 11/11 23:57"></i><b class="fx-lab c dn" style="--x:84.60">7.6</b>
+<i class="fx-dot k-ink" style="--x:89.60" title="Spec v0.7.7 publiée le 12/11 15:33"></i><b class="fx-lab c up" style="--x:89.60">7.7</b>
+<i class="fx-dot k-ink" style="--x:91.83" title="Spec v0.7.8 publiée le 12/11 22:31"></i><b class="fx-lab c dn" style="--x:91.83">7.8</b>
+<i class="fx-dot k-ink" style="--x:95.16" title="Spec v0.7.9 publiée le 13/11 08:54"></i><b class="fx-lab c up" style="--x:95.16">7.9</b>
+</div></div>
+<div class="fx-row"><span class="fx-l">R0</span><div class="fx-t" style="--h:56px">
+<i class="fx-dot k-body" style="--x:8.45;--y:11px" title="#1301-ST, invariants d'envoi : PR #1522 mergée le 02/11 à 02:21 (dev 0.66.0)"></i><b class="fx-lab" style="--x:8.45;--y:11px">#1301-ST</b>
+<i class="fx-bar k-body" style="--x:41.96;--w:7.71;--y:11px" title="R0b : PR #1539 (06/11 10:55) et #1551 (07/11 10:59)"></i><b class="fx-lab rt" style="--x:41.96;--y:11px">R0b</b>
+<i class="fx-bar k-body" style="--x:53.12;--w:11.16;--y:11px" title="R0c : #1555 (07/11 21:44) à #1569 (08/11 16:17), puis #1574 (09/11 08:34)"></i><b class="fx-lab" style="--x:64.28;--y:11px">R0c</b>
+<i class="fx-dot k-body" style="--x:43.70;--y:28px" title="R0m : PR #1524 mergée le 06/11 à 16:20 (dev 0.69.2)"></i><b class="fx-lab rt" style="--x:43.70;--y:28px">R0m</b>
+<i class="fx-dot k-body" style="--x:57.78;--y:28px" title="#1553, citation en attente stockée : PR #1564 mergée le 08/11 à 12:17"></i><b class="fx-lab" style="--x:57.78;--y:28px">#1553</b>
+<i class="fx-bar k-body hatch" style="--x:50.96;--w:10.15;--y:45px" title="R0a, hors dépôt : prétests, bloc automatique sur S10e, séance sur S25 ; conclu le 08/11 à 22:40"></i><b class="fx-lab" style="--x:61.11;--y:45px">R0a · preuve sur appareil</b>
+</div></div>
+<div class="fx-row"><span class="fx-l">R1 · R2 · R6</span><div class="fx-t" style="--h:40px">
+<i class="fx-bar k-body" style="--x:67.67;--w:5.93;--y:12px" title="R1a-1 : #1583 à #1589 le 09/11 de 19:08 à 23:42, #1590 le 10/11 à 13:38"></i><b class="fx-lab rt" style="--x:67.67;--y:12px">R1a-1 · 8 PR</b>
+<i class="fx-bar k-body" style="--x:79.95;--w:0.95;--y:29px" title="R1a-2, R1b, R2a, R2b, R6 : #1591 à #1603, le 11/11 de 09:26 à 12:24"></i><b class="fx-lab rt" style="--x:79.95;--y:29px">R1a-2, R1b, R2a, R2b, R6 · 12 PR en 3 h</b>
+</div></div>
+<div class="fx-row"><span class="fx-l">Fin de phase</span><div class="fx-t" style="--h:30px">
+<span class="fx-zone" style="--x:80.98;--w:19.02"></span>
+<i class="fx-dot k-end" style="--x:82.71" title="PR #1606 mergée le 11/11 18:03"></i>
+<i class="fx-dot k-end" style="--x:86.96" title="PR #1608 mergée le 12/11 07:19"></i>
+<i class="fx-dot k-end" style="--x:88.66" title="PR #1610 mergée le 12/11 12:37"></i>
+<i class="fx-dot k-end" style="--x:90.03" title="PR #1612 mergée le 12/11 16:53"></i>
+<i class="fx-dot k-end" style="--x:92.08" title="PR #1614 mergée le 12/11 23:18"></i>
+<i class="fx-dot k-end" style="--x:95.12" title="PR #1615 mergée le 13/11 08:47"></i>
+<b class="fx-lab rt" style="--x:80.98">6 PR d'ajustement, détail dans la loupe</b>
+</div></div>
+<div class="fx-row"><span class="fx-l">Releases</span><div class="fx-t" style="--h:34px">
+<i class="fx-rel k-body" style="--x:8.56" title="Release dev 0.66.0, PR de version mergée le 02/11 02:42"></i>
+<i class="fx-rel k-body" style="--x:42.01" title="Release dev 0.69.0, PR de version mergée le 06/11 11:04"></i>
+<i class="fx-rel k-body" style="--x:43.76" title="Release dev 0.69.2, PR de version mergée le 06/11 16:32"></i>
+<i class="fx-rel k-body" style="--x:49.74" title="Release dev 0.69.4, PR de version mergée le 07/11 11:11"></i>
+<i class="fx-rel k-body" style="--x:53.29" title="Release dev 0.69.5, PR de version mergée le 07/11 22:15"></i>
+<i class="fx-rel k-body" style="--x:56.18" title="Release dev 0.69.6, PR de version mergée le 08/11 07:16"></i>
+<i class="fx-rel k-body" style="--x:57.99" title="Release dev 0.69.7, PR de version mergée le 08/11 12:56"></i>
+<i class="fx-rel k-body" style="--x:59.12" title="Release dev 0.69.8, PR de version mergée le 08/11 16:27"></i>
+<i class="fx-rel k-body" style="--x:64.35" title="Release dev 0.69.9, PR de version mergée le 09/11 08:47"></i>
+<i class="fx-rel k-body" style="--x:65.72" title="Release dev 0.69.10, PR de version mergée le 09/11 13:03"></i>
+<i class="fx-rel k-body" style="--x:80.98" title="Release dev 0.69.11, PR de version mergée le 11/11 12:39"></i>
+<i class="fx-rel k-end" style="--x:82.79" title="Release dev 0.69.12, PR de version mergée le 11/11 18:19"></i>
+<i class="fx-rel k-end" style="--x:87.05" title="Release dev 0.69.13, PR de version mergée le 12/11 07:36"></i>
+<i class="fx-rel k-end" style="--x:88.72" title="Release dev 0.69.14, PR de version mergée le 12/11 12:49"></i>
+<i class="fx-rel k-end" style="--x:90.35" title="Release dev 0.69.15, PR de version mergée le 12/11 17:53"></i>
+<i class="fx-rel k-end" style="--x:95.20" title="Release dev 0.69.16, PR de version mergée le 13/11 09:01"></i>
+<i class="fx-rel beta" style="--x:22.23" title="Bêta 0.68.0 préparée le 03/11 à 21:22, la dernière avant la fin de la refonte"></i>
+<b class="fx-lab c up" style="--x:8.56">0.66.0</b>
+<b class="fx-lab c up" style="--x:22.23">bêta 0.68.0</b>
+<b class="fx-lab c up" style="--x:42.01">0.69.0</b>
+<b class="fx-lab c up" style="--x:80.98">0.69.11</b>
+<b class="fx-lab rt up" style="--x:95.20">0.69.16</b>
+</div></div>
+<div class="fx-row"><span class="fx-l">Portes</span><div class="fx-t" style="--h:26px">
+<i class="fx-gate" style="--x:79.93" title="G1 : go du mainteneur le 11/11 à 09:23"></i>
+<i class="fx-gate" style="--x:80.25" title="G2 levée le 11/11 à 10:22"></i>
+<b class="fx-lab rt" style="--x:79.81">G1, G2 le 11/11</b>
+<b class="fx-lab rt muted" style="--x:96.07">G3, G4 : recette</b>
+</div></div>
+<div class="fx-row fx-histo"><span class="fx-l">PR mergées<br>par jour</span><div class="fx-t" style="--h:96px">
+<span class="fx-g" style="--n:5"><em>5</em></span><span class="fx-g" style="--n:10"><em>10</em></span>
+<span class="fx-col" style="--x:11.54;--t:1" title="lu 2/11 : 1 PR du corps de phase"><i class="k-body" style="--n:1"></i></span>
+<span class="fx-col" style="--x:42.31;--t:2" title="ve 6/11 : 2 PR du corps de phase"><i class="k-body" style="--n:2"></i></span>
+<span class="fx-col" style="--x:50.00;--t:3" title="sa 7/11 : 3 PR du corps de phase"><i class="k-body" style="--n:3"></i></span>
+<span class="fx-col" style="--x:57.69;--t:6" title="di 8/11 : 6 PR du corps de phase"><i class="k-body" style="--n:6"></i></span>
+<span class="fx-col" style="--x:65.38;--t:9" title="lu 9/11 : 9 PR du corps de phase"><i class="k-body" style="--n:9"></i><em>9</em></span>
+<span class="fx-col" style="--x:73.08;--t:1" title="ma 10/11 : 1 PR du corps de phase"><i class="k-body" style="--n:1"></i></span>
+<span class="fx-col" style="--x:80.77;--t:13" title="me 11/11 : 13 PR (12 corps de phase, 1 fin de phase)"><i class="k-body" style="--n:12"></i><i class="k-end" style="--n:1"></i><em>13</em></span>
+<span class="fx-col" style="--x:88.46;--t:4" title="je 12/11 : 4 PR de fin de phase"><i class="k-end" style="--n:4"></i></span>
+<span class="fx-col" style="--x:96.15;--t:1" title="ve 13/11 : 1 PR de fin de phase"><i class="k-end" style="--n:1"></i></span>
+</div></div>
+</div></div>
+    <p class="legend"><span style="--k:var(--c-body)">corps de phase</span><span style="--k:var(--c-end)">fin de phase</span><span class="lg-hatch" style="--k:var(--c-body)">hors dépôt (R0a)</span><span class="lg-dot" style="--k:var(--ink-2)">spec publiée</span><span class="lg-gate" style="--k:var(--ink)">porte franchie</span><span class="lg-now" style="--k:var(--ink-3)">maintenant</span><em>survol d'une marque : date, heure, PR</em></p>
+    <p class="note">Le corps de phase a tenu en dix jours, avec un pic le 11/11 : treize PR mergées, la cascade de R1a-2 à R6 en trois heures après le go du mainteneur, puis le premier correctif de fin de phase le soir même. Depuis, la fin de phase a livré six PR et quatre versions de la spec en moins de deux jours.</p>
+    <div class="sechd"><h3>Loupe sur la fin de phase</h3><span class="muted">du 11/11 12 h au 13/11 14 h · les numéros renvoient aux remarques plus bas</span></div>
+<div class="fx" tabindex="0" role="region" aria-label="Loupe sur la fin de phase, du 11/11 12 h au 13/11 14 h ; défilement horizontal" data-end>
+<div class="fx-in" style="--grid:12%">
+<span class="fx-now" style="--x:95.50" title="13/11 11:45" aria-hidden="true"></span>
+<div class="fx-row fx-axis"><span class="fx-l">heures</span><div class="fx-t">
+<span class="fx-tk lt" style="--x:0">me 11 · 12 h</span>
+<span class="fx-tk c" style="--x:12">18 h</span>
+<span class="fx-tk c b" style="--x:24">je 12</span>
+<span class="fx-tk c" style="--x:36">6 h</span>
+<span class="fx-tk c" style="--x:48">12 h</span>
+<span class="fx-tk c" style="--x:60">18 h</span>
+<span class="fx-tk c b" style="--x:72">ve 13</span>
+<span class="fx-tk c" style="--x:84">6 h</span>
+<span class="fx-tk c" style="--x:96">12 h</span>
+</div></div>
+<div class="fx-row"><span class="fx-l">Retours</span><div class="fx-t" style="--h:34px">
+<i class="fx-brk" style="--x:1.67;--w:2.73" title="Retours sur la 0.69.11, fil DEV, de 12:50 à 14:12"></i>
+<b class="fx-lab lo" style="--x:1.67">0.69.11 → 1, 4, 5, 12 à 14</b>
+<i class="fx-brk" style="--x:49.33;--w:12.00" title="Citation topic contre MP (styx42, questions de XaTriX), puis retours sur la 0.69.14"></i>
+<b class="fx-lab lo" style="--x:49.33">12/11 → 6, 9, 10</b>
+<i class="fx-brk" style="--x:85.67;--w:3.43" title="Revue Astra de #1615 et remarque de XaTriX sur le panier"></i>
+<b class="fx-lab lo rt" style="--x:89.10">pendant la PR 2 → 7, 8, 11</b>
+</div></div>
+<div class="fx-row"><span class="fx-l">Décisions</span><div class="fx-t" style="--h:28px">
+<b class="fx-pill" style="--x:8.00" title="11/11 ~16:00 : correctif de la citation, offre en feuille du bas, trait à 2 dp">1 · 2 · 4</b>
+<b class="fx-pill" style="--x:14.67" title="11/11 ~19:20 : icône restore_page">3</b>
+<b class="fx-pill" style="--x:41.43" title="12/11 08:43 : B aussi à 2 dp, bouton avion en papier">4 · 5</b>
+<b class="fx-pill" style="--x:50.43" title="12/11 13:13 : citation visible partout, brouillon sous ↺">6</b>
+<b class="fx-pill" style="--x:88.90" title="13/11 08:27-08:33 : réponse rapide suivie dans #1450, issue #1616">7 · 8</b>
+</div></div>
+<div class="fx-row"><span class="fx-l">Spec</span><div class="fx-t" style="--h:26px">
+<i class="fx-dot k-ink" style="--x:23.90" title="Spec v0.7.6 publiée le 11/11 23:57"></i><b class="fx-lab" style="--x:23.90">v0.7.6</b>
+<i class="fx-dot k-ink" style="--x:55.10" title="Spec v0.7.7 publiée le 12/11 15:33"></i><b class="fx-lab" style="--x:55.10">v0.7.7</b>
+<i class="fx-dot k-ink" style="--x:69.03" title="Spec v0.7.8 publiée le 12/11 22:31"></i><b class="fx-lab" style="--x:69.03">v0.7.8</b>
+<i class="fx-dot k-ink" style="--x:89.80" title="Spec v0.7.9 publiée le 13/11 08:54"></i><b class="fx-lab" style="--x:89.80">v0.7.9</b>
+</div></div>
+<div class="fx-row"><span class="fx-l">Livraisons</span><div class="fx-t" style="--h:40px">
+<i class="fx-dot k-body" style="--x:1.30;--y:13px" title="Release dev 0.69.11 (refonte), PR de version mergée le 11/11 12:39"></i>
+<b class="fx-lab two" style="--x:1.30">0.69.11<span>refonte</span></b>
+<i class="fx-dot k-end" style="--x:12.63;--y:13px" title="Release dev 0.69.12 (#1606), PR de version mergée le 11/11 18:19"></i>
+<b class="fx-lab two" style="--x:12.63">0.69.12<span>#1606</span></b>
+<i class="fx-dot k-end" style="--x:39.20;--y:13px" title="Release dev 0.69.13 (#1608), PR de version mergée le 12/11 07:36"></i>
+<b class="fx-lab two" style="--x:39.20">0.69.13<span>#1608</span></b>
+<i class="fx-dot k-end" style="--x:49.63;--y:13px" title="Release dev 0.69.14 (#1610), PR de version mergée le 12/11 12:49"></i>
+<b class="fx-lab two" style="--x:49.63">0.69.14<span>#1610</span></b>
+<i class="fx-dot k-end" style="--x:59.77;--y:13px" title="Release dev 0.69.15 (#1612), PR de version mergée le 12/11 17:53"></i>
+<b class="fx-lab two" style="--x:59.77">0.69.15<span>#1612</span></b>
+<i class="fx-dot k-end hollow" style="--x:70.60;--y:13px" title="PR #1614 (socle) mergée le 12/11 23:18, livrée avec la 0.69.16"></i>
+<b class="fx-lab two" style="--x:70.60">&nbsp;<span>#1614</span></b>
+<i class="fx-dot k-end" style="--x:90.03;--y:13px" title="Release dev 0.69.16 (#1615), PR de version mergée le 13/11 09:01"></i>
+<b class="fx-lab two" style="--x:90.03">0.69.16<span>#1615</span></b>
+</div></div>
+</div></div>
+  </section>
+
+  <section class="panel" aria-labelledby="h-fin">
+    <div class="sechd"><h2 id="h-fin">Fin de phase</h2><span class="muted">depuis le 11/11, 12:39 · ce qui est fait, en cours, prévu</span></div>
+    <p class="note">La fin de phase ne livre plus de lots. Elle recette ce qui est dans dev (portes G3 et G4), corrige ce que la recette et les testeurs trouvent, et règle les remarques du mainteneur. Elle se termine par son go et la bêta du nouvel éditeur.</p>
+    <div class="board">
+      <div class="col">
+        <div class="hd"><h3>Fait</h3><span class="pill p-done">0.69.12 → 0.69.16</span></div>
+        <ul>
+          <li>Six PR d'ajustement, cinq releases dev en 39 heures (11/11 18:19 → 13/11 09:01). <span>Remarques 1 à 6.</span></li>
+          <li>Spec v0.7.6 à v0.7.9 publiées en 33 heures, chacune relue avant publication.</li>
+          <li>Chaque PR : validation complète sur box, CI verte, gate Fable ou Astra rendu GO avant le merge.</li>
+          <li>Avis UX croisés de Fable et d'Astra avant de changer la citation (12/11).</li>
+          <li>Chaque release annoncée sur le fil DEV ; jalons commentés sur #1450 et #1417.</li>
+          <li>Commentaires de fin de lot postés sur les huit issues de la phase (11/11).</li>
+        </ul>
+      </div>
+      <div class="col">
+        <div class="hd"><h3>En cours</h3><span class="pill p-run">rf2-dev</span></div>
+        <ul>
+          <li><b>Réponse rapide</b> : écrire le brouillon avant de fermer la feuille, pour ne plus perdre de texte. Cadrage en cours ; l'UX sera soumise au mainteneur avant le code. <span>Remarque 7, suivie dans #1450.</span></li>
+          <li><b>Recette de la 0.69.16 sur appareil</b>, par le mainteneur : dialogue « Brouillon non enregistré », annonce TalkBack du brouillon à traiter. #1450 reste ouverte jusque-là.</li>
+        </ul>
+      </div>
+      <div class="col">
+        <div class="hd"><h3>Prévu</h3><span class="pill p-wait">dans l'ordre</span></div>
+        <ol>
+          <li>Reproduire sur émulateur les feuilles qui changent de taille à l'ouverture. <span>Remarque 9.</span></li>
+          <li>Vider le panier multi-citation après livraison durable (#1616). <span>Remarque 8, priorité à fixer.</span></li>
+          <li>Décisions du mainteneur sur les remarques 10 à 15, puis les ajustements retenus.</li>
+          <li>Recette G3 : protocole d'envoi (B.3) et C8 (rotation, mort du processus, en-têtes) sur les quatre éditeurs.</li>
+          <li>Recette G4 : C1 à C10 filmés ; S1, la feuille des smileys, corrigée ou dérogation bornée.</li>
+          <li>Clôture : issues de lot fermées, reliquats rangés en issues de suite.</li>
+          <li>Go du mainteneur, puis bêta du nouvel éditeur, la première depuis la 0.68.0.</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel rq" aria-labelledby="h-rq">
+    <div class="sechd"><h2 id="h-rq">Remarques depuis la livraison</h2><span class="muted">15 remarques · <span class="tag t-test">testeurs</span>retour du fil DEV porté par XaTriX · <span class="tag">XaTriX</span>le mainteneur · <span class="tag">revue</span>gate de code</span></div>
     <div class="tablebox">
       <table>
-        <thead><tr><th>Ph.</th><th>Lot</th><th>Taille</th><th>Contenu</th><th>Session</th><th>État</th><th>Prochaine étape</th></tr></thead>
+        <thead><tr><th>N°</th><th>Remarque</th><th>Origine</th><th>État</th><th>Suite</th></tr></thead>
         <tbody>
-          <tr><td class="ph">1</td><td class="lot"><b>R0m</b> <a href="https://github.com/ForumHFR/redface2/issues/1509">#1509</a></td><td class="size"><span class="sz">S</span><span class="szd">+399 −5, 12 fichiers</span></td><td class="what">material3 1.5.0-beta02, 17 feuilles testées</td><td>rf2-dev</td><td><span class="pill p-done">livré</span></td><td>PR <a href="https://github.com/ForumHFR/redface2/pull/1524">#1524</a>, dev 0.69.2 (6/11). Partira en bêta avec la refonte finie</td></tr>
-          <tr><td class="ph">—</td><td class="lot"><b>#1301-ST</b> <a href="https://github.com/ForumHFR/redface2/issues/1301">#1301</a></td><td class="size"><span class="sz sz-xl">XL</span><span class="szd">+8 666 −1 852, 94 fichiers</span></td><td class="what">Invariants d'envoi ED-160 à ED-172</td><td>rf2-smalldev</td><td><span class="pill p-done">livré</span></td><td>PR <a href="https://github.com/ForumHFR/redface2/pull/1522">#1522</a>, dev 0.66.0 (2/11). Fin du protocole B.3 sur S10e (rotation, TalkBack)</td></tr>
-          <tr><td class="ph">4</td><td class="lot"><b>R0b</b> PR 1 <a href="https://github.com/ForumHFR/redface2/issues/1456">#1456</a></td><td class="size"><span class="sz">S</span><span class="szd">+922 −71, 31 fichiers</span></td><td class="what">Frontière d'émission, ED-162 et ED-163</td><td>rf2-dev</td><td><span class="pill p-done">livré</span></td><td>PR <a href="https://github.com/ForumHFR/redface2/pull/1539">#1539</a>, dev 0.69.0 (6/11)</td></tr>
-          <tr><td class="ph">4</td><td class="lot"><b>R0b</b> PR 2 <a href="https://github.com/ForumHFR/redface2/issues/1456">#1456</a></td><td class="size"><span class="sz sz-l">L</span><span class="szd">+4 057 −806, 62 fichiers</span></td><td class="what">Contrat d'erreur côté UI, chaînes, ED-131 à ED-133</td><td>rf2-dev</td><td><span class="pill p-done">livré</span></td><td>PR <a href="https://github.com/ForumHFR/redface2/pull/1551">#1551</a>, dev 0.69.4 (7/11). Mineurs suivis dans <a href="https://github.com/ForumHFR/redface2/issues/1553">#1553</a></td></tr>
-          <tr><td class="ph">—</td><td class="lot"><b>R0c</b> <a href="https://github.com/ForumHFR/redface2/issues/1512">#1512</a></td><td class="size"><span class="sz sz-xl">XL</span><span class="szd">5 PR et 2 correctifs, +7 503 −1 806 (estimé à environ 4 100 lignes et 11 à 17 j ; livré en 2 jours)</span></td><td class="what">Quatre ViewModels sur <code class="mono">TextFieldState</code>, une PR chacun</td><td>rf2-smalldev</td><td><span class="pill p-done">livré</span></td><td>PR 0 (correctif du pont, <a href="https://github.com/ForumHFR/redface2/pull/1555">#1555</a>) et PR 1 (nouveau MP, <a href="https://github.com/ForumHFR/redface2/pull/1558">#1558</a>) en dev 0.69.5 ; PR 4 (réponse MP, <a href="https://github.com/ForumHFR/redface2/pull/1560">#1560</a>) en 0.69.6 ; PR 3 (sujet, <a href="https://github.com/ForumHFR/redface2/pull/1565">#1565</a>) en 0.69.7 ; PR 2 (post, <a href="https://github.com/ForumHFR/redface2/pull/1567">#1567</a>) et deux correctifs (<a href="https://github.com/ForumHFR/redface2/pull/1568">#1568</a>, <a href="https://github.com/ForumHFR/redface2/pull/1569">#1569</a>) en 0.69.8 (8/11). Recette sur appareil 24/24 ; édition de post verrouillée pendant l'envoi (<a href="https://github.com/ForumHFR/redface2/pull/1574">#1574</a>) en 0.69.9. Validé tel quel par le mainteneur le 9/11, #1512 fermée</td></tr>
-          <tr><td class="ph">2</td><td class="lot"><b>R0a</b> <a href="https://github.com/ForumHFR/redface2/issues/1455">#1455</a></td><td class="size"><span class="sz">M</span><span class="szd">hors dépôt, 3 j au plus ; 15 règles à prouver ou mesurer</span></td><td class="what">Preuve d'interaction sur S10e, critères A à O</td><td>rf2-dev</td><td><span class="pill p-done">conclu</span></td><td>Prétests sur émulateurs API 29, 34 et 35, puis bloc automatique sur S10e dans la nuit du 7 au 8/11. Passent : D, B5, paysage, B, L, O, I (après la PR 0 de R0c). Écarts : E (clavier masqué puis réaffiché après Wiki et URL), J (cartes inutilisables en hauteur compacte, Dialog en paysage sur une ligne). Séance humaine du 8/11 au soir, sur un Galaxy S25 (choix du mainteneur) : N, M, A/B, O, L passent, E et K passent hors deux bugs du banc (repris dans R1a-1) ; <b>B5 conservée</b>, repli E non adopté. Arbitrages pris (P21, E, J, spec v0.7.3). Rapport final du 8/11 : concluant avec réserves ; test confirmatoire C dispensé ; une observation de B5 intégré sur S10e reste à faire avant G1</td></tr>
-          <tr><td class="ph">—</td><td class="lot"><b>#1553</b> <a href="https://github.com/ForumHFR/redface2/issues/1553">#1553</a></td><td class="size"><span class="sz sz-xl">XL</span><span class="szd">+6 017 −1 512, 50 fichiers (estimé 1 250 à 2 200 lignes)</span></td><td class="what">Citation en attente stockée dans le brouillon, mineurs de R0b</td><td>rf2-dev</td><td><span class="pill p-done">livré</span></td><td>PR <a href="https://github.com/ForumHFR/redface2/pull/1564">#1564</a>, dev 0.69.7 (8/11) : sept passes, gates GO, preuves sur émulateur</td></tr>
-          <tr><td class="ph">3</td><td class="lot"><b>R1a-1</b> <a href="https://github.com/ForumHFR/redface2/issues/1513">#1513</a></td><td class="size"><span class="sz sz-xl">XL</span><span class="szd">+9 065 −4, 80 fichiers et 543 captures (cadrage : 6 PR) ; PR de finition +513 −109, 282 captures réenregistrées</span></td><td class="what"><code class="mono">EditorScaffold</code> et composants non branchés</td><td>rf2-dev</td><td><span class="pill p-done">mergé</span></td><td>PR 1 à 6 et un correctif de la PR 1 mergés le 9/11 entre 19:08 et 23:42 (<a href="https://github.com/ForumHFR/redface2/pull/1583">#1583</a> à <a href="https://github.com/ForumHFR/redface2/pull/1589">#1589</a>), chacun après un GO de Fable. PR 7 de finition mergée le 10/11 à 13:38 (<a href="https://github.com/ForumHFR/redface2/pull/1590">#1590</a> : pastille compacte de 40 dp dans des cibles de 48 dp). Composants non branchés, donc rien de visible avant R1a-2 ; pas encore de release dev</td></tr>
-          <tr><td class="ph">5</td><td class="lot"><b>R1a-2</b> <a href="https://github.com/ForumHFR/redface2/issues/1450">#1450</a></td><td class="size"><span class="sz sz-xl">XL</span><span class="szd">+6 909 −960, 61 fichiers et 100 captures (cadrage : L, 4 PR)</span></td><td class="what">Intégration dans <code class="mono">PostEditorScreen</code></td><td>rf2-dev</td><td><span class="pill p-done">mergé</span></td><td>4 PR mergées le 11/11 de 09:26 à 10:12 (<a href="https://github.com/ForumHFR/redface2/pull/1591">#1591</a> à <a href="https://github.com/ForumHFR/redface2/pull/1594">#1594</a>), sur go du mainteneur, chacune verte sur box et en CI sur sa tête exacte, après un GO de Fable. Les deux défauts du passage automatique sur S10e du 10/11 (ED-52 ; focus et clavier perdus à la rotation) ont été corrigés avant le merge ; recette sur S10e de toute la pile : 5 réussites sur 5. L'éditeur de post passe au nouveau chrome, en dev 0.69.11. Premier retour des testeurs : défaut du brouillon en attente avec la citation et les favoris HFR, en cours de confirmation</td></tr>
-          <tr><td class="ph">6</td><td class="lot"><b>R1b-1</b> <a href="https://github.com/ForumHFR/redface2/issues/1451">#1451</a></td><td class="size"><span class="sz sz-xl">XL</span><span class="szd">+7 252 −1 507, 73 fichiers et 112 captures, socle commun aux trois surfaces compris (cadrage : M)</span></td><td class="what">Nouveau sujet</td><td>rf2-dev</td><td><span class="pill p-done">mergé</span></td><td>Socle commun aux trois surfaces (S1 à S3, <a href="https://github.com/ForumHFR/redface2/pull/1595">#1595</a>) et T1 à T3 (<a href="https://github.com/ForumHFR/redface2/pull/1596">#1596</a>) mergés le 11/11 à 10:28 et 10:44, après la levée de la porte G2 par le mainteneur. L'éditeur de sujet passe au nouveau chrome</td></tr>
-          <tr><td class="ph">7</td><td class="lot"><b>R1b-2a</b> <a href="https://github.com/ForumHFR/redface2/issues/1514">#1514</a></td><td class="size"><span class="sz sz-l">L</span><span class="szd">+3 366 −743, 23 fichiers et 112 captures (cadrage : M)</span></td><td class="what">Réponse MP</td><td>rf2-dev</td><td><span class="pill p-done">mergé</span></td><td>R1 à R3 (<a href="https://github.com/ForumHFR/redface2/pull/1597">#1597</a>) mergé le 11/11 à 11:08, relu par Fable, vert sur box et en CI sur sa tête exacte. La réponse MP passe au nouveau chrome</td></tr>
-          <tr><td class="ph">8</td><td class="lot"><b>R1b-2b</b> <a href="https://github.com/ForumHFR/redface2/issues/1515">#1515</a></td><td class="size"><span class="sz sz-l">L</span><span class="szd">+4 415 −1 121, 36 fichiers et 108 captures (cadrage : M)</span></td><td class="what">Nouveau MP</td><td>rf2-dev</td><td><span class="pill p-done">mergé</span></td><td>C1 à C4 (<a href="https://github.com/ForumHFR/redface2/pull/1598">#1598</a>) mergé le 11/11 à 11:25, relu par Fable, vert sur box et en CI sur sa tête exacte. Le nouveau MP passe au nouveau chrome : R1 est entier dans dev</td></tr>
-          <tr><td class="ph">9</td><td class="lot"><b>R6</b> <a href="https://github.com/ForumHFR/redface2/issues/1516">#1516</a></td><td class="size"><span class="sz sz-l">L</span><span class="szd">+3 282 −318, 122 fichiers et 242 captures (cadrage : M, 4 règles sur les quatre surfaces)</span></td><td class="what">Raccourci de la barre d'action, défaut « Aucun »</td><td>rf2-dev</td><td><span class="pill p-done">mergé</span></td><td>Deux PR mergées le 11/11 à 12:11 et 12:24 (<a href="https://github.com/ForumHFR/redface2/pull/1602">#1602</a>, <a href="https://github.com/ForumHFR/redface2/pull/1603">#1603</a>), vertes sur box et en CI sur leur tête exacte, relues par Fable (GO), recette sur S10e conforme ; dev 0.69.11. La recette a relevé un défaut antérieur à R6, déjà dans dev (clavier rouvert à la rotation après Retour sur l'onglet Wiki), dont le suivi reste à décider. Arbitrages de la PR 2 ratifiés le 11/11 (titre « Smileys » retiré en consultation, focus rendu à l'onglet sélectionné) ; ceux de la PR 1 restent à ratifier</td></tr>
-          <tr><td class="ph">10</td><td class="lot"><b>R2a</b> <a href="https://github.com/ForumHFR/redface2/issues/1452">#1452</a></td><td class="size"><span class="sz">M</span><span class="szd">+852 −403, 16 fichiers et 24 captures (cadrage : 4 règles)</span></td><td class="what">Panneau de citations, mode cartes</td><td>rf2-dev</td><td><span class="pill p-done">mergé</span></td><td>Mergé le 11/11 à 11:40 (<a href="https://github.com/ForumHFR/redface2/pull/1600">#1600</a>), vert sur box et en CI sur sa tête exacte, relu par Astra puis Fable (GO avec conditions), recette TalkBack sur S10e conforme (5 réussites sur 5) après correction des annonces ; arbitrages ratifiés. Les deux écarts TalkBack restants (focus en mode tactile, déjà dans dev ; annonce identique non répétée) sont reportés à <a href="https://github.com/ForumHFR/redface2/issues/1599">#1599</a>. Intégré avec R2b (recette sur S10e : 9 cas sur 9)</td></tr>
-          <tr><td class="ph">11</td><td class="lot"><b>R2b</b> <a href="https://github.com/ForumHFR/redface2/issues/1452">#1452</a></td><td class="size"><span class="sz sz-l">L</span><span class="szd">+3 539 −288, 72 fichiers et 44 captures (cadrage : M, 6 règles)</span></td><td class="what">Aperçu en partage, smileys perso (#873)</td><td>rf2-dev</td><td><span class="pill p-done">mergé</span></td><td>Mergé le 11/11 à 11:54 (<a href="https://github.com/ForumHFR/redface2/pull/1601">#1601</a>), vert sur box et en CI sur sa tête exacte. Les trois échecs de la recette du 10/11 corrigés, vert, relu par Fable (GO), recette ciblée sur S10e conforme (aucun aperçu bloqué à tort sur 50 essais). Arbitrages ratifiés le 11/11, dont l'aperçu masqué dans tout repli dû au seul clavier ; ED-62 et ED-32 amendés dans la spec v0.7.5, publiée le 11/11. ED-66 vérifié sur HFR. Intégré avec R2a (recette 9 cas sur 9)</td></tr>
+          <tr class="grp end"><th colspan="5">Livrées · 6</th></tr>
+          <tr><td class="n">1</td><td class="what">« Citer » ne marche plus quand un brouillon attend ; favoris HFR absents, Envoyer grisé. Le formulaire se charge désormais sous l'offre</td><td class="src"><span class="tag t-test">testeurs</span>styx42 <a href="https://forum.hardware.fr/forum2.php?config=hfr.inc&amp;cat=23&amp;post=35421&amp;numreponse=2805736">#2805736</a>, Dintr-un lemn <a href="https://forum.hardware.fr/forum2.php?config=hfr.inc&amp;cat=23&amp;post=35421&amp;numreponse=2805758">#2805758</a> ; go du 11/11 16:00</td><td class="st"><span class="pill p-done">0.69.12</span></td><td class="next">PR <a href="https://github.com/ForumHFR/redface2/pull/1606">#1606</a>. Recette sur appareil de #1450</td></tr>
+          <tr><td class="n">2</td><td class="what">Le menu ↺ est laid : l'offre du brouillon passe en feuille du bas, l'attente de la citation s'affiche puis disparaît seule</td><td class="src"><span class="tag">XaTriX</span>11/11 16:00, libellé revu à 18:44</td><td class="st"><span class="pill p-done">0.69.13</span></td><td class="next">PR <a href="https://github.com/ForumHFR/redface2/pull/1608">#1608</a>. L'avis minuté a disparu en 0.69.16, avec la citation immédiate</td></tr>
+          <tr><td class="n">3</td><td class="what">Icône du brouillon : <code>restore_page</code> (Material Symbols) à la place de l'ancienne</td><td class="src"><span class="tag">XaTriX</span>choix sur la planche d'icônes, 11/11 19:20</td><td class="st"><span class="pill p-done">0.69.13</span></td><td class="next">PR <a href="https://github.com/ForumHFR/redface2/pull/1608">#1608</a>, sur les cinq éditeurs. Rien à suivre</td></tr>
+          <tr><td class="n">4</td><td class="what">« Tout est en gras » : icônes de l'éditeur dessinées au trait de 2 dp, B compris</td><td class="src"><span class="tag">XaTriX</span><a href="https://forum.hardware.fr/forum2.php?config=hfr.inc&amp;cat=23&amp;post=35421&amp;numreponse=2805740">#2805740</a> ; décidé le 11/11 16:12 et le 12/11 08:43</td><td class="st"><span class="pill p-done">0.69.14</span></td><td class="next">PR <a href="https://github.com/ForumHFR/redface2/pull/1610">#1610</a>, 905 captures. Hors éditeur (flèche retour, chevrons à 2,5 dp) : le mainteneur regarde les rendus. Thème sombre : voir 10</td></tr>
+          <tr><td class="n">5</td><td class="what">La pilule « Envoyer » prend trop de place : bouton rond « avion en papier », coche quand l'envoi est armé</td><td class="src"><span class="tag">XaTriX</span><a href="https://forum.hardware.fr/forum2.php?config=hfr.inc&amp;cat=23&amp;post=35421&amp;numreponse=2805740">#2805740</a> ; variante D choisie le 12/11</td><td class="st"><span class="pill p-done">0.69.15</span></td><td class="next">PR <a href="https://github.com/ForumHFR/redface2/pull/1612">#1612</a>, 822 captures. Un format de plus tient dans la barre à 411 dp. Réponse rapide inchangée jusqu'à son lot (R4)</td></tr>
+          <tr><td class="n">6</td><td class="what">Topic et MP traitaient la citation différemment : citation visible tout de suite partout, brouillon offert sous ↺ (point, date, extrait)</td><td class="src"><span class="tag t-test">testeurs</span>styx42 <a href="https://forum.hardware.fr/forum2.php?config=hfr.inc&amp;cat=23&amp;post=35421&amp;numreponse=2805876">#2805876</a>, questions de XaTriX ; go du 12/11 13:13</td><td class="st"><span class="pill p-done">0.69.16</span></td><td class="next">PR <a href="https://github.com/ForumHFR/redface2/pull/1614">#1614</a> et <a href="https://github.com/ForumHFR/redface2/pull/1615">#1615</a>, spec v0.7.8 et v0.7.9. En plus : fermeture qui demande « Brouillon non enregistré » si l'écriture échoue</td></tr>
+          <tr class="grp end"><th colspan="5">En cours et prévues · 3</th></tr>
+          <tr><td class="n">7</td><td class="what">Réponse rapide : la feuille se ferme avant la dernière écriture du brouillon, du texte peut se perdre</td><td class="src"><span class="tag">revue</span>gate Astra de #1615, 13/11 ; en tête de file sur décision de XaTriX</td><td class="st"><span class="pill p-run">en cours</span></td><td class="next">Cadrage, puis UX proposée au mainteneur avant le code ; PR et release dev</td></tr>
+          <tr><td class="n">8</td><td class="what">Le panier multi-citation n'est vidé qu'au succès de l'envoi</td><td class="src"><span class="tag">XaTriX</span>13/11 08:33, après avis de Fable</td><td class="st"><span class="pill p-wait">décidé</span></td><td class="next">Issue <a href="https://github.com/ForumHFR/redface2/issues/1616">#1616</a>, ED-88 amendé (v0.7.9) : vider après livraison durable. À coder ; portée pour la réponse rapide et le mode cartes à trancher</td></tr>
+          <tr><td class="n">9</td><td class="what">Les feuilles « … » (options du message) et smileys changent plusieurs fois de taille à l'ouverture</td><td class="src"><span class="tag t-test">testeurs</span>antiseptiqueIncolore <a href="https://forum.hardware.fr/forum2.php?config=hfr.inc&amp;cat=23&amp;post=35421&amp;numreponse=2805926">#2805926</a>, vidéo <a href="https://forum.hardware.fr/forum2.php?config=hfr.inc&amp;cat=23&amp;post=35421&amp;numreponse=2805932">#2805932</a>, 0.69.14</td><td class="st"><span class="pill p-run">à reproduire</span></td><td class="next">Reproduction sur émulateur, suivi dans #1417 ; pas d'issue avant l'avis du mainteneur</td></tr>
+          <tr class="grp"><th colspan="5">À décider par le mainteneur · 6</th></tr>
+          <tr><td class="n">10</td><td class="what">Icônes encore trop grasses en thème sombre ; un trait plus fin y est proposé</td><td class="src"><span class="tag t-test">testeurs</span>nicko <a href="https://forum.hardware.fr/forum2.php?config=hfr.inc&amp;cat=23&amp;post=35421&amp;numreponse=2805904">#2805904</a>, Dintr-un lemn <a href="https://forum.hardware.fr/forum2.php?config=hfr.inc&amp;cat=23&amp;post=35421&amp;numreponse=2805906">#2805906</a></td><td class="st"><span class="pill p-ask">à décider</span></td><td class="next">1,5 dp en sombre, ou statu quo. Mesure du 12/11 : les icônes au trait de Gboard sont aussi à 2 dp</td></tr>
+          <tr><td class="n">11</td><td class="what">Nouveau sujet et nouveau MP : sous une offre de brouillon non décidée, un titre ou des destinataires modifiés ne sont pas écrits à la fermeture</td><td class="src"><span class="tag">revue</span>gate Astra de #1615, 13/11</td><td class="st"><span class="pill p-ask">à décider</span></td><td class="next">Comportement à choisir, puis correctif dans la même file que 7</td></tr>
+          <tr><td class="n">12</td><td class="what">Le raccourci de la barre est introuvable (« Aucun » par défaut) ; ouvrir les réglages de l'éditeur depuis l'éditeur</td><td class="src"><span class="tag t-test">testeurs</span>nicko <a href="https://forum.hardware.fr/forum2.php?config=hfr.inc&amp;cat=23&amp;post=35421&amp;numreponse=2805739">#2805739</a>, thibw <a href="https://forum.hardware.fr/forum2.php?config=hfr.inc&amp;cat=23&amp;post=35421&amp;numreponse=2805744">#2805744</a> ; <span class="tag">XaTriX</span><a href="https://forum.hardware.fr/forum2.php?config=hfr.inc&amp;cat=23&amp;post=35421&amp;numreponse=2805742">#2805742</a></td><td class="st"><span class="pill p-ask">à décider</span></td><td class="next">Avant G4 : l'accès aux réglages contredit ED-39. La mise en avant des nouveautés (idée de thibw) n'est pas retenue pour ce lot</td></tr>
+          <tr><td class="n">13</td><td class="what">Afficher les images dans l'aperçu</td><td class="src"><span class="tag">XaTriX</span><a href="https://forum.hardware.fr/forum2.php?config=hfr.inc&amp;cat=23&amp;post=35421&amp;numreponse=2805743">#2805743</a></td><td class="st"><span class="pill p-ask">à décider</span></td><td class="next">Dans cette phase (suite de R2b, #1452) ou en suite hors phase</td></tr>
+          <tr><td class="n">14</td><td class="what">Revoir la liste des options d'édition du texte, avec un menu qui les décrit ; mieux présenter le ton du post</td><td class="src"><span class="tag">XaTriX</span><a href="https://forum.hardware.fr/forum2.php?config=hfr.inc&amp;cat=23&amp;post=35421&amp;numreponse=2805742">#2805742</a></td><td class="st"><span class="pill p-ask">à décider</span></td><td class="next">À cadrer, rattaché à #1513 ; le ton du post renvoie à <a href="https://github.com/ForumHFR/redface2/issues/1441">#1441</a></td></tr>
+          <tr><td class="n">15</td><td class="what">Après envoi, « Message publié » puis « Message publié, dernière page » : un seul accusé serait plus clair</td><td class="src"><span class="tag t-test">testeurs</span>nicko <a href="https://forum.hardware.fr/forum2.php?config=hfr.inc&amp;cat=23&amp;post=35421&amp;numreponse=2805518">#2805518</a> ; XaTriX : « on verra en fin de phase »</td><td class="st"><span class="pill p-ask">à décider</span></td><td class="next">À trancher maintenant : un seul accusé visible, quitte à attendre l'offre ? Suivi dans <a href="https://github.com/ForumHFR/redface2/issues/1437">#1437</a></td></tr>
         </tbody>
       </table>
     </div>
   </section>
 
   <div class="grid">
-    <section class="panel">
-      <h2>Portes de passage</h2>
+    <section class="panel" aria-labelledby="h-gates">
+      <h2 id="h-gates">Portes de passage</h2>
       <ul class="gates">
         <li class="gate"><div class="hd"><b>Gm</b><span class="pill p-wait">sans bêta</span></div>
-          <ul class="conds"><li class="y">R0m livré en dev 0.69.2 le 6/11 à 16:43</li><li class="y">Trois jours en dev, atteints lun. 9/11 à 16:45</li><li class="r">Aucun retour bloquant des testeurs sur la 0.69.2</li><li class="n">Plus de bêta intermédiaire (7/11) : R0m sortira en bêta avec la refonte</li></ul></li>
+          <ul class="conds"><li class="y">R0m en dev 0.69.2 le 6/11, trois jours atteints le 9/11</li><li class="n">Plus de bêta intermédiaire depuis le 7/11 : R0m sortira avec la refonte</li></ul></li>
         <li class="gate"><div class="hd"><b>G1</b><span class="pill p-done">go du mainteneur</span></div>
-          <ul class="conds"><li class="y">Go du mainteneur le 11/11 à 09:23 pour merger R1a-2 ; les points sur appareil passent après le merge</li><li class="y">#1301-ST mergé</li><li class="y">R0b mergé (dev 0.69.4, 7/11)</li><li class="y">R0a concluant (avec réserves, 8/11)</li><li class="n">Observation de B5 intégré sur S10e (six séquences, deux claviers)</li><li class="n">ADR accepté</li><li class="r">Ancien éditeur capturé avec R0m (un point restant sur appareil)</li></ul></li>
+          <ul class="conds"><li class="y">Go le 11/11 à 09:23 pour merger R1a-2 ; les points sur appareil passent après le merge</li><li class="y">#1301-ST et R0b mergés, R0a concluant avec réserves</li><li class="n">Observation de B5 intégré sur S10e (six séquences, deux claviers)</li><li class="n">ADR accepté</li><li class="r">Ancien éditeur capturé (un point restant sur appareil)</li></ul></li>
         <li class="gate"><div class="hd"><b>G2</b><span class="pill p-done">levée</span></div>
-          <ul class="conds"><li class="y">R1a-2 trois jours en dev : levée par le mainteneur le 11/11 à 10:22 ; R1b, puis R2a, R2b et R6 se mergent dès qu'ils sont verts. Pas de bêta avant G3</li></ul></li>
+          <ul class="conds"><li class="y">Levée par le mainteneur le 11/11 à 10:22 ; R1b, R2a, R2b et R6 mergés dans la foulée</li></ul></li>
         <li class="gate"><div class="hd"><b>G3</b><span class="pill p-run">1 / 2 conditions</span></div>
-          <ul class="conds"><li class="y">Quatre surfaces migrées (R1 mergé en entier le 11/11 à 11:25)</li><li class="n">Protocole d'envoi et C8 (rotation, mort du processus, en-têtes)</li></ul></li>
+          <ul class="conds"><li class="y">Quatre surfaces migrées (R1 entier le 11/11 à 11:25)</li><li class="n">Protocole d'envoi et C8 (rotation, mort du processus, en-têtes) sur chacune</li></ul></li>
         <li class="gate"><div class="hd"><b>G4</b><span class="pill p-wait">1 / 4 conditions</span></div>
-          <ul class="conds"><li class="y">R2a, R2b et R6 convergés et mergés (11/11, dev 0.69.11)</li><li class="n">C1 à C10 filmés (les écarts TalkBack des cartes sont reportés à #1599)</li><li class="n">S1 (feuille des smileys, suite de #1154) corrigé, ou dérogation bornée</li><li class="n">Go du mainteneur, puis bêta du nouvel éditeur, la première depuis la 0.68.0</li></ul></li>
+          <ul class="conds"><li class="y">R2a, R2b et R6 convergés et mergés (0.69.11)</li><li class="n">C1 à C10 filmés (écarts TalkBack des cartes reportés à #1599)</li><li class="n">S1 (feuille des smileys, suite de #1154) corrigé, ou dérogation bornée</li><li class="n">Go du mainteneur, puis bêta du nouvel éditeur</li></ul></li>
       </ul>
     </section>
 
-    <section class="panel">
-      <h2>R0b PR 2 · boucle de revue</h2>
-      <p class="note">Chaque gate Astra relit le code corrigé par Sol. Un carré plein est un bloquant ouvert ; un carré creux, un bloquant de la passe précédente clos.</p>
-      <div class="loop">
-        <div class="lrow"><span class="t">r1</span><span class="track" aria-hidden="true"><i></i><i></i></span><span class="v">6/11 18:04 · NO GO, 2 bloquants</span></div>
-        <div class="lrow"><span class="t">r2</span><span class="track" aria-hidden="true"><i class="closed"></i><i class="closed"></i><i></i><i></i></span><span class="v">19:10 · NO GO, 2 bloquants</span></div>
-        <div class="lrow"><span class="t">r3</span><span class="track" aria-hidden="true"><i class="closed"></i><i></i><i></i></span><span class="v">7/11 05:02 · NO GO, 2 bloquants</span></div>
-        <div class="lrow"><span class="t">r4</span><span class="track" aria-hidden="true"><i class="closed"></i><i class="closed"></i><i></i></span><span class="v">06:31 · NO GO, 1 bloquant</span></div>
-        <div class="lrow"><span class="t">r5</span><span class="track" aria-hidden="true"><i class="closed"></i><i></i></span><span class="v">07:15 · NO GO, 1 bloquant</span></div>
-        <div class="lrow"><span class="t">r6</span><span class="track" aria-hidden="true"><i class="closed"></i></span><span class="v">10:01 · <b>GO</b>, 1 mineur</span></div>
-      </div>
-      <p class="note">Depuis r3, les bloquants touchent tous la citation en attente (ED-132) : doublon possible sur HFR quand un envoi réussit puis que l'application est tuée, ou citation perdue. Le bloquant de r5 exigeait qu'Android tue l'application au premier plan pendant que « Confirmer avant d'envoyer » est armé. <b>r6 rend GO à 10:01</b>, puis le gate de Fable aussi : la conception d'ED-132 tient sans refonte avant R0c. PR #1551 mergée le 7/11, dev 0.69.4. Les six mineurs de Fable et celui de r6 sont suivis dans #1553 ; Fable propose, avant R1a-1, de porter la demande de citation dans le brouillon stocké, ce qui supprimerait le compromis au prix d'une migration. <b>Retenu le 7/11 comme lot autonome (#1553).</b></p>
-    </section>
-
-    <section class="panel">
-      <h2>Livraisons de la phase</h2>
-      <ul class="rel">
-        <li><span class="mono">0.66.0</span><span>2/11 · #1301-ST, invariants d'envoi</span></li>
-        <li><span class="mono">0.69.0</span><span>6/11 · R0b PR 1, échecs d'envoi classés par étape</span></li>
-        <li><span class="mono">0.69.2</span><span>6/11 · R0m, material3 1.5.0-beta02</span></li>
-        <li><span class="mono">0.69.4</span><span>7/11 · R0b PR 2, contrat d'erreur côté UI</span></li>
-        <li><span class="mono">0.69.5</span><span>7/11 · R0c PR 0 (correctif du pont) et PR 1 (nouveau MP)</span></li>
-        <li><span class="mono">0.69.6</span><span>8/11 · R0c PR 4 (réponse MP)</span></li>
-        <li><span class="mono">0.69.7</span><span>8/11 · #1553, R0c PR 3 (sujet)</span></li>
-        <li><span class="mono">0.69.8</span><span>8/11 · R0c PR 2 (post) et deux correctifs : R0c livré</span></li>
-        <li><span class="mono">0.69.9</span><span>9/11 · édition de post verrouillée pendant l'envoi (#1574) ; plantait au lancement, remplacée le jour même</span></li>
-        <li><span class="mono">0.69.10</span><span>9/11 · correctif du plantage (KSP 2.3.12), annulation du sélecteur d'image (#1573), captures Roborazzi comparées (#1575)</span></li>
-        <li><span class="mono">0.69.11</span><span>11/11 · nouveau chrome sur les quatre éditeurs : R1a, R1b, R2a, R2b et R6</span></li>
-        <li><span class="mono muted">0.69.1, 0.69.3</span><span class="muted">correctifs hors refonte</span></li>
-      </ul>
-      <p class="note">Toute la refonte, de R0 à R6, est dans <code class="mono">dev</code> depuis le 11/11 à 12:24 et sort en dev 0.69.11 : les quatre éditeurs utilisent le nouveau chrome, avec le panneau de citations en cartes, l'aperçu partagé et le raccourci de la barre d'action.</p>
-      <p class="note">R0c est entier dans <code class="mono">dev</code> depuis le 8/11 : la règle « aucun merge de R0c entre R1a-2 et R1b-2b » n'a plus d'objet.</p>
-      <p class="note">La 0.69.9 plantait au lancement : KSP 2.3.13 (google/ksp#3286) perdait parfois les modules Hilt d'un module de l'application, sans faire échouer ni le build ni les tests. Retour à KSP 2.3.12 en 0.69.10, version 2.3.13 bloquée pour Dependabot ; depuis le 9/11, une garde de <code class="mono">release.yml</code> refuse de publier un APK ou un AAB auquel il manque des entrées Hilt (#1582).</p>
-      <h2>Ce qui attend le mainteneur</h2>
+    <section class="panel" aria-labelledby="h-asks">
+      <h2 id="h-asks">Ce qui attend le mainteneur</h2>
       <ol class="asks">
-        <li>Treize arbitrages pris en son absence dans la nuit du 9 au 10/11, à ratifier.</li>
-        <li>Onze arbitrages de la nuit du 10 au 11/11 ratifiés le 11/11 à 10:48. Restent quatre questions sur R2b et R6 : clavier non rouvert au retour au message, Œil coché peu lisible en thème sombre, infobulle sur la barre d'état, pastille « Envoyer » à 360 × 470 dp.</li>
-        <li>Un défaut antérieur à la refonte relevé par la recette de R6 (clavier rouvert à la rotation après l'onglet Wiki) : issue de suivi ou non. Les écarts TalkBack de R2a sont reportés à <a href="https://github.com/ForumHFR/redface2/issues/1599">#1599</a>.</li>
-        <li>R1a-2 : ED-14 quand le champ a le focus (question ouverte, non bloquante).</li>
-        <li>Séance sur appareil, désormais après le merge de R1a-2 : observation de B5 intégré, B.3. Le passage automatique du 10/11 a laissé six points non concluants, faute de geste humain ou de sujet et de DT appartenant au compte de test.</li>
-        <li>Décisions de fin de phase : fermeture de #1513 (possible avec une réserve : l'écoute TalkBack réelle n'est pas faite), arbitrages de la PR 1 de R6, ED-66, clé de position et plancher de 120 dp de R2b, question H2.</li>
-        <li>Graisse du chrome de l'éditeur : garder l'actuelle, alléger l'éditeur seul ou tout le thème (rendus comparés le 11/11).</li>
-        <li>G4 : S1 (feuille des smileys) à corriger chez rf2-smalldev, ou une dérogation bornée.</li>
-        <li>Tri des retours hors éditeur de la passe du topic DEV du 11/11.</li>
+        <li>Les remarques 10 à 15 : trait en thème sombre, en-têtes sous l'offre, accès au raccourci et aux réglages, images dans l'aperçu, options d'édition et ton du post, accusés après envoi.</li>
+        <li>La priorité de #1616 et la portée d'ED-88 (réponse rapide, mode cartes).</li>
+        <li>L'UX de la réponse rapide, dès que le cadrage est prêt.</li>
+        <li>La recette de la 0.69.16 sur appareil (dialogue de fermeture, annonce TalkBack).</li>
+        <li>Les recettes G3 et G4 sur appareil, et la séance S10e restante (B5 intégré, ancien éditeur). S1 ou une dérogation pour G4 ; S1 attend la relance de rf2-smalldev.</li>
+        <li>Le trait hors de l'éditeur (flèche retour, chevrons, reste de l'app), après les rendus.</li>
+        <li>Les décisions de fin de refonte : fermeture de #1513 (réserve : écoute TalkBack réelle non faite), arbitrages de la PR 1 de R6 (#1602), ED-66, clé de position et plancher de 120 dp de R2b, H2, ED-14 avec le focus.</li>
+        <li>Les questions restées ouvertes à la livraison : clavier non rouvert au retour au message, Œil coché peu lisible en thème sombre, infobulle de l'Œil sur la barre d'état ; le clavier rouvert à la rotation après l'onglet Wiki, antérieur à la refonte : issue de suivi ou non.</li>
+        <li>Les treize arbitrages de la nuit du 9 au 10/11 : ratification à confirmer.</li>
+        <li>Le go de la bêta, à la fin de la refonte.</li>
       </ol>
     </section>
   </div>
 
-  <footer>Tenu à partir du tableau de bord des sessions de développement et des journaux de revue. Plan de référence : PHASES-v07 (spec v0.7.1 acceptée le 1/11).</footer>
+  <section class="panel rel" aria-labelledby="h-rel">
+    <div class="sechd"><h2 id="h-rel">Livraisons</h2><span class="muted">releases dev de la refonte · heure du merge de la PR de version</span></div>
+    <div class="tablebox">
+      <table>
+        <thead><tr><th>Version</th><th>Date</th><th>Contenu</th></tr></thead>
+        <tbody>
+          <tr class="grp end"><th colspan="3">Fin de phase</th></tr>
+          <tr><td>0.69.16</td><td class="d">13/11 09:01</td><td>Citation visible partout, brouillon sous ↺, fermeture protégée (#1614, #1615)</td></tr>
+          <tr><td>0.69.15</td><td class="d">12/11 17:53</td><td>Bouton d'envoi « avion en papier » (#1612)</td></tr>
+          <tr><td>0.69.14</td><td class="d">12/11 12:49</td><td>Icônes de l'éditeur au trait de 2 dp (#1610)</td></tr>
+          <tr><td>0.69.13</td><td class="d">12/11 07:36</td><td>Offre du brouillon en feuille du bas, avis minuté, icône <code>restore_page</code> (#1608)</td></tr>
+          <tr><td>0.69.12</td><td class="d">11/11 18:19</td><td>Citation en attente : le formulaire de réponse se charge (#1606)</td></tr>
+          <tr class="grp body"><th colspan="3">Corps de phase</th></tr>
+          <tr><td>0.69.11</td><td class="d">11/11 12:39</td><td>Nouveau chrome sur les quatre éditeurs : R1a, R1b, R2a, R2b et R6</td></tr>
+          <tr><td>0.69.10</td><td class="d">09/11 13:03</td><td>Correctif du plantage (KSP 2.3.12), annulation du sélecteur d'image (#1573), captures comparées (#1575)</td></tr>
+          <tr><td>0.69.9</td><td class="d">09/11 08:47</td><td>Édition de post verrouillée pendant le chargement (#1574) ; plantait au lancement, remplacée le jour même</td></tr>
+          <tr><td>0.69.8</td><td class="d">08/11 16:27</td><td>R0c PR 2 (post) et deux correctifs : R0c livré</td></tr>
+          <tr><td>0.69.7</td><td class="d">08/11 12:56</td><td>#1553, R0c PR 3 (sujet)</td></tr>
+          <tr><td>0.69.6</td><td class="d">08/11 07:16</td><td>R0c PR 4 (réponse MP)</td></tr>
+          <tr><td>0.69.5</td><td class="d">07/11 22:15</td><td>R0c PR 0 (pont) et PR 1 (nouveau MP)</td></tr>
+          <tr><td>0.69.4</td><td class="d">07/11 11:11</td><td>R0b PR 2, contrat d'erreur côté UI</td></tr>
+          <tr><td>0.69.2</td><td class="d">06/11 16:32</td><td>R0m, material3 1.5.0-beta02</td></tr>
+          <tr><td>0.69.0</td><td class="d">06/11 11:04</td><td>R0b PR 1, échecs d'envoi classés par étape</td></tr>
+          <tr><td>0.66.0</td><td class="d">02/11 02:42</td><td>#1301-ST, invariants d'envoi</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">0.69.1 et 0.69.3 : correctifs hors refonte. La 0.69.9 plantait au lancement : KSP 2.3.13 perdait parfois des modules Hilt sans faire échouer le build. Retour à KSP 2.3.12 en 0.69.10 ; depuis le 9/11, la release refuse un APK ou un AAB auquel il manque des entrées Hilt (#1582).</p>
+  </section>
+
+  <section class="panel lots" aria-labelledby="h-lots">
+    <div class="sechd"><h2 id="h-lots">Lots</h2><span class="muted">corps de phase, tous livrés · ajustements de fin de phase en bas · session rf2-dev sauf mention</span></div>
+    <p class="key"><b>Taille</b>, en lignes modifiées (code et tests) : <span class="sz">S</span>moins de 1 000, <span class="sz">M</span>1 000 à 3 000, <span class="sz sz-l">L</span>3 000 à 6 000, <span class="sz sz-xl">XL</span>au-delà. Diff réel, captures Roborazzi à part.</p>
+    <div class="tablebox">
+      <table>
+        <thead><tr><th>Ph.</th><th>Lot</th><th>Taille</th><th>Contenu</th><th>État</th><th>Livraison et reste</th></tr></thead>
+        <tbody>
+          <tr class="grp body"><th colspan="6">Corps de phase · 14 lots</th></tr>
+          <tr><td class="ph">1</td><td class="lot"><b>R0m</b> <a href="https://github.com/ForumHFR/redface2/issues/1509">#1509</a></td><td class="size"><span class="sz">S</span><span class="szd">+399 −5</span></td><td class="what2">material3 1.5.0-beta02, 17 feuilles testées</td><td><span class="pill p-done">livré</span></td><td>PR <a href="https://github.com/ForumHFR/redface2/pull/1524">#1524</a>, 0.69.2 (6/11). Partira en bêta avec la refonte</td></tr>
+          <tr><td class="ph">—</td><td class="lot"><b>#1301-ST</b> <a href="https://github.com/ForumHFR/redface2/issues/1301">#1301</a></td><td class="size"><span class="sz sz-xl">XL</span><span class="szd">+8 666 −1 852</span></td><td class="what2">Invariants d'envoi ED-160 à ED-172 <span class="muted">· rf2-smalldev</span></td><td><span class="pill p-done">livré</span></td><td>PR <a href="https://github.com/ForumHFR/redface2/pull/1522">#1522</a>, 0.66.0 (2/11). Protocole B.3 sur appareil : compté dans G3</td></tr>
+          <tr><td class="ph">4</td><td class="lot"><b>R0b</b> <a href="https://github.com/ForumHFR/redface2/issues/1456">#1456</a></td><td class="size"><span class="sz sz-l">L</span><span class="szd">+4 979 −877, 2 PR</span></td><td class="what2">Frontière d'émission, contrat d'erreur côté UI</td><td><span class="pill p-done">livré</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1539">#1539</a> en 0.69.0, <a href="https://github.com/ForumHFR/redface2/pull/1551">#1551</a> en 0.69.4 (7/11), après six gates Astra, cinq NO GO puis GO</td></tr>
+          <tr><td class="ph">—</td><td class="lot"><b>R0c</b> <a href="https://github.com/ForumHFR/redface2/issues/1512">#1512</a></td><td class="size"><span class="sz sz-xl">XL</span><span class="szd">+7 503 −1 806, 7 PR</span></td><td class="what2">Quatre ViewModels sur <code>TextFieldState</code> <span class="muted">· rf2-smalldev</span></td><td><span class="pill p-done">livré</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1555">#1555</a> à <a href="https://github.com/ForumHFR/redface2/pull/1569">#1569</a>, 0.69.5 à 0.69.8 (7-8/11), puis <a href="https://github.com/ForumHFR/redface2/pull/1574">#1574</a> en 0.69.9. Recette 24/24, issue fermée le 9/11</td></tr>
+          <tr><td class="ph">2</td><td class="lot"><b>R0a</b> <a href="https://github.com/ForumHFR/redface2/issues/1455">#1455</a></td><td class="size"><span class="sz">M</span><span class="szd">hors dépôt, 15 règles</span></td><td class="what2">Preuve d'interaction sur appareil, critères A à O</td><td><span class="pill p-done">conclu</span></td><td>Concluant avec réserves le 8/11 (S10e et S25) ; B5 conservée, repli E non adopté. Reste l'observation de B5 intégré (G1)</td></tr>
+          <tr><td class="ph">—</td><td class="lot"><b>#1553</b> <a href="https://github.com/ForumHFR/redface2/issues/1553">#1553</a></td><td class="size"><span class="sz sz-xl">XL</span><span class="szd">+6 017 −1 512</span></td><td class="what2">Citation en attente stockée dans le brouillon</td><td><span class="pill p-done">livré</span></td><td>PR <a href="https://github.com/ForumHFR/redface2/pull/1564">#1564</a>, 0.69.7 (8/11)</td></tr>
+          <tr><td class="ph">3</td><td class="lot"><b>R1a-1</b> <a href="https://github.com/ForumHFR/redface2/issues/1513">#1513</a></td><td class="size"><span class="sz sz-xl">XL</span><span class="szd">+9 578 −113, 8 PR</span></td><td class="what2"><code>EditorScaffold</code> et composants du chrome</td><td><span class="pill p-done">mergé</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1583">#1583</a> à <a href="https://github.com/ForumHFR/redface2/pull/1590">#1590</a> (9-10/11), chacune après un GO de Fable. Fermeture possible, réserve TalkBack</td></tr>
+          <tr><td class="ph">5</td><td class="lot"><b>R1a-2</b> <a href="https://github.com/ForumHFR/redface2/issues/1450">#1450</a></td><td class="size"><span class="sz sz-xl">XL</span><span class="szd">+6 909 −960, 4 PR</span></td><td class="what2">Éditeur de post sur le nouveau chrome</td><td><span class="pill p-done">mergé</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1591">#1591</a> à <a href="https://github.com/ForumHFR/redface2/pull/1594">#1594</a> (11/11, 09:26-10:12), après le go G1. Les ajustements de la citation sont suivis dans cette issue</td></tr>
+          <tr><td class="ph">6</td><td class="lot"><b>R1b-1</b> <a href="https://github.com/ForumHFR/redface2/issues/1451">#1451</a></td><td class="size"><span class="sz sz-xl">XL</span><span class="szd">+7 252 −1 507, 2 PR</span></td><td class="what2">Nouveau sujet, socle commun aux trois surfaces</td><td><span class="pill p-done">mergé</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1595">#1595</a>, <a href="https://github.com/ForumHFR/redface2/pull/1596">#1596</a> (11/11, 10:28 et 10:44), après la levée de G2</td></tr>
+          <tr><td class="ph">7</td><td class="lot"><b>R1b-2a</b> <a href="https://github.com/ForumHFR/redface2/issues/1514">#1514</a></td><td class="size"><span class="sz sz-l">L</span><span class="szd">+3 366 −743</span></td><td class="what2">Réponse MP</td><td><span class="pill p-done">mergé</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1597">#1597</a> (11/11, 11:08)</td></tr>
+          <tr><td class="ph">8</td><td class="lot"><b>R1b-2b</b> <a href="https://github.com/ForumHFR/redface2/issues/1515">#1515</a></td><td class="size"><span class="sz sz-l">L</span><span class="szd">+4 415 −1 121</span></td><td class="what2">Nouveau MP</td><td><span class="pill p-done">mergé</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1598">#1598</a> (11/11, 11:25) : R1 entier dans dev</td></tr>
+          <tr><td class="ph">9</td><td class="lot"><b>R6</b> <a href="https://github.com/ForumHFR/redface2/issues/1516">#1516</a></td><td class="size"><span class="sz sz-l">L</span><span class="szd">+3 282 −318, 2 PR</span></td><td class="what2">Raccourci de la barre d'action, « Aucun » par défaut</td><td><span class="pill p-done">mergé</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1602">#1602</a>, <a href="https://github.com/ForumHFR/redface2/pull/1603">#1603</a> (11/11, 12:10 et 12:24). Arbitrages de la PR 1 à ratifier ; découvrabilité : remarque 12</td></tr>
+          <tr><td class="ph">10</td><td class="lot"><b>R2a</b> <a href="https://github.com/ForumHFR/redface2/issues/1452">#1452</a></td><td class="size"><span class="sz">M</span><span class="szd">+852 −403</span></td><td class="what2">Panneau de citations, mode cartes</td><td><span class="pill p-done">mergé</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1600">#1600</a> (11/11, 11:40). Écarts TalkBack reportés à <a href="https://github.com/ForumHFR/redface2/issues/1599">#1599</a></td></tr>
+          <tr><td class="ph">11</td><td class="lot"><b>R2b</b> <a href="https://github.com/ForumHFR/redface2/issues/1452">#1452</a></td><td class="size"><span class="sz sz-l">L</span><span class="szd">+3 539 −288</span></td><td class="what2">Aperçu en partage, smileys perso (#873)</td><td><span class="pill p-done">mergé</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1601">#1601</a> (11/11, 11:54), recette 9 cas sur 9 avec R2a. Images dans l'aperçu : remarque 13</td></tr>
+          <tr class="grp end"><th colspan="6">Fin de phase · ajustements</th></tr>
+          <tr><td class="ph">—</td><td class="lot"><b>Citation, A</b> <a href="https://github.com/ForumHFR/redface2/issues/1450">#1450</a></td><td class="size"><span class="sz">M</span><span class="szd">+988 −78</span></td><td class="what2">Formulaire chargé sous l'offre</td><td><span class="pill p-done">livré</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1606">#1606</a>, 0.69.12 (11/11)</td></tr>
+          <tr><td class="ph">—</td><td class="lot"><b>Citation, B</b> <a href="https://github.com/ForumHFR/redface2/issues/1450">#1450</a></td><td class="size"><span class="sz">M</span><span class="szd">+2 091 −425, 388 captures</span></td><td class="what2">Offre en feuille du bas, avis minuté</td><td><span class="pill p-done">livré</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1608">#1608</a>, 0.69.13 (12/11)</td></tr>
+          <tr><td class="ph">—</td><td class="lot"><b>Trait 2 dp</b> <a href="https://github.com/ForumHFR/redface2/issues/1417">#1417</a></td><td class="size"><span class="sz">S</span><span class="szd">+46 −31, 905 captures</span></td><td class="what2">29 icônes de l'éditeur redessinées</td><td><span class="pill p-done">livré</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1610">#1610</a>, 0.69.14 (12/11)</td></tr>
+          <tr><td class="ph">—</td><td class="lot"><b>Avion</b> <a href="https://github.com/ForumHFR/redface2/issues/1417">#1417</a></td><td class="size"><span class="sz">S</span><span class="szd">+283 −90, 822 captures</span></td><td class="what2">Bouton d'envoi rond</td><td><span class="pill p-done">livré</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1612">#1612</a>, 0.69.15 (12/11)</td></tr>
+          <tr><td class="ph">—</td><td class="lot"><b>Citation, PR 1</b> <a href="https://github.com/ForumHFR/redface2/issues/1450">#1450</a></td><td class="size"><span class="sz sz-l">L</span><span class="szd">+4 136 −183</span></td><td class="what2">Offres durables, provenance, Room 21 → 22</td><td><span class="pill p-done">livré</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1614">#1614</a>, 0.69.16 (13/11)</td></tr>
+          <tr><td class="ph">—</td><td class="lot"><b>Citation, PR 2</b> <a href="https://github.com/ForumHFR/redface2/issues/1450">#1450</a></td><td class="size"><span class="sz sz-l">L</span><span class="szd">+3 428 −1 869, 88 captures</span></td><td class="what2">Citation immédiate, brouillon sous ↺</td><td><span class="pill p-done">livré</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1615">#1615</a>, 0.69.16 (13/11) ; gates Astra r1 à r7</td></tr>
+          <tr><td class="ph">—</td><td class="lot"><b>Réponse rapide</b> <a href="https://github.com/ForumHFR/redface2/issues/1450">#1450</a></td><td class="size"><span class="szd">non estimée</span></td><td class="what2">Écriture finale avant la fermeture</td><td><span class="pill p-run">cadrage</span></td><td>UX soumise au mainteneur avant le code</td></tr>
+          <tr><td class="ph">—</td><td class="lot"><b>Panier</b> <a href="https://github.com/ForumHFR/redface2/issues/1616">#1616</a></td><td class="size"><span class="szd">non estimée</span></td><td class="what2">Vider le panier après livraison durable</td><td><span class="pill p-wait">à faire</span></td><td>Priorité à fixer par le mainteneur</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer>Version 13 de la page, état au 13/11/2026 à 11:45. Tenue à partir du tableau de bord des sessions de développement, des journaux de suivi et de l'historique de <code>dev</code>. Plan de référence : PHASES-v07 (spec v0.7.1 acceptée le 1/11).</footer>
 </div>
+<script>
+document.querySelectorAll('.fx[data-end]').forEach(function (el) {
+  if (el.scrollWidth > el.clientWidth) el.scrollLeft = el.scrollWidth;
+});
+</script>
 </body>
 </html>
