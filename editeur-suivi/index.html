@@ -213,10 +213,10 @@ footer{font-size:12px;color:var(--ink-3);border-top:1px solid var(--line);paddin
   <header>
     <span class="eyebrow">Redface 2 · refonte de l'éditeur · plan v0.7.1 · fin de phase</span>
     <h1>Suivi de l'éditeur #1417</h1>
-    <p class="lede">État au <b>vendredi 13 novembre 2026, 11:45</b>. Le développement de la refonte est terminé : <b>les quatorze lots sont dans dev depuis la release 0.69.11</b> du 11/11. La phase est entrée dans sa <b>fin de phase</b> : le code est livré, on fait la recette vers les portes G3 et G4 et on ajuste ce que le mainteneur et les testeurs relèvent sur appareil. Six ajustements sont sortis en dev, de la 0.69.12 à la <b>0.69.16</b> ; le suivant, en cours, protège la réponse rapide contre la perte de texte. <b>La bêta sortira à la fin de la refonte, sur go du mainteneur</b>, pas avant.</p>
+    <p class="lede">État au <b>vendredi 13 novembre 2026, 19:35</b>. Le développement de la refonte est terminé : <b>les quatorze lots sont dans dev depuis la release 0.69.11</b> du 11/11. La phase est entrée dans sa <b>fin de phase</b> : le code est livré, on fait la recette vers les portes G3 et G4 et on ajuste ce que le mainteneur et les testeurs relèvent sur appareil. Dix ajustements sont sortis en dev, de la 0.69.12 à la <b>0.69.17</b> (app-v384) ; en cours, la refonte de la feuille Options, dont le mainteneur choisira la variante ; ensuite, la réponse rapide, protégée contre la perte de texte. <b>La bêta sortira à la fin de la refonte, sur go du mainteneur</b>, pas avant.</p>
     <p class="key"><b>Corps de phase</b> : les lots du plan, du 1/11 au 11/11. <b>Fin de phase</b> : recette et petits ajustements, depuis le 11/11 à 12:39. Sur toute la page, le bleu marque le corps de phase et le rouge la fin de phase. Un <b>lot</b> = une ou plusieurs PR, chacune livrée en release dev. Une <b>porte</b> = les conditions à remplir avant l'étape suivante. Un <b>gate</b> = la relecture du code par un second modèle, Astra ou Fable. Les codes ED-xxx, C1 à C10 et B.3 renvoient à la spec.</p>
     <nav class="links" aria-label="Pages de la phase éditeur">
-      <a href="https://forumhfr.github.io/artifacts/editeur-spec/">Spec de l'éditeur (v0.7.9)</a>
+      <a href="https://forumhfr.github.io/artifacts/editeur-spec/">Spec de l'éditeur (v0.7.10)</a>
       <a href="https://forumhfr.github.io/artifacts/editeur-lexique/">Anatomie de l'éditeur</a>
       <a href="https://forumhfr.github.io/artifacts/editeur-roborazzi/">Rendus Roborazzi</a>
       <a href="https://github.com/ForumHFR/redface2/issues/1417">Issue #1417</a>
@@ -226,16 +226,16 @@ footer{font-size:12px;color:var(--ink-3);border-top:1px solid var(--line);paddin
 
   <section class="strip" aria-label="Résumé">
     <div class="cell"><span>Corps de phase</span><b>14 / 14 lots</b><span>dans dev depuis la 0.69.11 (11/11, 12:39)</span></div>
-    <div class="cell hot"><span>Fin de phase</span><b>Recette et ajustements</b><span>6 remarques livrées, 1 en cours, 2 prévues, 6 à décider</span></div>
-    <div class="cell"><span>Version dev</span><b class="mono">0.69.16</b><span>13/11, 09:01 · bêta publique : 0.68.0</span></div>
+    <div class="cell hot"><span>Fin de phase</span><b>Recette et ajustements</b><span>9 remarques livrées, 3 prévues, 1 en attente, 2 à décider</span></div>
+    <div class="cell"><span>Version dev</span><b class="mono">0.69.17</b><span>13/11, 16:48 · app-v384 · bêta publique : 0.68.0</span></div>
     <div class="cell"><span>Portes</span><b>G3 1/2 · G4 1/4</b><span>bêta à la fin de la refonte, sur go du mainteneur</span></div>
   </section>
 
   <section class="rail" aria-label="Volume livré, pondéré par taille">
-    <div class="bar" role="img" aria-label="Corps de phase : 14 lots livrés. Fin de phase : 6 ajustements livrés, 3 prévus. Largeur selon la taille.">
-      <i class="body" style="flex-grow:1" title="R0m · S"></i><i class="body" style="flex-grow:6" title="#1301-ST · XL"></i><i class="body" style="flex-grow:4" title="R0b · L"></i><i class="body" style="flex-grow:6" title="R0c · XL"></i><i class="body" style="flex-grow:2" title="R0a · M"></i><i class="body" style="flex-grow:6" title="#1553 · XL"></i><i class="body" style="flex-grow:6" title="R1a-1 · XL"></i><i class="body" style="flex-grow:6" title="R1a-2 · XL"></i><i class="body" style="flex-grow:6" title="R1b-1 · XL"></i><i class="body" style="flex-grow:4" title="R1b-2a · L"></i><i class="body" style="flex-grow:4" title="R1b-2b · L"></i><i class="body" style="flex-grow:4" title="R6 · L"></i><i class="body" style="flex-grow:2" title="R2a · M"></i><i class="body" style="flex-grow:4" title="R2b · L"></i><i class="cut"></i><i class="end" style="flex-grow:2" title="#1606 · M"></i><i class="end" style="flex-grow:2" title="#1608 · M"></i><i class="end" style="flex-grow:1" title="#1610 · S"></i><i class="end" style="flex-grow:1" title="#1612 · S"></i><i class="end" style="flex-grow:4" title="#1614 · L"></i><i class="end" style="flex-grow:4" title="#1615 · L"></i><i class="todo" style="flex-grow:1" title="Réponse rapide · taille non estimée"></i><i class="todo" style="flex-grow:1" title="#1616 · taille non estimée"></i><i class="todo" style="flex-grow:1" title="Tagbug #2805926 · taille non estimée"></i>
+    <div class="bar" role="img" aria-label="Corps de phase : 14 lots livrés. Fin de phase : 10 ajustements livrés, 4 en cours ou prévus. Largeur selon la taille.">
+      <i class="body" style="flex-grow:1" title="R0m · S"></i><i class="body" style="flex-grow:6" title="#1301-ST · XL"></i><i class="body" style="flex-grow:4" title="R0b · L"></i><i class="body" style="flex-grow:6" title="R0c · XL"></i><i class="body" style="flex-grow:2" title="R0a · M"></i><i class="body" style="flex-grow:6" title="#1553 · XL"></i><i class="body" style="flex-grow:6" title="R1a-1 · XL"></i><i class="body" style="flex-grow:6" title="R1a-2 · XL"></i><i class="body" style="flex-grow:6" title="R1b-1 · XL"></i><i class="body" style="flex-grow:4" title="R1b-2a · L"></i><i class="body" style="flex-grow:4" title="R1b-2b · L"></i><i class="body" style="flex-grow:4" title="R6 · L"></i><i class="body" style="flex-grow:2" title="R2a · M"></i><i class="body" style="flex-grow:4" title="R2b · L"></i><i class="cut"></i><i class="end" style="flex-grow:2" title="#1606 · M"></i><i class="end" style="flex-grow:2" title="#1608 · M"></i><i class="end" style="flex-grow:1" title="#1610 · S"></i><i class="end" style="flex-grow:1" title="#1612 · S"></i><i class="end" style="flex-grow:4" title="#1614 · L"></i><i class="end" style="flex-grow:4" title="#1615 · L"></i><i class="end" style="flex-grow:1" title="#1618 · S"></i><i class="end" style="flex-grow:1" title="#1620 · S"></i><i class="end" style="flex-grow:2" title="#1621 · M"></i><i class="end" style="flex-grow:1" title="#1622 · S"></i><i class="todo" style="flex-grow:1" title="Feuille Options, en cours · taille non estimée"></i><i class="todo" style="flex-grow:1" title="Réponse rapide · taille non estimée"></i><i class="todo" style="flex-grow:1" title="#1616 · taille non estimée"></i><i class="todo" style="flex-grow:1" title="Tagbug #2805926 · taille non estimée"></i>
     </div>
-    <p class="legend"><span style="--k:var(--c-body)">corps de phase, 14 lots</span><span style="--k:var(--c-end)">fin de phase, 6 PR livrées</span><span style="--k:var(--paper-2);--kb:var(--c-end)">prévues, 3 (taille non estimée)</span><em>largeur = taille en lignes modifiées : S 1, M 2, L 4, XL 6. La fin de phase pèse déjà plus que le plus gros lot du corps : +10 972 −2 676 lignes et 2 203 captures Roborazzi réenregistrées.</em></p>
+    <p class="legend"><span style="--k:var(--c-body)">corps de phase, 14 lots</span><span style="--k:var(--c-end)">fin de phase, 10 PR livrées</span><span style="--k:var(--paper-2);--kb:var(--c-end)">en cours et prévues, 4 (taille non estimée)</span><em>largeur = taille en lignes modifiées : S 1, M 2, L 4, XL 6. Les dix PR de fin de phase pèsent déjà plus que le plus gros lot du corps : +13 514 −2 885 lignes, et 2 203 captures Roborazzi réenregistrées par les six premières.</em></p>
   </section>
 
   <section class="panel" aria-labelledby="h-fresque">
@@ -243,7 +243,7 @@ footer{font-size:12px;color:var(--ink-3);border-top:1px solid var(--line);paddin
     <p class="fx-hint">Sur téléphone, la fresque s'ouvre sur les derniers jours : glissez le doigt vers la droite pour remonter au 1/11.</p>
 <div class="fx" tabindex="0" role="region" aria-label="Fresque de la refonte, du 1er au 13 novembre ; défilement horizontal" data-end>
 <div class="fx-in" style="--grid:calc(100% / 13)">
-<span class="fx-now" style="--x:96.07" title="13/11 11:45" aria-hidden="true"></span>
+<span class="fx-now" style="--x:98.58" title="13/11 19:35" aria-hidden="true"></span>
 <div class="fx-row fx-axis"><span class="fx-l">nov. 2026</span><div class="fx-t">
 <span class="fx-tk c" style="--x:3.85">di 1</span>
 <span class="fx-tk c" style="--x:11.54">lu 2</span>
@@ -276,6 +276,7 @@ footer{font-size:12px;color:var(--ink-3);border-top:1px solid var(--line);paddin
 <i class="fx-dot k-ink" style="--x:89.60" title="Spec v0.7.7 publiée le 12/11 15:33"></i><b class="fx-lab c up" style="--x:89.60">7.7</b>
 <i class="fx-dot k-ink" style="--x:91.83" title="Spec v0.7.8 publiée le 12/11 22:31"></i><b class="fx-lab c dn" style="--x:91.83">7.8</b>
 <i class="fx-dot k-ink" style="--x:95.16" title="Spec v0.7.9 publiée le 13/11 08:54"></i><b class="fx-lab c up" style="--x:95.16">7.9</b>
+<i class="fx-dot k-ink" style="--x:98.29" title="Spec v0.7.10 publiée le 13/11 18:39"></i><b class="fx-lab c dn" style="--x:98.29">7.10</b>
 </div></div>
 <div class="fx-row"><span class="fx-l">R0</span><div class="fx-t" style="--h:56px">
 <i class="fx-dot k-body" style="--x:8.45;--y:11px" title="#1301-ST, invariants d'envoi : PR #1522 mergée le 02/11 à 02:21 (dev 0.66.0)"></i><b class="fx-lab" style="--x:8.45;--y:11px">#1301-ST</b>
@@ -297,7 +298,11 @@ footer{font-size:12px;color:var(--ink-3);border-top:1px solid var(--line);paddin
 <i class="fx-dot k-end" style="--x:90.03" title="PR #1612 mergée le 12/11 16:53"></i>
 <i class="fx-dot k-end" style="--x:92.08" title="PR #1614 mergée le 12/11 23:18"></i>
 <i class="fx-dot k-end" style="--x:95.12" title="PR #1615 mergée le 13/11 08:47"></i>
-<b class="fx-lab rt" style="--x:80.98">6 PR d'ajustement, détail dans la loupe</b>
+<i class="fx-dot k-end" style="--x:96.88" title="PR #1618 mergée le 13/11 14:15"></i>
+<i class="fx-dot k-end" style="--x:96.96" title="PR #1620 mergée le 13/11 14:31"></i>
+<i class="fx-dot k-end" style="--x:97.36" title="PR #1621 mergée le 13/11 15:45"></i>
+<i class="fx-dot k-end" style="--x:97.69" title="PR #1622 mergée le 13/11 16:48"></i>
+<b class="fx-lab rt" style="--x:80.98">10 PR d'ajustement, détail dans la loupe</b>
 </div></div>
 <div class="fx-row"><span class="fx-l">Releases</span><div class="fx-t" style="--h:34px">
 <i class="fx-rel k-body" style="--x:8.56" title="Release dev 0.66.0, PR de version mergée le 02/11 02:42"></i>
@@ -316,18 +321,19 @@ footer{font-size:12px;color:var(--ink-3);border-top:1px solid var(--line);paddin
 <i class="fx-rel k-end" style="--x:88.72" title="Release dev 0.69.14, PR de version mergée le 12/11 12:49"></i>
 <i class="fx-rel k-end" style="--x:90.35" title="Release dev 0.69.15, PR de version mergée le 12/11 17:53"></i>
 <i class="fx-rel k-end" style="--x:95.20" title="Release dev 0.69.16, PR de version mergée le 13/11 09:01"></i>
+<i class="fx-rel k-end" style="--x:97.69" title="Release dev 0.69.17, PR de version mergée le 13/11 16:48"></i>
 <i class="fx-rel beta" style="--x:22.23" title="Bêta 0.68.0 préparée le 03/11 à 21:22, la dernière avant la fin de la refonte"></i>
 <b class="fx-lab c up" style="--x:8.56">0.66.0</b>
 <b class="fx-lab c up" style="--x:22.23">bêta 0.68.0</b>
 <b class="fx-lab c up" style="--x:42.01">0.69.0</b>
 <b class="fx-lab c up" style="--x:80.98">0.69.11</b>
-<b class="fx-lab rt up" style="--x:95.20">0.69.16</b>
+<b class="fx-lab rt up" style="--x:97.69">0.69.17</b>
 </div></div>
 <div class="fx-row"><span class="fx-l">Portes</span><div class="fx-t" style="--h:26px">
 <i class="fx-gate" style="--x:79.93" title="G1 : go du mainteneur le 11/11 à 09:23"></i>
 <i class="fx-gate" style="--x:80.25" title="G2 levée le 11/11 à 10:22"></i>
 <b class="fx-lab rt" style="--x:79.81">G1, G2 le 11/11</b>
-<b class="fx-lab rt muted" style="--x:96.07">G3, G4 : recette</b>
+<b class="fx-lab rt muted" style="--x:98.58">G3, G4 : recette</b>
 </div></div>
 <div class="fx-row fx-histo"><span class="fx-l">PR mergées<br>par jour</span><div class="fx-t" style="--h:96px">
 <span class="fx-g" style="--n:5"><em>5</em></span><span class="fx-g" style="--n:10"><em>10</em></span>
@@ -339,62 +345,68 @@ footer{font-size:12px;color:var(--ink-3);border-top:1px solid var(--line);paddin
 <span class="fx-col" style="--x:73.08;--t:1" title="ma 10/11 : 1 PR du corps de phase"><i class="k-body" style="--n:1"></i></span>
 <span class="fx-col" style="--x:80.77;--t:13" title="me 11/11 : 13 PR (12 corps de phase, 1 fin de phase)"><i class="k-body" style="--n:12"></i><i class="k-end" style="--n:1"></i><em>13</em></span>
 <span class="fx-col" style="--x:88.46;--t:4" title="je 12/11 : 4 PR de fin de phase"><i class="k-end" style="--n:4"></i></span>
-<span class="fx-col" style="--x:96.15;--t:1" title="ve 13/11 : 1 PR de fin de phase"><i class="k-end" style="--n:1"></i></span>
+<span class="fx-col" style="--x:96.15;--t:5" title="ve 13/11 : 5 PR de fin de phase"><i class="k-end" style="--n:5"></i></span>
 </div></div>
 </div></div>
     <p class="legend"><span style="--k:var(--c-body)">corps de phase</span><span style="--k:var(--c-end)">fin de phase</span><span class="lg-hatch" style="--k:var(--c-body)">hors dépôt (R0a)</span><span class="lg-dot" style="--k:var(--ink-2)">spec publiée</span><span class="lg-gate" style="--k:var(--ink)">porte franchie</span><span class="lg-now" style="--k:var(--ink-3)">maintenant</span><em>survol d'une marque : date, heure, PR</em></p>
-    <p class="note">Le corps de phase a tenu en dix jours, avec un pic le 11/11 : treize PR mergées, la cascade de R1a-2 à R6 en trois heures après le go du mainteneur, puis le premier correctif de fin de phase le soir même. Depuis, la fin de phase a livré six PR et quatre versions de la spec en moins de deux jours.</p>
-    <div class="sechd"><h3>Loupe sur la fin de phase</h3><span class="muted">du 11/11 12 h au 13/11 14 h · les numéros renvoient aux remarques plus bas</span></div>
-<div class="fx" tabindex="0" role="region" aria-label="Loupe sur la fin de phase, du 11/11 12 h au 13/11 14 h ; défilement horizontal" data-end>
-<div class="fx-in" style="--grid:12%">
-<span class="fx-now" style="--x:95.50" title="13/11 11:45" aria-hidden="true"></span>
+    <p class="note">Le corps de phase a tenu en dix jours, avec un pic le 11/11 : treize PR mergées, la cascade de R1a-2 à R6 en trois heures après le go du mainteneur, puis le premier correctif de fin de phase le soir même. Depuis, la fin de phase a livré dix PR d'ajustement et cinq versions de la spec en un peu plus de deux jours.</p>
+    <div class="sechd"><h3>Loupe sur la fin de phase</h3><span class="muted">du 11/11 12 h au 13/11 20 h · les numéros renvoient aux remarques plus bas</span></div>
+<div class="fx" tabindex="0" role="region" aria-label="Loupe sur la fin de phase, du 11/11 12 h au 13/11 20 h ; défilement horizontal" data-end>
+<div class="fx-in" style="--grid:calc(600% / 56)">
+<span class="fx-now" style="--x:99.26" title="13/11 19:35" aria-hidden="true"></span>
 <div class="fx-row fx-axis"><span class="fx-l">heures</span><div class="fx-t">
-<span class="fx-tk lt" style="--x:0">me 11 · 12 h</span>
-<span class="fx-tk c" style="--x:12">18 h</span>
-<span class="fx-tk c b" style="--x:24">je 12</span>
-<span class="fx-tk c" style="--x:36">6 h</span>
-<span class="fx-tk c" style="--x:48">12 h</span>
-<span class="fx-tk c" style="--x:60">18 h</span>
-<span class="fx-tk c b" style="--x:72">ve 13</span>
-<span class="fx-tk c" style="--x:84">6 h</span>
-<span class="fx-tk c" style="--x:96">12 h</span>
+<span class="fx-tk lt" style="--x:0.00">me 11 · 12 h</span>
+<span class="fx-tk c b" style="--x:21.43">je 12</span>
+<span class="fx-tk c" style="--x:32.14">6 h</span>
+<span class="fx-tk c" style="--x:42.86">12 h</span>
+<span class="fx-tk c" style="--x:53.57">18 h</span>
+<span class="fx-tk c b" style="--x:64.29">ve 13</span>
+<span class="fx-tk c" style="--x:75.00">6 h</span>
+<span class="fx-tk c" style="--x:85.71">12 h</span>
+<span class="fx-tk c" style="--x:96.43">18 h</span>
 </div></div>
 <div class="fx-row"><span class="fx-l">Retours</span><div class="fx-t" style="--h:34px">
-<i class="fx-brk" style="--x:1.67;--w:2.73" title="Retours sur la 0.69.11, fil DEV, de 12:50 à 14:12"></i>
-<b class="fx-lab lo" style="--x:1.67">0.69.11 → 1, 4, 5, 12 à 14</b>
-<i class="fx-brk" style="--x:49.33;--w:12.00" title="Citation topic contre MP (styx42, questions de XaTriX), puis retours sur la 0.69.14"></i>
-<b class="fx-lab lo" style="--x:49.33">12/11 → 6, 9, 10</b>
-<i class="fx-brk" style="--x:85.67;--w:3.43" title="Revue Astra de #1615 et remarque de XaTriX sur le panier"></i>
-<b class="fx-lab lo rt" style="--x:89.10">pendant la PR 2 → 7, 8, 11</b>
+<i class="fx-brk" style="--x:1.49;--w:2.44" title="Retours sur la 0.69.11, fil DEV, de 12:50 à 14:12"></i>
+<b class="fx-lab lo" style="--x:1.49">0.69.11 → 1, 4, 5, 12 à 14</b>
+<i class="fx-brk" style="--x:44.05;--w:10.71" title="Citation topic contre MP (styx42, questions de XaTriX), puis retours sur la 0.69.14"></i>
+<b class="fx-lab lo" style="--x:44.05">12/11 → 6, 9, 10</b>
+<i class="fx-brk" style="--x:76.49;--w:3.07" title="Revue Astra de #1615 et remarque de XaTriX sur le panier"></i>
+<b class="fx-lab lo rt" style="--x:79.55">pendant la PR 2 → 7, 8, 11</b>
 </div></div>
 <div class="fx-row"><span class="fx-l">Décisions</span><div class="fx-t" style="--h:28px">
-<b class="fx-pill" style="--x:8.00" title="11/11 ~16:00 : correctif de la citation, offre en feuille du bas, trait à 2 dp">1 · 2 · 4</b>
-<b class="fx-pill" style="--x:14.67" title="11/11 ~19:20 : icône restore_page">3</b>
-<b class="fx-pill" style="--x:41.43" title="12/11 08:43 : B aussi à 2 dp, bouton avion en papier">4 · 5</b>
-<b class="fx-pill" style="--x:50.43" title="12/11 13:13 : citation visible partout, brouillon sous ↺">6</b>
-<b class="fx-pill" style="--x:88.90" title="13/11 08:27-08:33 : réponse rapide suivie dans #1450, issue #1616">7 · 8</b>
+<b class="fx-pill" style="--x:7.14" title="11/11 ~16:00 : correctif de la citation, offre en feuille du bas, trait à 2 dp">1 · 2 · 4</b>
+<b class="fx-pill" style="--x:13.10" title="11/11 ~19:20 : icône restore_page">3</b>
+<b class="fx-pill" style="--x:36.99" title="12/11 08:43 : B aussi à 2 dp, bouton avion en papier">4 · 5</b>
+<b class="fx-pill" style="--x:45.03" title="12/11 13:13 : citation visible partout, brouillon sous ↺">6</b>
+<b class="fx-pill" style="--x:79.38" title="13/11 08:27-08:33 : réponse rapide suivie dans #1450, issue #1616">7 · 8</b>
 </div></div>
 <div class="fx-row"><span class="fx-l">Spec</span><div class="fx-t" style="--h:26px">
-<i class="fx-dot k-ink" style="--x:23.90" title="Spec v0.7.6 publiée le 11/11 23:57"></i><b class="fx-lab" style="--x:23.90">v0.7.6</b>
-<i class="fx-dot k-ink" style="--x:55.10" title="Spec v0.7.7 publiée le 12/11 15:33"></i><b class="fx-lab" style="--x:55.10">v0.7.7</b>
-<i class="fx-dot k-ink" style="--x:69.03" title="Spec v0.7.8 publiée le 12/11 22:31"></i><b class="fx-lab" style="--x:69.03">v0.7.8</b>
-<i class="fx-dot k-ink" style="--x:89.80" title="Spec v0.7.9 publiée le 13/11 08:54"></i><b class="fx-lab" style="--x:89.80">v0.7.9</b>
+<i class="fx-dot k-ink" style="--x:21.34" title="Spec v0.7.6 publiée le 11/11 23:57"></i><b class="fx-lab" style="--x:21.34">v0.7.6</b>
+<i class="fx-dot k-ink" style="--x:49.20" title="Spec v0.7.7 publiée le 12/11 15:33"></i><b class="fx-lab" style="--x:49.20">v0.7.7</b>
+<i class="fx-dot k-ink" style="--x:61.64" title="Spec v0.7.8 publiée le 12/11 22:31"></i><b class="fx-lab" style="--x:61.64">v0.7.8</b>
+<i class="fx-dot k-ink" style="--x:80.18" title="Spec v0.7.9 publiée le 13/11 08:54"></i><b class="fx-lab" style="--x:80.18">v0.7.9</b>
+<i class="fx-dot k-ink" style="--x:97.59" title="Spec v0.7.10 publiée le 13/11 18:39"></i><b class="fx-lab rt" style="--x:97.59">v0.7.10</b>
 </div></div>
 <div class="fx-row"><span class="fx-l">Livraisons</span><div class="fx-t" style="--h:40px">
-<i class="fx-dot k-body" style="--x:1.30;--y:13px" title="Release dev 0.69.11 (refonte), PR de version mergée le 11/11 12:39"></i>
-<b class="fx-lab two" style="--x:1.30">0.69.11<span>refonte</span></b>
-<i class="fx-dot k-end" style="--x:12.63;--y:13px" title="Release dev 0.69.12 (#1606), PR de version mergée le 11/11 18:19"></i>
-<b class="fx-lab two" style="--x:12.63">0.69.12<span>#1606</span></b>
-<i class="fx-dot k-end" style="--x:39.20;--y:13px" title="Release dev 0.69.13 (#1608), PR de version mergée le 12/11 07:36"></i>
-<b class="fx-lab two" style="--x:39.20">0.69.13<span>#1608</span></b>
-<i class="fx-dot k-end" style="--x:49.63;--y:13px" title="Release dev 0.69.14 (#1610), PR de version mergée le 12/11 12:49"></i>
-<b class="fx-lab two" style="--x:49.63">0.69.14<span>#1610</span></b>
-<i class="fx-dot k-end" style="--x:59.77;--y:13px" title="Release dev 0.69.15 (#1612), PR de version mergée le 12/11 17:53"></i>
-<b class="fx-lab two" style="--x:59.77">0.69.15<span>#1612</span></b>
-<i class="fx-dot k-end hollow" style="--x:70.60;--y:13px" title="PR #1614 (socle) mergée le 12/11 23:18, livrée avec la 0.69.16"></i>
-<b class="fx-lab two" style="--x:70.60">&nbsp;<span>#1614</span></b>
-<i class="fx-dot k-end" style="--x:90.03;--y:13px" title="Release dev 0.69.16 (#1615), PR de version mergée le 13/11 09:01"></i>
-<b class="fx-lab two" style="--x:90.03">0.69.16<span>#1615</span></b>
+<i class="fx-dot k-body" style="--x:1.16;--y:13px" title="Release dev 0.69.11 (refonte), PR de version mergée le 11/11 12:39"></i>
+<b class="fx-lab two" style="--x:1.16">0.69.11<span>refonte</span></b>
+<i class="fx-dot k-end" style="--x:11.28;--y:13px" title="Release dev 0.69.12 (#1606), PR de version mergée le 11/11 18:19"></i>
+<b class="fx-lab two" style="--x:11.28">0.69.12<span>#1606</span></b>
+<i class="fx-dot k-end" style="--x:35.00;--y:13px" title="Release dev 0.69.13 (#1608), PR de version mergée le 12/11 07:36"></i>
+<b class="fx-lab two" style="--x:35.00">0.69.13<span>#1608</span></b>
+<i class="fx-dot k-end" style="--x:44.32;--y:13px" title="Release dev 0.69.14 (#1610), PR de version mergée le 12/11 12:49"></i>
+<b class="fx-lab two" style="--x:44.32">0.69.14<span>#1610</span></b>
+<i class="fx-dot k-end" style="--x:53.36;--y:13px" title="Release dev 0.69.15 (#1612), PR de version mergée le 12/11 17:53"></i>
+<b class="fx-lab two" style="--x:53.36">0.69.15<span>#1612</span></b>
+<i class="fx-dot k-end hollow" style="--x:63.04;--y:13px" title="PR #1614 (socle) mergée le 12/11 23:18, livrée avec la 0.69.16"></i>
+<b class="fx-lab two" style="--x:63.04">&nbsp;<span>#1614</span></b>
+<i class="fx-dot k-end" style="--x:80.39;--y:13px" title="Release dev 0.69.16 (#1615), PR de version mergée le 13/11 09:01"></i>
+<b class="fx-lab two" style="--x:80.39">0.69.16<span>#1615</span></b>
+<i class="fx-dot k-end hollow" style="--x:89.73;--y:13px" title="PR #1618 (images dans l'aperçu) mergée le 13/11 14:15, livrée avec la 0.69.17"></i>
+<i class="fx-dot k-end hollow" style="--x:90.21;--y:13px" title="PR #1620 (rangée des formats) mergée le 13/11 14:31, livrée avec la 0.69.17"></i>
+<i class="fx-dot k-end hollow" style="--x:92.41;--y:13px" title="PR #1621 (réglages de l'éditeur) mergée le 13/11 15:45, livrée avec la 0.69.17"></i>
+<i class="fx-dot k-end" style="--x:94.29;--y:13px" title="Release dev 0.69.17 (#1618, #1620, #1621, #1622), PR de version #1622 mergée le 13/11 16:48 ; app-v384 publiée à 16:56"></i>
+<b class="fx-lab two" style="--x:94.29">0.69.17<span>4 PR</span></b>
 </div></div>
 </div></div>
   </section>
@@ -404,29 +416,33 @@ footer{font-size:12px;color:var(--ink-3);border-top:1px solid var(--line);paddin
     <p class="note">La fin de phase ne livre plus de lots. Elle recette ce qui est dans dev (portes G3 et G4), corrige ce que la recette et les testeurs trouvent, et règle les remarques du mainteneur. Elle se termine par son go et la bêta du nouvel éditeur.</p>
     <div class="board">
       <div class="col">
-        <div class="hd"><h3>Fait</h3><span class="pill p-done">0.69.12 → 0.69.16</span></div>
+        <div class="hd"><h3>Fait</h3><span class="pill p-done">0.69.12 → 0.69.17</span></div>
         <ul>
           <li>Six PR d'ajustement, cinq releases dev en 39 heures (11/11 18:19 → 13/11 09:01). <span>Remarques 1 à 6.</span></li>
-          <li>Spec v0.7.6 à v0.7.9 publiées en 33 heures, chacune relue avant publication.</li>
-          <li>Chaque PR : validation complète sur box, CI verte, gate Fable ou Astra rendu GO avant le merge.</li>
+          <li>Quatre PR le 13/11 de 14:15 à 16:48 (#1618, #1620, #1621, #1622), livrées en <b>0.69.17</b> (app-v384) : publiée à 16:56, servie sur F-Droid, changelog DEV posté. <span>Remarques 12, 13 et 14.</span></li>
+          <li>Spec v0.7.6 à v0.7.9 publiées en 33 heures, chacune relue avant publication ; v0.7.10 le 13/11 à 18:39, sur go du mainteneur (artifacts <code>37b3ed7</code>, spec v17, lexique v21).</li>
+          <li>Chaque PR : validation sur box et CI verte avant le merge ; gate Fable ou Astra rendu GO confirmé jusqu'à #1615.</li>
           <li>Avis UX croisés de Fable et d'Astra avant de changer la citation (12/11).</li>
           <li>Chaque release annoncée sur le fil DEV ; jalons commentés sur #1450 et #1417.</li>
           <li>Commentaires de fin de lot postés sur les huit issues de la phase (11/11).</li>
+          <li><span>Infra, #1623 (issue #1619), 13/11 17:06 : cache Gradle de la CI écrit depuis <code>dev</code>, entrées des tests déclarées, tests <code>:app</code> lancés seulement en prod, release construite sans cache. Gain sur les PR à mesurer.</span></li>
         </ul>
       </div>
       <div class="col">
         <div class="hd"><h3>En cours</h3><span class="pill p-run">rf2-dev</span></div>
         <ul>
-          <li><b>Réponse rapide</b> : écrire le brouillon avant de fermer la feuille, pour ne plus perdre de texte. Cadrage en cours ; l'UX sera soumise au mainteneur avant le code. <span>Remarque 7, suivie dans #1450.</span></li>
-          <li><b>Recette de la 0.69.16 sur appareil</b>, par le mainteneur : dialogue « Brouillon non enregistré », annonce TalkBack du brouillon à traiter. #1450 reste ouverte jusque-là.</li>
+          <li><b>Refonte de la feuille Options</b> : Fable a proposé trois variantes (A liste sobre, B cartes, C onglets), avec 34 rendus ; Sol fait la finition, planche attendue vers 20:00. Le mainteneur choisit la variante.</li>
+          <li>Puis une PR « Formats disponibles » et le nom du raccourci sur la ligne « Réglages de l'éditeur ». <span>Suites des remarques 14 et 12.</span></li>
         </ul>
       </div>
       <div class="col">
         <div class="hd"><h3>Prévu</h3><span class="pill p-wait">dans l'ordre</span></div>
         <ol>
-          <li>Reproduire sur émulateur les feuilles qui changent de taille à l'ouverture. <span>Remarque 9.</span></li>
-          <li>Vider le panier multi-citation après livraison durable (#1616). <span>Remarque 8, priorité à fixer.</span></li>
-          <li>Décisions du mainteneur sur les remarques 10 à 15, puis les ajustements retenus.</li>
+          <li>Réponse rapide : écrire le brouillon avant de fermer la feuille, pour ne plus perdre de texte ; UX soumise au mainteneur avant le code. <span>Remarque 7, suivie dans #1450.</span></li>
+          <li>Vider le panier multi-citation après livraison durable (#1616). <span>Remarque 8.</span></li>
+          <li>Tagbug #2805926 : feuilles qui changent de taille à l'ouverture. <span>Remarque 9.</span></li>
+          <li>Ménage des worktrees.</li>
+          <li>Décision du mainteneur sur la remarque 11, puis l'ajustement retenu. <span>10 en attente ; 15 hors de la session de la refonte.</span></li>
           <li>Recette G3 : protocole d'envoi (B.3) et C8 (rotation, mort du processus, en-têtes) sur les quatre éditeurs.</li>
           <li>Recette G4 : C1 à C10 filmés ; S1, la feuille des smileys, corrigée ou dérogation bornée.</li>
           <li>Clôture : issues de lot fermées, reliquats rangés en issues de suite.</li>
@@ -442,24 +458,24 @@ footer{font-size:12px;color:var(--ink-3);border-top:1px solid var(--line);paddin
       <table>
         <thead><tr><th>N°</th><th>Remarque</th><th>Origine</th><th>État</th><th>Suite</th></tr></thead>
         <tbody>
-          <tr class="grp end"><th colspan="5">Livrées · 6</th></tr>
+          <tr class="grp end"><th colspan="5">Livrées · 9</th></tr>
           <tr><td class="n">1</td><td class="what">« Citer » ne marche plus quand un brouillon attend ; favoris HFR absents, Envoyer grisé. Le formulaire se charge désormais sous l'offre</td><td class="src"><span class="tag t-test">testeurs</span>styx42 <a href="https://forum.hardware.fr/forum2.php?config=hfr.inc&amp;cat=23&amp;post=35421&amp;numreponse=2805736">#2805736</a>, Dintr-un lemn <a href="https://forum.hardware.fr/forum2.php?config=hfr.inc&amp;cat=23&amp;post=35421&amp;numreponse=2805758">#2805758</a> ; go du 11/11 16:00</td><td class="st"><span class="pill p-done">0.69.12</span></td><td class="next">PR <a href="https://github.com/ForumHFR/redface2/pull/1606">#1606</a>. Recette sur appareil de #1450</td></tr>
           <tr><td class="n">2</td><td class="what">Le menu ↺ est laid : l'offre du brouillon passe en feuille du bas, l'attente de la citation s'affiche puis disparaît seule</td><td class="src"><span class="tag">XaTriX</span>11/11 16:00, libellé revu à 18:44</td><td class="st"><span class="pill p-done">0.69.13</span></td><td class="next">PR <a href="https://github.com/ForumHFR/redface2/pull/1608">#1608</a>. L'avis minuté a disparu en 0.69.16, avec la citation immédiate</td></tr>
           <tr><td class="n">3</td><td class="what">Icône du brouillon : <code>restore_page</code> (Material Symbols) à la place de l'ancienne</td><td class="src"><span class="tag">XaTriX</span>choix sur la planche d'icônes, 11/11 19:20</td><td class="st"><span class="pill p-done">0.69.13</span></td><td class="next">PR <a href="https://github.com/ForumHFR/redface2/pull/1608">#1608</a>, sur les cinq éditeurs. Rien à suivre</td></tr>
           <tr><td class="n">4</td><td class="what">« Tout est en gras » : icônes de l'éditeur dessinées au trait de 2 dp, B compris</td><td class="src"><span class="tag">XaTriX</span><a href="https://forum.hardware.fr/forum2.php?config=hfr.inc&amp;cat=23&amp;post=35421&amp;numreponse=2805740">#2805740</a> ; décidé le 11/11 16:12 et le 12/11 08:43</td><td class="st"><span class="pill p-done">0.69.14</span></td><td class="next">PR <a href="https://github.com/ForumHFR/redface2/pull/1610">#1610</a>, 905 captures. Hors éditeur (flèche retour, chevrons à 2,5 dp) : le mainteneur regarde les rendus. Thème sombre : voir 10</td></tr>
           <tr><td class="n">5</td><td class="what">La pilule « Envoyer » prend trop de place : bouton rond « avion en papier », coche quand l'envoi est armé</td><td class="src"><span class="tag">XaTriX</span><a href="https://forum.hardware.fr/forum2.php?config=hfr.inc&amp;cat=23&amp;post=35421&amp;numreponse=2805740">#2805740</a> ; variante D choisie le 12/11</td><td class="st"><span class="pill p-done">0.69.15</span></td><td class="next">PR <a href="https://github.com/ForumHFR/redface2/pull/1612">#1612</a>, 822 captures. Un format de plus tient dans la barre à 411 dp. Réponse rapide inchangée jusqu'à son lot (R4)</td></tr>
           <tr><td class="n">6</td><td class="what">Topic et MP traitaient la citation différemment : citation visible tout de suite partout, brouillon offert sous ↺ (point, date, extrait)</td><td class="src"><span class="tag t-test">testeurs</span>styx42 <a href="https://forum.hardware.fr/forum2.php?config=hfr.inc&amp;cat=23&amp;post=35421&amp;numreponse=2805876">#2805876</a>, questions de XaTriX ; go du 12/11 13:13</td><td class="st"><span class="pill p-done">0.69.16</span></td><td class="next">PR <a href="https://github.com/ForumHFR/redface2/pull/1614">#1614</a> et <a href="https://github.com/ForumHFR/redface2/pull/1615">#1615</a>, spec v0.7.8 et v0.7.9. En plus : fermeture qui demande « Brouillon non enregistré » si l'écriture échoue</td></tr>
-          <tr class="grp end"><th colspan="5">En cours et prévues · 3</th></tr>
-          <tr><td class="n">7</td><td class="what">Réponse rapide : la feuille se ferme avant la dernière écriture du brouillon, du texte peut se perdre</td><td class="src"><span class="tag">revue</span>gate Astra de #1615, 13/11 ; en tête de file sur décision de XaTriX</td><td class="st"><span class="pill p-run">en cours</span></td><td class="next">Cadrage, puis UX proposée au mainteneur avant le code ; PR et release dev</td></tr>
-          <tr><td class="n">8</td><td class="what">Le panier multi-citation n'est vidé qu'au succès de l'envoi</td><td class="src"><span class="tag">XaTriX</span>13/11 08:33, après avis de Fable</td><td class="st"><span class="pill p-wait">décidé</span></td><td class="next">Issue <a href="https://github.com/ForumHFR/redface2/issues/1616">#1616</a>, ED-88 amendé (v0.7.9) : vider après livraison durable. À coder ; portée pour la réponse rapide et le mode cartes à trancher</td></tr>
-          <tr><td class="n">9</td><td class="what">Les feuilles « … » (options du message) et smileys changent plusieurs fois de taille à l'ouverture</td><td class="src"><span class="tag t-test">testeurs</span>antiseptiqueIncolore <a href="https://forum.hardware.fr/forum2.php?config=hfr.inc&amp;cat=23&amp;post=35421&amp;numreponse=2805926">#2805926</a>, vidéo <a href="https://forum.hardware.fr/forum2.php?config=hfr.inc&amp;cat=23&amp;post=35421&amp;numreponse=2805932">#2805932</a>, 0.69.14</td><td class="st"><span class="pill p-run">à reproduire</span></td><td class="next">Reproduction sur émulateur, suivi dans #1417 ; pas d'issue avant l'avis du mainteneur</td></tr>
-          <tr class="grp"><th colspan="5">À décider par le mainteneur · 6</th></tr>
-          <tr><td class="n">10</td><td class="what">Icônes encore trop grasses en thème sombre ; un trait plus fin y est proposé</td><td class="src"><span class="tag t-test">testeurs</span>nicko <a href="https://forum.hardware.fr/forum2.php?config=hfr.inc&amp;cat=23&amp;post=35421&amp;numreponse=2805904">#2805904</a>, Dintr-un lemn <a href="https://forum.hardware.fr/forum2.php?config=hfr.inc&amp;cat=23&amp;post=35421&amp;numreponse=2805906">#2805906</a></td><td class="st"><span class="pill p-ask">à décider</span></td><td class="next">1,5 dp en sombre, ou statu quo. Mesure du 12/11 : les icônes au trait de Gboard sont aussi à 2 dp</td></tr>
+          <tr><td class="n">12</td><td class="what">Le raccourci de la barre est introuvable (« Aucun » par défaut) ; ouvrir les réglages de l'éditeur depuis l'éditeur</td><td class="src"><span class="tag t-test">testeurs</span>nicko <a href="https://forum.hardware.fr/forum2.php?config=hfr.inc&amp;cat=23&amp;post=35421&amp;numreponse=2805739">#2805739</a>, thibw <a href="https://forum.hardware.fr/forum2.php?config=hfr.inc&amp;cat=23&amp;post=35421&amp;numreponse=2805744">#2805744</a> ; <span class="tag">XaTriX</span><a href="https://forum.hardware.fr/forum2.php?config=hfr.inc&amp;cat=23&amp;post=35421&amp;numreponse=2805742">#2805742</a></td><td class="st"><span class="pill p-done">0.69.17</span></td><td class="next">PR <a href="https://github.com/ForumHFR/redface2/pull/1621">#1621</a> : « Réglages de l'éditeur » depuis la feuille Options, barre du bas cachée (ED-39). Suite en cours : la ligne nommera le raccourci, défaut « Aucun » gardé (décision du mainteneur)</td></tr>
+          <tr><td class="n">13</td><td class="what">Afficher les images dans l'aperçu</td><td class="src"><span class="tag">XaTriX</span><a href="https://forum.hardware.fr/forum2.php?config=hfr.inc&amp;cat=23&amp;post=35421&amp;numreponse=2805743">#2805743</a></td><td class="st"><span class="pill p-done">0.69.17</span></td><td class="next">PR <a href="https://github.com/ForumHFR/redface2/pull/1618">#1618</a> : une image dans <code>[url]</code> ou dans un style est visible dans l'aperçu (suite de R2b, #1452)</td></tr>
+          <tr><td class="n">14</td><td class="what">Revoir la liste des options d'édition du texte, avec un menu qui les décrit ; mieux présenter le ton du post</td><td class="src"><span class="tag">XaTriX</span><a href="https://forum.hardware.fr/forum2.php?config=hfr.inc&amp;cat=23&amp;post=35421&amp;numreponse=2805742">#2805742</a></td><td class="st"><span class="pill p-done">0.69.17</span></td><td class="next">PR <a href="https://github.com/ForumHFR/redface2/pull/1620">#1620</a> : formats réordonnés, Puce et E-mail, puces HFR gardées en lecture. PR <a href="https://github.com/ForumHFR/redface2/pull/1622">#1622</a> : grille du ton (noms, 48 dp, 6 ou 8 colonnes). Suite : le menu qui décrit les options (point 5) deviendra « Formats disponibles » dans la feuille Options, après sa refonte</td></tr>
+          <tr class="grp end"><th colspan="5">Prévues · 3</th></tr>
+          <tr><td class="n">7</td><td class="what">Réponse rapide : la feuille se ferme avant la dernière écriture du brouillon, du texte peut se perdre</td><td class="src"><span class="tag">revue</span>gate Astra de #1615, 13/11 ; en tête de file sur décision de XaTriX</td><td class="st"><span class="pill p-wait">prévue</span></td><td class="next">En tête de file après la feuille Options. UX proposée au mainteneur avant le code ; PR et release dev</td></tr>
+          <tr><td class="n">8</td><td class="what">Le panier multi-citation n'est vidé qu'au succès de l'envoi</td><td class="src"><span class="tag">XaTriX</span>13/11 08:33, après avis de Fable</td><td class="st"><span class="pill p-wait">prévue</span></td><td class="next">Issue <a href="https://github.com/ForumHFR/redface2/issues/1616">#1616</a>, ED-88 amendé (v0.7.9) : vider après livraison durable. À coder ; portée pour la réponse rapide et le mode cartes à trancher</td></tr>
+          <tr><td class="n">9</td><td class="what">Les feuilles « … » (options du message) et smileys changent plusieurs fois de taille à l'ouverture</td><td class="src"><span class="tag t-test">testeurs</span>antiseptiqueIncolore <a href="https://forum.hardware.fr/forum2.php?config=hfr.inc&amp;cat=23&amp;post=35421&amp;numreponse=2805926">#2805926</a>, vidéo <a href="https://forum.hardware.fr/forum2.php?config=hfr.inc&amp;cat=23&amp;post=35421&amp;numreponse=2805932">#2805932</a>, 0.69.14</td><td class="st"><span class="pill p-wait">prévue</span></td><td class="next">Reproduction sur émulateur, suivi dans #1417 ; pas d'issue avant l'avis du mainteneur. Le prototype de feuille Options à un seul cran traite le même symptôme, pour cette feuille seulement</td></tr>
+          <tr class="grp"><th colspan="5">En attente ou à décider · 3</th></tr>
+          <tr><td class="n">10</td><td class="what">Icônes encore trop grasses en thème sombre ; un trait plus fin y est proposé</td><td class="src"><span class="tag t-test">testeurs</span>nicko <a href="https://forum.hardware.fr/forum2.php?config=hfr.inc&amp;cat=23&amp;post=35421&amp;numreponse=2805904">#2805904</a>, Dintr-un lemn <a href="https://forum.hardware.fr/forum2.php?config=hfr.inc&amp;cat=23&amp;post=35421&amp;numreponse=2805906">#2805906</a></td><td class="st"><span class="pill p-wait">en attente</span></td><td class="next">13/11 : le mainteneur confirme que ce sont les icônes, mais « laisser tel quel pour l'instant ». Piste : 1,5 dp en sombre ; mesure du 12/11 : les icônes au trait de Gboard sont aussi à 2 dp</td></tr>
           <tr><td class="n">11</td><td class="what">Nouveau sujet et nouveau MP : sous une offre de brouillon non décidée, un titre ou des destinataires modifiés ne sont pas écrits à la fermeture</td><td class="src"><span class="tag">revue</span>gate Astra de #1615, 13/11</td><td class="st"><span class="pill p-ask">à décider</span></td><td class="next">Comportement à choisir, puis correctif dans la même file que 7</td></tr>
-          <tr><td class="n">12</td><td class="what">Le raccourci de la barre est introuvable (« Aucun » par défaut) ; ouvrir les réglages de l'éditeur depuis l'éditeur</td><td class="src"><span class="tag t-test">testeurs</span>nicko <a href="https://forum.hardware.fr/forum2.php?config=hfr.inc&amp;cat=23&amp;post=35421&amp;numreponse=2805739">#2805739</a>, thibw <a href="https://forum.hardware.fr/forum2.php?config=hfr.inc&amp;cat=23&amp;post=35421&amp;numreponse=2805744">#2805744</a> ; <span class="tag">XaTriX</span><a href="https://forum.hardware.fr/forum2.php?config=hfr.inc&amp;cat=23&amp;post=35421&amp;numreponse=2805742">#2805742</a></td><td class="st"><span class="pill p-ask">à décider</span></td><td class="next">Avant G4 : l'accès aux réglages contredit ED-39. La mise en avant des nouveautés (idée de thibw) n'est pas retenue pour ce lot</td></tr>
-          <tr><td class="n">13</td><td class="what">Afficher les images dans l'aperçu</td><td class="src"><span class="tag">XaTriX</span><a href="https://forum.hardware.fr/forum2.php?config=hfr.inc&amp;cat=23&amp;post=35421&amp;numreponse=2805743">#2805743</a></td><td class="st"><span class="pill p-ask">à décider</span></td><td class="next">Dans cette phase (suite de R2b, #1452) ou en suite hors phase</td></tr>
-          <tr><td class="n">14</td><td class="what">Revoir la liste des options d'édition du texte, avec un menu qui les décrit ; mieux présenter le ton du post</td><td class="src"><span class="tag">XaTriX</span><a href="https://forum.hardware.fr/forum2.php?config=hfr.inc&amp;cat=23&amp;post=35421&amp;numreponse=2805742">#2805742</a></td><td class="st"><span class="pill p-ask">à décider</span></td><td class="next">À cadrer, rattaché à #1513 ; le ton du post renvoie à <a href="https://github.com/ForumHFR/redface2/issues/1441">#1441</a></td></tr>
-          <tr><td class="n">15</td><td class="what">Après envoi, « Message publié » puis « Message publié, dernière page » : un seul accusé serait plus clair</td><td class="src"><span class="tag t-test">testeurs</span>nicko <a href="https://forum.hardware.fr/forum2.php?config=hfr.inc&amp;cat=23&amp;post=35421&amp;numreponse=2805518">#2805518</a> ; XaTriX : « on verra en fin de phase »</td><td class="st"><span class="pill p-ask">à décider</span></td><td class="next">À trancher maintenant : un seul accusé visible, quitte à attendre l'offre ? Suivi dans <a href="https://github.com/ForumHFR/redface2/issues/1437">#1437</a></td></tr>
+          <tr><td class="n">15</td><td class="what">Après envoi, « Message publié » puis « Message publié, dernière page » : un seul accusé serait plus clair</td><td class="src"><span class="tag t-test">testeurs</span>nicko <a href="https://forum.hardware.fr/forum2.php?config=hfr.inc&amp;cat=23&amp;post=35421&amp;numreponse=2805518">#2805518</a> ; XaTriX : « on verra en fin de phase »</td><td class="st"><span class="pill p-ask">à décider</span></td><td class="next">À trancher hors de la session de développement de la refonte : un seul accusé visible, quitte à attendre l'offre ? Suivi dans <a href="https://github.com/ForumHFR/redface2/issues/1437">#1437</a></td></tr>
         </tbody>
       </table>
     </div>
@@ -485,8 +501,9 @@ footer{font-size:12px;color:var(--ink-3);border-top:1px solid var(--line);paddin
     <section class="panel" aria-labelledby="h-asks">
       <h2 id="h-asks">Ce qui attend le mainteneur</h2>
       <ol class="asks">
-        <li>Les remarques 10 à 15 : trait en thème sombre, en-têtes sous l'offre, accès au raccourci et aux réglages, images dans l'aperçu, options d'édition et ton du post, accusés après envoi.</li>
-        <li>La priorité de #1616 et la portée d'ED-88 (réponse rapide, mode cartes).</li>
+        <li>Le choix de la variante de la feuille Options : A (liste sobre), B (cartes) ou C (onglets), sur la planche attendue vers 20:00.</li>
+        <li>Les remarques 11 et 15 : en-têtes sous l'offre, accusés après envoi (15 hors de la session de la refonte). La 10, trait en thème sombre, reste en attente.</li>
+        <li>La portée d'ED-88 pour #1616 (réponse rapide, mode cartes).</li>
         <li>L'UX de la réponse rapide, dès que le cadrage est prêt.</li>
         <li>La recette de la 0.69.16 sur appareil (dialogue de fermeture, annonce TalkBack).</li>
         <li>Les recettes G3 et G4 sur appareil, et la séance S10e restante (B5 intégré, ancien éditeur). S1 ou une dérogation pour G4 ; S1 attend la relance de rf2-smalldev.</li>
@@ -494,6 +511,8 @@ footer{font-size:12px;color:var(--ink-3);border-top:1px solid var(--line);paddin
         <li>Les décisions de fin de refonte : fermeture de #1513 (réserve : écoute TalkBack réelle non faite), arbitrages de la PR 1 de R6 (#1602), ED-66, clé de position et plancher de 120 dp de R2b, H2, ED-14 avec le focus.</li>
         <li>Les questions restées ouvertes à la livraison : clavier non rouvert au retour au message, Œil coché peu lisible en thème sombre, infobulle de l'Œil sur la barre d'état ; le clavier rouvert à la rotation après l'onglet Wiki, antérieur à la refonte : issue de suivi ou non.</li>
         <li>Les treize arbitrages de la nuit du 9 au 10/11 : ratification à confirmer.</li>
+        <li>L'élagage des captures Roborazzi : la session propose de mesurer 2 à 3 semaines d'abord.</li>
+        <li>Infra : lancer les tests CI sur toutes les PR de <code>docs/</code> ? Aujourd'hui une PR qui ne touche que <code>docs/adr/</code> les saute ; les inclure coûte ~14 min de CI par PR de doc.</li>
         <li>Le go de la bêta, à la fin de la refonte.</li>
       </ol>
     </section>
@@ -506,6 +525,7 @@ footer{font-size:12px;color:var(--ink-3);border-top:1px solid var(--line);paddin
         <thead><tr><th>Version</th><th>Date</th><th>Contenu</th></tr></thead>
         <tbody>
           <tr class="grp end"><th colspan="3">Fin de phase</th></tr>
+          <tr><td>0.69.17</td><td class="d">13/11 16:48</td><td>Images dans l'aperçu (#1618), formats réordonnés (#1620), réglages depuis la feuille Options (#1621), grille du ton (#1622) ; app-v384</td></tr>
           <tr><td>0.69.16</td><td class="d">13/11 09:01</td><td>Citation visible partout, brouillon sous ↺, fermeture protégée (#1614, #1615)</td></tr>
           <tr><td>0.69.15</td><td class="d">12/11 17:53</td><td>Bouton d'envoi « avion en papier » (#1612)</td></tr>
           <tr><td>0.69.14</td><td class="d">12/11 12:49</td><td>Icônes de l'éditeur au trait de 2 dp (#1610)</td></tr>
@@ -526,7 +546,7 @@ footer{font-size:12px;color:var(--ink-3);border-top:1px solid var(--line);paddin
         </tbody>
       </table>
     </div>
-    <p class="note">0.69.1 et 0.69.3 : correctifs hors refonte. La 0.69.9 plantait au lancement : KSP 2.3.13 perdait parfois des modules Hilt sans faire échouer le build. Retour à KSP 2.3.12 en 0.69.10 ; depuis le 9/11, la release refuse un APK ou un AAB auquel il manque des entrées Hilt (#1582).</p>
+    <p class="note">0.69.1 et 0.69.3 : correctifs hors refonte. La 0.69.9 plantait au lancement : KSP 2.3.13 perdait parfois des modules Hilt sans faire échouer le build. Retour à KSP 2.3.12 en 0.69.10 ; depuis le 9/11, la release refuse un APK ou un AAB auquel il manque des entrées Hilt (#1582). La 0.69.17 (app-v384) : tag à 16:48, publiée à 16:56, servie sur F-Droid ; dev était rouge depuis #1621 (une capture Roborazzi dépendait du réseau), corrigé par #1622.</p>
   </section>
 
   <section class="panel lots" aria-labelledby="h-lots">
@@ -558,14 +578,19 @@ footer{font-size:12px;color:var(--ink-3);border-top:1px solid var(--line);paddin
           <tr><td class="ph">—</td><td class="lot"><b>Avion</b> <a href="https://github.com/ForumHFR/redface2/issues/1417">#1417</a></td><td class="size"><span class="sz">S</span><span class="szd">+283 −90, 822 captures</span></td><td class="what2">Bouton d'envoi rond</td><td><span class="pill p-done">livré</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1612">#1612</a>, 0.69.15 (12/11)</td></tr>
           <tr><td class="ph">—</td><td class="lot"><b>Citation, PR 1</b> <a href="https://github.com/ForumHFR/redface2/issues/1450">#1450</a></td><td class="size"><span class="sz sz-l">L</span><span class="szd">+4 136 −183</span></td><td class="what2">Offres durables, provenance, Room 21 → 22</td><td><span class="pill p-done">livré</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1614">#1614</a>, 0.69.16 (13/11)</td></tr>
           <tr><td class="ph">—</td><td class="lot"><b>Citation, PR 2</b> <a href="https://github.com/ForumHFR/redface2/issues/1450">#1450</a></td><td class="size"><span class="sz sz-l">L</span><span class="szd">+3 428 −1 869, 88 captures</span></td><td class="what2">Citation immédiate, brouillon sous ↺</td><td><span class="pill p-done">livré</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1615">#1615</a>, 0.69.16 (13/11) ; gates Astra r1 à r7</td></tr>
-          <tr><td class="ph">—</td><td class="lot"><b>Réponse rapide</b> <a href="https://github.com/ForumHFR/redface2/issues/1450">#1450</a></td><td class="size"><span class="szd">non estimée</span></td><td class="what2">Écriture finale avant la fermeture</td><td><span class="pill p-run">cadrage</span></td><td>UX soumise au mainteneur avant le code</td></tr>
-          <tr><td class="ph">—</td><td class="lot"><b>Panier</b> <a href="https://github.com/ForumHFR/redface2/issues/1616">#1616</a></td><td class="size"><span class="szd">non estimée</span></td><td class="what2">Vider le panier après livraison durable</td><td><span class="pill p-wait">à faire</span></td><td>Priorité à fixer par le mainteneur</td></tr>
+          <tr><td class="ph">—</td><td class="lot"><b>Images de l'aperçu</b> <a href="https://github.com/ForumHFR/redface2/issues/1452">#1452</a></td><td class="size"><span class="sz">S</span><span class="szd">+446 −3, 4 fichiers</span></td><td class="what2">Image dans <code>[url]</code> ou dans un style</td><td><span class="pill p-done">livré</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1618">#1618</a>, 0.69.17 (13/11)</td></tr>
+          <tr><td class="ph">—</td><td class="lot"><b>Formats</b> <a href="https://github.com/ForumHFR/redface2/issues/1513">#1513</a></td><td class="size"><span class="sz">S</span><span class="szd">+410 −60, 76 fichiers</span></td><td class="what2">Rangée réordonnée, Puce et E-mail ; puces HFR gardées en lecture</td><td><span class="pill p-done">livré</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1620">#1620</a>, 0.69.17 (13/11)</td></tr>
+          <tr><td class="ph">—</td><td class="lot"><b>Réglages</b> <a href="https://github.com/ForumHFR/redface2/issues/1516">#1516</a></td><td class="size"><span class="sz">M</span><span class="szd">+1 074 −36, 57 fichiers</span></td><td class="what2">« Réglages de l'éditeur » depuis la feuille Options, barre du bas cachée</td><td><span class="pill p-done">livré</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1621">#1621</a>, 0.69.17 (13/11)</td></tr>
+          <tr><td class="ph">—</td><td class="lot"><b>Ton du message</b> <a href="https://github.com/ForumHFR/redface2/issues/1513">#1513</a></td><td class="size"><span class="sz">S</span><span class="szd">+612 −110, 47 fichiers</span></td><td class="what2">Grille refaite : noms, 48 dp, 6 ou 8 colonnes</td><td><span class="pill p-done">livré</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1622">#1622</a>, 0.69.17 (13/11), avec le bump de version ; répare dev</td></tr>
+          <tr><td class="ph">—</td><td class="lot"><b>Feuille Options</b></td><td class="size"><span class="szd">non estimée</span></td><td class="what2">Refonte : variantes A, B, C de Fable (34 rendus), finition par Sol</td><td><span class="pill p-run">en cours</span></td><td>Planche vers 20:00, choix du mainteneur ; puis « Formats disponibles » et nom du raccourci</td></tr>
+          <tr><td class="ph">—</td><td class="lot"><b>Réponse rapide</b> <a href="https://github.com/ForumHFR/redface2/issues/1450">#1450</a></td><td class="size"><span class="szd">non estimée</span></td><td class="what2">Écriture finale avant la fermeture</td><td><span class="pill p-wait">à faire</span></td><td>En tête de file après la feuille Options ; UX soumise au mainteneur avant le code</td></tr>
+          <tr><td class="ph">—</td><td class="lot"><b>Panier</b> <a href="https://github.com/ForumHFR/redface2/issues/1616">#1616</a></td><td class="size"><span class="szd">non estimée</span></td><td class="what2">Vider le panier après livraison durable</td><td><span class="pill p-wait">à faire</span></td><td>Après la réponse rapide</td></tr>
         </tbody>
       </table>
     </div>
   </section>
 
-  <footer>Version 13 de la page, état au 13/11/2026 à 11:45. Tenue à partir du tableau de bord des sessions de développement, des journaux de suivi et de l'historique de <code>dev</code>. Plan de référence : PHASES-v07 (spec v0.7.1 acceptée le 1/11).</footer>
+  <footer>Version 14 de la page, état au 13/11/2026 à 19:35. Tenue à partir du tableau de bord des sessions de développement, des journaux de suivi et de l'historique de <code>dev</code>. Plan de référence : PHASES-v07 (spec v0.7.1 acceptée le 1/11).</footer>
 </div>
 <script>
 document.querySelectorAll('.fx[data-end]').forEach(function (el) {
