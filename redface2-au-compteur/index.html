@@ -1,0 +1,1445 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Redface 2, client Android open source du forum HFR : versions, code, tests, specs, commits, PR, issues, LLM, intervenants et CI, relevés sur le dépôt ForumHFR/redface2.">
+<title>Redface 2 au compteur</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Instrument+Sans:wdth,wght@75..100,400..700&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<style>
+/* Layout: a long release log. Hero = build counter + release chain dev -> bêta -> production; sticky section rail; left-aligned 74rem column; charts drawn on the page plane, panels only for objects that stand apart. */
+:root{
+--bg:#F4F6FA; --surface:#FFFFFF; --ink:#131B2E; --ink-2:#46506A; --muted:#5F6980;
+--grid:#E2E6EE; --rule:#CDD3DE; --wash:#E8ECF4; --accent:#B8245A; --accent-soft:#F8E4EB;
+--ring:var(--bg);
+--s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100; --s5:#e87ba4;
+--other:#A3ABBB; --good:#0ca30c; --bad:#d03b3b; --cancel:#A3ABBB; --add:#2a78d6; --del:#e34948;
+--o1:#86b6ef; --o2:#5598e7; --o3:#2a78d6; --o4:#1c5cab; --o5:#104281;
+--o1i:#0b0b0b; --o2i:#0b0b0b; --o3i:#fff; --o4i:#fff; --o5i:#fff;
+--shadow:0 10px 30px rgba(19,27,46,.12),0 1px 3px rgba(19,27,46,.1);
+--f-display:"Bricolage Grotesque","Avenir Next Condensed","Arial Narrow",system-ui,sans-serif;
+--f-body:"Instrument Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+--f-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+--fs-xs:.75rem; --fs-sm:.8125rem; --fs-md:1.0625rem;
+--fs-h2:clamp(2rem,4.4vw,3rem); --fs-h1:clamp(3.1rem,9vw,6.4rem);
+--wrap:74rem;
+color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+--bg:#0F1422; --surface:#161C2C; --ink:#E8ECF4; --ink-2:#B4BCCC; --muted:#8D97AB;
+--grid:#232B3E; --rule:#343E55; --wash:#1D2438; --accent:#FF7AA2; --accent-soft:#3A1C2A;
+--s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181;
+--other:#5B6579; --cancel:#5B6579; --add:#3987e5; --del:#e66767;
+--o1:#184f95; --o2:#256abf; --o3:#3987e5; --o4:#6da7ec; --o5:#9ec5f4;
+--o1i:#fff; --o2i:#fff; --o3i:#0b0b0b; --o4i:#0b0b0b; --o5i:#0b0b0b;
+--shadow:0 10px 30px rgba(0,0,0,.45),0 1px 3px rgba(0,0,0,.4);
+color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+--bg:#0F1422; --surface:#161C2C; --ink:#E8ECF4; --ink-2:#B4BCCC; --muted:#8D97AB;
+--grid:#232B3E; --rule:#343E55; --wash:#1D2438; --accent:#FF7AA2; --accent-soft:#3A1C2A;
+--s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181;
+--other:#5B6579; --cancel:#5B6579; --add:#3987e5; --del:#e66767;
+--o1:#184f95; --o2:#256abf; --o3:#3987e5; --o4:#6da7ec; --o5:#9ec5f4;
+--o1i:#fff; --o2i:#fff; --o3i:#0b0b0b; --o4i:#0b0b0b; --o5i:#0b0b0b;
+--shadow:0 10px 30px rgba(0,0,0,.45),0 1px 3px rgba(0,0,0,.4);
+color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;scroll-padding-top:calc(env(safe-area-inset-top,0px) + 60px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 1rem/1.55 var(--f-body);-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+[hidden]{display:none!important}
+img,svg{max-width:100%}
+p{margin:0}
+a{color:var(--accent);text-underline-offset:.18em;text-decoration-thickness:1px}
+a:hover{text-decoration-thickness:2px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+.mono{font-family:var(--f-mono)}
+.wrap{max-width:var(--wrap);margin-inline:auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* hero */
+.hero{padding-block:clamp(28px,5vw,60px) 8px}
+.kicker{font:500 var(--fs-xs)/1.5 var(--f-mono);color:var(--muted);display:flex;flex-wrap:wrap;gap:.15rem .5rem}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:24px 40px;align-items:end;margin-top:18px}
+h1{font-family:var(--f-display);font-size:var(--fs-h1);font-weight:800;font-variation-settings:"wdth" 76,"opsz" 96;line-height:.9;letter-spacing:-.025em;margin:0;text-wrap:balance}
+h1 em{font-style:normal;color:var(--accent);font-weight:700}
+.hero-lede{font-size:clamp(1.05rem,1.6vw,1.2rem);line-height:1.5;color:var(--ink-2);max-width:56ch;margin-top:20px}
+.hero-lede b{color:var(--ink);font-weight:600}
+.odo{justify-self:end;display:grid;gap:10px;justify-items:end;text-align:right}
+.odo-top{font:500 var(--fs-xs)/1 var(--f-mono);color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.odo-digits{display:flex;gap:6px}
+.odo-d{position:relative;display:grid;place-items:center;width:.8em;height:1.16em;font:700 clamp(3.6rem,9vw,6.2rem)/1 var(--f-mono);color:var(--bg);border-radius:.12em;background:linear-gradient(180deg,color-mix(in oklab,var(--ink) 84%,var(--bg)) 0 50%,var(--ink) 50% 100%);box-shadow:inset 0 -.04em 0 rgba(0,0,0,.28)}
+.odo-d::after{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:color-mix(in oklab,var(--bg) 30%,transparent)}
+.odo-cap{font-size:var(--fs-sm);color:var(--ink-2);max-width:30ch}
+.chain{list-style:none;margin:34px 0 0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+.chain li{position:relative;padding:30px 14px 0 0;min-width:0}
+.chain li::before{content:"";position:absolute;top:9px;left:0;right:0;height:2px;background:var(--rule)}
+.chain li:last-child::before{right:auto;width:18px}
+.chain li:not(:last-child)::after{content:"";position:absolute;top:5px;right:2px;border:5px solid transparent;border-left:8px solid var(--rule);border-right:0}
+.chain .dot{position:absolute;top:2px;left:0;width:16px;height:16px;border-radius:50%;background:var(--c);box-shadow:0 0 0 4px var(--bg)}
+.chain .prod .dot{background:var(--bg);border:2px solid var(--muted)}
+.chain h4{margin:0;font:700 1.35rem/1 var(--f-display);font-variation-settings:"wdth" 85}
+.chain .track{display:block;font:400 var(--fs-xs)/1.4 var(--f-mono);color:var(--muted);margin-top:4px}
+.chain .ver{display:block;font:700 1.1rem/1.2 var(--f-mono);margin-top:10px}
+.chain .meta{display:block;font-size:var(--fs-sm);color:var(--ink-2)}
+.chain .note{display:inline-block;margin-top:8px;font-size:var(--fs-xs);color:var(--ink-2);border:1px dashed var(--muted);border-radius:6px;padding:2px 7px}
+.ledger{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:22px 24px;margin:38px 0 0;padding:22px 0 0;border-top:1px solid var(--rule)}
+.ledger div{display:flex;flex-direction:column;gap:3px;min-width:0}
+.ledger .k{font:500 var(--fs-xs)/1.2 var(--f-mono);color:var(--accent)}
+.ledger dd{margin:0;font:600 clamp(1.65rem,3vw,2.15rem)/1.05 var(--f-body);letter-spacing:-.015em}
+.ledger dt{font-size:var(--fs-sm);line-height:1.3}
+.ledger .s{font-size:var(--fs-xs);color:var(--muted);line-height:1.35}
+
+/* rail */
+.rail{position:sticky;top:env(safe-area-inset-top,0px);z-index:6;margin-top:36px;background:color-mix(in srgb,var(--bg) 90%,transparent);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-block:1px solid var(--grid)}
+.rail ul{list-style:none;margin:0 auto;display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;padding-block:8px}
+.rail ul::-webkit-scrollbar{display:none}
+.rail a{display:block;white-space:nowrap;padding:5px 10px;border-radius:999px;color:var(--ink-2);text-decoration:none;font-size:var(--fs-sm);font-weight:500}
+.rail a:hover{background:var(--wash);color:var(--ink)}
+.rail a[aria-current="true"]{background:var(--ink);color:var(--bg)}
+
+/* sections and figures */
+.sec{padding-block:clamp(44px,6vw,76px) 0}
+.sec-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:.4rem 1.5rem;border-top:1px solid var(--rule);padding-top:16px}
+h2{font:800 var(--fs-h2)/1 var(--f-display);font-variation-settings:"wdth" 80,"opsz" 72;letter-spacing:-.02em;margin:0;text-wrap:balance}
+.src{font:400 var(--fs-xs)/1.5 var(--f-mono);color:var(--muted);display:flex;flex-wrap:wrap;gap:0 .5rem}
+.src span{white-space:nowrap}
+.src span+span::before,.kicker>span+span::before{content:"· ";color:var(--muted)}
+.lede{max-width:66ch;font-size:var(--fs-md);color:var(--ink-2);margin-top:16px}
+.lede b,.sub b,.note-p b{color:var(--ink);font-weight:600}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:40px;margin-top:30px}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:28px}
+.span2{grid-column:1/-1}
+.fig{margin:0;min-width:0;display:flex;flex-direction:column;gap:10px}
+.fig-head{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:flex-end;justify-content:space-between}
+.fig-head>div:first-child{min-width:0;flex:1 1 16rem}
+.fig h3{font:600 1.0625rem/1.3 var(--f-body);margin:0;text-wrap:balance}
+.sub{font-size:var(--fs-sm);color:var(--muted);margin-top:3px;max-width:64ch}
+.panel{--ring:var(--surface);background:var(--surface);border:1px solid var(--grid);border-radius:16px;padding:18px clamp(14px,2vw,22px)}
+.card{display:grid;gap:12px;align-content:start;align-self:start}
+.card h3{font:700 1.35rem/1.1 var(--f-display);font-variation-settings:"wdth" 85}
+.chart{position:relative;min-width:0;width:100%}
+.note-p{font-size:var(--fs-sm);color:var(--ink-2);max-width:66ch}
+.big{font:600 clamp(2.2rem,4vw,3rem)/1 var(--f-body);letter-spacing:-.02em}
+.big small{font-size:.45em;font-weight:500;color:var(--ink-2);letter-spacing:0}
+.mini .big{font-size:2.2rem}
+
+/* controls, legends */
+.seg{flex:none;display:inline-flex;border:1px solid var(--rule);border-radius:999px;padding:2px;gap:2px;background:var(--surface)}
+.seg button{font:500 var(--fs-xs)/1 var(--f-body);border:0;background:none;color:var(--ink-2);padding:7px 11px;border-radius:999px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.legend,.hb,.bb,.tickets,.ms,.prs,.chips{margin:0;padding:0;list-style:none}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:var(--fs-sm);color:var(--ink-2);align-items:center}
+.legend li,.legend button{display:inline-flex;align-items:center;gap:7px}
+.legend button{font:inherit;color:inherit;background:var(--surface);border:1px solid var(--rule);border-radius:999px;padding:4px 11px 4px 9px;cursor:pointer}
+.legend button[aria-pressed="false"]{opacity:.5;background:none}
+.legend button[aria-pressed="false"] .sw{background:none;box-shadow:inset 0 0 0 1.5px var(--c)}
+.legend .cnt{color:var(--muted)}
+.sw{flex:none;width:10px;height:10px;border-radius:3px;background:var(--c)}
+.sw.line{width:14px;height:3px;border-radius:2px}
+.sw.dot{border-radius:50%}
+
+/* svg */
+.svg{display:block;overflow:visible;font-family:var(--f-body);touch-action:pan-y}
+.svg text{font-size:11px}
+.svg .tk{fill:var(--muted);font-variant-numeric:tabular-nums}
+.svg .gl{stroke:var(--grid);stroke-width:1;shape-rendering:crispEdges}
+.svg .bl{stroke:var(--rule);stroke-width:1;shape-rendering:crispEdges}
+.svg .lb{fill:var(--ink-2);font-size:11.5px}
+.svg .lbb{fill:var(--ink);font-size:12px;font-weight:600}
+.svg .mn{font-family:var(--f-mono)}
+.svg .wash{fill:var(--wash)}
+.svg .xh{stroke:var(--ink-2);stroke-width:1}
+.svg .ov{cursor:crosshair}
+.svg .ring{stroke:var(--ring);stroke-width:2}
+.svg .hl{fill:none;stroke:var(--ink);stroke-width:1.5}
+.svg .mark{stroke:var(--muted);stroke-width:1}
+.svg:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
+
+/* tooltip */
+.tip{position:fixed;z-index:20;pointer-events:none;background:var(--surface);color:var(--ink);border:1px solid var(--rule);border-radius:10px;box-shadow:var(--shadow);padding:8px 10px;font-size:var(--fs-sm);line-height:1.35;max-width:min(300px,calc(100vw - 32px))}
+.tip-t{font-size:var(--fs-xs);color:var(--muted);margin-bottom:4px}
+.tip-r{display:flex;align-items:center;gap:7px}
+.tip-r b{font-weight:650;font-variant-numeric:tabular-nums;white-space:nowrap}
+.tip-r span{color:var(--ink-2)}
+.tip-k{flex:none;width:12px;height:3px;border-radius:2px}
+
+/* tables */
+details.data{font-size:var(--fs-sm)}
+details summary{cursor:pointer;color:var(--muted);width:max-content;max-width:100%;list-style:none;display:inline-flex;align-items:center;gap:6px;padding:2px 0}
+details summary::-webkit-details-marker{display:none}
+details summary::before{content:"";border:4px solid transparent;border-left:6px solid currentColor;border-right:0;transition:transform .15s}
+details[open] summary::before{transform:rotate(90deg)}
+details summary:hover{color:var(--ink)}
+.tbl{overflow:auto;max-height:340px;margin-top:8px;border:1px solid var(--grid);border-radius:10px;background:var(--surface)}
+.tbl.full{max-height:none;margin-top:0}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;font-size:var(--fs-sm)}
+th,td{padding:5px 10px;text-align:right;border-bottom:1px solid var(--grid);white-space:nowrap}
+th:first-child,td:first-child{text-align:left;white-space:normal;overflow-wrap:anywhere;min-width:7rem}
+thead th{position:sticky;top:0;background:var(--surface);color:var(--ink-2);font-weight:600;z-index:1}
+tbody tr:last-child td{border-bottom:0}
+
+/* html bars */
+.hb{display:grid;gap:7px}
+.hb li{display:grid;grid-template-columns:minmax(0,var(--lw,10rem)) minmax(0,1fr) auto;align-items:center;gap:4px 12px;font-size:var(--fs-sm)}
+.hb .l{color:var(--ink-2);overflow-wrap:anywhere;line-height:1.3}
+.hb.lm .l{font-family:var(--f-mono);font-size:var(--fs-xs)}
+.hb .l small{display:block;color:var(--muted);font:400 .6875rem/1.3 var(--f-body)}
+.hb .t{display:flex;height:12px;gap:2px}
+.hb .b{border-radius:0 4px 4px 0;background:var(--c);min-width:2px}
+.hb .b.mid{border-radius:0}
+.hb .v{font-variant-numeric:tabular-nums;font-weight:600;text-align:right;min-width:3.2rem}
+.hb .v small{font-weight:400;color:var(--muted)}
+.hb li:hover .l,.hb li:focus .l{color:var(--ink)}
+
+/* back-to-back bars */
+.bb{display:grid;gap:6px}
+.bb li{display:grid;grid-template-columns:minmax(0,var(--nw,8.5rem)) minmax(0,1fr) minmax(0,1fr);align-items:center;font-size:var(--fs-sm)}
+.bb .nm{font:400 var(--fs-xs)/1.35 var(--f-mono);color:var(--ink-2);padding-right:10px;overflow-wrap:anywhere}
+.bb .hd{font:400 var(--fs-xs)/1.3 var(--f-body);color:var(--muted)}
+.bb .m,.bb .tt{display:flex;align-items:center;gap:6px;min-width:0;min-height:18px}
+.bb .m{justify-content:flex-end;padding-right:1px}
+.bb .tt{border-left:1px solid var(--rule);padding-left:1px}
+.bb .head .tt{border:0;padding-left:6px}
+.bb .bar{height:12px;flex:none;background:var(--c)}
+.bb .m .bar{border-radius:4px 0 0 4px}
+.bb .tt .bar{border-radius:0 4px 4px 0}
+.bb .n{font-size:var(--fs-xs);color:var(--ink-2);font-variant-numeric:tabular-nums;white-space:nowrap}
+.bb .na{grid-column:2/-1;font-size:var(--fs-xs);color:var(--muted);padding-left:8px}
+.bb.lots{gap:0}
+.bb.lots li{padding-block:6px;border-bottom:1px solid var(--grid)}
+.bb.lots li:last-child{border-bottom:0}
+.bb.lots .nm{font-family:var(--f-body);display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 8px}
+.bb.lots .nm b{font:700 var(--fs-sm)/1.3 var(--f-mono);color:var(--ink)}
+
+/* segmented bars */
+.segbar{display:flex;gap:2px;height:28px;width:100%}
+.segbar>div{display:flex;align-items:center;padding-left:7px;border-radius:4px;background:var(--c);color:var(--ci,#fff);font-size:var(--fs-xs);font-weight:600;min-width:0;white-space:nowrap}
+.segbar.thin{height:8px}
+.segbar.thin>div{border-radius:0;padding:0}
+.segbar.thin>div:first-child{border-radius:999px 0 0 999px}
+.segbar.thin>div:last-child{border-radius:0 999px 999px 0}
+.segbar.thin>div:only-child{border-radius:999px}
+
+/* stat grids */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(9.5rem,1fr));gap:18px 22px;margin:0}
+.stats div{display:flex;flex-direction:column-reverse;gap:2px;min-width:0}
+.stats dt{font-size:var(--fs-sm);color:var(--ink-2);line-height:1.3}
+.stats dd{margin:0;font:600 1.6rem/1.1 var(--f-body);letter-spacing:-.01em}
+
+/* bêta tickets */
+.tickets{display:grid;grid-template-columns:repeat(auto-fill,minmax(6.6rem,1fr));gap:8px}
+.tickets li{position:relative;border:1px solid var(--grid);background:var(--surface);border-radius:10px;padding:7px 8px 6px 12px;display:grid;font-size:var(--fs-xs);color:var(--muted);line-height:1.4}
+.tickets li::before{content:"";position:absolute;left:0;top:9px;bottom:9px;width:3px;border-radius:0 3px 3px 0;background:var(--s2)}
+.tickets .v{font:700 var(--fs-sm)/1.35 var(--f-mono);color:var(--ink)}
+.tickets .d{color:var(--ink-2)}
+.tickets li.pending{background:none;border:1.5px dashed var(--muted)}
+.tickets li.pending::before{display:none}
+
+/* lists */
+.ms{display:grid;gap:12px}
+.ms li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:5px 12px;font-size:var(--fs-sm);align-items:baseline}
+.ms .tt{font-weight:500;overflow-wrap:anywhere}
+.ms .c{color:var(--ink-2);font-variant-numeric:tabular-nums;white-space:nowrap}
+.ms .segbar{grid-column:1/-1}
+.pill{display:inline-block;font:500 .6875rem/1.45 var(--f-body);padding:0 7px;border-radius:999px;border:1px solid var(--rule);color:var(--ink-2);vertical-align:2px;margin-left:6px;white-space:nowrap}
+.pill.on{background:var(--accent-soft);border-color:transparent;color:var(--ink)}
+.pill.solid{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.bb.lots .pill{margin-left:0}
+.prs{display:grid;gap:10px}
+.prs li{display:grid;grid-template-columns:4rem minmax(0,1fr) auto;gap:2px 12px;font-size:var(--fs-sm);align-items:baseline;padding-bottom:10px;border-bottom:1px solid var(--grid)}
+.prs li:last-child{border-bottom:0;padding-bottom:0}
+.prs .no{font:400 var(--fs-xs)/1.4 var(--f-mono)}
+.prs .ti{overflow-wrap:anywhere;line-height:1.35}
+.prs .ti small{display:block;color:var(--muted);font-size:var(--fs-xs);margin-top:2px}
+.prs .ch{font-variant-numeric:tabular-nums;white-space:nowrap;text-align:right;font-size:var(--fs-xs);color:var(--muted)}
+.prs .ch b{color:var(--ink);font-weight:600}
+.kv{display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px 16px;margin:0;font-size:var(--fs-sm)}
+.kv dt{color:var(--muted)}
+.kv dd{margin:0;overflow-wrap:anywhere}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips li{font:500 var(--fs-xs)/1.5 var(--f-mono);padding:1px 8px;border-radius:6px;background:var(--wash);color:var(--ink-2)}
+.btn{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:var(--fs-sm);text-decoration:none;color:var(--bg);background:var(--ink);border-radius:999px;padding:8px 15px;width:max-content;max-width:100%}
+.btn:hover{background:var(--accent);color:#fff}
+.btn::after{content:"↗";font-weight:400}
+.methods{columns:2 22rem;column-gap:40px;margin:24px 0 0;padding:0 0 0 1.1em;font-size:var(--fs-sm);color:var(--ink-2)}
+.methods li{break-inside:avoid;margin-bottom:10px;padding-left:2px}
+.methods li::marker{color:var(--accent)}
+.code{font-family:var(--f-mono);font-size:.92em;background:var(--wash);padding:0 4px;border-radius:4px}
+footer{margin-top:64px;border-top:1px solid var(--rule);padding-block:22px 40px;color:var(--muted);font-size:var(--fs-xs)}
+footer .wrap{display:flex;flex-wrap:wrap;gap:6px 24px;justify-content:space-between}
+
+@media (max-width:1040px){.ledger{grid-template-columns:repeat(3,minmax(0,1fr))}.g4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:860px){
+.hero-grid,.grid{grid-template-columns:minmax(0,1fr)}
+.odo{justify-self:start;justify-items:start;text-align:left}
+}
+@media (max-width:600px){
+.ledger{grid-template-columns:repeat(2,minmax(0,1fr))}
+.chain li{padding-right:8px}
+.chain h4{font-size:1.15rem}
+.chain .ver{font-size:.95rem}
+.hb li{grid-template-columns:minmax(0,1fr) auto}
+.hb .l{grid-column:1/-1}
+.bb{--nw:7.2rem}
+.bb.lots li{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.bb.lots .nm{grid-column:1/-1;padding:2px 0 4px}
+.bb.lots .na{grid-column:1/-1;padding-left:0}
+.prs li{grid-template-columns:3.4rem minmax(0,1fr)}
+.prs .ch{grid-column:2;text-align:left}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div id="tip" class="tip" role="status" aria-live="polite" hidden></div>
+
+<header class="hero wrap">
+<p class="kicker"><span data-v="repo"></span><span>origin/dev <span data-v="head"></span></span><span>relevé le <span data-v="releve"></span> (heure de Paris)</span></p>
+<div class="hero-grid">
+<div>
+<h1>Redface 2 <em>au compteur</em></h1>
+<p class="hero-lede">Redface 2 est un client Android open source (<span data-v="license"></span>) pour le forum HFR, forum.hardware.fr. Du premier commit, le <b data-v="firstCommitL"></b>, au dernier build dev, le <b data-v="lastBuildL"></b> : <b data-v="spanDays"></b> jours, <b data-v="commitsTotal"></b> commits et <b data-v="ghCount"></b> builds publiés sur GitHub.</p>
+</div>
+<div class="odo">
+<span class="odo-top">versionCode</span>
+<div class="odo-digits" id="odo" role="img"></div>
+<p class="odo-cap">Numéro du dernier build : <span class="mono" data-v="devVer"></span> sur le canal dev, tag <span class="mono" data-v="lastTag"></span>.</p>
+</div>
+</div>
+<ol class="chain" aria-label="Chaîne de release">
+<li style="--c:var(--s1)"><span class="dot"></span><h4>dev</h4><span class="track">Play : internal · F-Droid .dev</span><span class="ver" data-v="devVer"></span><span class="meta" data-v="devMeta"></span></li>
+<li style="--c:var(--s2)"><span class="dot"></span><h4>bêta</h4><span class="track">Play : open · F-Droid .beta</span><span class="ver" data-v="betaVer"></span><span class="meta" data-v="betaMeta"></span><span class="note" data-v="betaPending"></span></li>
+<li class="prod"><span class="dot"></span><h4>production</h4><span class="track">Play : production</span><span class="ver">–</span><span class="meta" data-v="prodMeta"></span></li>
+</ol>
+<dl class="ledger">
+<div><span class="k">kotlin</span><dd data-v="ktTotal"></dd><dt>lignes de Kotlin</dt><span class="s" data-v="ktSplit"></span></div>
+<div><span class="k">@Test</span><dd data-v="testMethods"></dd><dt>tests annotés</dt><span class="s" data-v="testSub"></span></div>
+<div><span class="k">git</span><dd data-v="commitsTotal"></dd><dt>commits sur dev</dt><span class="s" data-v="commitsSub"></span></div>
+<div><span class="k">pull requests</span><dd data-v="prMerged"></dd><dt>PR mergées</dt><span class="s" data-v="prSub"></span></div>
+<div><span class="k">issues</span><dd data-v="issuesTotal"></dd><dt>issues créées</dt><span class="s" data-v="issuesSub"></span></div>
+<div><span class="k">Co-Authored-By</span><dd data-v="llmPct"></dd><dt>des commits co-signés par un LLM</dt><span class="s" data-v="llmSub"></span></div>
+</dl>
+</header>
+
+<nav class="rail" aria-label="Sections">
+<ul class="wrap">
+<li><a href="#versions">Versions</a></li>
+<li><a href="#code">Code</a></li>
+<li><a href="#specs">Specs</a></li>
+<li><a href="#activite">Activité</a></li>
+<li><a href="#pr">PR</a></li>
+<li><a href="#issues">Issues</a></li>
+<li><a href="#llm">LLM</a></li>
+<li><a href="#intervenants">Intervenants</a></li>
+<li><a href="#ci">CI</a></li>
+<li><a href="#depot">Dépôt</a></li>
+<li><a href="#editeur">Éditeur</a></li>
+<li><a href="#methode">Méthode</a></li>
+</ul>
+</nav>
+
+<main class="wrap">
+
+<section class="sec" id="versions" aria-labelledby="h-versions">
+<div class="sec-head"><h2 id="h-versions">Versions</h2><p class="src"><span>app/CHANGELOG.md</span><span>tags app-vN</span><span>releases GitHub</span><span>dépôt F-Droid</span></p></div>
+<p class="lede">Chaque build reçoit un versionCode unique, qu'il parte en dev, en bêta ou nulle part. Jusqu'au <b data-v="firstBetaDateL"></b>, les builds passaient par une piste fermée ; depuis <span class="mono" data-v="firstBetaVer"></span> (build <span data-v="firstBetaCode"></span>), deux canaux tournent en parallèle : dev en continu, bêta par promotions. Le CHANGELOG de l'app compte <b data-v="clTotal"></b> entrées.</p>
+<div class="grid">
+<figure class="fig panel span2">
+<div class="fig-head">
+<div><h3>Le train des versions</h3><p class="sub">Un point par build, d'après le CHANGELOG et les tags. Survolez un point pour sa version ; cliquez un canal pour l'isoler.</p></div>
+<div class="seg" role="group" aria-label="Axe vertical" id="vmode"><button type="button" aria-pressed="true" data-m="code">versionCode</button><button type="button" aria-pressed="false" data-m="name">versionName</button></div>
+</div>
+<div class="legend" id="lg-versions" role="group" aria-label="Canaux"></div>
+<div class="chart" id="c-versions"></div>
+<details class="data" data-t="versions"><summary>Données : tous les builds</summary></details>
+</figure>
+<figure class="fig span2">
+<div class="fig-head"><div><h3>Les bêtas publiées</h3><p class="sub"><span data-v="betaCount"></span> builds bêta taggés, de <span class="mono" data-v="firstBetaVer"></span> à <span class="mono" data-v="betaVer"></span>, avec les téléchargements (↓) de leurs assets GitHub. <span class="mono" data-v="pendingVer"></span> figure au CHANGELOG sans tag : elle est en préparation.</p></div></div>
+<ul class="tickets" id="tickets"></ul>
+</figure>
+<figure class="fig">
+<div class="fig-head">
+<div><h3>Releases GitHub</h3><p class="sub"><b data-v="ghCount"></b> releases : <span data-v="ghSplit"></span>. Comptées à la date de leur tag.</p></div>
+<div class="seg" role="group" aria-label="Pas de temps" id="rel-gran"><button type="button" aria-pressed="true" data-g="w">Semaine</button><button type="button" aria-pressed="false" data-g="m">Mois</button></div>
+</div>
+<ul class="legend" id="lg-rel"></ul>
+<div class="chart" id="c-rel"></div>
+<details class="data" data-t="c-rel"><summary>Données</summary></details>
+</figure>
+<figure class="fig">
+<div class="fig-head"><div><h3>Taille de l'APK F-Droid</h3><p class="sub">APK publiés sur le dépôt F-Droid, à la date du build, en Mo (10⁶ octets). Dev : de <b data-v="apkFirst"></b> à <b data-v="apkLast"></b>.</p></div></div>
+<ul class="legend" id="lg-apk"></ul>
+<div class="chart" id="c-apk"></div>
+<details class="data" data-t="c-apk"><summary>Données</summary></details>
+</figure>
+<div class="fig panel card">
+<h3>F-Droid</h3>
+<p class="big"><span data-v="fdTotal"></span> <small>publications</small></p>
+<div class="segbar thin" id="sb-fd" role="img"></div>
+<ul class="legend" id="lg-fd"></ul>
+<dl class="kv">
+<dt>Dépôt</dt><dd class="mono" data-v="fdRepo"></dd>
+<dt>Paquet dev</dt><dd><span class="mono" data-v="fdDevPkg"></span><br><span data-v="fdDevLatest"></span></dd>
+<dt>Paquet bêta</dt><dd><span class="mono" data-v="fdBetaPkg"></span><br><span data-v="fdBetaLatest"></span></dd>
+<dt>Index</dt><dd data-v="fdIndex"></dd>
+</dl>
+</div>
+<div class="fig card">
+<h3>Téléchargements</h3>
+<p class="big"><span data-v="dlTotal"></span> <small>téléchargements d'assets GitHub</small></p>
+<ul class="hb" id="hb-dl" style="--lw:9rem"></ul>
+<p class="note-p">Seuls les assets des releases GitHub sont comptés : les installations depuis Google Play et F-Droid ne sont pas connues. Release la plus téléchargée : <b data-v="dlTop"></b>.</p>
+</div>
+</div>
+</section>
+
+<section class="sec" id="code" aria-labelledby="h-code">
+<div class="sec-head"><h2 id="h-code">Code</h2><p class="src"><span>fichiers versionnés de origin/dev <span data-v="locSha"></span></span><span>scanner de lignes (voir Méthode)</span></p></div>
+<p class="lede">L'arbre compte <b data-v="filesTree"></b> fichiers versionnés, dont <b data-v="filesCounted"></b> comptés en lignes. Hors blancs et commentaires : <b data-v="locTotal"></b> lignes. Le Kotlin de test pèse <b data-v="ratio"></b> fois le Kotlin de production.</p>
+<div class="grid">
+<figure class="fig span2">
+<div class="fig-head"><div><h3>Lignes de code, semaine par semaine</h3><p class="sub">Dernier commit de chaque semaine sur la ligne dev. « Le reste » regroupe build, CI, scripts, ressources XML, schémas Room et divers.</p></div></div>
+<ul class="legend" id="lg-loc"></ul>
+<div class="chart" id="c-loc"></div>
+<details class="data" data-t="c-loc"><summary>Données</summary></details>
+</figure>
+<figure class="fig">
+<div class="fig-head"><div><h3>Composition au <span data-v="genDayL"></span></h3><p class="sub">Lignes hors blancs et commentaires, par catégorie ; nombre de fichiers sous chaque libellé.</p></div></div>
+<ul class="hb" id="hb-comp" style="--lw:11rem"></ul>
+<details class="data" data-t="comp"><summary>Données : fichiers, commentaires, blancs</summary></details>
+</figure>
+<figure class="fig">
+<div class="fig-head"><div><h3>Modules : production et tests</h3><p class="sub">Lignes de Kotlin par module Gradle. <span data-v="modNote"></span></p></div></div>
+<ul class="bb" id="bb-mods"></ul>
+</figure>
+<figure class="fig span2">
+<div class="fig-head"><div><h3>Les tests</h3><p class="sub">Relevé hebdomadaire, sauf les captures Roborazzi, suivies commit par commit depuis leur versionnement.</p></div></div>
+<div class="g4">
+<div class="fig mini"><p class="note-p">Annotations <span class="code">@Test</span></p><p class="big" data-v="testMethods"></p><div class="chart" id="c-m-test"></div></div>
+<div class="fig mini"><p class="note-p">Ratio test / production</p><p class="big" data-v="ratio"></p><div class="chart" id="c-m-ratio"></div></div>
+<div class="fig mini"><p class="note-p">Fonctions <span class="code">@Composable</span></p><p class="big" data-v="composables"></p><div class="chart" id="c-m-comp"></div></div>
+<div class="fig mini"><p class="note-p">Captures Roborazzi</p><p class="big"><span data-v="roboNow"></span> <small data-v="roboPeak"></small></p><div class="chart" id="c-m-robo"></div></div>
+</div>
+<details class="data" data-t="c-m-robo"><summary>Données : captures Roborazzi</summary></details>
+</figure>
+<figure class="fig span2">
+<div class="fig-head"><div><h3>Les dix plus gros fichiers</h3><p class="sub"><span data-v="bigTests"></span> des dix sont des tests.</p></div></div>
+<ul class="legend" id="lg-files"></ul>
+<ul class="hb lm" id="hb-files" style="--lw:22rem"></ul>
+</figure>
+</div>
+</section>
+
+<section class="sec" id="specs" aria-labelledby="h-specs">
+<div class="sec-head"><h2 id="h-specs">Specs et documentation</h2><p class="src"><span>docs/specs</span><span>docs/adr</span><span>CHANGELOG.md racine</span><span>ForumHFR/artifacts</span></p></div>
+<p class="lede">Les specs vivent dans le dépôt (<b data-v="specsN"></b> specs, <b data-v="adrN"></b> ADR) et suivent leur propre numéro de version : <b data-v="specsLogN"></b> versions au CHANGELOG racine, de <span class="mono" data-v="specsFirst"></span> (<span data-v="specsFirstD"></span>) à <span class="mono" data-v="specsLast"></span> (<span data-v="specsLastD"></span>). La spec de l'éditeur est publiée à part.</p>
+<div class="grid">
+<div class="fig">
+<dl class="stats">
+<div><dt>specs</dt><dd data-v="specsN"></dd></div>
+<div><dt>ADR (décisions d'architecture)</dt><dd data-v="adrN"></dd></div>
+<div><dt>guides</dt><dd data-v="guidesN"></dd></div>
+<div><dt>skills d'agents</dt><dd data-v="skillsN"></dd></div>
+<div><dt>fichiers Markdown</dt><dd data-v="mdN"></dd></div>
+<div><dt>lignes de specs et ADR</dt><dd data-v="specsLoc"></dd></div>
+<div><dt>lignes de docs hors specs</dt><dd data-v="docsLoc"></dd></div>
+<div><dt>versions des specs</dt><dd data-v="specsLogN"></dd></div>
+</dl>
+<figure class="fig" style="margin-top:22px">
+<div class="fig-head"><div><h3>Specs et docs, semaine par semaine</h3><p class="sub">Lignes non vides des fichiers Markdown.</p></div></div>
+<ul class="legend" id="lg-docs"></ul>
+<div class="chart" id="c-docs"></div>
+</figure>
+</div>
+<div class="fig panel card">
+<h3>Spec de l'éditeur</h3>
+<p class="note-p">Publiée sur ForumHFR/artifacts, version courante <span class="mono" data-v="edVer"></span>.</p>
+<dl class="stats">
+<div><dt>exigences ED</dt><dd data-v="edReq"></dd></div>
+<div><dt>mots</dt><dd data-v="edWords"></dd></div>
+<div><dt>lignes de texte</dt><dd data-v="edLines"></dd></div>
+<div><dt>versions archivées</dt><dd data-v="edArch"></dd></div>
+<div><dt>commits</dt><dd data-v="edCommits"></dd></div>
+<div><dt>HTML</dt><dd data-v="edHtml"></dd></div>
+</dl>
+<p class="note-p">Premier commit le <b data-v="edFirst"></b>, dernier le <b data-v="edLast"></b>.</p>
+<a class="btn" id="ed-spec-link" href="https://forumhfr.github.io/artifacts/editeur-spec/">Lire la spec de l'éditeur</a>
+</div>
+</div>
+</section>
+
+<section class="sec" id="activite" aria-labelledby="h-activite">
+<div class="sec-head"><h2 id="h-activite">Activité</h2><p class="src"><span>git log origin/dev</span><span>date d'auteur, heure de Paris</span></p></div>
+<p class="lede"><b data-v="commitsTotal"></b> commits en <b data-v="spanDays"></b> jours, dont <b data-v="merges"></b> merges. <b data-v="activeDays"></b> jours ont reçu au moins un commit (<span data-v="activePct"></span>). Le jour le plus chargé est le <b data-v="busiestDay"></b>.</p>
+<div class="grid">
+<figure class="fig span2">
+<div class="fig-head">
+<div><h3>Commits</h3><p class="sub">Par semaine ISO (lundi à dimanche) ou par mois.</p></div>
+<div class="seg" role="group" aria-label="Pas de temps" id="com-gran"><button type="button" aria-pressed="true" data-g="w">Semaine</button><button type="button" aria-pressed="false" data-g="m">Mois</button></div>
+</div>
+<div class="chart" id="c-commits"></div>
+<details class="data" data-t="c-commits"><summary>Données</summary></details>
+</figure>
+<figure class="fig">
+<div class="fig-head"><div><h3>Heure du commit</h3><p class="sub">Pic à <b data-v="peakHour"></b>.</p></div></div>
+<div class="chart" id="c-hour"></div>
+<details class="data" data-t="c-hour"><summary>Données</summary></details>
+</figure>
+<figure class="fig">
+<div class="fig-head"><div><h3>Jour de la semaine</h3><p class="sub">Pic le <b data-v="peakDay"></b>.</p></div></div>
+<div class="chart" id="c-wday"></div>
+<details class="data" data-t="c-wday"><summary>Données</summary></details>
+</figure>
+<figure class="fig">
+<div class="fig-head"><div><h3>Type de commit</h3><p class="sub">Préfixe Conventional Commits du titre.</p></div></div>
+<ul class="hb lm" id="hb-types" style="--lw:6rem"></ul>
+</figure>
+<figure class="fig">
+<div class="fig-head"><div><h3>Auteurs des commits</h3><p class="sub">Login GitHub rattaché à chaque commit.</p></div></div>
+<ul class="hb lm" id="hb-cauth" style="--lw:9rem"></ul>
+<p class="note-p"><span data-v="firstParent"></span> commits sur la ligne first-parent stricte de dev.</p>
+</figure>
+</div>
+</section>
+
+<section class="sec" id="pr" aria-labelledby="h-pr">
+<div class="sec-head"><h2 id="h-pr">Pull requests</h2><p class="src"><span>API GitHub</span><span>toutes les PR de ForumHFR/redface2</span></p></div>
+<p class="lede"><b data-v="prTotal"></b> PR : <span data-v="prStates"></span>. La moitié des PR est mergée moins de <b data-v="prMed"></b> après son ouverture. Hors promotions et resynchronisations, les PR mergées ajoutent <b data-v="prAdd"></b> lignes et en retirent <b data-v="prDel"></b>.</p>
+<div class="grid">
+<figure class="fig span2">
+<div class="fig-head"><div><h3>PR mergées par semaine</h3><p class="sub">Semaine la plus chargée : <b data-v="prPeakWeek"></b>.</p></div></div>
+<div class="chart" id="c-prw"></div>
+<details class="data" data-t="c-prw"><summary>Données</summary></details>
+</figure>
+<figure class="fig">
+<div class="fig-head"><div><h3>Délai d'ouverture à merge</h3><p class="sub">Échelle logarithmique. La moyenne, tirée par quelques PR longues, est de <b data-v="prMean"></b>.</p></div></div>
+<div class="chart" id="c-delay"></div>
+</figure>
+<figure class="fig">
+<div class="fig-head"><div><h3>Taille des PR</h3><p class="sub">Lignes modifiées (ajouts + suppressions) de <span data-v="sizeN"></span> PR mergées hors promotions. Commits par PR : médiane <span data-v="cpprMed"></span>, maximum <span data-v="cpprMax"></span>.</p></div></div>
+<div class="segbar" id="sb-size" role="img"></div>
+<ul class="legend" id="lg-size"></ul>
+<p class="note-p" style="margin-top:8px">Branche cible : <span data-v="baseSplit"></span>. <span data-v="promoNote"></span></p>
+<div class="segbar thin" id="sb-base" role="img"></div>
+<ul class="legend" id="lg-base"></ul>
+</figure>
+<figure class="fig span2">
+<div class="fig-head"><div><h3>Churn mensuel</h3><p class="sub">Lignes ajoutées (au-dessus de l'axe) et supprimées (en dessous) par les PR mergées, hors promotions et resynchronisations.</p></div></div>
+<ul class="legend" id="lg-churn"></ul>
+<div class="chart" id="c-churn"></div>
+<details class="data" data-t="c-churn"><summary>Données</summary></details>
+</figure>
+<figure class="fig">
+<div class="fig-head"><div><h3>Les plus grosses PR</h3><p class="sub">Hors promotions, par lignes ajoutées + supprimées.</p></div></div>
+<ol class="prs" id="prs-big"></ol>
+</figure>
+<figure class="fig">
+<div class="fig-head"><div><h3>Les plus grosses promotions</h3><p class="sub">PR de dev vers main, qui recomptent des PR déjà mergées.</p></div></div>
+<ol class="prs" id="prs-promo"></ol>
+</figure>
+</div>
+</section>
+
+<section class="sec" id="issues" aria-labelledby="h-issues">
+<div class="sec-head"><h2 id="h-issues">Issues</h2><p class="src"><span>API GitHub</span><span>issues hors PR</span></p></div>
+<p class="lede"><b data-v="issuesTotal"></b> issues : <span data-v="issueStates"></span>. <b data-v="issuesMs"></b> sont rattachées à un milestone. Délai médian de fermeture : <b data-v="closeMed"></b>.</p>
+<div class="grid">
+<figure class="fig span2">
+<div class="fig-head"><div><h3>Ouvertes et fermées, semaine par semaine</h3><p class="sub">Ouvertures au-dessus de l'axe, fermetures en dessous.</p></div></div>
+<ul class="legend" id="lg-iw"></ul>
+<div class="chart" id="c-iw"></div>
+<details class="data" data-t="c-iw"><summary>Données</summary></details>
+</figure>
+<figure class="fig">
+<div class="fig-head"><div><h3>Backlog</h3><p class="sub">Issues ouvertes en fin de semaine. Aujourd'hui : <b data-v="issuesOpen"></b>.</p></div></div>
+<div class="chart" id="c-backlog"></div>
+</figure>
+<div class="fig">
+<div class="fig-head"><div><h3>Délai de fermeture</h3><p class="sub">De la création à la fermeture.</p></div></div>
+<dl class="stats">
+<div><dt>médiane, toutes issues fermées</dt><dd data-v="closeMed"></dd></div>
+<div><dt>90e centile</dt><dd data-v="closeP90"></dd></div>
+<div><dt>moyenne</dt><dd data-v="closeMean"></dd></div>
+<div><dt>médiane, issues terminées</dt><dd data-v="closeMedC"></dd></div>
+<div><dt>90e centile, terminées</dt><dd data-v="closeP90C"></dd></div>
+<div><dt>commentaires d'issues</dt><dd data-v="issueComments"></dd></div>
+</dl>
+</div>
+<figure class="fig">
+<div class="fig-head"><div><h3>Labels</h3><p class="sub">Les <span data-v="labelsShown"></span> labels les plus posés, sur <span data-v="labelsTotal"></span>.</p></div></div>
+<ul class="legend" id="lg-labels"></ul>
+<ul class="hb lm" id="hb-labels" style="--lw:9.5rem"></ul>
+<details class="data" data-t="labels"><summary>Données : tous les labels</summary></details>
+</figure>
+<figure class="fig">
+<div class="fig-head"><div><h3>Milestones</h3><p class="sub"><span data-v="msN"></span> milestones, dont <span data-v="msOpen"></span> encore ouverts ; <span data-v="msItems"></span> work items rattachés (issues et PR).</p></div></div>
+<ul class="legend" id="lg-ms"></ul>
+<ul class="ms" id="ms"></ul>
+</figure>
+</div>
+</section>
+
+<section class="sec" id="llm" aria-labelledby="h-llm">
+<div class="sec-head"><h2 id="h-llm">LLM</h2><p class="src"><span>trailers Co-Authored-By</span><span>lignes « Action par »</span><span>corps de PR</span></p></div>
+<p class="lede"><b data-v="llmCommits"></b> commits sur <b data-v="commitsTotal"></b> (<span data-v="llmPct1"></span>) portent au moins un trailer Co-Authored-By d'un modèle de langage, et <span data-v="llmPctX"></span> hors merges et bots. Un commit peut citer plusieurs modèles. <span data-v="llmModels"></span> modèles distincts apparaissent dans les trailers.</p>
+<div class="grid">
+<figure class="fig span2">
+<div class="fig-head"><div><h3>Qui a co-signé, et quand</h3><p class="sub">Chaque barre va du premier au dernier commit portant le trailer du modèle ; le nombre donne ses commits distincts.</p></div></div>
+<ul class="legend" id="lg-lanes"></ul>
+<div class="chart" id="c-lanes"></div>
+<details class="data" data-t="lanes"><summary>Données</summary></details>
+</figure>
+<figure class="fig">
+<div class="fig-head"><div><h3>Trailers par mois</h3><p class="sub">Commits distincts par modèle, regroupés par nom court.</p></div></div>
+<ul class="legend" id="lg-llmm"></ul>
+<div class="chart" id="c-llmm"></div>
+<details class="data" data-t="c-llmm"><summary>Données</summary></details>
+</figure>
+<figure class="fig">
+<div class="fig-head"><div><h3>Familles</h3><p class="sub">Commits distincts portant au moins un trailer de la famille.</p></div></div>
+<div class="segbar" id="sb-fam" role="img"></div>
+<ul class="legend" id="lg-fam"></ul>
+<p class="note-p" style="margin-top:10px" data-v="llmMarkers"></p>
+</figure>
+<figure class="fig">
+<div class="fig-head"><div><h3>« Action par »</h3><p class="sub"><span data-v="apTexts"></span> textes d'issues, de PR et de revues portent une ligne « Action par &lt;modèle&gt; ». Un texte compte une fois par modèle.</p></div></div>
+<ul class="hb" id="hb-ap" style="--lw:10.5rem"></ul>
+</figure>
+<figure class="fig">
+<div class="fig-head"><div><h3>Rôles dans les PR</h3><p class="sub">Qui code, qui fait la revue distincte (gate), d'après le corps des PR. Convention récente et irrégulière : seules <b data-v="rolesN"></b> PR la suivent.</p></div></div>
+<ul class="bb" id="bb-roles"></ul>
+</figure>
+</div>
+</section>
+
+<section class="sec" id="intervenants" aria-labelledby="h-intervenants">
+<div class="sec-head"><h2 id="h-intervenants">Intervenants</h2><p class="src"><span>logins GitHub uniquement</span><span>aucun nom ni e-mail</span></p></div>
+<p class="lede"><b data-v="peopleN"></b> comptes ont laissé une trace sur le dépôt : <span data-v="peopleSplit"></span>. Le mainteneur, XaaT (XaTriX sur le forum), signe <b data-v="xaatCommits"></b> commits sur <span data-v="commitsTotal"></span>. Les <span data-v="othersN"></span> autres humains totalisent <span data-v="othersSum"></span>. <span data-v="maskedNote"></span></p>
+<div class="grid">
+<figure class="fig">
+<div class="fig-head"><div><h3>Humains, par date de premier passage</h3><p class="sub">Cumul des comptes humains.</p></div></div>
+<div class="chart" id="c-people"></div>
+</figure>
+<figure class="fig">
+<div class="fig-head"><div><h3>Bots</h3></div></div>
+<div class="tbl full"><table id="t-bots"></table></div>
+</figure>
+<figure class="fig span2">
+<div class="fig-head"><div><h3>Contributions des humains</h3><p class="sub">Commits, PR et issues ouvertes, commentaires (issues et PR), revues.</p></div></div>
+<div class="tbl full"><table id="t-people"></table></div>
+</figure>
+</div>
+</section>
+
+<section class="sec" id="ci" aria-labelledby="h-ci">
+<div class="sec-head"><h2 id="h-ci">Intégration continue</h2><p class="src"><span>GitHub Actions</span><span>tous les workflows</span></p></div>
+<p class="lede"><b data-v="ciRuns"></b> runs depuis le <span data-v="ciFirst"></span>. Taux de succès : <b data-v="ciRate"></b> (succès sur succès + échecs, runs annulés exclus). Durée médiane d'un run : <b data-v="ciMed"></b>, <span data-v="ciP90"></span> au 90e centile, <span data-v="ciHours"></span> cumulées. Ces durées sont approximatives.</p>
+<div class="grid">
+<figure class="fig">
+<div class="fig-head"><div><h3>Runs par mois</h3><p class="sub">Par conclusion.</p></div></div>
+<ul class="legend" id="lg-ci"></ul>
+<div class="chart" id="c-ci"></div>
+<details class="data" data-t="c-ci"><summary>Données</summary></details>
+</figure>
+<figure class="fig">
+<div class="fig-head"><div><h3>Workflows</h3><p class="sub">Durée = fin − démarrage du run, attente des jobs comprise.</p></div></div>
+<div class="tbl full"><table id="t-wf"></table></div>
+</figure>
+</div>
+</section>
+
+<section class="sec" id="depot" aria-labelledby="h-depot">
+<div class="sec-head"><h2 id="h-depot">Dépôt GitHub</h2><p class="src"><span>API GitHub</span><span>ForumHFR/redface2</span></p></div>
+<div class="grid">
+<figure class="fig">
+<div class="fig-head"><div><h3>Étoiles et forks</h3><p class="sub"><b data-v="stars"></b> étoiles, <b data-v="forks"></b> forks, <span data-v="watchers"></span> abonné au dépôt.</p></div></div>
+<ul class="legend" id="lg-stars"></ul>
+<div class="chart" id="c-stars"></div>
+</figure>
+<div class="fig card">
+<dl class="kv">
+<dt>Créé le</dt><dd data-v="created"></dd>
+<dt>Dernier push</dt><dd data-v="pushed"></dd>
+<dt>Licence</dt><dd data-v="license"></dd>
+<dt>Branche par défaut</dt><dd class="mono" data-v="defBranch"></dd>
+<dt>Taille (API)</dt><dd data-v="sizeKb"></dd>
+<dt>Issues ouvertes</dt><dd data-v="issuesOpen"></dd>
+</dl>
+<div><p class="note-p" style="margin-bottom:6px">Sujets</p><ul class="chips" id="topics"></ul></div>
+<div><p class="note-p" style="margin-bottom:6px">Langages, en octets (détection GitHub)</p><div class="segbar thin" id="sb-lang" role="img"></div><ul class="legend" id="lg-lang" style="margin-top:8px"></ul></div>
+</div>
+</div>
+</section>
+
+<section class="sec" id="editeur" aria-labelledby="h-editeur">
+<div class="sec-head"><h2 id="h-editeur">Refonte de l'éditeur</h2><p class="src"><span>issue #<span data-v="edIssue"></span></span><span>suivi publié sur ForumHFR/artifacts</span></p></div>
+<p class="lede">La refonte de l'éditeur (<a id="ed-issue-link" href="https://github.com/ForumHFR/redface2/issues">#<span data-v="edIssue"></span></a>, ouverte le <span data-v="edOpened"></span>) est découpée en <b data-v="edLots"></b> lots au corps de phase : <span data-v="edLotStates"></span>, pour <b data-v="edAdd"></b> / <b data-v="edDel"></b> lignes. S'y ajoutent <b data-v="edAdj"></b> ajustements de fin de phase : <span data-v="edAdjStates"></span>.</p>
+<div class="grid">
+<figure class="fig span2">
+<div class="fig-head"><div><h3>Les lots</h3><p class="sub">Lignes supprimées à gauche, ajoutées à droite. États et tailles recopiés du suivi publié ; les issues des lots restent souvent ouvertes après livraison.</p></div></div>
+<ul class="legend" id="lg-lots"></ul>
+<ul class="bb lots" id="lots" style="--nw:15rem"></ul>
+<p class="note-p" data-v="edNotes"></p>
+<a class="btn" href="https://forumhfr.github.io/artifacts/editeur-suivi/">Ouvrir le suivi de la refonte</a>
+</figure>
+</div>
+</section>
+
+<section class="sec" id="methode" aria-labelledby="h-methode">
+<div class="sec-head"><h2 id="h-methode">Méthode et sources</h2><p class="src"><span data-v="collectLine"></span></p></div>
+<p class="lede">Tous les chiffres de cette page sont calculés dans la page à partir d'un seul relevé (<span class="mono">stats.json</span>), daté du <span data-v="releve"></span>, sur origin/dev <span class="mono" data-v="head"></span>. Règles de comptage, telles que notées par le script de collecte :</p>
+<ol class="methods" id="methods"></ol>
+<details style="margin-top:18px;font-size:var(--fs-sm)"><summary>Règles de comptage des lignes (loc.rules)</summary><p class="note-p" id="rules" style="margin-top:10px;max-width:none"></p></details>
+</section>
+</main>
+
+<footer><div class="wrap"><span>Redface 2 au compteur · <span data-v="repo"></span> · origin/dev <span data-v="head"></span></span><a href="https://github.com/ForumHFR/redface2">github.com/ForumHFR/redface2</a></div></footer>
+
+<script type="application/json" id="data">{"base":1774994400,"meta":{"generated_at":"2026-11-14T13:03:52+01:00","dev_head":"9aafd601","repo":"ForumHFR/redface2","created_at":"2026-04-11T20:14:05+02:00","pushed_at":"2026-11-14T12:37:59+01:00","stars":11,"forks":2,"watchers":0,"size_kb":155491,"languages":{"Kotlin":10323332,"HTML":5888364,"Shell":95019,"Dockerfile":356},"topics":["android","forum-client","hardware-fr","jetpack-compose","kotlin","material3"],"license":"GPL-3.0","default_branch":"main"},"stars":[[25200,1],[32400,2],[36720,3],[68400,4],[77040,5],[111600,6],[126000,7],[127440,8],[138960,9],[186480,10],[300300,11]],"forks":[[159120,1],[176400,2]],"loc":{"sha":"9aafd601","rules":"Arbre git de origin/dev (fichiers versionnés uniquement, liens symboliques ignorés ; tmp/ est hors git). Lignes classées code / commentaire / blanc. Kotlin, .kts, Java : commentaires //, /* */ et KDoc exclus du code (scanner qui ignore les // et /* dans les chaînes, y compris les \"\"\" brutes) ; une ligne mêlant code et commentaire compte en code. XML/HTML : \u003c!-- --> en commentaire. YAML, shell, Python, TOML, properties, ProGuard : lignes commençant par # en commentaire. Markdown, JSON, texte : toute ligne non vide compte en code. Binaires (PNG, keystore, jar…) : comptés en fichiers, pas en lignes. Wrapper Gradle généré (gradlew, gradlew.bat, gradle/wrapper) exclu. Catégories : kotlin_main = .kt/.java hors build-logic dans src/main et autres source sets non-test (debug…) ; kotlin_test = src/test*, src/testFixtures ; kotlin_android_test = src/androidTest ; build = *.gradle.kts, build-logic/ (y compris son Kotlin), gradle/*.toml, gradle.properties, ProGuard, config/ ; resources_xml = XML sous src/*/res et manifestes ; specs = docs/specs + docs/adr ; docs = Markdown hors specs (README, AGENTS.md, guides, CHANGELOG, drafts/, skills d'agents) ; ci = YAML sous .github/ ; scripts = .sh/.py ; test_fixtures = fichiers non Kotlin sous src/test*/ (HTML/JSON/TXT capturés sur HFR) hors captures Roborazzi ; room_schemas = schémas JSON exportés par Room (générés) ; other = le reste (Dockerfile, devcontainer, docs/*.html…). Captures Roborazzi = PNG sous src/test*/screenshots/. Tests = annotations @Test dans le Kotlin de test.","tl_method":"Un point par semaine ISO : dernier commit de la ligne dev (first-parent, en suivant au merge le parent le plus récent) dont la date de commit (Paris) précède le lundi suivant.","robo_note":"PNG de référence sous src/test*/screenshots/, versionnés depuis #1575 (09/11) ; un point par commit de la ligne dev qui touche ces fichiers et change leur nombre. Avant, les captures n'étaient pas versionnées (0).","cur":{"kotlin_main":{"files":707,"code":79378,"comment":26526,"blank":7293},"kotlin_test":{"files":629,"code":156462,"comment":8840,"blank":17433},"kotlin_android_test":{"files":1,"code":86,"comment":11,"blank":8},"build":{"files":43,"code":1194,"comment":315,"blank":178},"resources_xml":{"files":134,"code":2557,"comment":423,"blank":81},"docs":{"files":46,"code":8780,"comment":0,"blank":3163},"specs":{"files":30,"code":7139,"comment":0,"blank":1896},"ci":{"files":3,"code":636,"comment":147,"blank":34},"scripts":{"files":12,"code":3731,"comment":252,"blank":396},"test_fixtures":{"files":342,"code":31551,"comment":2441,"blank":746},"room_schemas":{"files":22,"code":11216,"comment":0,"blank":0},"other":{"files":10,"code":967,"comment":2,"blank":166}},"tot":{"code":303697,"comment":38957,"blank":31394,"files":1979,"files_total_in_tree":2843,"binary_files":27,"roborazzi_png":829,"symlinks":4,"test_methods":6901,"composable_functions":569,"kotlin_test_to_main_ratio":1.97},"mods":[["core:ui",16552,35245,356],["core:data",9931,19027,161],["feature:topic",8899,20036,85],["feature:messages",7633,19607,85],["feature:editor",4862,20147,66],["feature:settings",8161,7639,74],["feature:flags",4960,5276,39],["core:parser",3245,6281,80],["core:domain",3674,5701,142],["app",3569,5068,57],["core:network",1911,4632,47],["feature:forum",1633,2216,20],["core:database",1204,2429,32],["core:model",1171,1050,77],["feature:profile",888,1323,8],["feature:search",788,690,4],["feature:auth",297,181,4],["build-logic",214,29,3],["core:extension",0,0,0]],"tl":{"cols":["kotlin_main","kotlin_test","kotlin_android_test","build","resources_xml","docs","specs","ci","scripts","test_fixtures","room_schemas","other","test_methods","composable_functions"],"rows":[[17152,"2026-04-06","8f759788",0,0,0,0,0,2282,0,0,0,0,0,209,0,0],[27125,"2026-04-13","29969ff6",0,0,0,346,27,2639,2640,0,0,0,0,610,0,0],[37302,"2026-04-20","861edbdd",2837,925,0,625,156,3179,2875,110,47,2093,175,1460,41,24],[47501,"2026-04-27","948a1b4e",6758,6159,0,707,209,3561,3150,110,47,5701,811,920,266,49],[57389,"2026-05-04","1832ed17",7036,6673,0,744,212,3892,3153,320,47,6537,811,930,295,54],[67576,"2026-05-11","6a9c3649",7174,6875,0,753,215,4084,3252,320,47,11702,811,934,300,57],[77226,"2026-05-18","0978f7fb",13349,12955,0,791,318,4678,3506,344,47,17108,1464,935,608,83],[87663,"2026-05-25","492d2195",15625,15955,0,845,358,4834,3641,344,47,20493,2138,939,790,102],[97884,"2026-06-01","57f66180",18035,18174,0,867,402,5152,3738,474,47,21123,2138,939,939,120],[107995,"2026-06-08","2992c138",28696,28053,0,883,710,5290,3908,477,47,24343,4695,939,1500,174],[118055,"2026-06-15","21bfdbad",34519,34057,0,883,1056,5432,4115,503,47,24568,5236,939,1840,226],[128116,"2026-06-22","2c0b23fa",37276,35696,0,916,1441,6269,4247,545,133,25749,5236,942,1974,266],[138146,"2026-06-29","6b993329",39742,38142,0,916,1493,6391,4265,545,137,26648,5236,936,2113,279],[148280,"2026-07-06","dd84dd10",41257,41215,0,917,1524,6474,4265,545,137,27005,5782,932,2268,290],[157870,"2026-07-13","164b6da5",42116,43320,0,917,1525,6831,4265,545,137,27035,5782,932,2350,291],[168468,"2026-07-20","f0ade3e5",43286,48828,86,959,1546,6928,4265,545,137,27176,5782,932,2600,297],[177091,"2026-07-27","9fafe209",43335,49521,86,959,1546,7029,4265,545,137,27195,5782,938,2644,297],[183921,"2026-08-03","0e9c7e3e",44661,51013,86,959,1573,7086,4265,545,137,27195,6340,936,2716,302],[198681,"2026-08-10","3d8f6504",46360,56710,86,971,1605,7437,4513,561,963,28009,6340,936,2898,309],[208567,"2026-08-17","ea272fe6",47180,57922,86,977,1615,7448,4580,561,963,28258,6340,938,2936,315],[218830,"2026-08-24","901181c1",51317,66396,86,992,1704,7533,5070,561,1936,28661,7898,932,3270,331],[228853,"2026-08-31","ad98ae78",59001,78806,86,1037,2037,7948,5433,595,2017,30331,8688,935,3870,415],[238760,"2026-09-07","e4b05d40",59854,81524,86,1047,2059,8026,6134,604,2017,30332,8688,941,3985,417],[249095,"2026-09-14","797e02d8",61095,85312,86,1047,2066,8116,6134,604,2017,30332,8688,935,4132,426],[251538,"2026-09-21","efedbf3f",61095,85312,86,1047,2066,8126,6134,604,2017,30332,8688,937,4132,426],[251538,"2026-09-28","efedbf3f",61095,85312,86,1047,2066,8126,6134,604,2017,30332,8688,937,4132,426],[251538,"2026-10-05","efedbf3f",61095,85312,86,1047,2066,8126,6134,604,2017,30332,8688,937,4132,426],[283737,"2026-10-12","7bb95d03",62697,88825,86,1048,2075,8213,6142,604,2017,30332,8688,937,4259,426],[283737,"2026-10-19","7bb95d03",62697,88825,86,1048,2075,8213,6142,604,2017,30332,8688,937,4259,426],[309480,"2026-10-26","3d429409",65979,97672,86,1063,2125,8307,6937,604,2017,30734,8688,937,4646,466],[319654,"2026-11-02","21cc6746",70344,118384,86,1089,2214,8399,6965,609,2017,30890,10317,960,5448,486],[327698,"2026-11-09","9aafd601",79378,156462,86,1194,2557,8780,7139,636,3731,31551,11216,967,6901,569]]},"big":[["feature/topic/src/test/…/TopicViewModelTest.kt",8308],["feature/editor/src/test/…/PostEditorViewModelTest.kt",6071],["feature/editor/src/test/…/TopicFormViewModelTest.kt",4193],["feature/messages/src/test/…/PrivateMessageReplyViewModelTest.kt",3639],["feature/flags/src/test/…/FlagsViewModelTest.kt",3240],["feature/topic/src/main/…/TopicScreen.kt",3006],["core/data/src/test/…/DefaultFlagRepositoryTest.kt",2770],["feature/settings/src/test/…/SettingsViewModelTest.kt",2485],["feature/messages/src/test/…/PrivateMessageComposeViewModelTest.kt",2387],["app/src/main/…/RedfaceNavigation.kt",2288]],"robo":[[320277,140,"d116554e"],[321025,197,"5365cb73"],[321055,213,"bc80297e"],[321109,239,"a7e1f8c4"],[321144,467,"22620a04"],[321163,683,"1bf0f6fd"],[321999,685,"7b5ea57f"],[323217,701,"bcb18fb4"],[323232,753,"0e13228a"],[323264,849,"02eedd92"],[323288,953,"9411a789"],[323305,1033,"f6998931"],[323321,1053,"f34b7676"],[323365,1205,"df1ca01c"],[325073,1213,"2aa877f3"],[326372,1235,"a9815023"],[326445,1251,"d68615a3"],[326509,1275,"298f25fd"],[326814,1299,"7620c3f1"],[327093,1301,"b11b4907"],[327131,829,"7a9390f1"]],"docs":{"specs":13,"adr":17,"guides":13,"markdown_total":78,"agent_skills":14},"specs_log":{"count":30,"source":"CHANGELOG.md racine (versions des specs)","latest":{"version":"0.13.5","date":"2026-11-14"},"first":{"version":"0.3.0","date":"2026-04-13"}},"ed_spec":{"url":"https://forumhfr.github.io/artifacts/editeur-spec/","version":"0.7.12","archived_versions":18,"requirements_ed":109,"words":93475,"text_lines":3674,"html_bytes":680473,"first_commit":"2026-09-23T00:22:57+02:00","last_commit":"2026-11-14T06:40:36+01:00","commits":22},"ed_spec_note":"Spec de l'éditeur publiée dans ForumHFR/artifacts (HTML), comptée à part : mots et lignes non vides du texte rendu de la version courante."},"commits":{"total":1055,"first_parent":382,"merges":49,"first_date":"2026-04-11T20:22:24+02:00","active_days":131,"span_days":218,"by_hour":[55,35,31,19,8,9,12,33,27,44,34,46,61,41,42,37,57,62,53,59,51,101,71,67],"by_weekday":[121,133,99,141,132,188,241],"busiest_day":{"date":"2026-09-02","count":30},"conventional_types":{"feat":363,"fix":251,"chore":241,"docs":95,"merge":38,"build":18,"test":17,"ci":12,"refactor":8,"release":5,"autre":4,"perf":2,"revert":1},"weekly":[["2026-04-06",26],["2026-04-13",32],["2026-04-20",30],["2026-04-27",17],["2026-05-04",16],["2026-05-11",7],["2026-05-18",35],["2026-05-25",15],["2026-06-01",25],["2026-06-08",112],["2026-06-15",93],["2026-06-22",71],["2026-06-29",49],["2026-07-06",42],["2026-07-13",26],["2026-07-20",13],["2026-07-27",24],["2026-08-03",13],["2026-08-10",37],["2026-08-17",9],["2026-08-24",42],["2026-08-31",106],["2026-09-07",50],["2026-09-14",19],["2026-09-21",1],["2026-09-28",0],["2026-10-05",0],["2026-10-12",7],["2026-10-19",0],["2026-10-26",29],["2026-11-02",43],["2026-11-09",66]],"monthly":[["2026-04",91],["2026-05",87],["2026-06",305],["2026-07",128],["2026-08",136],["2026-09",163],["2026-10",32],["2026-11",113]],"by_login":[["XaaT",1030,false],["dependabot[bot]",24,true],["hygt",1,false]]},"llm":{"trailers_by_model":{"Claude Opus 4.8":188,"Claude Fable 5":170,"Claude Fable 5.1":140,"Claude Opus 5.5":123,"Claude Opus 4.7":81,"GPT-5 Codex":80,"GPT-6.1 Sol":49,"Claude Opus 4.6":31,"Claude Opus 5":25,"GPT-5.6 Sol":10,"GPT-6 Astra":9,"GPT-5.6 Codex":7,"GPT-5.4 Codex":5,"Claude Fable 5.2":5},"trailers_by_family":{"Claude":755,"GPT":158},"trailer_lines_by_model":{"Claude Opus 5.5":401,"Claude Fable 5":267,"Claude Opus 4.8":259,"Claude Fable 5.1":163,"Claude Opus 4.7":158,"GPT-6.1 Sol":130,"GPT-5 Codex":106,"Claude Opus 5":34,"Claude Opus 4.6":31,"Claude Fable 5.2":20,"GPT-5.6 Codex":16,"GPT-6 Astra":11,"GPT-5.6 Sol":10,"GPT-5.4 Codex":6},"trailers_monthly":[{"month":"2026-04","Claude Opus 4.6":31,"Claude Opus 4.7":29,"GPT-5 Codex":32,"GPT-5.4 Codex":4},{"month":"2026-05","Claude Opus 4.7":52,"GPT-5 Codex":42,"GPT-5.4 Codex":1,"Claude Opus 4.8":4},{"month":"2026-06","Claude Opus 4.8":159,"GPT-5 Codex":1,"Claude Fable 5":50},{"month":"2026-07","Claude Fable 5":117,"Claude Opus 4.8":1,"GPT-5.6 Sol":9,"Claude Opus 5":1},{"month":"2026-08","Claude Opus 5":16,"GPT-5 Codex":3,"Claude Fable 5":3,"GPT-5.6 Sol":1,"Claude Opus 4.8":20,"GPT-5.6 Codex":4},{"month":"2026-09","GPT-5.6 Codex":3,"Claude Opus 4.8":4,"Claude Fable 5.1":140,"GPT-6 Astra":9,"Claude Opus 5":8,"GPT-5 Codex":1},{"month":"2026-10","Claude Opus 5.5":26,"GPT-6.1 Sol":8},{"month":"2026-11","Claude Opus 5.5":97,"GPT-6.1 Sol":41,"GPT-5 Codex":1,"Claude Fable 5.2":5}],"commits_with_llm":805,"commits_with_llm_ratio_excl_merges_bots":0.8043,"claude_session_trailers":20,"action_par":{"Claude Opus 4.8":750,"Claude Fable 5":692,"Claude Opus 5":338,"Claude Opus 5.5":295,"Claude Opus 4.7":219,"Claude Fable 5.1":196,"GPT-5 Codex":191,"GPT-5.6 Codex":12,"Claude (modèle non précisé)":2,"GPT Codex":1,"Claude Opus 4.6":1,"GPT-5.6 Sol":1},"action_par_texts":2691,"pr_roles_by_name":{"code":{"Sol":36,"Astra":17,"Codex":10,"Fable":8,"Opus":3},"gate":{"Fable":121,"Codex":66,"Astra":29,"Sol":17}},"prs_with_roles":248,"prs_generated_with_claude_code":598,"prs_label_codex_reviewed":30,"codex_connector_reviews_comments":13,"trailers_first_last":{"Claude Opus 4.6":["Claude","2026-04-11T20:22:24+02:00","2026-04-16T19:18:18+02:00"],"Claude Opus 4.7":["Claude","2026-04-16T19:21:10+02:00","2026-05-28T18:54:43+02:00"],"GPT-5 Codex":["GPT","2026-04-18T23:35:46+02:00","2026-11-11T11:40:48+01:00"],"GPT-5.4 Codex":["GPT","2026-04-19T17:20:31+02:00","2026-05-01T13:43:24+02:00"],"Claude Opus 4.8":["Claude","2026-05-31T11:33:42+02:00","2026-09-01T20:07:47+02:00"],"Claude Fable 5":["Claude","2026-06-10T01:39:02+02:00","2026-08-01T19:41:38+02:00"],"GPT-5.6 Sol":["GPT","2026-07-13T17:00:03+02:00","2026-08-06T17:18:42+02:00"],"Claude Opus 5":["Claude","2026-07-26T23:48:02+02:00","2026-09-22T16:18:10+02:00"],"GPT-5.6 Codex":["GPT","2026-08-29T23:40:35+02:00","2026-09-01T19:42:48+02:00"],"Claude Fable 5.1":["Claude","2026-09-01T21:46:53+02:00","2026-09-20T09:36:53+02:00"],"GPT-6 Astra":["GPT","2026-09-06T21:44:21+02:00","2026-09-12T08:52:17+02:00"],"Claude Opus 5.5":["Claude","2026-10-14T12:52:41+02:00","2026-11-14T12:37:57+01:00"],"GPT-6.1 Sol":["GPT","2026-10-29T21:11:15+01:00","2026-11-14T11:27:00+01:00"],"Claude Fable 5.2":["Claude","2026-11-12T07:19:48+01:00","2026-11-14T00:12:58+01:00"]}},"prs":{"total":975,"merged":932,"open":1,"closed_unmerged":42,"additions":425195,"deletions":63134,"churn_scope":"PR mergées hors promotions dev→main et resynchronisations main→dev (elles recomptent des PR déjà mergées)","additions_all_merged":700461,"deletions_all_merged":94120,"promotions":43,"syncs":4,"by_base":{"main":175,"autre":13,"dev":787},"hours_to_merge":{"median":0.17,"p75":0.6,"p90":7.34,"mean":9.74},"hours_to_merge_excl_bots":{"median":0.17,"p75":0.51,"p90":3.25},"size_buckets":{"XS":55,"S":284,"M":271,"L":128,"XL":147},"size_buckets_scope":"PR mergées hors promotions et resynchronisations ; lignes modifiées = additions + suppressions","commits_per_merged_pr":{"median":1.0,"max":145},"largest":[{"number":1522,"title":"fix(editor): invariants d'envoi sur les cinq surfaces d'envoi (#1301-ST)","additions":8666,"deletions":1852,"merged_at":"2026-11-02T02:21:12+01:00"},{"number":1564,"title":"feat(editor): durable inline quote request in Room (#1553)","additions":6017,"deletions":1512,"merged_at":"2026-11-08T12:17:48+01:00"},{"number":159,"title":"docs(protocol): reality-check HFR write flows","additions":5935,"deletions":20,"merged_at":"2026-05-17T20:45:41+02:00"},{"number":1598,"title":"feat(messages): switch the new private message editor to the new chrome (R1b C1-C4, #1515)","additions":4415,"deletions":1121,"merged_at":"2026-11-11T11:25:07+01:00"},{"number":1615,"title":"feat(editor): immediate quotes, dotted draft offer and guarded close (#1450, PR 2/2)","additions":3428,"deletions":1869,"merged_at":"2026-11-13T08:47:28+01:00"},{"number":228,"title":"fix(topic): écriture & Citer en catégorie sans sous-catégorie (#213, #227)","additions":4792,"deletions":254,"merged_at":"2026-05-31T09:21:09+02:00"},{"number":1551,"title":"feat(editor): type d'erreur commun aux éditeurs, citation en attente et largeur des résumés (#1456, R0b PR 2)","additions":4057,"deletions":806,"merged_at":"2026-11-07T10:59:33+01:00"},{"number":1596,"title":"feat(editor): switch the topic editor to the new chrome (R1b T1-T3, #1451)","additions":3825,"deletions":886,"merged_at":"2026-11-11T10:44:15+01:00"},{"number":1614,"title":"feat(editor): durable draft offers and quote provenance (#1450, PR 1/2)","additions":4136,"deletions":183,"merged_at":"2026-11-12T23:18:10+01:00"},{"number":94,"title":"feat(flags): Phase 1B.2-1B.5 — drapeaux HFR live (parser + repository + UI + feature module)","additions":3870,"deletions":434,"merged_at":"2026-05-01T13:43:25+02:00"}],"largest_promotions":[{"number":1008,"title":"Promotion bêta 0.37.0 — gate d'agrégation (10 coupes, 128 commits)","additions":35280,"deletions":4135,"merged_at":"2026-08-01T21:36:59+02:00"},{"number":1143,"title":"chore(release): promotion bêta 0.43.0 — parité de lecture MP","additions":24506,"deletions":2509,"merged_at":"2026-08-26T00:44:31+02:00"},{"number":1508,"title":"Promotion bêta 0.65.0 — smileys favoris (#1154), configuration matérielle (#1467), refresh des drapeaux (#984)","additions":21595,"deletions":720,"merged_at":"2026-10-31T15:46:38+01:00"},{"number":1536,"title":"Promotion bêta 0.68.0 — signalement in-app (refus Play), accusés d'envoi (#1437), invariants d'envoi (#1301)","additions":15224,"deletions":2742,"merged_at":"2026-11-03T22:25:27+01:00"},{"number":1317,"title":"Promotion bêta 0.55.0 : dev → main","additions":16276,"deletions":864,"merged_at":"2026-09-07T22:48:02+02:00"}],"weekly_merged":[["2026-04-20",18],["2026-04-27",17],["2026-05-04",16],["2026-05-11",7],["2026-05-18",26],["2026-05-25",15],["2026-06-01",25],["2026-06-08",109],["2026-06-15",86],["2026-06-22",71],["2026-06-29",49],["2026-07-06",42],["2026-07-13",26],["2026-07-20",13],["2026-07-27",17],["2026-08-03",6],["2026-08-10",37],["2026-08-17",9],["2026-08-24",41],["2026-08-31",85],["2026-09-07",48],["2026-09-14",20],["2026-09-21",2],["2026-09-28",0],["2026-10-05",0],["2026-10-12",7],["2026-10-19",0],["2026-10-26",30],["2026-11-02",44],["2026-11-09",66]],"monthly_churn":{"cols":["month","prs","additions","deletions"],"rows":[["2026-04",20,11882,2131],["2026-05",72,67532,5840],["2026-06",280,86181,11945],["2026-07",128,38533,6995],["2026-08",103,47452,5591],["2026-09",137,47105,11141],["2026-10",32,23122,2247],["2026-11",113,103388,17244]]}},"issues":{"total":675,"open":212,"closed":463,"closed_by_reason":{"COMPLETED":447,"NOT_PLANNED":15,"DUPLICATE":1},"comments":1324,"days_to_close":{"median":2.48,"p90":36.24,"mean":10.29},"days_to_close_completed":{"median":2.31,"p90":32.68},"with_milestone":604,"weekly":[["2026-04-06",19,1],["2026-04-13",14,18],["2026-04-20",15,7],["2026-04-27",13,13],["2026-05-04",16,10],["2026-05-11",0,2],["2026-05-18",22,24],["2026-05-25",19,24],["2026-06-01",60,17],["2026-06-08",67,56],["2026-06-15",35,41],["2026-06-22",33,19],["2026-06-29",44,27],["2026-07-06",42,41],["2026-07-13",22,18],["2026-07-20",11,8],["2026-07-27",10,5],["2026-08-03",2,2],["2026-08-10",25,11],["2026-08-17",17,4],["2026-08-24",28,13],["2026-08-31",39,48],["2026-09-07",35,24],["2026-09-14",30,11],["2026-09-21",14,5],["2026-09-28",0,0],["2026-10-05",0,0],["2026-10-12",11,2],["2026-10-19",1,0],["2026-10-26",10,1],["2026-11-02",10,5],["2026-11-09",11,6]],"open_timeline":[["2026-04-12",18],["2026-04-19",14],["2026-04-26",22],["2026-05-03",22],["2026-05-10",28],["2026-05-17",26],["2026-05-24",24],["2026-05-31",19],["2026-06-07",62],["2026-06-14",73],["2026-06-21",67],["2026-06-28",81],["2026-07-05",98],["2026-07-12",99],["2026-07-19",103],["2026-07-26",106],["2026-08-02",111],["2026-08-09",111],["2026-08-16",125],["2026-08-23",138],["2026-08-30",153],["2026-09-06",144],["2026-09-13",155],["2026-09-20",174],["2026-09-27",183],["2026-10-04",183],["2026-10-11",183],["2026-10-18",192],["2026-10-25",193],["2026-11-01",202],["2026-11-08",207],["2026-11-14",212]],"by_label":[["enhancement",279,101],["bug",199,59],["vue:topic",130,52],["community",109,48],["design",77,30],["vue:editeur",76,36],["polish",65,0],["media",62,18],["phase-2",50,0],["vue:drapeaux",49,19],["navigation",48,15],["phase-4",48,0],["architecture",42,13],["status:ready",39,15],["vue:mp",34,23],["devops",32,13],["phase-1",25,0],["phase-2-finish",22,0],["documentation",21,9],["quick-win",19,5],["spec",17,1],["refactor",17,14],["spike",17,13],["status:blocked-repro",16,11],["phase-0",15,0],["vue:reglages",14,12],["performance",12,8],["phase-3",11,0],["storage",9,3],["meta",8,6],["status:blocked-capture",8,5],["vue:compte",6,2],["status:blocked-dependency",6,4],["status:gated",5,4],["priority",4,0],["dependencies",4,3],["fun",3,1],["naming",2,0],["question",2,1],["help wanted",1,0]]},"ms":{"cols":["number","title","state","open","closed","issues_open","issues_closed","closed_at"],"rows":[[1,"Phase 0 — Bootstrap","closed",0,25,0,25,"2026-05-10T19:43:12+02:00"],[2,"Phase 1 — Core","closed",0,27,0,27,"2026-05-10T19:43:12+02:00"],[3,"Phase 2 — Écriture","closed",0,53,0,53,"2026-06-03T15:30:11+02:00"],[4,"Phase 3 — Messages","closed",0,20,0,20,"2026-06-21T12:10:32+02:00"],[6,"Polish & UX (backlog continu)","closed",0,78,0,78,"2026-06-23T23:01:52+02:00"],[9,"Vue · Drapeaux 1","closed",0,27,0,21,"2026-06-29T13:14:04+02:00"],[10,"Vue · Topic 1","closed",0,69,0,69,"2026-08-01T11:57:36+02:00"],[11,"Vue · Éditeur 1","closed",0,18,0,18,"2026-08-01T11:36:45+02:00"],[12,"Vue · Réglages 1","open",10,9,10,9,null],[13,"Vue · Compte HFR 1","open",2,4,2,4,null],[14,"Quick wins & Material 3","closed",0,4,0,4,"2026-09-02T09:12:24+02:00"],[15,"Infra & dette","open",28,16,28,16,null],[16,"Méta / long terme","open",7,0,7,0,null],[17,"Vue · Drapeaux 2","open",17,12,17,12,null],[18,"Vue · Topic 2","open",51,45,51,45,null],[19,"Vue · Éditeur 2","open",35,16,35,16,null],[20,"Vue · MP 1","open",15,16,15,16,null],[21,"Vue · Forum 1","open",1,5,1,5,null]]},"people":{"cols":["login","is_bot","commits","prs","issues","comments","reviews","first_seen"],"rows":[["XaaT",false,1030,919,659,1647,5,"2026-04-11T20:22:24+02:00"],["dependabot[bot]",true,24,54,0,34,0,"2026-04-20T11:13:32+02:00"],["chatgpt-codex-connector[bot]",true,0,0,0,14,5,"2026-04-22T20:07:06+02:00"],["jocel1",false,0,0,5,7,0,"2026-07-02T21:46:03+02:00"],["tomtomtls",false,0,0,0,8,0,"2026-09-03T23:38:04+02:00"],["nknico-pixel",false,0,0,3,1,0,"2026-05-31T14:28:49+02:00"],["fonfano",false,0,0,0,3,0,"2026-05-24T20:43:52+02:00"],["hygt",false,1,1,0,0,0,"2026-07-21T01:05:19+02:00"],["Foul",false,0,0,1,1,0,"2026-05-23T13:12:43+02:00"],["Jungledede",false,0,0,2,0,0,"2026-05-23T18:40:58+02:00"],["bluehangel",false,0,0,1,1,0,"2026-07-02T17:58:43+02:00"],["github-code-quality[bot]",true,0,0,0,1,1,"2026-11-14T12:43:18+01:00"],["Chetan786",false,0,1,0,0,0,"2026-08-01T21:31:56+02:00"],["masqué-2",false,0,0,1,0,0,"2026-10-25T09:11:58+01:00"],["Shinseiki555",false,0,0,1,0,0,"2026-05-24T14:01:20+02:00"],["grostim",false,0,0,1,0,0,"2026-04-26T22:03:04+02:00"],["Dintr-un-lemn",false,0,0,1,0,0,"2026-04-15T17:14:28+02:00"],["MisterDams",false,0,0,0,1,0,"2026-08-11T11:49:11+02:00"],["masqué-1",false,0,0,0,0,1,"2026-05-10T00:04:38+02:00"]]},"rel":{"gh":{"count":346,"by_channel":{"pre-canaux":26,"beta":28,"dev":292},"downloads_total":2722,"downloads_by_channel":{"pre-canaux":152,"beta":356,"dev":2214},"list":{"code":[36,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,3,2,1,7,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],"downloads":[14,9,7,8,3,4,3,2,2,5,2,2,3,3,2,12,7,4,14,6,4,3,8,11,2,12,3,5,6,7,6,5,18,6,18,10,8,7,8,5,10,12,5,5,5,8,4,6,5,6,5,6,6,7,6,5,4,4,4,4,5,7,8,4,7,5,6,4,5,15,6,6,7,6,5,10,5,6,5,5,6,5,5,4,5,8,23,7,7,8,12,7,9,10,18,6,5,5,10,6,6,6,5,4,8,6,4,5,6,7,6,5,6,4,4,7,6,5,6,6,4,4,4,6,5,4,7,7,5,9,10,7,8,10,6,6,8,8,6,9,6,6,4,7,8,5,5,4,8,17,6,4,5,4,6,15,4,5,9,7,4,7,4,8,8,9,6,4,5,15,4,6,9,6,5,5,11,6,5,7,9,18,5,18,5,6,8,5,7,5,8,5,9,6,7,8,6,15,8,7,11,5,12,13,11,17,7,18,11,6,18,8,6,11,11,13,14,13,6,9,6,8,8,10,14,8,6,21,12,8,6,5,9,5,6,8,8,6,6,5,6,8,5,7,5,12,5,5,10,6,6,7,5,17,5,6,7,4,4,7,15,20,22,22,9,9,8,6,8,7,18,8,9,17,11,16,41,18,17,8,9,8,14,7,19,10,17,17,9,4,6,21,11,8,7,11,11,20,6,10,47,11,5,13,7,7,4,5,7,7,3,3,7,19,8,5,5,3,8,11,4,3,5,3,4,6,5,5,7,6,6,12,7,6,5,7,6,6,6,7,4,4,8,6,5,5]}},"cl_counts":{"beta":29,"dev":197,"closed":36,"local":16,"burnt":2},"cl_source":"app/CHANGELOG.md (versions binaires) ; le CHANGELOG.md racine suit les versions des specs","pending":[{"version":"0.70.0","channel":"beta","date":"2026-11-14"}],"fd":{"repo":"https://forumhfr.github.io/redface2-fdroid/repo/","total":324,"pre":8,"index_ts":"2026-11-14T12:34:31+01:00","dev":{"package":"fr.forumhfr.redface2.dev","count":289,"served":5,"latest":{"version":"0.69.24-dev.391","code":391,"date":"2026-11-14T12:34:28+01:00","size_bytes":43028277},"apks":{"code":[73,1,1,1,1,1,1,1,1,1,1,4,1,1,1,1,2,1,1,1,1,1,1,1,2,1,2,1,1,1,1,1,1,1,2,1,1,1,1,1,1,1,1,1,1,1,2,1,1,1,1,2,1,1,2,1,1,1,1,1,1,1,2,1,1,1,1,1,1,2,1,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,1,1,1,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,1,1,1,2,2,1,1,1,1,1,2,1,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,1,1,1,1,1,1,1,1,1,1,1,1,1,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,1,1,1,1,1,1,1,1,1,2,1,1,1,1,1,1,1,1,2,1,2,1,1,1,1,1,1,1,1,1,1,1,1,2,1,1,3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],"bytes":[30450698,16384,0,16384,0,0,0,0,103840,55556,17304,70532,0,0,116580,36632,0,156692,0,0,16384,0,0,536,125960,16748,0,-1792,0,0,4,16380,19236,0,119448,16384,0,16804,52488,17424,33168,0,67728,1192,16388,0,121212,364632,21372,0,16808,68148,34168,0,93312,0,82696,16384,18952,0,32772,17308,33664,17512,-752,34312,0,17324,0,16384,0,86696,35516,18308,16380,34972,4,18176,0,0,34316,52020,16804,0,34120,18068,1404,16856,34240,36372,69028,17620,122316,168,-564,17348,18964,0,-52,0,0,17112,18240,-4,4,16384,812,16384,-4,0,20460,18272,-800,21668,19244,5304,35680,0,0,16384,35892,-972,0,17352,33184,32768,17184,88,18492,55216,34900,17204,17256,0,35068,432,20072,23676,4,16380,4,36684,17704,452,460,16380,4,16380,4,16384,65532,33588,16388,0,144,-428,-65536,16384,0,0,246900,17692,16384,19052,0,16384,0,16384,1292,51852,0,105524,34772,16780,37024,16388,16356,32768,203476,135480,50784,70536,32768,0,54604,35944,18836,50944,0,0,0,35740,0,0,18840,0,0,546906,17312,183776,454720,0,0,17232,0,99488,1264,16380,16844,16916,436,980595,16384,100016,7536,-4,72048,71240,492,51304,0,436,15996,36084,17228,16384,37632,1548,-35468,16788,0,32768,556,-4,-16380,0,16384,0,0,-4,16388,572,16388,16384,0,34780,16784,131948,66832,16428,16788,185536,16388,492,37684,52688,34916,66872,50884,468,165860,49962,0,146176,16384,0,1845822,0,41093,49152,16384,169676,4,-16388,32768,1070637,0,17019,-16,953,202912,41836,56004,65536,49944,16380,4,16384,0]}},"beta":{"package":"fr.forumhfr.redface2.beta","count":27,"served":5,"latest":{"version":"0.68.0","code":365,"date":"2026-11-06T07:57:55+01:00","size_bytes":39335785},"apks":{"code":[84,1,1,6,9,3,9,13,6,4,9,11,18,5,32,45,5,2,10,18,15,16,11,10,3,14,5],"bytes":[30483466,176700,0,223748,173612,142708,33828,341020,524028,102312,261424,118444,383640,157260,415168,809288,122340,52712,509432,352604,1371274,1385735,37440,66112,51568,677944,361978]}}}},"vt":{"t":[36720,0,1440,0,0,1440,0,0,0,0,1440,0,0,2880,4320,1440,0,0,4320,2211,1178,1505,8810,518,281,75,38,472,875,870,2267,75,272,537,176,597,843,0,300,-300,1410,219,-189,0,1440,2880,1440,0,2861,321,980,146,1258,1410,171,761,5156,130,260,75,119,58,614,71,143,205,144,69,33,99,132,553,79,480,48,149,-10,213,613,52,71,36,26,97,27,961,388,114,0,139,21,26,25,34,52,26,33,143,32,17,744,123,124,103,51,1098,33,106,135,73,212,857,53,94,128,199,765,232,143,74,187,412,806,113,69,804,16,205,181,172,25,28,62,495,119,547,49,41,108,89,142,289,289,127,233,65,85,135,42,43,62,42,13,28,400,174,97,555,91,1114,788,114,96,5788,332,124,51,818,51,247,28,68,171,41,17,95,124,104,478,152,280,76,125,98,159,215,273,64,89,146,42,395,105,112,498,5042,148,36,107,48,403,67,130,131,73,92,2733,206,204,2436,417,3516,65,2368,716,144,87,84,191,88,297,379,466,1760,855,265,104,5486,830,173,1024,367,1457,6140,235,101,271,5776,2486,247,3190,590,253,2614,308,6146,673,5338,1087,870,90,281,264,2708,9603,516,217,2069,1811,1281,147,887,500,194,312,551,187,220,211,55,158,720,294,181,33,399,32,468,427,124,71,120,86,300,31,139,239,119,116,131,1652,139,772,255,47,193,217,469,254,66,276,41,134,321,302,852,5825,539,638,256,158,296,170,94,105,102,100,1337,1523,293,87,657,4909,91,60,425,281,512,309,2458,31468,608,108,19998,972,180,297,31,999,164,196,144,766,243,2096,1151,512,69,890,-24,3664,149,178,924,195,664,541,341,210,980,257,2855,341,796,314,303,909,467,305,186,93,209,31,183,168],"code":[11,1,1,1,1,1,1,1,1,1,1,1,1,1,6,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],"ch":"333333333033333344222222222222222222222222222322222222210000000000011100000100000000100100000000100000000000010000010001000000001000000000010000000000000000010000100000000000000000000000000000001000000000000000000000000000000000000000000001000010100000000010000000000000000010000000000000010000000000000001000000000010000000001001000000000000010000100000000000000000000000000","ver":["0.1.0-conventions","0.1.0-phase1a","0.1.0-phase1a.1","0.1.0-phase1b.0","0.1.0-phase1b.1","0.1.0-phase1b.2","0.1.0-phase1b.3","0.1.0-phase1b.4","0.1.0-phase1b.5","0.1.0-phase1b.6","0.1.0-phase1b.7","0.1.0-phase1b.8","0.1.0-phase1b.9","0.1.0-phase1b.10","0.1.0-phase1d.2","0.1.0-phase1.1","0.1.0-phase1.2","0.1.0-phase1.3","0.1.0-phase1.4","0.1.0-phase1.5","0.1.0-phase1.6","0.1.0-phase1.7","0.2.0","0.3.0","0.3.1","0.3.2","0.3.3","0.3.4","0.3.5","0.3.6","0.3.7","0.3.8","0.3.9","0.3.10","0.3.11","0.3.12","0.3.13","0.3.14","0.3.15","0.3.16","0.3.17","0.3.18","0.3.19","0.3.20","0.3.21","0.3.22","0.3.23","0.3.24","0.3.25","0.3.26","0.3.27","0.3.28","0.3.29","0.3.30","0.3.31","0.4.0","0.4.0","0.4.0","0.4.0","0.4.0","0.4.0","0.4.0","0.4.0","0.4.0","0.4.0","0.4.0","0.4.0","0.5.0","0.5.0","0.5.1","0.5.1","0.5.1","0.5.1","0.5.1","0.5.1","0.6.0","0.6.0","0.6.0","0.6.0","0.6.0","0.6.0","0.6.0","0.6.0","0.7.0","0.7.0","0.7.0","0.7.0","0.8.0","0.8.0","0.8.0","0.8.0","0.8.0","0.8.0","0.8.0","0.8.0","0.8.0","0.9.0","0.9.0","0.9.0","0.9.0","0.9.0","0.9.0","0.9.0","0.9.0","0.9.0","0.9.0","0.9.0","0.10.0","0.10.0","0.10.0","0.10.0","0.10.0","0.10.0","0.10.0","0.10.0","0.11.0","0.11.0","0.11.0","0.11.0","0.12.0","0.12.0","0.12.0","0.12.0","0.12.0","0.12.0","0.12.0","0.12.0","0.12.0","0.13.0","0.13.0","0.13.0","0.13.0","0.13.0","0.13.0","0.13.0","0.13.0","0.13.0","0.13.0","0.13.0","0.14.0","0.14.0","0.14.0","0.14.0","0.14.0","0.14.0","0.14.0","0.14.0","0.14.0","0.14.0","0.14.0","0.14.0","0.14.0","0.14.0","0.14.0","0.14.0","0.14.0","0.14.0","0.15.0","0.15.0","0.15.0","0.16.0","0.16.0","0.16.0","0.17.0","0.17.1","0.17.2","0.17.3","0.17.4","0.17.5","0.17.6","0.17.7","0.17.8","0.17.9","0.17.10","0.17.11","0.17.12","0.17.13","0.17.14","0.17.15","0.17.16","0.17.17","0.17.18","0.17.19","0.17.20","0.17.21","0.17.22","0.17.23","0.17.24","0.17.25","0.17.26","0.17.27","0.17.28","0.17.29","0.17.30","0.18.0","0.19.0","0.19.1","0.19.2","0.20.0","0.20.1","0.20.2","0.21.0","0.22.0","0.23.0","0.24.0","0.24.1","0.25.0","0.25.1","0.25.2","0.26.0","0.26.1","0.26.2","0.26.3","0.27.0","0.27.1","0.27.2","0.27.3","0.27.4","0.28.0","0.28.1","0.29.0","0.29.1","0.29.2","0.30.0","0.30.1","0.31.0","0.32.0","0.33.0","0.34.0","0.34.1","0.34.2","0.34.3","0.34.4","0.34.5","0.34.6","0.35.0","0.35.1","0.36.0","0.36.1","0.37.0","0.38.0","0.38.1","0.39.0","0.39.1","0.40.0","0.41.0","0.41.0","0.42.0","0.42.1","0.42.2","0.42.3","0.42.4","0.42.5","0.42.6","0.42.7","0.42.8","0.43.0","0.44.0","0.45.0","0.45.1","0.45.2","0.46.0","0.46.1","0.47.0","0.48.0","0.48.1","0.48.2","0.48.3","0.49.0","0.49.1","0.49.2","0.50.0","0.50.1","0.50.2","0.50.2","0.51.0","0.51.1","0.51.2","0.52.0","0.52.1","0.52.2","0.52.3","0.53.0","0.53.1","0.53.2","0.53.3","0.53.4","0.53.5","0.53.6","0.53.6","0.54.0","0.54.1","0.54.2","0.54.3","0.54.4","0.54.5","0.54.6","0.54.7","0.54.8","0.54.9","0.54.10","0.54.11","0.54.12","0.54.13","0.54.14","0.55.0","0.56.0","0.56.1","0.57.0","0.57.1","0.57.2","0.57.3","0.57.4","0.57.5","0.57.6","0.57.7","0.58.0","0.59.0","0.59.1","0.59.2","0.59.3","0.59.4","0.59.5","0.59.6","0.59.7","0.59.8","0.60.0","0.61.0","0.61.1","0.62.0","0.63.0","0.63.1","0.63.2","0.64.0","0.64.1","0.64.2","0.64.3","0.64.4","0.64.5","0.64.6","0.64.7","0.64.8","0.64.9","0.65.0","0.66.0","0.67.0","0.67.1","0.67.2","0.68.0","0.68.0","0.69.0","0.69.1","0.69.2","0.69.3","0.69.4","0.69.5","0.69.6","0.69.7","0.69.8","0.69.9","0.69.10","0.69.11","0.69.12","0.69.13","0.69.14","0.69.15","0.69.16","0.69.17","0.69.18","0.69.19","0.69.20","0.69.21","0.69.22","0.69.23","0.69.24"],"timed":"000000000000000000011111111111111101001011000000111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111"},"ci":{"runs_total":3477,"conclusions":{"success":3007,"cancelled":315,"failure":155},"success_rate":0.951,"success_rate_rule":"success / (success + failure) ; runs annulés, ignorés ou en cours exclus","median_duration_min":5.9,"p90_duration_min":9.9,"total_hours":319.5,"duration_rule":"updated_at − run_started_at des runs terminés en success/failure (approximation : inclut l'attente des jobs, pas la facturation)","first_run":"2026-04-11T20:22:56+02:00","monthly":{"cols":["month","runs","success","failure","cancelled"],"rows":[["2026-04",251,231,4,16],["2026-05",430,399,19,12],["2026-06",998,925,26,47],["2026-07",362,336,6,20],["2026-08",356,304,26,26],["2026-09",577,433,42,102],["2026-10",111,91,6,14],["2026-11",392,288,26,78]]},"workflows":{"cols":["name","runs","success_rate","median_duration_min","total_hours"],"rows":[["CI",2709,0.945,6.1,262.6],["Release",377,0.9469,6.8,44.4],["pages build and deployment",203,1.0,0.7,2.6],["Dependabot updates",106,1.0,1.2,5.0],["Code Quality (CodeQL)",82,0.9634,3.2,4.9]]}},"ed":{"issue":1417,"lots":14,"notes":"14 lots au « corps de phase » (dont #1301-ST et #1553, portés hors série R) ; états : livré 5, conclu 1, mergé 8. 27 ajustements de fin de phase. Tailles et états recopiés du suivi publié ; R4 (#1454) est hors phase.","source":"ForumHFR/artifacts editeur-suivi/index.html (tableau des lots)","issue_state":"OPEN","issue_created_at":"2026-09-16T13:43:53+02:00","issue_comments":25,"lots_detail":{"cols":["lot","issue","size_class","additions","deletions","prs","state"],"rows":[["R0m",1509,"S",399,5,null,"livré"],["#1301-ST",1301,"XL",8666,1852,null,"livré"],["R0b",1456,"L",4979,877,2,"livré"],["R0c",1512,"XL",7503,1806,7,"livré"],["R0a",1455,"M",null,null,null,"conclu"],["#1553",1553,"XL",6017,1512,null,"livré"],["R1a-1",1513,"XL",9578,113,8,"mergé"],["R1a-2",1450,"XL",6909,960,4,"mergé"],["R1b-1",1451,"XL",7252,1507,2,"mergé"],["R1b-2a",1514,"L",3366,743,null,"mergé"],["R1b-2b",1515,"L",4415,1121,null,"mergé"],["R6",1516,"L",3282,318,2,"mergé"],["R2a",1452,"M",852,403,null,"mergé"],["R2b",1452,"L",3539,288,null,"mergé"]]},"lots_by_state":{"livré":5,"conclu":1,"mergé":8},"lots_additions":66757,"lots_deletions":11505,"end_of_phase_adjustments":27,"end_of_phase_by_state":{"livré":25,"mergé":1,"à faire":1}},"notes":["Périmètre git : historique complet atteignable depuis origin/dev (commits.total = git rev-list --count origin/dev ; commits.first_parent donne la ligne first-parent stricte). Dates de commit = date d'auteur, fuseau Europe/Paris ; semaines ISO (clé = lundi), mois YYYY-MM.","Identités : chaque commit est rattaché au login GitHub renvoyé par l'API /commits (author.login) ; aucun nom ni e-mail git n'est lu. Sans login : « inconnu ». Bots (type Bot ou suffixe [bot]) : is_bot = true ; GraphQL renvoie « dependabot », normalisé en « dependabot[bot] » comme l'API REST.","Logins masqués : les comptes dont le login ressemble à une identité réelle sortent sous « masqué-N » (liste par empreinte SHA-256 dans collect.py).","repo_meta.watchers = abonnés au dépôt (subscribers_count) ; l'API appelle aussi « watchers » le nombre d'étoiles. repo_meta.open_issues = valeur API (issues + PR ouvertes) ; open_issues_excl_prs = issues seules.","LOC : voir loc.rules. Méthode alignée sur la page du 02/09 : au commit 099c9537, Kotlin main + test + build-logic = 125 241 lignes de code (page : 125 238) et 3 496 @Test (page : 3 494).","LOC timeline : la ligne first-parent stricte de origin/dev passe par les merges de promotion de main entre le 08/06 et le 13/09 (dev avancé sur main), ce qui laisse des trous de plusieurs semaines ; on suit donc, à chaque merge, le parent au commit le plus récent (cf. loc.timeline_method).","LLM / trailers : lignes Co-Authored-By des messages de commit. trailers_by_model compte les commits distincts par modèle (un commit peut citer plusieurs modèles) ; trailer_lines_by_model compte les lignes, doublons compris (un squash répète le trailer de chaque commit absorbé) : c'est ce que comptait la page du 02/09 sous l'intitulé « commits ». Les co-auteurs non LLM sont comptés dans other_coauthor_trailers sans nom (sauf bots).","LLM / « Action par » : lignes « > Action par \u003cmodèle> (demandée par …) » dans les corps et commentaires d'issues et de PR et les corps de revues ; un texte compte une fois par modèle.","LLM / rôles de PR : d'après les corps de PR seulement, motifs « Code par|code produit par \u003cmodèle> » et « gate|Gate distinct|Review distincte|relu par \u003cmodèle> » (« pas de gate Codex » ignoré). Convention récente et irrégulière : pr_roles couvre prs_with_roles PR, pas toutes. pr_roles_by_name regroupe par nom court (Sol, Fable, Astra, Opus, Codex).","Normalisation des modèles : « (1M context) » retiré ; « GPT-6.1 Sol Codex » → « GPT-6.1 Sol » ; « GPT-5.4 » → « GPT-5.4 Codex » ; « Sol 6.1 » / « Sol (gpt-6.1-sol) » → « GPT-6.1 Sol » ; un nom nu (« Fable », « Sol ») reste sans version. Table complète : llm.normalization.","PR : additions/deletions et monthly_churn excluent les PR de promotion (base main ou promotion/*, tête dev, release/*, promo/*…) et de resynchronisation main→dev, qui recomptent des PR déjà mergées ; les totaux bruts sont dans additions_all_merged / deletions_all_merged. hours_to_merge : toutes les PR mergées (création → merge).","PR size_buckets (lignes modifiées = additions + suppressions) : XS \u003c 10, S 10–99, M 100–499, L 500–999, XL ≥ 1000.","Issues : days_to_close sur toutes les issues fermées (y compris « not planned ») ; days_to_close_completed sur les seules COMPLETED. open_timeline : issues ouvertes en fin de semaine ISO.","Milestones : open/closed = compteurs de l'API (issues + PR) ; issues_open/issues_closed = issues seules.","Releases : canal déduit du nom de la release GitHub (« dev », « β ») et des noms d'assets ; « pre-canaux » = builds d'avant les canaux dev/bêta (v36 → v71, juin 2026). versionName lu dans app/build.gradle.kts au commit de chaque tag app-vN.","Changelog : app/CHANGELOG.md fait foi pour les versions binaires (internal = dev, open = bêta, closed = ancien canal alpha, local = AAB non distribué, burnt = versionCode grillé, slot remplacé par le build suivant) ; les entrées récentes n'ont pas de versionCode dans leur titre : code repris du tag app-vN de même versionName et canal ; le CHANGELOG.md racine suit les versions des specs (loc.specs_changelog).","F-Droid : l'index ne sert que les 5 dernières versions par paquet (served_in_index) ; l'historique complet vient des commits « fdroid: publish app-vN » de la branche gh-pages de ForumHFR/redface2-fdroid, croisés avec le canal de la release et la taille de l'asset redface2-fdroid-\u003ccanal>-vN-*.apk.","CI : runs GitHub Actions de tous les workflows (CI, Release, pages, CodeQL, mises à jour Dependabot regroupées) ; durées approximées par updated_at − run_started_at.","Refonte de l'éditeur : lots et états recopiés du tableau publié dans ForumHFR/artifacts editeur-suivi ; les issues des lots restent souvent ouvertes après livraison, leur état GitHub n'est pas un indicateur.","Données d'intervenants : seuls des logins GitHub. Les pseudos HFR cités dans les textes (rapporteurs, demandeurs) ne sont pas extraits."],"collect":{"duration_s":27.5,"api_calls":{"rest":19,"graphql":2},"script":"redface2-work/drafts/repo-stats/collect.py"}}</script>
+<script>
+(() => {
+'use strict';
+const D = JSON.parse(document.getElementById('data').textContent);
+const NS = 'http://www.w3.org/2000/svg', TZ = 'Europe/Paris';
+const REPO = 'https://github.com/' + D.meta.repo;
+
+// formats (fr-FR, heure de Paris)
+const NF = new Intl.NumberFormat('fr-FR'), n = v => NF.format(v);
+const nfd = d => new Intl.NumberFormat('fr-FR', {minimumFractionDigits: d, maximumFractionDigits: d});
+const N1 = nfd(1), N2 = nfd(2), n1 = v => N1.format(v), n2 = v => N2.format(v);
+const pct = d => { const f = new Intl.NumberFormat('fr-FR', {style: 'percent', minimumFractionDigits: d, maximumFractionDigits: d}); return v => f.format(v); };
+const p0 = pct(0), p1 = pct(1);
+const DF = o => { const f = new Intl.DateTimeFormat('fr-FR', Object.assign({timeZone: TZ}, o)); return t => f.format(t); };
+const fDay = DF({day: 'numeric', month: 'short'}), fDayL = DF({day: 'numeric', month: 'long'}), fDayY = DF({day: 'numeric', month: 'long', year: 'numeric'});
+const fMon = DF({month: 'short'}), fMonY = DF({month: 'long', year: 'numeric'}), fDT = DF({day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'});
+const kf = v => Math.abs(v) >= 1e4 ? n(v / 1e3) + ' k' : n(v);
+const mo = b => n1(b / 1e6) + ' Mo';
+const fh = h => { if (h < 1) return Math.round(h * 60) + ' min'; const H = Math.floor(h), M = Math.round((h - H) * 60); return M ? H + ' h ' + String(M).padStart(2, '0') : H + ' h'; };
+const fj = d => (d < 10 ? n1(d) : n(Math.round(d))) + ' jours';
+const pl = (v, s, p) => n(v) + ' ' + (v > 1 ? (p || s + 's') : s);
+const iso = s => Date.parse(s.length === 10 ? s + 'T12:00:00+01:00' : s);
+const T = m => (D.base + m * 60) * 1000;
+const PF = new Intl.DateTimeFormat('en-GB', {timeZone: TZ, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', weekday: 'short', hourCycle: 'h23'});
+const paris = t => Object.fromEntries(PF.formatToParts(t).map(p => [p.type, p.value]));
+const WD = {Mon: 0, Tue: 1, Wed: 2, Thu: 3, Fri: 4, Sat: 5, Sun: 6};
+const weekKey = t => { const o = paris(t); return new Date(Date.UTC(+o.year, o.month - 1, +o.day) - WD[o.weekday] * 864e5).toISOString().slice(0, 10); };
+const monthKey = t => { const o = paris(t); return o.year + '-' + o.month; };
+const kd = k => Date.parse((k.length === 7 ? k + '-15' : k) + 'T12:00:00Z');
+const wk = k => 'semaine du ' + fDay(kd(k)), mk = k => fMonY(kd(k)), ml = k => fMon(kd(k));
+const sum = a => a.reduce((x, y) => x + y, 0);
+const median = a => { const s = [...a].sort((x, y) => x - y), k = s.length >> 1; return s.length % 2 ? s[k] : (s[k - 1] + s[k]) / 2; };
+const short = m => m.replace(/^Claude (?=Opus|Fable)/, '');
+const maxBy = (a, f) => a.reduce((x, y) => f(y) > f(x) ? y : x);
+const rows = o => o.rows.map(r => Object.fromEntries(o.cols.map((c, i) => [c, r[i]])));
+
+// DOM
+const $ = id => document.getElementById(id);
+function mk2(doc, tag, a, p) {
+  const e = doc ? document.createElementNS(NS, tag) : document.createElement(tag);
+  if (a) for (const k in a) { const v = a[k]; if (v == null) continue; if (k === 'text') e.textContent = v; else e.setAttribute(k, v); }
+  if (p) p.appendChild(e); return e;
+}
+const S = (t, a, p) => mk2(1, t, a, p), H = (t, a, p) => mk2(0, t, a, p);
+
+// tooltip: values lead, textContent only
+const tip = $('tip');
+function tipShow(x, y, title, rs) {
+  tip.replaceChildren();
+  if (title) H('div', {class: 'tip-t', text: title}, tip);
+  for (const r of rs) { const row = H('div', {class: 'tip-r'}, tip); if (r.c) H('i', {class: 'tip-k', style: 'background:' + r.c}, row); H('b', {text: r.v}, row); if (r.k) H('span', {text: r.k}, row); }
+  tip.hidden = false;
+  const w = tip.offsetWidth, h = tip.offsetHeight, vw = document.documentElement.clientWidth;
+  let L = x + 14, Y = y + 16;
+  if (L + w > vw - 8) L = Math.max(8, x - w - 14);
+  if (Y + h > innerHeight - 8) Y = Math.max(8, y - h - 12);
+  tip.style.left = L + 'px'; tip.style.top = Y + 'px';
+}
+const tipHide = () => { tip.hidden = true; };
+function tipFor(el, title, rs) {
+  const show = e => { const r = el.getBoundingClientRect(); tipShow(e ? e.clientX : r.left + r.width / 2, e ? e.clientY : r.bottom - 8, title, rs()); };
+  el.dataset.tip = '';
+  el.addEventListener('pointermove', show);
+  el.addEventListener('pointerleave', e => { if (e.pointerType !== 'touch') tipHide(); });
+  el.addEventListener('focus', () => show(null)); el.addEventListener('blur', tipHide);
+  el.tabIndex = 0;
+}
+document.addEventListener('pointerdown', e => { if (!e.target.closest('.chart,[data-tip]')) tipHide(); });
+addEventListener('scroll', tipHide, {passive: true});
+
+// scales
+const lin = (d0, d1, r0, r1) => { const f = v => r0 + (v - d0) / ((d1 - d0) || 1) * (r1 - r0); f.inv = p => d0 + (p - r0) / ((r1 - r0) || 1) * (d1 - d0); return f; };
+const nstep = (r, c) => { const raw = r / c, p = 10 ** Math.floor(Math.log10(raw)), m = raw / p; return (m <= 1 ? 1 : m <= 2 ? 2 : m <= 2.5 ? 2.5 : m <= 5 ? 5 : 10) * p; };
+const nmax = (v, c = 4) => { if (v <= 0) return 1; const s = nstep(v, c); return Math.ceil(v / s - 1e-9) * s; };
+const ticks = (lo, hi, c = 4) => { const s = nstep(hi - lo, c), o = []; for (let v = Math.ceil(lo / s - 1e-9) * s; v <= hi + 1e-9; v += s) o.push(+v.toFixed(8)); return o; };
+
+// charts are redrawn at their container width
+const REG = [];
+const paint = o => { const w = Math.round(o.host.clientWidth); if (w) { o.w = w; o.draw(o.host, w); } };
+const ro = new ResizeObserver(es => es.forEach(e => { const o = REG.find(r => r.host === e.target); const w = Math.round(e.contentRect.width); if (o && w && w !== o.w) { cancelAnimationFrame(o.raf); o.raf = requestAnimationFrame(() => paint(o)); } }));
+function mount(id, draw) { const o = {host: $(id), draw, w: 0}; REG.push(o); paint(o); ro.observe(o.host); return o; }
+const repaint = o => paint(o);
+
+function frame(host, w, h, m) {
+  const fig = host.closest('.fig'), lab = fig && fig.querySelector('h3,.note-p');
+  const svg = S('svg', {class: 'svg', width: w, height: h, viewBox: `0 0 ${w} ${h}`, role: 'img', 'aria-label': lab ? lab.textContent : ''});
+  host.replaceChildren(svg);
+  return {svg, w, h, L: m.l, R: w - m.r, T: m.t, B: h - m.b};
+}
+function yAxis(f, y, tk, fmt, noLabels) {
+  const g = S('g', null, f.svg);
+  for (const v of tk) {
+    const yy = Math.round(y(v)) + .5;
+    S('line', {x1: f.L, x2: f.R, y1: yy, y2: yy, class: v === 0 ? 'bl' : 'gl'}, g);
+    if (!noLabels) S('text', {x: f.L - 6, y: yy, class: 'tk', 'text-anchor': 'end', 'dominant-baseline': 'middle', text: fmt(v)}, g);
+  }
+}
+// first day of each month (approx. midnight Paris) inside [t0, t1)
+function monthStarts(t0, t1) { const o = paris(t0), out = []; let y = +o.year, m = +o.month; for (;;) { if (++m > 12) { m = 1; y++; } const t = Date.UTC(y, m - 1, 1) - 36e5; if (t >= t1) return out; out.push(t); } }
+// time axis: months, or days for short ranges; labels thinned when crowded
+function xTime(f, x, t0, t1, grid) {
+  const g = S('g', null, f.svg), days = (t1 - t0) / 864e5;
+  const tick = X => S('line', {x1: X, x2: X, y1: grid ? f.T : f.B, y2: f.B + 5, class: grid ? 'gl' : 'bl'}, g);
+  if (days < 25) {
+    const o = paris(t0), every = Math.max(1, Math.ceil(30 / ((f.R - f.L) / days)));
+    for (let d = Date.UTC(+o.year, o.month - 1, +o.day) + 864e5 - 36e5, i = 0; d < t1; d += 864e5, i++) {
+      const X = Math.round(x(d)) + .5; tick(X);
+      if (i % every === 0) S('text', {x: X, y: f.B + 16, class: 'tk', 'text-anchor': 'middle', text: fDay(d + 72e5)}, g);
+    }
+    return;
+  }
+  const st = monthStarts(t0, t1), b = [t0, ...st, t1], pxm = (f.R - f.L) / (days / 30.4);
+  const every = pxm < 24 ? 3 : pxm < 34 ? 2 : 1;
+  for (let i = 0; i < b.length - 1; i++) {
+    if (i) tick(Math.round(x(b[i])) + .5);
+    const mi = +paris(b[i] + 1728e5).month;
+    if (x(b[i + 1]) - x(b[i]) >= 18 && (mi - 1) % every === 0) S('text', {x: x(b[i]) + (i ? 3 : 0), y: f.B + 16, class: 'tk', text: fMon(b[i] + 1728e5)}, g);
+  }
+}
+// band axis: month labels at month changes, or custom labels
+function xBands(f, keys, bw, lab, gap = 26) {
+  const g = S('g', null, f.svg); let last = '', lastX = -99;
+  keys.forEach((k, i) => {
+    const X = f.L + bw * i;
+    if (lab) { const t = lab(k, i); if (t != null && X + bw / 2 - lastX > gap) { S('text', {x: X + bw / 2, y: f.B + 16, class: 'tk', 'text-anchor': 'middle', text: t}, g); lastX = X + bw / 2; } return; }
+    const m = k.slice(0, 7); if (m === last) return; last = m;
+    if (i) S('line', {x1: Math.round(X) + .5, x2: Math.round(X) + .5, y1: f.B, y2: f.B + 5, class: 'bl'}, g);
+    if (X - lastX > 26) { S('text', {x: X + 2, y: f.B + 16, class: 'tk', text: ml(m)}, g); lastX = X; }
+  });
+}
+// bar with a 4px rounded data end, square at the baseline
+const colPath = (x, y, w, h, r, up) => {
+  r = Math.max(0, Math.min(r, w / 2, h));
+  return up ? `M${x},${y + h}V${y + r}Q${x},${y} ${x + r},${y}H${x + w - r}Q${x + w},${y} ${x + w},${y + r}V${y + h}Z`
+            : `M${x},${y}V${y + h - r}Q${x},${y + h} ${x + r},${y + h}H${x + w - r}Q${x + w},${y + h} ${x + w},${y + h - r}V${y}Z`;
+};
+// pointer and keyboard layer: idxAt(px, py) -> index, posOf(i) -> {x, y}, show(i, clientX, clientY) with i = -1 to clear
+function hover(f, count, idxAt, posOf, show) {
+  const ov = S('rect', {x: f.L, y: f.T, width: Math.max(0, f.R - f.L), height: Math.max(0, f.B - f.T), fill: 'transparent', class: 'ov'}, f.svg);
+  let cur = -1;
+  const clear = () => { cur = -1; show(-1); tipHide(); };
+  const move = e => { const r = f.svg.getBoundingClientRect(), i = idxAt(e.clientX - r.left, e.clientY - r.top); if (i == null || i < 0) return clear(); cur = i; show(i, e.clientX, e.clientY); };
+  ov.addEventListener('pointermove', move); ov.addEventListener('pointerdown', move);
+  ov.addEventListener('pointerleave', e => { if (e.pointerType !== 'touch') clear(); });
+  f.svg.tabIndex = 0;
+  f.svg.addEventListener('keydown', e => {
+    if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return; e.preventDefault();
+    const d = e.key === 'ArrowRight' ? 1 : -1;
+    cur = cur < 0 ? (d > 0 ? 0 : count - 1) : Math.max(0, Math.min(count - 1, cur + d));
+    const r = f.svg.getBoundingClientRect(), p = posOf(cur); show(cur, r.left + p.x, r.top + p.y);
+  });
+  f.svg.addEventListener('blur', clear);
+}
+
+// columns: stacked series, optional series below the axis (neg)
+function columns(host, w, o) {
+  const small = w < 480, f = frame(host, w, o.h || 230, {l: 40, r: 6, t: 14, b: 24}), N = o.keys.length;
+  const pos = Array(N).fill(0), neg = Array(N).fill(0);
+  o.series.forEach(s => s.vals.forEach((v, i) => { (s.neg ? neg : pos)[i] += v; }));
+  let lo = 0, hi = nmax(Math.max(...pos), small ? 3 : 4), tk = ticks(0, hi, small ? 3 : 4);
+  if (Math.max(...neg) > 0) { const st = nstep(hi + Math.max(...neg), small ? 4 : 6); hi = Math.ceil(Math.max(...pos) / st) * st; lo = -Math.ceil(Math.max(...neg) / st) * st; tk = ticks(lo, hi, (hi - lo) / st); }
+  const y = lin(lo, hi, f.B, f.T);
+  yAxis(f, y, tk, v => (o.fmt || kf)(Math.abs(v)));
+  const bw = (f.R - f.L) / N, cw = Math.max(1, Math.min(o.maxW || 24, bw - (bw > 6 ? 2 : 1)));
+  const hl = S('rect', {class: 'wash', y: f.T, width: bw, height: f.B - f.T, visibility: 'hidden'}, f.svg);
+  xBands(f, o.keys, bw, o.lab, o.gap);
+  const g = S('g', null, f.svg);
+  for (let i = 0; i < N; i++) {
+    const x = f.L + bw * i + (bw - cw) / 2;
+    for (const up of [true, false]) {
+      const ser = o.series.filter(s => !s.neg === up), last = ser.map(s => s.vals[i] > 0).lastIndexOf(true);
+      let acc = 0;
+      ser.forEach((s, j) => {
+        const v = s.vals[i]; if (!(v > 0)) return;
+        const a = y(up ? acc : -acc), b = y(up ? acc + v : -acc - v), gap = acc > 0 ? 2 : 0; acc += v;
+        const hh = Math.abs(a - b) - gap; if (hh <= .4) return;
+        S('path', {d: colPath(x, up ? b : a + gap, cw, hh, j === last ? 4 : 0, up), style: 'fill:' + s.c}, g);
+      });
+    }
+  }
+  host._tbl = () => [[o.th || 'Période', ...o.series.map(s => s.name), ...(o.total ? [o.total] : [])], o.keys.map((k, i) => [o.title(k, i), ...o.series.map(s => n(s.vals[i])), ...(o.total ? [n(pos[i])] : [])])];
+  (o.ann || []).forEach(a => { const X = f.L + bw * (a.i + .5); S('text', {x: X, y: Math.max(10, y(pos[a.i]) - 6), class: 'lbb', 'text-anchor': X > f.R - 30 ? 'end' : X < f.L + 30 ? 'start' : 'middle', text: a.text}, f.svg); });
+  hover(f, N, px => { const i = Math.floor((px - f.L) / bw); return i < N ? i : -1; }, i => ({x: f.L + bw * (i + .5), y: y(pos[i])}), (i, cx, cy) => {
+    if (i < 0) return hl.setAttribute('visibility', 'hidden');
+    hl.setAttribute('x', f.L + bw * i); hl.setAttribute('visibility', 'visible');
+    const rs = [...o.series].reverse().filter(s => !o.hideZero || s.vals[i]).map(s => ({v: n(s.vals[i]), k: s.name, c: s.c}));
+    if (o.total) rs.push({v: n(pos[i]), k: o.total});
+    tipShow(cx, cy, o.title(o.keys[i], i), rs);
+  });
+}
+
+// lines / steps / stacked areas on a time axis
+function lines(host, w, o) {
+  const small = w < 480, f = frame(host, w, o.h || 230, {l: o.ml || 40, r: 8, t: o.mt || 14, b: 24});
+  const x = lin(o.t0, o.t1, f.L, f.R), ser = o.series;
+  let top = null;
+  if (o.stack) { top = Array(ser[0].pts.length).fill(0); ser.forEach(s => { s.lo = top.slice(); s.pts.forEach((p, i) => { top[i] += p[1]; }); s.hi = top.slice(); }); }
+  const lo = o.yMin || 0, hi = o.yMax != null ? o.yMax : nmax(o.stack ? Math.max(...top) : Math.max(...ser.flatMap(s => s.pts.map(p => p[1]))), small ? 3 : 4);
+  const y = lin(lo, hi, f.B, f.T);
+  yAxis(f, y, o.yTicks || ticks(lo, hi, o.nt || (small ? 3 : 4)), o.fmt || kf);
+  xTime(f, x, o.t0, o.t1);
+  const P = (pts, step) => pts.map((p, i) => { const X = x(p[0]).toFixed(1), Y = y(p[1]).toFixed(1); return i ? (step ? `H${X}V${Y}` : `L${X},${Y}`) : `M${X},${Y}`; }).join('');
+  const g = S('g', null, f.svg);
+  ser.forEach(s => {
+    if (o.stack) {
+      const up = s.pts.map((p, i) => [p[0], s.hi[i]]), dn = s.pts.map((p, i) => [p[0], s.lo[i]]).reverse();
+      S('path', {d: P(up) + P(dn).replace('M', 'L') + 'Z', style: `fill:${s.c};fill-opacity:.2`}, g);
+      S('path', {d: P(up), style: `fill:none;stroke:${s.c};stroke-width:2;stroke-linejoin:round`}, g);
+      return;
+    }
+    const pts = s.step && s.extend !== false ? [...s.pts, [o.t1, s.pts[s.pts.length - 1][1]]] : s.pts, d = P(pts, s.step);
+    if (s.area) S('path', {d: d + `L${x(pts[pts.length - 1][0])},${y(lo)}L${x(pts[0][0])},${y(lo)}Z`, style: `fill:${s.c};fill-opacity:.1`}, g);
+    S('path', {d, style: `fill:none;stroke:${s.c};stroke-width:${s.width || 2};stroke-linejoin:round;stroke-linecap:round`}, g);
+    if (s.dots) s.pts.forEach(p => S('circle', {cx: x(p[0]), cy: y(p[1]), r: s.r || 3.5, class: 'ring', style: 'fill:' + s.c}, g));
+  });
+  (o.ends || []).forEach(e => { const X = x(e.t), Y = y(e.v); S('circle', {cx: X, cy: Y, r: 4, class: 'ring', style: 'fill:' + e.c}, g); S('text', {x: X - 8, y: Y + (e.dy || -8), class: 'lbb', 'text-anchor': 'end', text: e.text}, g); });
+  // hover snaps to the nearest sample; each series shows its last value at or before that time
+  const times = [...new Set(ser.flatMap(s => s.pts.map(p => p[0])))].sort((a, b) => a - b);
+  const xh = S('line', {class: 'xh', y1: f.T, y2: f.B, visibility: 'hidden'}, f.svg), dots = S('g', null, f.svg);
+  const at = (s, t) => { let k = -1; while (k + 1 < s.pts.length && s.pts[k + 1][0] <= t) k++; return k; };
+  const near = px => { const t = x.inv(px); let a = 0, b = times.length - 1; while (b - a > 1) { const m = (a + b) >> 1; if (times[m] < t) a = m; else b = m; } return Math.abs(times[a] - t) <= Math.abs(times[b] - t) ? a : b; };
+  const total = t => n(sum(ser.map(s => s.pts[at(s, t)][1])));
+  host._tbl = () => [['Date', ...ser.map(s => s.name), ...(o.stack ? ['total'] : [])], times.map(t => [o.title ? o.title(t) : fDayY(t), ...ser.map(s => { const k = at(s, t); return k < 0 ? '' : (o.tipFmt || n)(s.pts[k][1]); }), ...(o.stack ? [total(t)] : [])]).reverse()];
+  hover(f, times.length, near, i => ({x: x(times[i]), y: f.T + 20}), (i, cx, cy) => {
+    dots.replaceChildren();
+    if (i < 0) return xh.setAttribute('visibility', 'hidden');
+    const t = times[i], X = x(t);
+    xh.setAttribute('x1', X); xh.setAttribute('x2', X); xh.setAttribute('visibility', 'visible');
+    const rs = [];
+    [...ser].reverse().forEach(s => {
+      const k = at(s, t); if (k < 0) return;
+      const p = s.pts[k];
+      S('circle', {cx: X, cy: y(o.stack ? s.hi[k] : p[1]), r: 4, class: 'ring', style: 'fill:' + s.c}, dots);
+      rs.push({v: (o.tipFmt || n)(p[1]), k: s.key ? s.key(p) : s.name, c: s.c});
+    });
+    if (o.stack) rs.push({v: total(t), k: 'total'});
+    tipShow(cx, cy, o.title ? o.title(t) : fDayY(t), o.tipRows ? o.tipRows(t) : rs);
+  });
+  return {f, x, y};
+}
+
+// HTML builders
+function legend(id, items, toggle) {
+  const host = $(id); host.replaceChildren();
+  return items.map(it => {
+    const el = H(toggle ? 'button' : 'li', toggle ? {type: 'button', 'aria-pressed': 'true'} : null, host);
+    el.style.setProperty('--c', it.c);
+    H('i', {class: 'sw ' + (it.kind || '')}, el);
+    el.append(it.name);
+    if (it.cnt != null) H('span', {class: 'cnt', text: ' ' + it.cnt}, el);
+    if (toggle) el.addEventListener('click', () => toggle(it));
+    return el;
+  });
+}
+function hbars(id, list) {
+  const host = $(id), max = Math.max(...list.map(r => r.parts ? sum(r.parts.map(p => p.v)) : r.v));
+  list.forEach(r => {
+    const li = H('li', null, host), l = H('span', {class: 'l', text: r.label}, li);
+    if (r.small) H('small', {text: r.small}, l);
+    const t = H('span', {class: 't'}, li), parts = (r.parts || [{v: r.v, c: r.c || 'var(--s1)'}]).filter(p => p.v > 0);
+    parts.forEach((p, i) => { const b = H('span', {class: 'b' + (i < parts.length - 1 ? ' mid' : '')}, t); b.style.setProperty('--c', p.c); b.style.width = p.v / max * 100 + '%'; });
+    const v = H('span', {class: 'v', text: r.vt || n(r.v)}, li); if (r.vs) H('small', {text: ' ' + r.vs}, v);
+    if (r.tip) tipFor(li, r.label, r.tip);
+  });
+}
+function segbar(host, parts, label, labels) {
+  host = typeof host === 'string' ? $(host) : host;
+  const tot = sum(parts.map(p => p.v));
+  host.setAttribute('aria-label', label + ' : ' + parts.map(p => `${p.name} ${n(p.v)}`).join(', '));
+  parts.filter(p => p.v > 0).forEach(p => {
+    const d = H('div', null, host); d.style.setProperty('--c', p.c); if (p.ci) d.style.setProperty('--ci', p.ci); d.style.flex = `${p.v} 1 0`;
+    if (labels) { const s = H('span', {text: labels === 'share' ? p0(p.v / tot) : n(p.v)}, d); requestAnimationFrame(() => { if (s.offsetWidth + 10 > d.clientWidth) s.remove(); }); }
+    tipFor(d, p.name, () => [{v: n(p.v), k: p0(p.v / tot) + (p.extra ? ' · ' + p.extra : ''), c: p.c}]);
+  });
+}
+// back-to-back bars around a centre axis
+function b2b(id, head, list, max) {
+  const ul = $(id);
+  if (head) { const li = H('li', {class: 'head', 'aria-hidden': 'true'}, ul); H('span', {class: 'nm hd', text: head[0]}, li); H('span', {class: 'm hd', text: head[1] + ' ←'}, li); H('span', {class: 'tt hd', text: '→ ' + head[2]}, li); }
+  list.forEach(r => {
+    const li = H('li', null, ul), nm = H('span', {class: 'nm'}, li);
+    if (typeof r.name === 'string') nm.textContent = r.name; else r.name(nm);
+    if (r.l == null) { H('span', {class: 'na', text: r.na}, li); return; }
+    const a = H('span', {class: 'm'}, li), b = H('span', {class: 'tt'}, li);
+    H('span', {class: 'n', text: r.lt || n(r.l)}, a);
+    const bar = (p, v, c) => { const e = H('span', {class: 'bar'}, p); e.style.setProperty('--c', c); e.style.width = `calc((100% - 3.8rem) * ${v / max})`; };
+    bar(a, r.l, r.cl); bar(b, r.r, r.cr);
+    H('span', {class: 'n', text: r.rt || n(r.r)}, b);
+    if (r.tip) tipFor(li, r.title, r.tip);
+  });
+}
+function table(el, head, body) {
+  const tr = H('tr', null, H('thead', null, el)), tb = H('tbody', null, el);
+  head.forEach(h => H('th', {text: h, scope: 'col'}, tr));
+  body.forEach(r => { const row = H('tr', null, tb); r.forEach(c => H('td', {text: c}, row)); });
+}
+// "Données" twins: a chart publishes its own table (host._tbl); TABLES holds the few custom ones
+const TABLES = {};
+document.querySelectorAll('details.data[data-t]').forEach(d => d.addEventListener('toggle', () => {
+  if (!d.open) return;
+  const k = d.dataset.t, [h, b] = (TABLES[k] || $(k)._tbl)();
+  d.querySelector('.tbl')?.remove(); table(H('table', null, H('div', {class: 'tbl'}, d)), h, b);
+}));
+function seg(id, cb) {
+  const g = $(id);
+  g.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; g.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x === b))); cb(b.dataset); });
+}
+
+// == data
+const V = {};
+const [c1, c2, c3, c4, c5] = [1, 2, 3, 4, 5].map(i => `var(--s${i})`), cO = 'var(--other)';
+const M = D.meta, C = D.commits, LOC = D.loc, P = D.prs, I = D.issues, L = D.llm, R = D.rel, CI = D.ci, ED = D.ed, FD = R.fd;
+const CHN = ['dev', 'bêta', 'avant les canaux', 'local', 'grillé'];
+const CHC = [c1, c2, c3, cO, cO];
+const cum = a => { let s = 0; return a.map(v => s += v); }, vtT = cum(D.vt.t), vtC = cum(D.vt.code);
+const VT = vtT.map((m, i) => ({t: T(m), code: vtC[i], ch: +D.vt.ch[i], ver: D.vt.ver[i], timed: D.vt.timed[i] === '1'})).sort((a, b) => a.t - b.t || a.code - b.code);
+const byCode = {}; VT.forEach(v => { if (v.timed || !byCode[v.code]) byCode[v.code] = v; });
+const GH = cum(R.gh.list.code).map((code, i) => ({code, dl: R.gh.list.downloads[i], t: byCode[code].t, ch: Math.min(byCode[code].ch, 2)})).sort((a, b) => a.t - b.t);
+const dlOf = Object.fromEntries(GH.map(g => [g.code, g.dl]));
+const devs = VT.filter(v => v.ch === 0), betas = VT.filter(v => v.ch === 1);
+const lastDev = maxBy(devs, v => v.code), lastBeta = maxBy(betas, v => v.code), firstBeta = betas[0];
+const pend = R.pending.filter(p => p.channel === 'beta').map(p => p.version).join(', ');
+const gen = iso(M.generated_at), t0c = iso(C.first_date);
+
+// hero
+(() => { const o = paris(gen); V.releve = `${o.day}-${o.month}-${o.year} à ${o.hour}:${o.minute}:${o.second}`; })();
+Object.assign(V, {repo: M.repo, head: M.dev_head, license: M.license, firstCommitL: fDayY(t0c), lastBuildL: fDayL(lastDev.t),
+  spanDays: n(C.span_days), commitsTotal: n(C.total), ghCount: n(R.gh.count), lastTag: 'app-v' + lastDev.code,
+  devVer: lastDev.ver, devMeta: `build ${lastDev.code} · ${fDay(lastDev.t)}`, betaVer: lastBeta.ver, betaMeta: `build ${lastBeta.code} · ${fDay(lastBeta.t)}`,
+  betaPending: pend ? pend + ' en préparation' : '', prodMeta: R.cl_counts.production ? pl(R.cl_counts.production, 'version') : 'aucune version au CHANGELOG'});
+const kt = k => LOC.cur[k].code, ktMain = kt('kotlin_main'), ktTest = kt('kotlin_test') + kt('kotlin_android_test');
+Object.assign(V, {ktTotal: n(ktMain + ktTest), ktSplit: `${n(ktMain)} production · ${n(ktTest)} tests`,
+  testMethods: n(LOC.tot.test_methods), testSub: `${n(LOC.tot.roborazzi_png)} captures Roborazzi`, commitsSub: `${n(C.active_days)} jours actifs sur ${n(C.span_days)}`,
+  prMerged: n(P.merged), prSub: `délai médian ${fh(P.hours_to_merge.median)}`, issuesTotal: n(I.total), issuesSub: `${n(I.closed)} fermées · ${n(I.open)} ouvertes`,
+  llmPct: p0(L.commits_with_llm / C.total), llmSub: `${n(L.commits_with_llm)} commits sur ${n(C.total)}`});
+String(lastDev.code).split('').forEach(d => H('span', {class: 'odo-d', text: d}, $('odo')));
+$('odo').setAttribute('aria-label', 'versionCode ' + lastDev.code);
+
+// == Versions
+Object.assign(V, {firstBetaDateL: fDayL(firstBeta.t), firstBetaVer: firstBeta.ver, firstBetaCode: firstBeta.code, clTotal: n(sum(Object.values(R.cl_counts))),
+  betaCount: n(betas.length), pendingVer: pend, ghSplit: `${n(R.gh.by_channel.dev)} dev, ${n(R.gh.by_channel.beta)} bêta, ${n(R.gh.by_channel['pre-canaux'])} d'avant les canaux`});
+const vs = {mode: 'code', on: new Set([0, 1, 2, 3, 4])};
+const minor = v => { const m = /^(\d+)\.(\d+)/.exec(v); return m ? +m[1] * 100 + +m[2] : 0; };
+const VL = [
+  {name: 'dev', c: CHC[0], set: [0], kind: 'line', cnt: devs.length},
+  {name: 'bêta', c: CHC[1], set: [1], kind: 'dot', cnt: betas.length},
+  {name: 'avant les canaux (piste fermée)', c: CHC[2], set: [2], kind: 'dot', cnt: VT.filter(v => v.ch === 2).length},
+  {name: 'local ou grillé', c: CHC[3], set: [3, 4], kind: 'dot', cnt: VT.filter(v => v.ch > 2).length},
+];
+let vChart;
+const isOn = it => it.set.every(c => vs.on.has(c));
+const vBtns = legend('lg-versions', VL, it => {
+  const onNow = VL.filter(isOn);
+  if (onNow.length === VL.length) vs.on = new Set(it.set);               // first click isolates
+  else if (onNow.length === 1 && onNow[0] === it) vs.on = new Set([0, 1, 2, 3, 4]); // clicking the isolated one restores all
+  else { const had = isOn(it); it.set.forEach(c => had ? vs.on.delete(c) : vs.on.add(c)); if (!vs.on.size) vs.on = new Set([0, 1, 2, 3, 4]); }
+  vBtns.forEach((b, i) => b.setAttribute('aria-pressed', String(isOn(VL[i]))));
+  repaint(vChart);
+});
+seg('vmode', d => { vs.mode = d.m; repaint(vChart); });
+vChart = mount('c-versions', (host, w) => {
+  const small = w < 560, f = frame(host, w, small ? 300 : 390, {l: 44, r: 10, t: 30, b: 26});
+  const x = lin(t0c, gen, f.L, f.R), code = vs.mode === 'code', val = v => code ? v.code : minor(v.ver);
+  const nt = small || code ? 4 : 7, hi = nmax(Math.max(...VT.map(val)), nt), y = lin(0, hi, f.B, f.T);
+  yAxis(f, y, ticks(0, hi, nt), v => code ? n(v) : v ? '0.' + v : '0');
+  xTime(f, x, t0c, gen);
+  const xs = Math.round(x(firstBeta.t)) + .5;
+  S('line', {x1: xs, x2: xs, y1: f.T - 8, y2: f.B, class: 'mark'}, f.svg);
+  S('text', {x: xs + 5, y: f.T - 12, class: 'lb', text: small ? 'canaux dev + bêta' : 'début des canaux dev et bêta · ' + fDay(firstBeta.t)}, f.svg);
+  const g = S('g', null, f.svg), dot = (v, r, style, cls) => S('circle', {cx: x(v.t), cy: y(val(v)), r, class: cls, style}, g);
+  if (vs.on.has(0)) {
+    S('path', {d: devs.map((v, i) => (i ? 'L' : 'M') + x(v.t).toFixed(1) + ',' + y(val(v)).toFixed(1)).join(''), style: 'fill:none;stroke:var(--s1);stroke-width:2;stroke-linejoin:round'}, g);
+    devs.forEach(v => dot(v, 1.9, 'fill:var(--s1)'));
+  }
+  VT.filter(v => v.ch > 1 && vs.on.has(v.ch)).forEach(v => dot(v, v.ch === 2 ? 3.6 : 3, v.ch === 4 ? 'fill:var(--ring);stroke:var(--other);stroke-width:1.5' : 'fill:' + CHC[v.ch], v.ch === 4 ? null : 'ring'));
+  if (vs.on.has(1)) {
+    betas.forEach(v => dot(v, 5, 'fill:var(--s2)', 'ring'));
+    // label the first and last bêta and those around the two longest pauses, without collisions
+    const gaps = betas.slice(1).map((b, i) => ({i: i + 1, d: b.t - betas[i].t})).sort((a, b) => b.d - a.d).slice(0, 2);
+    const placed = [];
+    [0, betas.length - 1, ...gaps.flatMap(gp => [gp.i - 1, gp.i])].forEach(i => {
+      const v = betas[i], X = x(v.t), Y = y(val(v));
+      if (placed.some(p => Math.abs(p - X) < 58)) return; placed.push(X);
+      const right = X + 9 + v.ver.length * 7.2 < f.R;
+      S('text', {x: right ? X + 9 : X - 9, y: right ? Y + 15 : Y - 9, class: 'lbb mn', 'text-anchor': right ? 'start' : 'end', text: v.ver}, g);
+    });
+  }
+  const hl = S('circle', {r: 8, class: 'hl', visibility: 'hidden'}, f.svg);
+  const pts = VT.filter(v => vs.on.has(v.ch)).map(v => ({v, X: x(v.t), Y: y(val(v))}));
+  hover(f, pts.length, (px, py) => { let best = -1, bd = 34 * 34; pts.forEach((p, i) => { const d = (p.X - px) ** 2 + (p.Y - py) ** 2; if (d < bd) { bd = d; best = i; } }); return best; }, i => ({x: pts[i].X, y: pts[i].Y}), (i, cx, cy) => {
+    if (i < 0) return hl.setAttribute('visibility', 'hidden');
+    const p = pts[i]; hl.setAttribute('cx', p.X); hl.setAttribute('cy', p.Y); hl.setAttribute('visibility', 'visible');
+    const rs = [{v: 'build ' + p.v.code, k: CHN[p.v.ch], c: CHC[p.v.ch]}];
+    if (dlOf[p.v.code] != null) rs.push({v: n(dlOf[p.v.code]), k: 'téléchargements (assets GitHub)'});
+    tipShow(cx, cy, p.v.ver + ' · ' + (p.v.timed ? fDT(p.v.t) : fDayY(p.v.t)), rs);
+  });
+});
+TABLES.versions = () => [['Date', 'versionName', 'versionCode', 'Canal'], [...VT].reverse().map(v => [v.timed ? fDT(v.t) : fDay(v.t), v.ver, n(v.code), CHN[v.ch]])];
+
+(() => {
+  const ul = $('tickets');
+  betas.forEach(v => { const li = H('li', null, ul); H('span', {class: 'v', text: v.ver}, li); H('span', {class: 'd', text: 'build ' + v.code}, li); H('span', {text: fDay(v.t) + (dlOf[v.code] != null ? ' · ↓ ' + n(dlOf[v.code]) : '')}, li); });
+  if (pend) { const li = H('li', {class: 'pending'}, ul); H('span', {class: 'v', text: pend}, li); H('span', {class: 'd', text: 'en préparation'}, li); H('span', {text: 'sans tag'}, li); }
+})();
+
+/* release cadence, at tag date */
+const rel = {g: 'w'};
+function relBins() {
+  const key = rel.g === 'w' ? weekKey : monthKey, keys = [], a = key(GH[0].t), b = key(gen);
+  if (rel.g === 'w') for (let d = Date.parse(a); d <= Date.parse(b); d += 6048e5) keys.push(new Date(d).toISOString().slice(0, 10));
+  else for (let [y, m] = a.split('-').map(Number); y * 12 + m <= +b.slice(0, 4) * 12 + +b.slice(5); m = m % 12 + 1, y += m === 1 ? 1 : 0) keys.push(y + '-' + String(m).padStart(2, '0'));
+  const map = new Map(keys.map(k => [k, [0, 0, 0]]));
+  GH.forEach(r => { const v = map.get(key(r.t)); if (v) v[r.ch]++; });
+  return {keys, vals: keys.map(k => map.get(k))};
+}
+const RCH = [2, 1, 0].map(i => ({name: CHN[i], c: CHC[i], i}));
+legend('lg-rel', [...RCH].reverse());
+const relChart = mount('c-rel', (host, w) => {
+  const b = relBins(), tot = b.vals.map(sum), im = tot.indexOf(Math.max(...tot));
+  columns(host, w, {keys: b.keys, total: 'total', fmt: n, ann: [{i: im, text: n(tot[im])}], lab: rel.g === 'm' ? ml : null,
+    series: RCH.map(s => ({name: s.name, c: s.c, vals: b.vals.map(v => v[s.i])})), title: rel.g === 'w' ? wk : mk});
+});
+seg('rel-gran', d => { rel.g = d.g; repaint(relChart); });
+
+/* APK sizes at build date */
+const apk = ch => { const b = cum(FD[ch].apks.bytes); return cum(FD[ch].apks.code).map((code, i) => [byCode[code].t, b[i], code]).sort((p, q) => p[0] - q[0]); };
+const apkDev = apk('dev'), apkBeta = apk('beta'), ld = apkDev[apkDev.length - 1], lb = apkBeta[apkBeta.length - 1];
+V.apkFirst = mo(apkDev[0][1]); V.apkLast = mo(ld[1]);
+legend('lg-apk', [{name: 'dev', c: CHC[0], kind: 'line'}, {name: 'bêta', c: CHC[1], kind: 'dot'}]);
+mount('c-apk', (host, w) => {
+  const all = [...apkDev, ...apkBeta].map(a => a[1]), lo = Math.floor(Math.min(...all) / 5e6) * 5e6, hi = Math.ceil(Math.max(...all) / 5e6) * 5e6;
+  lines(host, w, {t0: Math.min(apkDev[0][0], apkBeta[0][0]), t1: gen, yMin: lo, yMax: hi, yTicks: ticks(lo, hi, 3), fmt: v => n(v / 1e6), tipFmt: mo, title: fDT,
+    series: [{name: 'dev', c: CHC[0], pts: apkDev, key: p => `dev · build ${p[2]}`}, {name: 'bêta', c: CHC[1], pts: apkBeta, dots: true, width: 1.5, key: p => `bêta · ${byCode[p[2]].ver} (build ${p[2]})`}],
+    ends: [{t: ld[0], v: ld[1], c: CHC[0], text: mo(ld[1])}, {t: lb[0], v: lb[1], c: CHC[1], text: mo(lb[1]), dy: 18}]});
+});
+
+const fdl = p => `${pl(p.count, 'publication')}, dernière ${p.latest.version} le ${fDay(iso(p.latest.date))}`;
+Object.assign(V, {fdTotal: n(FD.total), fdRepo: FD.repo.replace(/^https:\/\//, ''), fdDevPkg: FD.dev.package, fdBetaPkg: FD.beta.package,
+  fdDevLatest: fdl(FD.dev), fdBetaLatest: fdl(FD.beta), fdIndex: `${n(FD.dev.served)} dernières versions servies par paquet ; index du ${fDT(iso(FD.index_ts))}`});
+const fdParts = [{name: 'dev', v: FD.dev.count, c: CHC[0]}, {name: 'bêta', v: FD.beta.count, c: CHC[1]}, {name: 'avant les canaux', v: FD.pre, c: CHC[2]}];
+segbar('sb-fd', fdParts, 'Publications F-Droid');
+legend('lg-fd', fdParts.map(p => ({name: p.name, c: p.c, cnt: n(p.v)})));
+
+V.dlTotal = n(R.gh.downloads_total);
+hbars('hb-dl', [['dev', 0], ['beta', 1], ['pre-canaux', 2]].map(([k, i]) => {
+  const l = GH.filter(g => g.ch === i).map(g => g.dl), tot = R.gh.downloads_by_channel[k];
+  return {label: CHN[i], small: `médiane ${n(median(l))} par release`, v: tot, c: CHC[i], tip: () => [{v: n(tot), k: 'téléchargements', c: CHC[i]}, {v: n(l.length), k: 'releases'}, {v: n(median(l)), k: 'médiane par release'}, {v: n(Math.max(...l)), k: 'maximum'}]};
+}));
+const topDl = maxBy(GH, g => g.dl);
+V.dlTop = `${byCode[topDl.code].ver} ${CHN[topDl.ch]} (build ${topDl.code}), ${n(topDl.dl)}`;
+
+// == Code
+Object.assign(V, {locSha: LOC.sha, filesTree: n(LOC.tot.files_total_in_tree), filesCounted: n(LOC.tot.files), locTotal: n(LOC.tot.code),
+  ratio: n2(ktTest / ktMain), composables: n(LOC.tot.composable_functions), genDayL: fDayL(gen)});
+const TL = LOC.tl, tv = (r, c) => r.r[3 + TL.cols.indexOf(c)];
+const TLR = TL.rows.map(r => ({t: T(r[0]), week: r[1], sha: r[2], r}));
+const GROUPS = [
+  {name: 'production (Kotlin)', c: c1, cols: ['kotlin_main']},
+  {name: 'tests (Kotlin)', c: c2, cols: ['kotlin_test', 'kotlin_android_test']},
+  {name: 'fixtures de test', c: c3, cols: ['test_fixtures']},
+  {name: 'docs et specs', c: c4, cols: ['docs', 'specs']},
+  {name: 'le reste', c: cO, cols: ['build', 'ci', 'scripts', 'resources_xml', 'room_schemas', 'other']},
+];
+const gv = (g, r) => sum(g.cols.map(c => tv(r, c)));
+const weekOf = t => TLR.find(z => z.t === t);
+legend('lg-loc', GROUPS.map(g => ({name: g.name, c: g.c, cnt: n(sum(g.cols.map(kt)))})));
+mount('c-loc', (host, w) => {
+  const last = TLR[TLR.length - 1], tot = sum(GROUPS.map(g => gv(g, last)));
+  const r = lines(host, w, {t0: TLR[0].t, t1: gen, h: w < 560 ? 260 : 320, stack: true, series: GROUPS.map(g => ({name: g.name, c: g.c, pts: TLR.map(z => [z.t, gv(g, z)])})),
+    title: t => { const z = weekOf(t); return wk(z.week) + ' · ' + z.sha; }});
+  S('text', {x: r.x(last.t) - 6, y: r.y(tot) - 8, class: 'lbb', 'text-anchor': 'end', text: n(tot)}, r.f.svg);
+});
+
+const CAT = {kotlin_main: 'Kotlin, production', kotlin_test: 'Kotlin, tests', kotlin_android_test: 'Kotlin, tests Android', test_fixtures: 'fixtures de test (HTML, JSON capturés sur HFR)', room_schemas: 'schémas Room (générés)', docs: 'docs (Markdown hors specs)', specs: 'specs et ADR', scripts: 'scripts', resources_xml: 'ressources XML', build: 'build (Gradle, build-logic)', other: 'autre', ci: 'CI (workflows)'};
+const comp = Object.entries(LOC.cur).map(([k, v]) => ({k, ...v, g: GROUPS.find(g => g.cols.includes(k))})).sort((a, b) => b.code - a.code);
+hbars('hb-comp', comp.map(x => ({label: CAT[x.k] || x.k, small: pl(x.files, 'fichier'), v: x.code, c: x.g.c,
+  tip: () => [{v: n(x.code), k: 'lignes de code', c: x.g.c}, {v: n(x.comment), k: 'commentaires'}, {v: n(x.blank), k: 'blancs'}, {v: n(x.files), k: 'fichiers'}]})));
+TABLES.comp = () => [['Catégorie', 'Fichiers', 'Code', 'Commentaires', 'Blancs'], [...comp.map(x => [CAT[x.k] || x.k, n(x.files), n(x.code), n(x.comment), n(x.blank)]), ['total', n(LOC.tot.files), n(LOC.tot.code), n(LOC.tot.comment), n(LOC.tot.blank)]]];
+
+(() => {
+  const mods = LOC.mods.filter(m => m[1] + m[2] > 0).sort((a, b) => b[1] + b[2] - a[1] - a[2]), empty = LOC.mods.filter(m => m[1] + m[2] === 0).map(m => m[0]);
+  V.modNote = `${mods.length} modules non vides${empty.length ? ' ; ' + empty.join(', ') + ' est vide.' : '.'}`;
+  b2b('bb-mods', ['module', 'production', 'tests'], mods.map(([name, main, test, files]) => ({name, l: main, r: test, cl: c1, cr: c2, title: name,
+    tip: () => [{v: n(main), k: 'lignes de production', c: c1}, {v: n(test), k: 'lignes de test', c: c2}, {v: main ? n2(test / main) : '–', k: 'ratio test / production'}, {v: n(files), k: 'fichiers Kotlin'}]})), Math.max(...mods.flatMap(m => [m[1], m[2]])));
+})();
+
+const wkT = t => wk(weekKey(t));
+const mini = (id, pts, o) => mount(id, (host, w) => lines(host, w, Object.assign({t0: pts[0][0], t1: gen, h: 128, ml: 34, mt: 10, nt: 2, title: wkT, series: [{name: o.name, c: c1, pts, area: true}]}, o)));
+const tls = TLR.filter(z => tv(z, 'kotlin_main') > 0);
+mini('c-m-test', tls.map(z => [z.t, tv(z, 'test_methods')]), {name: '@Test'});
+mini('c-m-ratio', tls.map(z => [z.t, tv(z, 'kotlin_test') / tv(z, 'kotlin_main')]), {name: 'ratio test / production', fmt: n1, tipFmt: n2, yMax: 2, yTicks: [0, 1, 2]});
+mini('c-m-comp', tls.map(z => [z.t, tv(z, 'composable_functions')]), {name: '@Composable'});
+const robo = LOC.robo.map(r => [T(r[0]), r[1], r[2]]), roboPeak = maxBy(robo, r => r[1]), roboLast = robo[robo.length - 1];
+V.roboNow = n(roboLast[1]); V.roboPeak = `pic ${n(roboPeak[1])}`;
+mount('c-m-robo', (host, w) => {
+  const r = lines(host, w, {t0: robo[0][0] - 216e5, t1: roboLast[0] + 216e5, h: 128, ml: 34, mt: 10, nt: 2, title: fDT, series: [{name: 'captures', c: c1, pts: robo, area: true, step: true, extend: false, key: p => 'captures · ' + p[2]}]});
+  S('text', {x: r.x(roboPeak[0]) - 4, y: r.y(roboPeak[1]) - 6, class: 'lbb', 'text-anchor': 'end', text: n(roboPeak[1])}, r.f.svg);
+});
+
+(() => {
+  const isTest = p => /\/src\/test/.test(p);
+  V.bigTests = n(LOC.big.filter(f => isTest(f[0])).length);
+  legend('lg-files', [{name: 'test', c: c2}, {name: 'production', c: c1}]);
+  hbars('hb-files', LOC.big.map(([path, code]) => { const parts = path.split('/'), file = parts.pop(); return {label: file, small: parts.slice(0, parts.indexOf('src')).join(':') + ' · ' + (isTest(path) ? 'test' : 'production'), v: code, c: isTest(path) ? c2 : c1}; }));
+})();
+
+// == Specs
+const DOC = LOC.docs, SL = LOC.specs_log, ES = LOC.ed_spec;
+Object.assign(V, {specsN: n(DOC.specs), adrN: n(DOC.adr), guidesN: n(DOC.guides), skillsN: n(DOC.agent_skills), mdN: n(DOC.markdown_total),
+  specsLoc: n(kt('specs')), docsLoc: n(kt('docs')), specsLogN: n(SL.count), specsFirst: SL.first.version, specsFirstD: fDay(iso(SL.first.date)),
+  specsLast: SL.latest.version, specsLastD: fDay(iso(SL.latest.date)), edVer: ES.version, edReq: n(ES.requirements_ed), edWords: n(ES.words),
+  edLines: n(ES.text_lines), edArch: n(ES.archived_versions), edCommits: n(ES.commits), edHtml: n(Math.round(ES.html_bytes / 1e3)) + ' Ko',
+  edFirst: fDayL(iso(ES.first_commit)), edLast: fDayL(iso(ES.last_commit))});
+$('ed-spec-link').href = ES.url;
+const DS = [{name: 'specs et ADR', c: c1, k: 'specs'}, {name: 'docs hors specs', c: c2, k: 'docs'}];
+legend('lg-docs', DS.map(s => ({...s, kind: 'line'})));
+mount('c-docs', (host, w) => lines(host, w, {t0: TLR[0].t, t1: gen, h: 190, title: t => wk(weekOf(t).week), series: DS.map(s => ({name: s.name, c: s.c, pts: TLR.map(z => [z.t, tv(z, s.k)])}))}));
+
+// == Activité
+Object.assign(V, {merges: n(C.merges), activeDays: n(C.active_days), activePct: p0(C.active_days / C.span_days) + ' des jours',
+  busiestDay: `${fDayL(iso(C.busiest_day.date))}, avec ${n(C.busiest_day.count)} commits`, firstParent: n(C.first_parent)});
+const com = {g: 'w'};
+const comChart = mount('c-commits', (host, w) => {
+  const src = com.g === 'w' ? C.weekly : C.monthly, vals = src.map(r => r[1]), im = vals.indexOf(Math.max(...vals));
+  columns(host, w, {keys: src.map(r => r[0]), fmt: n, series: [{name: 'commits', c: c1, vals}], ann: [{i: im, text: n(vals[im])}], lab: com.g === 'm' ? ml : null, title: com.g === 'w' ? wk : mk});
+});
+seg('com-gran', d => { com.g = d.g; repaint(comChart); });
+const hMax = C.by_hour.indexOf(Math.max(...C.by_hour)), WDN = ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche'], dMax = C.by_weekday.indexOf(Math.max(...C.by_weekday));
+V.peakHour = `${hMax} h (${n(C.by_hour[hMax])} commits)`; V.peakDay = `${WDN[dMax]} (${n(C.by_weekday[dMax])} commits)`;
+mount('c-hour', (host, w) => columns(host, w, {h: 200, keys: C.by_hour.map((_, i) => String(i)), fmt: n, series: [{name: 'commits', c: c1, vals: C.by_hour}],
+  th: 'Heure', ann: [{i: hMax, text: n(C.by_hour[hMax])}], lab: (k, i) => i % (w < 480 ? 6 : 3) ? null : i + ' h', gap: 20, title: k => `${k} h – ${k} h 59`}));
+mount('c-wday', (host, w) => columns(host, w, {h: 200, keys: WDN, fmt: n, series: [{name: 'commits', c: c1, vals: C.by_weekday}],
+  th: 'Jour', ann: [{i: dMax, text: n(C.by_weekday[dMax])}], lab: k => w < 420 ? k.slice(0, 3) + '.' : k, gap: 10, title: k => k}));
+hbars('hb-types', Object.entries(C.conventional_types).sort((a, b) => b[1] - a[1]).map(([k, v]) => ({label: k, v, vs: p1(v / C.total)})));
+hbars('hb-cauth', C.by_login.map(([login, v, bot]) => ({label: login, small: bot ? 'bot' : 'humain', v, vs: p1(v / C.total), c: bot ? cO : c1})));
+
+// == PR
+const pw = P.weekly_merged, pwm = maxBy(pw, r => r[1]);
+Object.assign(V, {prTotal: n(P.total), prStates: `${n(P.merged)} mergées, ${n(P.closed_unmerged)} fermées sans merge, ${pl(P.open, 'ouverte')}`,
+  prMed: fh(P.hours_to_merge.median), prMean: fh(P.hours_to_merge.mean), prAdd: '+' + n(P.additions), prDel: '−' + n(P.deletions),
+  prPeakWeek: `semaine du ${fDayL(kd(pwm[0]))}, ${n(pwm[1])} PR`});
+mount('c-prw', (host, w) => columns(host, w, {h: 220, keys: pw.map(r => r[0]), fmt: n, series: [{name: 'PR mergées', c: c1, vals: pw.map(r => r[1])}], ann: [{i: pw.indexOf(pwm), text: n(pwm[1])}], title: wk}));
+
+mount('c-delay', (host, w) => {
+  const f = frame(host, w, 168, {l: 8, r: 14, t: 6, b: 24}), l0 = Math.log10(1 / 60), l1 = Math.log10(24);
+  const x = v => f.L + (Math.log10(v) - l0) / (l1 - l0) * (f.R - f.L);
+  [[1 / 60, '1 min', 'start'], [1 / 6, '10 min'], [1, '1 h'], [6, '6 h'], [24, '24 h', 'end']].forEach(([v, t, a]) => { const X = Math.round(x(v)) + .5; S('line', {x1: X, x2: X, y1: f.T, y2: f.B, class: 'gl'}, f.svg); S('text', {x: X, y: f.B + 16, class: 'tk', 'text-anchor': a || 'middle', text: t}, f.svg); });
+  const rh = (f.B - f.T) / 2;
+  [['toutes les PR mergées', P.hours_to_merge], ['hors bots', P.hours_to_merge_excl_bots]].forEach(([name, d], i) => {
+    const cy = f.T + rh * i + rh * .62, xm = x(d.median), x75 = x(d.p75), x90 = x(d.p90);
+    S('text', {x: f.L, y: cy - 26, class: 'lb', text: name}, f.svg);
+    S('rect', {x: f.L, y: cy - 2, width: xm - f.L, height: 4, rx: 2, style: 'fill:var(--s1);fill-opacity:.35'}, f.svg);
+    S('rect', {x: xm, y: cy - 4, width: x90 - xm, height: 8, rx: 4, style: 'fill:var(--s1);fill-opacity:.25'}, f.svg);
+    S('rect', {x: xm, y: cy - 4, width: x75 - xm, height: 8, rx: 4, style: 'fill:var(--s1);fill-opacity:.55'}, f.svg);
+    [[xm, 'médiane ' + fh(d.median), 'end', -10, -2], [x75, 'p75 ' + fh(d.p75), 'start', -10, 2], [x90, 'p90 ' + fh(d.p90), x90 > f.R - 60 ? 'end' : 'middle', 22, 0]].forEach(([X, t, a, dy, dx]) => {
+      S('circle', {cx: X, cy, r: 4.5, class: 'ring', style: 'fill:var(--s1)'}, f.svg);
+      S('text', {x: X + dx, y: cy + dy, class: 'lbb', 'text-anchor': a, text: t}, f.svg);
+    });
+  });
+});
+
+const SZ = P.size_buckets, SZK = ['XS', 'S', 'M', 'L', 'XL'], SZL = {XS: '< 10 lignes', S: '10 à 99', M: '100 à 499', L: '500 à 999', XL: '≥ 1 000'};
+Object.assign(V, {sizeN: n(sum(Object.values(SZ))), cpprMed: n(P.commits_per_merged_pr.median), cpprMax: n(P.commits_per_merged_pr.max)});
+segbar('sb-size', SZK.map((k, i) => ({name: `${k} (${SZL[k]})`, v: SZ[k], c: `var(--o${i + 1})`, ci: `var(--o${i + 1}i)`})), 'Taille des PR', 'share');
+legend('lg-size', SZK.map((k, i) => ({name: `${k} ${SZL[k]}`, c: `var(--o${i + 1})`, cnt: n(SZ[k])})));
+const BB = P.by_base, baseParts = [{name: 'dev', v: BB.dev, c: c1}, {name: 'main', v: BB.main, c: c2}, {name: 'autre', v: BB.autre, c: cO}];
+V.baseSplit = `dev ${n(BB.dev)}, main ${n(BB.main)}, autre ${n(BB.autre)}`;
+V.promoNote = `Dont ${n(P.promotions)} promotions dev → main et ${n(P.syncs)} resynchronisations main → dev.`;
+segbar('sb-base', baseParts, 'Branche cible des PR');
+legend('lg-base', baseParts.map(p => ({name: p.name, c: p.c, cnt: n(p.v)})));
+
+const CHU = rows(P.monthly_churn);
+legend('lg-churn', [{name: 'lignes ajoutées', c: 'var(--add)'}, {name: 'lignes supprimées', c: 'var(--del)'}]);
+mount('c-churn', (host, w) => columns(host, w, {h: 250, maxW: 40, keys: CHU.map(r => r.month), lab: ml, title: (k, i) => `${mk(k)} · ${pl(CHU[i].prs, 'PR', 'PR')}`,
+  series: [{name: 'ajoutées', c: 'var(--add)', vals: CHU.map(r => r.additions)}, {name: 'supprimées', c: 'var(--del)', vals: CHU.map(r => r.deletions), neg: true}]}));
+
+const prList = (id, list) => list.forEach(p => {
+  const li = H('li', null, $(id));
+  H('a', {class: 'no', href: REPO + '/pull/' + p.number, text: '#' + p.number}, li);
+  H('small', {text: 'mergée le ' + fDayY(iso(p.merged_at))}, H('span', {class: 'ti', text: p.title}, li));
+  const c = H('span', {class: 'ch'}, li); H('b', {text: '+' + n(p.additions)}, c); c.append(' −' + n(p.deletions));
+});
+prList('prs-big', P.largest); prList('prs-promo', P.largest_promotions);
+
+// == Issues
+const CR = I.closed_by_reason;
+Object.assign(V, {issueStates: `${n(I.closed)} fermées (${n(CR.COMPLETED)} terminées, ${n(CR.NOT_PLANNED)} abandonnées, ${pl(CR.DUPLICATE, 'doublon')}), ${n(I.open)} ouvertes`,
+  issuesMs: n(I.with_milestone), issuesOpen: n(I.open), closeMed: fj(I.days_to_close.median), closeP90: fj(I.days_to_close.p90), closeMean: fj(I.days_to_close.mean),
+  closeMedC: fj(I.days_to_close_completed.median), closeP90C: fj(I.days_to_close_completed.p90), issueComments: n(I.comments)});
+legend('lg-iw', [{name: 'ouvertes', c: c1}, {name: 'fermées', c: c3}]);
+mount('c-iw', (host, w) => columns(host, w, {h: 250, keys: I.weekly.map(r => r[0]), fmt: n, title: wk,
+  series: [{name: 'ouvertes', c: c1, vals: I.weekly.map(r => r[1])}, {name: 'fermées', c: c3, vals: I.weekly.map(r => r[2]), neg: true}]}));
+mount('c-backlog', (host, w) => { const pts = I.open_timeline.map(r => [iso(r[0]), r[1]]), last = pts[pts.length - 1];
+  lines(host, w, {t0: pts[0][0], t1: gen, h: 220, title: t => 'fin de semaine, ' + fDayY(t), series: [{name: 'issues ouvertes', c: c1, pts, area: true}], ends: [{t: last[0], v: last[1], c: c1, text: n(last[1])}]}); });
+
+const LB = [...I.by_label].sort((a, b) => b[1] - a[1]), LBN = 16;
+V.labelsShown = n(Math.min(LBN, LB.length)); V.labelsTotal = n(LB.length);
+legend('lg-labels', [{name: 'fermées', c: c1}, {name: 'ouvertes', c: c2}]);
+hbars('hb-labels', LB.slice(0, LBN).map(([label, cnt, open]) => ({label, v: cnt, parts: [{v: cnt - open, c: c1}, {v: open, c: c2}], vs: open ? n(open) + ' ouv.' : '',
+  tip: () => [{v: n(cnt), k: 'issues'}, {v: n(cnt - open), k: 'fermées', c: c1}, {v: n(open), k: 'ouvertes', c: c2}]})));
+TABLES.labels = () => [['Label', 'Issues', 'Ouvertes', 'Fermées'], LB.map(([l, c, o]) => [l, n(c), n(o), n(c - o)])];
+
+(() => {
+  const ms = rows(D.ms).sort((a, b) => a.number - b.number);
+  Object.assign(V, {msN: n(ms.length), msOpen: n(ms.filter(m => m.state === 'open').length), msItems: n(sum(ms.map(m => m.open + m.closed)))});
+  legend('lg-ms', [{name: 'fermés', c: c1}, {name: 'ouverts', c: 'var(--wash)'}]);
+  ms.forEach(m => {
+    const li = H('li', null, $('ms')), tt = H('span', {class: 'tt', text: m.title}, li);
+    H('span', {class: 'pill' + (m.state === 'open' ? ' on' : ''), text: m.state === 'open' ? 'ouvert' : 'fermé le ' + fDay(iso(m.closed_at))}, tt);
+    H('span', {class: 'c', text: `${n(m.closed)} / ${n(m.open + m.closed)}`}, li);
+    segbar(H('div', {class: 'segbar thin'}, li), [{name: 'fermés', v: m.closed, c: c1, extra: pl(m.issues_closed, 'issue')}, {name: 'ouverts', v: m.open, c: 'var(--wash)', extra: pl(m.issues_open, 'issue')}], m.title);
+  });
+})();
+
+// == LLM
+const FAM = [{k: 'Opus', c: c1}, {k: 'Fable', c: c2}, {k: 'Codex', c: c3}, {k: 'Sol', c: c4}, {k: 'Astra', c: c5}];
+const OTHER = {k: 'autre', c: cO}, famOf = m => FAM.find(f => m.includes(f.k)) || OTHER;
+const TF = L.trailers_first_last, models = Object.keys(L.trailers_by_model);
+Object.assign(V, {llmCommits: n(L.commits_with_llm), llmPct1: p1(L.commits_with_llm / C.total), llmPctX: p1(L.commits_with_llm_ratio_excl_merges_bots), llmModels: n(models.length)});
+legend('lg-lanes', FAM.map(f => ({name: f.k, c: f.c})));
+mount('c-lanes', (host, w) => {
+  const rs = models.map(m => ({m, fam: famOf(m), a: iso(TF[m][1]), b: iso(TF[m][2]), cnt: L.trailers_by_model[m]})).sort((p, q) => p.a - q.a);
+  const rh = 24, f = frame(host, w, rs.length * rh + 34, {l: w < 560 ? 96 : 118, r: 10, t: 6, b: 26}), x = lin(t0c, gen, f.L, f.R);
+  xTime(f, x, t0c, gen, true);
+  S('line', {x1: f.L, x2: f.R, y1: f.B + .5, y2: f.B + .5, class: 'bl'}, f.svg);
+  rs.forEach((r, i) => {
+    const cy = f.T + rh * i + rh / 2, a = x(r.a), b = Math.max(x(r.b), a + 6), txt = n(r.cnt), tw = txt.length * 6.6;
+    const pos = b + 12 + tw < f.R ? [b + 6, cy, 'start'] : a - 12 - tw > f.L ? [a - 6, cy, 'end'] : [b - 2, cy - 12, 'end']; // right, left, or above the bar end
+    S('text', {x: f.L - 10, y: cy, class: 'lb', 'text-anchor': 'end', 'dominant-baseline': 'middle', text: short(r.m)}, f.svg);
+    S('rect', {x: a, y: cy - 5, width: b - a, height: 10, rx: 5, style: 'fill:' + r.fam.c}, f.svg);
+    S('text', {x: pos[0], y: pos[1], class: 'lbb', 'text-anchor': pos[2], 'dominant-baseline': 'middle', text: txt}, f.svg);
+  });
+  hover(f, rs.length, (px, py) => { const i = Math.floor((py - f.T) / rh); return i < rs.length ? i : -1; }, i => ({x: x(rs[i].b), y: f.T + rh * (i + .5)}), (i, cx, cy) => {
+    if (i < 0) return; const r = rs[i];
+    tipShow(cx, cy, r.m, [{v: n(r.cnt), k: 'commits distincts', c: r.fam.c}, {v: fDay(r.a), k: 'premier trailer'}, {v: fDay(r.b), k: 'dernier trailer'}]);
+  });
+});
+TABLES.lanes = () => [['Modèle', 'Famille', 'Commits distincts', 'Lignes de trailer', 'Premier', 'Dernier'], models.map(m => [m, TF[m][0], n(L.trailers_by_model[m]), n(L.trailer_lines_by_model[m] || 0), fDayY(iso(TF[m][1])), fDayY(iso(TF[m][2]))])];
+const LM = L.trailers_monthly.map(r => { const o = {month: r.month}; [...FAM, OTHER].forEach(f => { o[f.k] = 0; }); for (const k in r) if (k !== 'month') o[famOf(k).k] += r[k]; return o; });
+const fams = LM.some(r => r.autre) ? [...FAM, OTHER] : FAM;
+legend('lg-llmm', fams.map(f => ({name: f.k, c: f.c})));
+mount('c-llmm', (host, w) => columns(host, w, {h: 240, maxW: 34, hideZero: true, fmt: n, keys: LM.map(r => r.month), lab: ml, title: mk, series: fams.map(f => ({name: f.k, c: f.c, vals: LM.map(r => r[f.k])}))}));
+const famParts = [{name: 'Claude', v: L.trailers_by_family.Claude, c: c1, ci: '#fff'}, {name: 'GPT', v: L.trailers_by_family.GPT, c: c3, ci: '#fff'}];
+segbar('sb-fam', famParts, 'Commits par famille de modèles', 'value');
+legend('lg-fam', famParts.map(p => ({name: p.name, c: p.c, cnt: n(p.v) + ' commits'})));
+V.llmMarkers = `Autres marqueurs : ${n(L.prs_generated_with_claude_code)} PR marquées « Generated with Claude Code », ${n(L.prs_label_codex_reviewed)} PR avec le label codex-reviewed, ${n(L.codex_connector_reviews_comments)} commentaires de revue du bot Codex, ${n(L.claude_session_trailers)} commits avec un trailer Claude-Session. Les lignes de trailer, doublons de squash compris, totalisent ${n(sum(Object.values(L.trailer_lines_by_model)))}, contre ${n(sum(Object.values(L.trailers_by_model)))} paires commit-modèle distinctes.`;
+V.apTexts = n(L.action_par_texts); V.rolesN = n(L.prs_with_roles);
+hbars('hb-ap', Object.entries(L.action_par).sort((a, b) => b[1] - a[1]).map(([m, v]) => ({label: short(m), v, c: famOf(m).c})));
+(() => {
+  const RB = L.pr_roles_by_name, g = (r, k) => RB[r][k] || 0, names = [...new Set([...Object.keys(RB.code), ...Object.keys(RB.gate)])].sort((a, b) => g('code', b) + g('gate', b) - g('code', a) - g('gate', a));
+  b2b('bb-roles', ['modèle', 'code', 'gate'], names.map(k => { const c = (FAM.find(f => f.k === k) || OTHER).c; return {name: k, l: g('code', k), r: g('gate', k), cl: c, cr: c, title: k,
+    tip: () => [{v: n(g('code', k)), k: 'PR codées', c}, {v: n(g('gate', k)), k: 'PR en gate'}]}; }),
+    Math.max(...names.flatMap(k => [g('code', k), g('gate', k)])));
+})();
+
+// == Intervenants
+const PE = rows(D.people), hum = PE.filter(p => !p.is_bot), bots = PE.filter(p => p.is_bot), others = hum.filter(p => p.login !== 'XaaT');
+const os = k => sum(others.map(p => p[k])), masked = PE.filter(p => /^masqué-/.test(p.login)).map(p => p.login).sort();
+Object.assign(V, {peopleN: n(PE.length), peopleSplit: `${n(hum.length)} humains et ${n(bots.length)} bots`, xaatCommits: n((PE.find(p => p.login === 'XaaT') || {commits: 0}).commits),
+  othersN: n(others.length), othersSum: `${pl(os('commits'), 'commit')}, ${pl(os('prs'), 'PR', 'PR')}, ${pl(os('issues'), 'issue')}, ${pl(os('comments'), 'commentaire')} et ${pl(os('reviews'), 'revue')}`,
+  maskedNote: masked.length ? `${masked.join(' et ')} remplacent des comptes dont le login ressemble à une identité réelle.` : ''});
+const what = p => [p.commits && pl(p.commits, 'commit'), p.prs && pl(p.prs, 'PR', 'PR'), p.issues && pl(p.issues, 'issue'), p.comments && pl(p.comments, 'commentaire'), p.reviews && pl(p.reviews, 'revue')].filter(Boolean).join(', ');
+mount('c-people', (host, w) => {
+  const hs = [...hum].sort((a, b) => iso(a.first_seen) - iso(b.first_seen)).map((p, i) => [iso(p.first_seen), i + 1, p]);
+  lines(host, w, {t0: t0c - 864e5, t1: gen, h: 230, fmt: n, title: t => 'premier passage le ' + fDayY(t), series: [{name: 'humains', c: c1, pts: hs, step: true, area: true, dots: true, r: 3}],
+    tipRows: t => hs.filter(z => z[0] === t).map(z => ({v: z[2].login, k: `${what(z[2])} · ${z[1]}e compte`, c: c1}))});
+});
+const tot = p => p.commits + p.prs + p.issues + p.comments + p.reviews;
+table($('t-people'), ['Compte', 'Premier passage', 'Commits', 'PR', 'Issues', 'Commentaires', 'Revues'], [...hum].sort((a, b) => tot(b) - tot(a) || iso(a.first_seen) - iso(b.first_seen)).map(p => [p.login, fDay(iso(p.first_seen)), ...['commits', 'prs', 'issues', 'comments', 'reviews'].map(k => n(p[k]))]));
+table($('t-bots'), ['Bot', 'Premier passage', 'Commits', 'PR', 'Comm.', 'Revues'], bots.map(p => [p.login, fDay(iso(p.first_seen)), ...['commits', 'prs', 'comments', 'reviews'].map(k => n(p[k]))]));
+
+// == CI
+const rate = r => p1(r.success / (r.success + r.failure)), CIM = rows(CI.monthly);
+Object.assign(V, {ciRuns: n(CI.runs_total), ciFirst: fDayY(iso(CI.first_run)), ciRate: p1(CI.success_rate), ciMed: n1(CI.median_duration_min) + ' min', ciP90: n1(CI.p90_duration_min) + ' min', ciHours: n1(CI.total_hours) + ' h'});
+const CIS = [{name: 'annulés', c: 'var(--cancel)', k: 'cancelled'}, {name: 'échecs', c: 'var(--bad)', k: 'failure'}, {name: 'succès', c: 'var(--good)', k: 'success'}];
+legend('lg-ci', [...CIS].reverse().map(s => ({name: s.name, c: s.c, cnt: n(CI.conclusions[s.k])})));
+mount('c-ci', (host, w) => columns(host, w, {h: 240, maxW: 34, total: 'runs', fmt: n, keys: CIM.map(r => r.month), lab: ml, series: CIS.map(s => ({name: s.name, c: s.c, vals: CIM.map(r => r[s.k])})),
+  title: (k, i) => `${mk(k)} · ${rate(CIM[i])} de succès`}));
+table($('t-wf'), ['Workflow', 'Runs', 'Succès', 'Médiane', 'Heures'], rows(CI.workflows).map(f => [f.name, n(f.runs), p1(f.success_rate), n1(f.median_duration_min) + ' min', n1(f.total_hours)]));
+
+// == Dépôt
+Object.assign(V, {stars: n(M.stars), forks: n(M.forks), watchers: n(M.watchers), created: fDayY(iso(M.created_at)), pushed: fDT(iso(M.pushed_at)), defBranch: M.default_branch, sizeKb: n(M.size_kb) + ' Ko'});
+legend('lg-stars', [{name: 'étoiles', c: c1, kind: 'line'}, {name: 'forks', c: c2, kind: 'line'}]);
+mount('c-stars', (host, w) => {
+  const t0 = iso(M.created_at), st = [[t0, 0], ...D.stars.map(r => [T(r[0]), r[1]])], fk = [[t0, 0], ...D.forks.map(r => [T(r[0]), r[1]])];
+  lines(host, w, {t0, t1: gen, h: 220, fmt: n, series: [{name: 'forks', c: c2, pts: fk, step: true}, {name: 'étoiles', c: c1, pts: st, step: true, area: true}], ends: [{t: gen, v: M.stars, c: c1, text: n(M.stars)}]});
+});
+M.topics.forEach(t => H('li', {text: t}, $('topics')));
+const langs = Object.entries(M.languages).sort((a, b) => b[1] - a[1]), lsum = sum(langs.map(l => l[1])), lc = i => [c1, c2, c3, c4][i] || cO;
+segbar('sb-lang', langs.map(([k, v], i) => ({name: k, v, c: lc(i), extra: n(v) + ' octets'})), 'Langages');
+legend('lg-lang', langs.map(([k, v], i) => ({name: k, c: lc(i), cnt: p1(v / lsum)})));
+
+// == Éditeur
+const st2 = o => Object.entries(o).map(([k, v]) => `${n(v)} ${k}${v > 1 && !k.includes(' ') ? 's' : ''}`).join(', ');
+Object.assign(V, {edIssue: ED.issue, edOpened: fDayY(iso(ED.issue_created_at)), edLots: n(ED.lots), edLotStates: st2(ED.lots_by_state), edAdd: '+' + n(ED.lots_additions), edDel: '−' + n(ED.lots_deletions),
+  edAdj: n(ED.end_of_phase_adjustments), edAdjStates: st2(ED.end_of_phase_by_state), edNotes: ED.notes});
+$('ed-issue-link').href = REPO + '/issues/' + ED.issue;
+legend('lg-lots', [{name: 'lignes supprimées', c: 'var(--del)'}, {name: 'lignes ajoutées', c: 'var(--add)'}]);
+(() => {
+  const lots = rows(ED.lots_detail), max = Math.max(...lots.flatMap(l => [l.additions || 0, l.deletions || 0]));
+  b2b('lots', null, lots.map(l => ({
+    name: nm => { H('b', {text: l.lot}, nm); H('a', {href: REPO + '/issues/' + l.issue, text: '#' + l.issue}, nm); H('span', {class: 'pill', text: l.size_class}, nm); H('span', {class: 'pill' + (l.state === 'livré' ? ' solid' : l.state === 'mergé' ? ' on' : ''), text: l.state}, nm); },
+    l: l.deletions, r: l.additions, lt: '−' + n(l.deletions), rt: '+' + n(l.additions), cl: 'var(--del)', cr: 'var(--add)', na: 'pas de lignes au suivi', title: `${l.lot} · #${l.issue}`,
+    tip: () => [{v: '+' + n(l.additions), k: 'lignes ajoutées', c: 'var(--add)'}, {v: '−' + n(l.deletions), k: 'lignes supprimées', c: 'var(--del)'}, ...(l.prs ? [{v: n(l.prs), k: 'PR'}] : []), {v: l.size_class, k: 'taille'}, {v: l.state, k: 'état'}]})), max);
+})();
+
+// == Méthode
+V.collectLine = `${D.collect.script.split('/').pop()} · ${n1(D.collect.duration_s)} s · ${n(D.collect.api_calls.rest)} appels REST, ${n(D.collect.api_calls.graphql)} GraphQL`;
+[...D.notes,
+  `Téléchargements : assets des releases GitHub uniquement. Les installations Google Play et F-Droid ne sont pas connues.`,
+  `Bêta ${pend} : présente au CHANGELOG sans versionCode ni tag, donc en préparation et non publiée.`,
+  `Releases GitHub et tailles d'APK F-Droid : placées à la date du tag app-vN du build. 1 Mo = 10⁶ octets.`,
+  `Taille des PR : ${P.size_buckets_scope}. Churn : ${P.churn_scope}. Totaux bruts de toutes les PR mergées : +${n(P.additions_all_merged)} / −${n(P.deletions_all_merged)}.`,
+  `CI : ${CI.success_rate_rule}. Durées : ${CI.duration_rule}.`,
+  `Courbe des lignes de code : ${LOC.tl_method}`,
+  `Captures Roborazzi : ${LOC.robo_note}`,
+  `Spec de l'éditeur : ${LOC.ed_spec_note}`,
+  `Refonte de l'éditeur : ${ED.source}.`,
+  `Changelog : ${R.cl_source} ; entrées par piste : ${Object.entries(R.cl_counts).map(([k, v]) => k + ' ' + v).join(', ')}.`,
+].forEach(t => H('li', {text: t}, $('methods')));
+$('rules').textContent = LOC.rules;
+
+// == fill the text values
+document.querySelectorAll('[data-v]').forEach(e => { const v = V[e.dataset.v]; if (v == null) console.warn('valeur manquante :', e.dataset.v); else e.textContent = v; });
+document.querySelectorAll('.note[data-v]').forEach(e => { e.hidden = !e.textContent; });
+
+/* rail: mark the section in view */
+(() => {
+  const links = [...document.querySelectorAll('.rail a')], ul = document.querySelector('.rail ul');
+  const io = new IntersectionObserver(es => es.forEach(e => {
+    if (!e.isIntersecting) return;
+    links.forEach(a => a.toggleAttribute('aria-current', a.hash === '#' + e.target.id));
+    const a = links.find(l => l.hash === '#' + e.target.id); if (a) a.setAttribute('aria-current', 'true');
+    if (a) ul.scrollLeft = a.offsetLeft - (ul.clientWidth - a.offsetWidth) / 2;
+  }), {rootMargin: '-45% 0px -50% 0px'});
+  links.forEach(a => io.observe($(a.hash.slice(1))));
+})();
+})();
+</script>
+</body>
+</html>
