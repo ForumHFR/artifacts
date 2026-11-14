@@ -1,0 +1,161 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Feuille smileys, propositions</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600&display=swap">
+<style>
+/* Layout: comparison strips, one row per scenario, five phones side by side; author cards above. */
+:root{--bg:#f7f3f3;--surface:#fff;--fg:#231a1b;--muted:#6d5f60;--line:#e4d9d9;--accent:#8e1d24;--chip:#f6e6e7;
+--font-body:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;--font-display:"Space Grotesk","Inter",system-ui,sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#171213;--surface:#211a1b;--fg:#f1e8e8;--muted:#b6a7a8;--line:#3a2f30;--accent:#f0a5a8;--chip:#3a2427;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#171213;--surface:#211a1b;--fg:#f1e8e8;--muted:#b6a7a8;--line:#3a2f30;--accent:#f0a5a8;--chip:#3a2427;color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font:15px/1.55 var(--font-body);padding-block:28px 64px;
+padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+main{max-width:1320px;margin:0 auto;display:grid;gap:32px}
+h1,h2,h3,h4{font-family:var(--font-display);margin:0;text-wrap:balance}h1{font-size:1.8rem}h2{font-size:1.25rem}h3{font-size:1.02rem}h4{font-size:.92rem;margin-top:10px}
+p{margin:0;max-width:75ch}.muted{color:var(--muted)}a{color:var(--accent)}
+header.top{display:grid;gap:12px}
+.authors{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.author{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:grid;gap:8px;align-content:start;min-width:0}
+.author header{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+.model{font-size:.78rem;color:var(--muted);letter-spacing:.02em}
+.idea{font-size:.92rem}.status{font-size:.8rem;color:var(--muted)}
+details summary{cursor:pointer;color:var(--accent);font-size:.85rem}
+.note{font-size:.86rem;display:grid;gap:6px;margin-top:8px}.note ul{margin:0;padding-left:18px}.note code{font-size:.82em;background:var(--chip);padding:0 4px;border-radius:4px}
+nav.jump{display:flex;flex-wrap:wrap;gap:6px;position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);padding-block:8px;z-index:5}
+nav.jump a{font:500 .8rem var(--font-display);text-decoration:none;background:var(--chip);color:var(--fg);padding:4px 10px;border-radius:999px;font-variant-numeric:tabular-nums}
+.scenario{display:grid;gap:10px}.num{font-variant-numeric:tabular-nums;color:var(--accent);margin-right:4px}
+.strip{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(170px,1fr);gap:12px;overflow-x:auto;padding-bottom:6px}
+.scenario.land .strip{grid-auto-columns:minmax(300px,1fr)}
+figure{margin:0;display:grid;gap:6px;min-width:0}
+figure img{display:block;width:100%;height:auto;border-radius:10px;border:1px solid var(--line);background:var(--surface)}
+figcaption{font:500 .8rem var(--font-display);color:var(--muted);text-align:center}
+.missing div{aspect-ratio:9/19.5;border:1px dashed var(--line);border-radius:10px;display:grid;place-items:center;color:var(--muted);font-size:.8rem}
+.extras{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px}
+a:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+</style>
+</head><body><main>
+<header class="top">
+<h1>Feuille smileys : quatre propositions</h1>
+<p>XaTriX a demandé de revenir sur la hauteur commune des onglets du sélecteur de smileys (#1630), puis de comparer des propositions d'UI et d'UX de Opus 5.5, Sol 6.1, Fable et Astra. Chaque auteur a travaillé seul, sur la même base et le même banc Roborazzi : écran S10e 360 × 780 dp, faux éditeur derrière la feuille, vrais smileys HFR. La première colonne montre la base, déjà sans la hauteur commune.</p>
+<p class="muted">Prototypes sur des branches locales, non mergés. Les rendus viennent de Robolectric, sans animation ni GIF animé : seule la première image de chaque smiley est affichée. Touchez une image pour l'ouvrir en grand.</p>
+</header>
+<section><h2>Les propositions</h2><div class="authors"><article class="author" id="a-baseline"><header><h3>Base</h3><span class="model">dev 0.69.23 sans la hauteur commune</span></header><p class="idea">Point de départ commun : les trois onglets d'aujourd'hui, chaque onglet à sa hauteur naturelle.</p><p class="status">Rendu complet.</p></article>
+<article class="author" id="a-opus"><header><h3>Opus 5.5</h3><span class="model">Claude Opus 5.5</span></header><p class="idea">Proposition en cours de rendu.</p><p class="status">En cours d&#x27;écriture.</p></article>
+<article class="author" id="a-sol"><header><h3>Sol 6.1</h3><span class="model">GPT-6.1 Sol</span></header><p class="idea">Une palette de petites cartes, avec la recherche toujours à portée de doigt et les usages fréquents en tête.</p><p class="status">Compile ; 7 scénarios sur 10 rendus, Favoris et détail en cours de correction.</p><details><summary>Note de conception</summary><div class="note"><p>Une palette de petites cartes, avec la recherche toujours à portée de doigt et les usages fréquents en tête.</p>
+<ul>
+<li>En-tête nommé, conseil d’appui long et fermeture explicite de 48 dp.</li>
+<li>Recherche permanente, puis trois collections en capsules : Favoris, Standard, Wiki.</li>
+<li>En paysage court, champ et collections partagent une ligne ; la grille garde le reste de la hauteur.</li>
+<li>Cases tonales arrondies, cinq colonnes à 360 dp, cases de 56 dp (48 dp en Standard), sans suragrandir les images.</li>
+<li>Favoris : Top d’usage, favoris de l’appareil, favoris HFR ; titres et compteurs distinguent les groupes.</li>
+<li>Hauteur naturelle par contenu, avec grille bornée et défilante ; aucune hauteur commune aux collections.</li>
+</ul>
+<h4>Parcours</h4>
+<ul>
+<li>Insérer : toucher une case ; le jeton et le retour à l’éditeur suivent les callbacks existants.</li>
+<li>Chercher : toucher le champ depuis toute collection active Wiki ; le debounce existant reste intact.</li>
+<li>Effacer : la croix du champ remet la recherche à zéro et garde le focus pour repartir immédiatement.</li>
+<li>Erreur : une carte propose de relancer la même recherche ; vide : conseil pour essayer un autre mot.</li>
+<li>Gérer un favori : appui long, puis action locale ou HFR ; états de mutation et retours existants conservés.</li>
+<li>Détail : aperçu et code en carte, actions regroupées, mots-clés défilants, insertion fixée en bas.</li>
+<li>Consultation : aucun autofocus clavier ; retour du détail sans réouverture automatique de l’IME.</li>
+</ul>
+<h4>Différences et validation</h4>
+<ul>
+<li>Les cartes remplacent les images flottantes ; les capsules remplacent la barre soulignée.</li>
+<li>La recherche n’est plus cachée dans Wiki ; le Top précède maintenant les favoris épinglés.</li>
+<li>Les dix scénarios du banc gardent leurs noms ; ajout de <code>11_wiki_error_light</code> et <code>12_favoris_amoled</code>.</li>
+<li>Tests adaptés : RestoreCaret, DetailGestures, LocalGestures, WikiKeywordsContent ; deux parcours ajoutés dans RestoreCaret pour la recherche depuis Standard et son effacement.</li>
+<li>Contrôle statique Material 3 : rôles de couleur et typographie du thème, cibles de 48 dp minimum.</li>
+<li>Aucun Gradle lancé, aucune capture régénérée : compilation, tests et rendu restent à exécuter sur le banc.</li>
+</ul>
+<h4>Risques et passage en production</h4>
+<ul>
+<li>Le champ permanent coûte une ligne en portrait ; le corpus Standard défile davantage.</li>
+<li>Valider sur S10e réel : IME, gestes de feuille, retour au curseur, TalkBack, grandes polices et paysage.</li>
+<li>Vérifier visuellement les fonds des GIF transparents, les séparateurs et les palettes sombre/AMOLED.</li>
+<li>Le catalogue de départ épingle Material 3 <code>1.5.0-beta02</code> ; aucune dépendance ni nouvelle API expérimentale ajoutée.</li>
+<li>Effort estimé : 2 à 3 jours après choix visuel pour ajustements sur appareil, tests et revue distincte.</li>
+<li>Le preset <code>Sol</code> reste isolé du preset historique <code>Current</code> pour faciliter la comparaison et le retrait du prototype.</li>
+</ul></div></details></article>
+<article class="author" id="a-fable"><header><h3>Fable</h3><span class="model">Claude Fable</span></header><p class="idea">Sélecteur de smileys — proposition Fable : « le clavier à smileys »</p><p class="status">Compile ; 12 scénarios rendus ; une vingtaine d&#x27;anciens tests à adapter (onglets retirés).</p><details><summary>Note de conception</summary><div class="note"><p><strong>Concept</strong> : une seule page sans onglets — on cherche en haut, on défile dessous, chaque smiley est une touche.</p>
+<h4>Disposition</h4>
+<ul>
+<li><strong>Recherche toujours visible</strong> : champ en pilule (loupe, croix d&#x27;effacement), nom accessible persistant.</li>
+<li><strong>Rail de sections</strong> sous le champ : une ancre par section non vide (Top, Appareil, HFR, Standard), icône seule sauf l&#x27;ancre courante qui affiche son nom ; il suit le défilement et saute à la section au toucher.</li>
+<li><strong>Une grille continue</strong> : Les plus utilisés → Favoris de l&#x27;appareil → Favoris HFR → Smileys standard, chaque titre avec son compteur. Plus de saut de hauteur ni d&#x27;onglet à moitié vide.</li>
+<li><strong>Tuiles tonales</strong> arrondies : les perso remplissent leur tuile, les builtin deviennent des touches de 48 dp, 7 par rangée sur 360 dp (5 aujourd&#x27;hui). Détail : inchangé, sans le bandeau clair ni le filet.</li>
+</ul>
+<h4>Parcours</h4>
+<ul>
+<li><strong>Insérer</strong> : ouvrir, toucher. Les plus utilisés sont en première rangée, sans changer d&#x27;onglet.</li>
+<li><strong>Chercher</strong> : taper remplace la page par « Dans vos smileys » (favoris, Top et builtin dont le code contient la saisie, dès le 1er caractère, sans réseau) puis « Wiki HFR » en direct (debounce et seuil de 3 inchangés). États vide, erreur, seuil et reprise dans un encart ; la croix revient à la page.</li>
+<li><strong>Gérer un favori</strong> : appui long → détail → ajouter ou retirer (appareil, HFR) ; actions TalkBack inchangées. Le détail s&#x27;ouvre partout et rend la position et la recherche quittées ; retour en bulle temporaire.</li>
+</ul>
+<h4>Ce qui change par rapport à aujourd&#x27;hui</h4>
+<ul>
+<li>Onglets Favoris / Standard / Wiki supprimés ; « Wiki » devient la recherche, qui trouve aussi les builtin.</li>
+<li>Top passe en tête (c&#x27;est l&#x27;insertion la plus probable), Standard est toujours à un défilement.</li>
+<li>La ligne de statut persistante de l&#x27;onglet Favoris disparaît au profit de la bulle temporaire.</li>
+<li>Réglage « délimiteur » : contour → tuile à contour, sinon tuile tonale. Contrôleur, état, gestes, garde de fermeture et focus de consultation (ED-70) inchangés.</li>
+</ul>
+<h4>Risques</h4>
+<ul>
+<li>Clavier ouvert ou paysage : champ + rail prennent ~110 dp ; il reste 3 à 4 rangées. À juger sur appareil.</li>
+<li>Rail en icônes : sens à apprendre (le nom n&#x27;apparaît que sur l&#x27;ancre courante) ; fontScale 1,3 : rail défilant.</li>
+<li>AMOLED : si les surfaces sont noires, la tuile s&#x27;efface ; un contour fin serait alors à forcer.</li>
+<li>Un favori ajouté depuis les résultats ne remonte qu&#x27;à la frappe suivante (voulu : rien ne bouge sous le doigt).</li>
+<li>Non compilé ni exécuté ici ; tests adaptés à l&#x27;aveugle, références Roborazzi de consultation à réenregistrer.</li>
+</ul>
+<h4>Effort pour la production</h4>
+<p>Environ 2 à 3 jours : retirer l&#x27;ancienne grille (<code>SmileyPickerGrid</code>), chaînes inutilisées, réglage du délimiteur, passe TalkBack et clavier physique sur appareil, références Roborazzi, gate. Aucune migration de données. Banc : 01 à 10 gardent leur nom (02 = ancre Standard, 03/04/07 = recherche), plus <code>11_recherche_locale_light</code> et <code>12_favoris_amoled</code>.</p></div></details></article>
+<article class="author" id="a-astra"><header><h3>Astra</h3><span class="model">GPT-6 Astra</span></header><p class="idea">Astra — La bibliothèque de poche</p><p class="status">Correction d&#x27;une erreur de compilation en cours.</p><details><summary>Note de conception</summary><div class="note"><p>Une bibliothèque de smileys à feuilleter, avec trois collections immédiatement repérables et une fiche qui garde l’insertion à portée de pouce.</p>
+<ul>
+<li>Navigation : trois capsules Favoris / Standard / Wiki, sélection pleine dans la couleur du thème.</li>
+<li>Favoris : trois rangées horizontales, appareil puis HFR puis Top local ; ordre des sources conservé.</li>
+<li>Chaque en-tête indique le nombre de smileys et ouvre la collection entière en grille.</li>
+<li>Les rangées laissent dépasser la vignette suivante à 360 dp ; positions conservées au retour du détail.</li>
+<li>Cases sur fond tonal, images proportionnelles : quatre colonnes perso à 360 dp, Standard plus dense.</li>
+<li>Hauteur ajustée au contenu et plafonnée ; aucune hauteur commune imposée aux trois pages.</li>
+<li>Recherche : champ arrondi avec loupe, effacement explicite, compteur de résultats et états dédiés.</li>
+<li>Détail : identité dans une carte, actions regroupées et bouton d’insertion fixé sous la zone défilante.</li>
+</ul>
+<h4>Parcours</h4>
+<ul>
+<li>Insérer : toucher une vignette, ou « Insérer dans le message » depuis sa fiche ; callback inchangé.</li>
+<li>Chercher : ouvrir Wiki, saisir au moins trois caractères ; debounce et restauration existants conservés.</li>
+<li>Gérer un favori : maintenir une vignette, puis choisir appareil ou HFR ; retour d’opération conservé.</li>
+<li>Explorer : toucher l’en-tête d’une collection ; flèche et retour système ramènent aux rangées.</li>
+<li>Détail : appui long ou action TalkBack ; image, code copiable, usage et mots-clés restent disponibles.</li>
+</ul>
+<h4>Écarts et risques</h4>
+<ul>
+<li>Les collections remplacent le long empilement de grilles ; leur ouverture ajoute un niveau de navigation.</li>
+<li>Moins de favoris visibles simultanément ; tous restent accessibles par défilement ou grille complète.</li>
+<li>Les cibles font au moins 48 dp ; les libellés peuvent grandir, sans hauteur de texte fixe.</li>
+<li>IME, restauration du curseur et protections des gestes restent sur les chemins existants.</li>
+<li>À éprouver sur appareil : défilement horizontal face au glissement de feuille, paysage et TalkBack.</li>
+<li>Couleurs issues du thème uniquement, y compris sombre et AMOLED.</li>
+<li>Le catalogue existant épingle Material 3 <code>1.5.0-beta02</code> : aucune dépendance changée, aucune nouvelle API expérimentale utilisée ; stabiliser cette dépendance est hors prototype.</li>
+</ul>
+<h4>Validation et passage en production</h4>
+<ul>
+<li>Dix scénarios conservés ; ajout de <code>11_collection_hfr_light</code> et <code>12_favoris_amoled</code>.</li>
+<li>Tests adaptés pour l’insertion fixe ; test ajouté pour collection → détail → retour → insertion.</li>
+<li>Detekt direct réussi sur le diff, XML et revue M3 statique ; compilation, tests et captures non exécutés.</li>
+<li>Effort estimé : 2 à 3 jours après choix visuel, pour tests appareil/IME/accessibilité, ajustements issus des captures, traduction des libellés et validation complète du dépôt.</li>
+</ul></div></details></article></div></section>
+<nav class="jump" aria-label="Scénarios"><a href="#s-01">01</a><a href="#s-02">02</a><a href="#s-03">03</a><a href="#s-04">04</a><a href="#s-05">05</a><a href="#s-06">06</a><a href="#s-07">07</a><a href="#s-08">08</a><a href="#s-09">09</a><a href="#s-10">10</a><a href="#extras">+</a></nav>
+<section class="scenario" id="s-01"><h3><span class="num">01</span> Favoris, clair</h3><div class="strip"><figure><a href="img/baseline/01_favoris_light.webp"><img src="img/baseline/01_favoris_light.webp" width="540" height="1170" loading="lazy" alt="Base : Favoris, clair"></a><figcaption>Base</figcaption></figure><figure class="missing"><div>non rendu</div><figcaption>Opus 5.5</figcaption></figure><figure class="missing"><div>non rendu</div><figcaption>Sol 6.1</figcaption></figure><figure><a href="img/fable/01_favoris_light.webp"><img src="img/fable/01_favoris_light.webp" width="540" height="1170" loading="lazy" alt="Fable : Favoris, clair"></a><figcaption>Fable</figcaption></figure><figure class="missing"><div>non rendu</div><figcaption>Astra</figcaption></figure></div></section>
+<section class="scenario" id="s-02"><h3><span class="num">02</span> Standard, clair</h3><div class="strip"><figure><a href="img/baseline/02_standard_light.webp"><img src="img/baseline/02_standard_light.webp" width="540" height="1170" loading="lazy" alt="Base : Standard, clair"></a><figcaption>Base</figcaption></figure><figure class="missing"><div>non rendu</div><figcaption>Opus 5.5</figcaption></figure><figure><a href="img/sol/02_standard_light.webp"><img src="img/sol/02_standard_light.webp" width="540" height="1170" loading="lazy" alt="Sol 6.1 : Standard, clair"></a><figcaption>Sol 6.1</figcaption></figure><figure><a href="img/fable/02_standard_light.webp"><img src="img/fable/02_standard_light.webp" width="540" height="1170" loading="lazy" alt="Fable : Standard, clair"></a><figcaption>Fable</figcaption></figure><figure class="missing"><div>non rendu</div><figcaption>Astra</figcaption></figure></div></section>
+<section class="scenario" id="s-03"><h3><span class="num">03</span> Recherche avec résultats, clair</h3><div class="strip"><figure><a href="img/baseline/03_wiki_results_light.webp"><img src="img/baseline/03_wiki_results_light.webp" width="540" height="1170" loading="lazy" alt="Base : Recherche avec résultats, clair"></a><figcaption>Base</figcaption></figure><figure class="missing"><div>non rendu</div><figcaption>Opus 5.5</figcaption></figure><figure><a href="img/sol/03_wiki_results_light.webp"><img src="img/sol/03_wiki_results_light.webp" width="540" height="1170" loading="lazy" alt="Sol 6.1 : Recherche avec résultats, clair"></a><figcaption>Sol 6.1</figcaption></figure><figure><a href="img/fable/03_wiki_results_light.webp"><img src="img/fable/03_wiki_results_light.webp" width="540" height="1170" loading="lazy" alt="Fable : Recherche avec résultats, clair"></a><figcaption>Fable</figcaption></figure><figure class="missing"><div>non rendu</div><figcaption>Astra</figcaption></figure></div></section>
+<section class="scenario" id="s-04"><h3><span class="num">04</span> Recherche vide, clair</h3><div class="strip"><figure><a href="img/baseline/04_wiki_empty_light.webp"><img src="img/baseline/04_wiki_empty_light.webp" width="540" height="1170" loading="lazy" alt="Base : Recherche vide, clair"></a><figcaption>Base</figcaption></figure><figure class="missing"><div>non rendu</div><figcaption>Opus 5.5</figcaption></figure><figure><a href="img/sol/04_wiki_empty_light.webp"><img src="img/sol/04_wiki_empty_light.webp" width="540" height="1170" loading="lazy" alt="Sol 6.1 : Recherche vide, clair"></a><figcaption>Sol 6.1</figcaption></figure><figure><a href="img/fable/04_wiki_empty_light.webp"><img src="img/fable/04_wiki_empty_light.webp" width="540" height="1170" loading="lazy" alt="Fable : Recherche vide, clair"></a><figcaption>Fable</figcaption></figure><figure class="missing"><div>non rendu</div><figcaption>Astra</figcaption></figure></div></section>
+<section class="scenario" id="s-05"><h3><span class="num">05</span> Favoris, sombre</h3><div class="strip"><figure><a href="img/baseline/05_favoris_dark.webp"><img src="img/baseline/05_favoris_dark.webp" width="540" height="1170" loading="lazy" alt="Base : Favoris, sombre"></a><figcaption>Base</figcaption></figure><figure class="missing"><div>non rendu</div><figcaption>Opus 5.5</figcaption></figure><figure class="missing"><div>non rendu</div><figcaption>Sol 6.1</figcaption></figure><figure><a href="img/fable/05_favoris_dark.webp"><img src="img/fable/05_favoris_dark.webp" width="540" height="1170" loading="lazy" alt="Fable : Favoris, sombre"></a><figcaption>Fable</figcaption></figure><figure class="missing"><div>non rendu</div><figcaption>Astra</figcaption></figure></div></section>
+<section class="scenario" id="s-06"><h3><span class="num">06</span> Standard, sombre</h3><div class="strip"><figure><a href="img/baseline/06_standard_dark.webp"><img src="img/baseline/06_standard_dark.webp" width="540" height="1170" loading="lazy" alt="Base : Standard, sombre"></a><figcaption>Base</figcaption></figure><figure class="missing"><div>non rendu</div><figcaption>Opus 5.5</figcaption></figure><figure><a href="img/sol/06_standard_dark.webp"><img src="img/sol/06_standard_dark.webp" width="540" height="1170" loading="lazy" alt="Sol 6.1 : Standard, sombre"></a><figcaption>Sol 6.1</figcaption></figure><figure><a href="img/fable/06_standard_dark.webp"><img src="img/fable/06_standard_dark.webp" width="540" height="1170" loading="lazy" alt="Fable : Standard, sombre"></a><figcaption>Fable</figcaption></figure><figure class="missing"><div>non rendu</div><figcaption>Astra</figcaption></figure></div></section>
+<section class="scenario" id="s-07"><h3><span class="num">07</span> Recherche avec résultats, sombre</h3><div class="strip"><figure><a href="img/baseline/07_wiki_results_dark.webp"><img src="img/baseline/07_wiki_results_dark.webp" width="540" height="1170" loading="lazy" alt="Base : Recherche avec résultats, sombre"></a><figcaption>Base</figcaption></figure><figure class="missing"><div>non rendu</div><figcaption>Opus 5.5</figcaption></figure><figure><a href="img/sol/07_wiki_results_dark.webp"><img src="img/sol/07_wiki_results_dark.webp" width="540" height="1170" loading="lazy" alt="Sol 6.1 : Recherche avec résultats, sombre"></a><figcaption>Sol 6.1</figcaption></figure><figure><a href="img/fable/07_wiki_results_dark.webp"><img src="img/fable/07_wiki_results_dark.webp" width="540" height="1170" loading="lazy" alt="Fable : Recherche avec résultats, sombre"></a><figcaption>Fable</figcaption></figure><figure class="missing"><div>non rendu</div><figcaption>Astra</figcaption></figure></div></section>
+<section class="scenario" id="s-08"><h3><span class="num">08</span> Favoris, texte à 130 %</h3><div class="strip"><figure><a href="img/baseline/08_favoris_fs13_light.webp"><img src="img/baseline/08_favoris_fs13_light.webp" width="540" height="1170" loading="lazy" alt="Base : Favoris, texte à 130 %"></a><figcaption>Base</figcaption></figure><figure class="missing"><div>non rendu</div><figcaption>Opus 5.5</figcaption></figure><figure class="missing"><div>non rendu</div><figcaption>Sol 6.1</figcaption></figure><figure><a href="img/fable/08_favoris_fs13_light.webp"><img src="img/fable/08_favoris_fs13_light.webp" width="540" height="1170" loading="lazy" alt="Fable : Favoris, texte à 130 %"></a><figcaption>Fable</figcaption></figure><figure class="missing"><div>non rendu</div><figcaption>Astra</figcaption></figure></div></section>
+<section class="scenario land" id="s-09"><h3><span class="num">09</span> Standard, paysage</h3><div class="strip"><figure><a href="img/baseline/09_standard_landscape_light.webp"><img src="img/baseline/09_standard_landscape_light.webp" width="540" height="249" loading="lazy" alt="Base : Standard, paysage"></a><figcaption>Base</figcaption></figure><figure class="missing"><div>non rendu</div><figcaption>Opus 5.5</figcaption></figure><figure><a href="img/sol/09_standard_landscape_light.webp"><img src="img/sol/09_standard_landscape_light.webp" width="540" height="249" loading="lazy" alt="Sol 6.1 : Standard, paysage"></a><figcaption>Sol 6.1</figcaption></figure><figure><a href="img/fable/09_standard_landscape_light.webp"><img src="img/fable/09_standard_landscape_light.webp" width="540" height="249" loading="lazy" alt="Fable : Standard, paysage"></a><figcaption>Fable</figcaption></figure><figure class="missing"><div>non rendu</div><figcaption>Astra</figcaption></figure></div></section>
+<section class="scenario" id="s-10"><h3><span class="num">10</span> Détail à l'appui long</h3><div class="strip"><figure><a href="img/baseline/10_detail_light.webp"><img src="img/baseline/10_detail_light.webp" width="540" height="1170" loading="lazy" alt="Base : Détail à l&#x27;appui long"></a><figcaption>Base</figcaption></figure><figure class="missing"><div>non rendu</div><figcaption>Opus 5.5</figcaption></figure><figure class="missing"><div>non rendu</div><figcaption>Sol 6.1</figcaption></figure><figure><a href="img/fable/10_detail_light.webp"><img src="img/fable/10_detail_light.webp" width="540" height="1170" loading="lazy" alt="Fable : Détail à l&#x27;appui long"></a><figcaption>Fable</figcaption></figure><figure class="missing"><div>non rendu</div><figcaption>Astra</figcaption></figure></div></section>
+<section id="extras" class="scenario"><h2>Interactions phares</h2><p class="muted">Scénarios ajoutés par chaque auteur pour montrer ce qui distingue sa proposition.</p><div class="extras"><figure><a href="img/sol/11_wiki_error_light.webp"><img src="img/sol/11_wiki_error_light.webp" width="540" height="1170" loading="lazy" alt="Sol 6.1 : wiki error light"></a><figcaption>Sol 6.1 · wiki error light</figcaption></figure><figure><a href="img/fable/11_recherche_locale_light.webp"><img src="img/fable/11_recherche_locale_light.webp" width="540" height="1170" loading="lazy" alt="Fable : recherche locale light"></a><figcaption>Fable · recherche locale light</figcaption></figure><figure><a href="img/fable/12_favoris_amoled.webp"><img src="img/fable/12_favoris_amoled.webp" width="540" height="1170" loading="lazy" alt="Fable : favoris amoled"></a><figcaption>Fable · favoris amoled</figcaption></figure></div></section>
+</main>
+</body></html>
