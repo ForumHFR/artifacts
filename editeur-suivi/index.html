@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
 <style>
-/* Layout: one 1040px column. Status strip and size rail, then the fresque (whole rework, day scale) with its loupe on the end of phase (hour scale), the end-of-phase board, the remarks table, gates and pending decisions side by side, releases, lots. Same family as the spec, lexicon and Roborazzi pages. Blue = body of the phase, red = end of phase, everywhere. */
+/* Layout: one 1040px column. Status strip and size rail, then the fresque (whole rework, day scale) with its loupe on the end of phase (hour scale), the end-of-phase board, the remarks table, gates and pending decisions side by side, releases, lots. Same family as the spec, lexicon and Roborazzi pages. Blue = body of the phase, red = end of phase, ink = beta, everywhere. v20: phase closed on 14/11 23:24, the vertical line marks the closing. */
 :root{
   --paper:#FAF5F4; --paper-2:#FFFFFF; --paper-3:#F3EAE9;
   --ink:#241A1B; --ink-2:#5C4A4A; --ink-3:#8B7573;
@@ -128,8 +128,10 @@ header{display:grid;gap:8px}
 .fx-rel{top:auto;bottom:4px;width:2px;height:12px;transform:translateX(-50%);background:var(--k);border-radius:1px}
 .fx-rel.beta{width:3px;height:16px;background:var(--ink)}
 .fx-gate{width:9px;height:9px;transform:translate(-50%,-50%) rotate(45deg);background:var(--ink);box-shadow:0 0 0 2px var(--paper-2)}
+.fx-gate.der{background:var(--paper-2);box-shadow:inset 0 0 0 1.5px var(--ink),0 0 0 2px var(--paper-2)}
 .fx-brk{width:calc(var(--w) * 1%);top:7px;height:6px;border:1.5px solid var(--ink-3);border-bottom:0}
 .fx-pill.rt{transform:translate(-100%,-50%)}
+.fx-pill.rt.rt8{transform:translate(calc(-100% - 8px),-50%)}
 .fx-pill{transform:translate(-50%,-50%);font-family:var(--f-mono);font-size:11px;font-weight:600;line-height:1;padding:4px 7px;border-radius:999px;background:var(--ink);color:var(--paper-2);white-space:nowrap}
 .fx-histo .fx-t::after{content:"";position:absolute;left:0;right:0;bottom:6px;border-top:1px solid var(--line)}
 .fx-t>.fx-g{top:auto;left:0;right:0;bottom:calc(6px + var(--n) * 5px);border-top:1px solid var(--line-2)}
@@ -152,7 +154,10 @@ header{display:grid;gap:8px}
 .p-ask{--c:var(--ink);--b:transparent;box-shadow:inset 0 0 0 1px var(--ink-3)}
 
 /* end-of-phase board */
-.board{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));gap:14px;align-items:start}
+.board{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:14px;align-items:start}
+.col.wide{grid-column:1/-1}
+.col.wide ul{display:block;columns:2 300px;column-gap:28px}
+.col.wide li{break-inside:avoid;margin-bottom:5px}
 .col{border:1px solid var(--line);border-radius:8px;background:var(--paper-2);padding:10px 14px 12px;display:grid;gap:8px;min-width:0}
 .col .hd{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
 .col ul,.col ol{margin:0;padding-left:18px;display:grid;gap:5px;font-size:13px}
@@ -168,6 +173,7 @@ tr:last-child td{border-bottom:0}
 tr.grp th{background:var(--paper-2);color:var(--ink-2);font-size:10.5px;padding-top:9px;border-bottom:1px solid var(--line)}
 tr.grp.end th{box-shadow:inset 3px 0 0 var(--c-end)}
 tr.grp.body th{box-shadow:inset 3px 0 0 var(--c-body)}
+tr.grp.beta th{box-shadow:inset 3px 0 0 var(--ink)}
 .rq table{min-width:900px}
 .rq td.n{font-family:var(--f-mono);font-weight:600;color:var(--ink);white-space:nowrap;width:34px;font-variant-numeric:tabular-nums}
 .rq td.what{width:31%}
@@ -212,275 +218,325 @@ footer{font-size:12px;color:var(--ink-3);border-top:1px solid var(--line);paddin
 
 <div class="wrap">
   <header>
-    <span class="eyebrow">Redface 2 · refonte de l'éditeur · plan v0.7.1 · fin de phase</span>
+    <span class="eyebrow">Redface 2 · refonte de l'éditeur · plan v0.7.1 · phase close</span>
     <h1>Suivi de l'éditeur #1417</h1>
-    <p class="lede">État au <b>samedi 14 novembre 2026, 11:50</b>. Le développement de la refonte est terminé : <b>les quatorze lots sont dans dev depuis la release 0.69.11</b> du 11/11. La phase est entrée dans sa <b>fin de phase</b> : le code est livré, on fait la recette vers les portes G3 et G4 et on ajuste ce que le mainteneur et les testeurs relèvent sur appareil. Vingt-six ajustements sont sortis en dev, de la 0.69.12 à la <b>0.69.23</b> (app-v390). Sous le <b>mandat de nuit</b> du mainteneur : 0.69.19 et 0.69.20, puis 0.69.21 à 06:02 ; #1625 (éditer son MP) close à 06:14. Ce matin : 0.69.22 à 06:32, spec v0.7.12 publiée à 07:52 sur go du mainteneur, 0.69.23 à 09:36 ; #1647 mergée à 11:27, pas encore livrée. Quatre propositions pour la feuille des smileys sont publiées (11:13). Cinq points attendent le mainteneur ; sur sa réponse : <b>dev 0.69.24</b> avec #1647, puis une PR smileys pour la proposition retenue. <b>La bêta sortira à la fin de la refonte, sur go du mainteneur</b>, pas avant.</p>
-    <p class="key"><b>Corps de phase</b> : les lots du plan, du 1/11 au 11/11. <b>Fin de phase</b> : recette et petits ajustements, depuis le 11/11 à 12:39. Sur toute la page, le bleu marque le corps de phase et le rouge la fin de phase. Un <b>lot</b> = une ou plusieurs PR, chacune livrée en release dev. Une <b>porte</b> = les conditions à remplir avant l'étape suivante. Un <b>gate</b> = la relecture du code par un second modèle, Astra ou Fable. Les codes ED-xxx, C1 à C10 et B.3 renvoient à la spec.</p>
+    <p class="lede">État au <b>dimanche 15 novembre 2026, 22:00</b>. <b>La refonte de l'éditeur est close.</b> Le nouvel éditeur est sorti en <b>bêta 0.70.0</b> (app-v393) le 14/11 à 21:43, sur go du mainteneur : promotion #1651 mergée à 21:28, piste bêta du Play Store (validation de Google à suivre), F-Droid bêta, annonces sur le forum. C'est la première bêta depuis la 0.68.0. À 23:24, <b>#1417 est fermée</b> : le mainteneur clôt la phase, et les portes G3 et G4 par dérogation ; la spec v0.7.13 est publiée à 23:22, quatorze issues sont fermées. Avant la bêta, le 14/11 : <b>dev 0.69.24</b> à 12:23, recettes G3 et G4 réduites sans KO bloquant ni majeur, revue de promotion et deux correctifs, <b>dev 0.70.0</b> à 19:51. Depuis, rien n'est entré dans dev : la suite, la 0.70.x, attend le mainteneur.</p>
+    <p class="key"><b>Corps de phase</b> : les lots du plan, du 1/11 au 11/11. <b>Fin de phase</b> : recette, petits ajustements et promotion, du 11/11 à 12:39 à la fermeture de #1417, le 14/11 à 23:24. Sur toute la page, le bleu marque le corps de phase et le rouge la fin de phase. Un <b>lot</b> = une ou plusieurs PR, chacune livrée en release dev. Une <b>porte</b> = les conditions à remplir avant l'étape suivante ; une <b>dérogation</b> la ferme sur décision du mainteneur sans qu'elles soient toutes remplies. Un <b>gate</b> = la relecture du code par un second modèle, Astra ou Fable. Les codes ED-xxx, C1 à C10 et B.3 renvoient à la spec.</p>
     <nav class="links" aria-label="Pages de la phase éditeur">
-      <a href="https://forumhfr.github.io/artifacts/editeur-spec/">Spec de l'éditeur (v0.7.12)</a>
+      <a href="https://forumhfr.github.io/artifacts/editeur-spec/">Spec de l'éditeur (v0.7.13)</a>
       <a href="https://forumhfr.github.io/artifacts/editeur-lexique/">Anatomie de l'éditeur</a>
       <a href="https://forumhfr.github.io/artifacts/editeur-roborazzi/">Rendus Roborazzi</a>
       <a href="https://forumhfr.github.io/artifacts/editeur-options/">Planche de la feuille Options</a>
       <a href="https://forumhfr.github.io/artifacts/editeur-smileys/">Propositions pour la feuille des smileys</a>
       <a href="https://github.com/ForumHFR/redface2/issues/1417">Issue #1417</a>
-      <a href="https://github.com/ForumHFR/redface2/issues/1450">Issue #1450</a>
+      <a href="https://github.com/ForumHFR/redface2/pull/1651">Promotion #1651</a>
     </nav>
   </header>
 
   <section class="strip" aria-label="Résumé">
-    <div class="cell"><span>Corps de phase</span><b>14 / 14 lots</b><span>dans dev depuis la 0.69.11 (11/11, 12:39)</span></div>
-    <div class="cell hot"><span>Fin de phase</span><b>Recette et ajustements</b><span>14 remarques livrées, dont 1 à confirmer ; 1 en attente</span></div>
-    <div class="cell"><span>Version dev</span><b class="mono">0.69.23</b><span>14/11, 09:36 · app-v390 · bêta publique : 0.68.0</span></div>
-    <div class="cell"><span>Portes</span><b>G3 1/2 · G4 1/4</b><span>bêta à la fin de la refonte, sur go du mainteneur</span></div>
+    <div class="cell"><span>Corps de phase</span><b>14 / 14 lots</b><span>dans dev depuis la 0.69.11 (11/11), en bêta 0.70.0</span></div>
+    <div class="cell hot"><span>Fin de phase</span><b>Close le 14/11, 23:24</b><span>#1417 fermée · 32 PR, 14 releases dev · 14 remarques livrées, 1 en attente</span></div>
+    <div class="cell"><span>Bêta publique</span><b class="mono">0.70.0</b><span>14/11, 21:43 · app-v393 · dev : 0.70.0 (app-v392)</span></div>
+    <div class="cell"><span>Portes</span><b>G3 · G4 closes</b><span>par dérogation, avec la phase ; volets non joués plus bas</span></div>
   </section>
 
   <section class="rail" aria-label="Volume livré, pondéré par taille">
-    <div class="bar" role="img" aria-label="Corps de phase : 14 lots livrés. Fin de phase : 26 ajustements livrés, 1 mergé. Largeur selon la taille.">
-      <i class="body" style="flex-grow:1" title="R0m · S"></i><i class="body" style="flex-grow:6" title="#1301-ST · XL"></i><i class="body" style="flex-grow:4" title="R0b · L"></i><i class="body" style="flex-grow:6" title="R0c · XL"></i><i class="body" style="flex-grow:2" title="R0a · M"></i><i class="body" style="flex-grow:6" title="#1553 · XL"></i><i class="body" style="flex-grow:6" title="R1a-1 · XL"></i><i class="body" style="flex-grow:6" title="R1a-2 · XL"></i><i class="body" style="flex-grow:6" title="R1b-1 · XL"></i><i class="body" style="flex-grow:4" title="R1b-2a · L"></i><i class="body" style="flex-grow:4" title="R1b-2b · L"></i><i class="body" style="flex-grow:4" title="R6 · L"></i><i class="body" style="flex-grow:2" title="R2a · M"></i><i class="body" style="flex-grow:4" title="R2b · L"></i><i class="cut"></i><i class="end" style="flex-grow:2" title="#1606 · M"></i><i class="end" style="flex-grow:2" title="#1608 · M"></i><i class="end" style="flex-grow:1" title="#1610 · S"></i><i class="end" style="flex-grow:1" title="#1612 · S"></i><i class="end" style="flex-grow:4" title="#1614 · L"></i><i class="end" style="flex-grow:4" title="#1615 · L"></i><i class="end" style="flex-grow:1" title="#1618 · S"></i><i class="end" style="flex-grow:1" title="#1620 · S"></i><i class="end" style="flex-grow:2" title="#1621 · M"></i><i class="end" style="flex-grow:1" title="#1622 · S"></i><i class="end" style="flex-grow:2" title="#1624 · M"></i><i class="end" style="flex-grow:1" title="#1626 · 0.69.19 · S"></i><i class="end" style="flex-grow:1" title="#1627 · 0.69.19 · taille non estimée"></i><i class="end" style="flex-grow:1" title="#1629 · 0.69.19 · taille non estimée"></i><i class="end" style="flex-grow:1" title="#1630 · 0.69.19 · taille non estimée"></i><i class="end" style="flex-grow:1" title="#1631 · 0.69.19 · taille non estimée"></i><i class="end" style="flex-grow:1" title="#1634 · 0.69.20 · taille non estimée"></i><i class="end" style="flex-grow:1" title="#1635 · 0.69.20 · taille non estimée"></i><i class="end" style="flex-grow:1" title="#1636 · 0.69.21 · taille non estimée"></i><i class="end" style="flex-grow:1" title="#1637 · 0.69.21 · taille non estimée"></i><i class="end" style="flex-grow:1" title="#1638 · 0.69.21 · taille non estimée"></i><i class="end" style="flex-grow:1" title="#1639 · 0.69.21 · taille non estimée"></i><i class="end" style="flex-grow:1" title="#1640 · 0.69.21 · taille non estimée"></i><i class="end" style="flex-grow:1" title="#1642 · 0.69.22 · taille non estimée"></i><i class="end" style="flex-grow:1" title="#1644 · 0.69.23 · taille non estimée"></i><i class="end" style="flex-grow:1" title="#1645 · 0.69.23 · taille non estimée"></i><i class="end" style="flex-grow:1" title="#1647 · mergée, visée pour la 0.69.24 · taille non estimée"></i>
+    <div class="bar" role="img" aria-label="Corps de phase : 14 lots livrés. Fin de phase : 30 PR d'ajustement livrées. Largeur selon la taille.">
+      <i class="body" style="flex-grow:1" title="R0m · S"></i><i class="body" style="flex-grow:6" title="#1301-ST · XL"></i><i class="body" style="flex-grow:4" title="R0b · L"></i><i class="body" style="flex-grow:6" title="R0c · XL"></i><i class="body" style="flex-grow:2" title="R0a · M"></i><i class="body" style="flex-grow:6" title="#1553 · XL"></i><i class="body" style="flex-grow:6" title="R1a-1 · XL"></i><i class="body" style="flex-grow:6" title="R1a-2 · XL"></i><i class="body" style="flex-grow:6" title="R1b-1 · XL"></i><i class="body" style="flex-grow:4" title="R1b-2a · L"></i><i class="body" style="flex-grow:4" title="R1b-2b · L"></i><i class="body" style="flex-grow:4" title="R6 · L"></i><i class="body" style="flex-grow:2" title="R2a · M"></i><i class="body" style="flex-grow:4" title="R2b · L"></i><i class="cut"></i><i class="end" style="flex-grow:2" title="#1606 · M"></i><i class="end" style="flex-grow:2" title="#1608 · M"></i><i class="end" style="flex-grow:1" title="#1610 · S"></i><i class="end" style="flex-grow:1" title="#1612 · S"></i><i class="end" style="flex-grow:4" title="#1614 · L"></i><i class="end" style="flex-grow:4" title="#1615 · L"></i><i class="end" style="flex-grow:1" title="#1618 · S"></i><i class="end" style="flex-grow:1" title="#1620 · S"></i><i class="end" style="flex-grow:2" title="#1621 · M"></i><i class="end" style="flex-grow:1" title="#1622 · S"></i><i class="end" style="flex-grow:2" title="#1624 · M"></i><i class="end" style="flex-grow:1" title="#1626 · 0.69.19 · S"></i><i class="end" style="flex-grow:1" title="#1627 · 0.69.19 · S"></i><i class="end" style="flex-grow:2" title="#1629 · 0.69.19 · M"></i><i class="end" style="flex-grow:1" title="#1630 · 0.69.19 · S"></i><i class="end" style="flex-grow:2" title="#1631 · 0.69.19 · M"></i><i class="end" style="flex-grow:2" title="#1634 · 0.69.20 · M"></i><i class="end" style="flex-grow:2" title="#1635 · 0.69.20 · M"></i><i class="end" style="flex-grow:1" title="#1636 · 0.69.21 · S"></i><i class="end" style="flex-grow:1" title="#1637 · 0.69.21 · S"></i><i class="end" style="flex-grow:1" title="#1638 · 0.69.21 · S"></i><i class="end" style="flex-grow:1" title="#1639 · 0.69.21 · S"></i><i class="end" style="flex-grow:1" title="#1640 · 0.69.21 · S"></i><i class="end" style="flex-grow:1" title="#1642 · 0.69.22 · S"></i><i class="end" style="flex-grow:1" title="#1644 · 0.69.23 · S"></i><i class="end" style="flex-grow:1" title="#1645 · 0.69.23 · S"></i><i class="end" style="flex-grow:1" title="#1647 · 0.69.24 · S"></i><i class="end" style="flex-grow:1" title="#1648 · 0.69.24 · S"></i><i class="end" style="flex-grow:1" title="#1652 · 0.70.0, revue de promotion · S"></i><i class="end" style="flex-grow:1" title="#1653 · 0.70.0, revue de promotion · S"></i>
     </div>
-    <p class="legend"><span style="--k:var(--c-body)">corps de phase, 14 lots</span><span style="--k:var(--c-end)">fin de phase, 26 PR livrées, 1 mergée</span><em>largeur = taille en lignes modifiées : S 1, M 2, L 4, XL 6 ; depuis #1627, sauf #1626 (S), les PR ne sont pas encore pesées et comptent pour 1. Les onze premières PR de fin de phase pèsent déjà plus que le plus gros lot du corps : +15 067 −3 039 lignes, et 2 203 captures Roborazzi réenregistrées par les six premières.</em></p>
+    <p class="legend"><span style="--k:var(--c-body)">corps de phase, 14 lots</span><span style="--k:var(--c-end)">fin de phase, 30 PR</span><em>largeur = taille en lignes modifiées : S 1, M 2, L 4, XL 6 ; toutes les PR sont pesées. Hors barre : les PR de version seules, la préparation de la bêta (#1650) et les PR de doc (#1633, #1655). Les onze premières PR de fin de phase pèsent déjà plus que le plus gros lot du corps : +15 067 −3 039 lignes, et 2 203 captures Roborazzi réenregistrées par les six premières. Les trente : +24 662 −3 890 lignes.</em></p>
   </section>
 
   <section class="panel" aria-labelledby="h-fresque">
-    <div class="sechd"><h2 id="h-fresque">Fresque de la refonte</h2><span class="muted">du 1/11 au 14/11 · une colonne par jour · heures des merges dans dev</span></div>
+    <div class="sechd"><h2 id="h-fresque">Fresque de la refonte</h2><span class="muted">du 1/11 au 15/11 · une colonne par jour · heures des merges dans dev</span></div>
     <p class="fx-hint">Sur téléphone, la fresque s'ouvre sur les derniers jours : glissez le doigt vers la droite pour remonter au 1/11.</p>
-<div class="fx" tabindex="0" role="region" aria-label="Fresque de la refonte, du 1er au 14 novembre ; défilement horizontal" data-end>
-<div class="fx-in" style="--grid:calc(100% / 14)">
-<span class="fx-now" style="--x:96.38" title="14/11 11:50" aria-hidden="true"></span>
+<div class="fx" tabindex="0" role="region" aria-label="Fresque de la refonte, du 1er au 15 novembre ; défilement horizontal" data-end>
+<div class="fx-in" style="--grid:calc(100% / 15);min-width:960px">
+<span class="fx-now" style="--x:93.17" title="14/11 23:24 : #1417 fermée, phase close" aria-hidden="true"></span>
 <div class="fx-row fx-axis"><span class="fx-l">nov. 2026</span><div class="fx-t">
-<span class="fx-tk c" style="--x:3.57">di 1</span>
-<span class="fx-tk c" style="--x:10.71">lu 2</span>
-<span class="fx-tk c" style="--x:17.86">ma 3</span>
-<span class="fx-tk c" style="--x:25.00">me 4</span>
-<span class="fx-tk c" style="--x:32.14">je 5</span>
-<span class="fx-tk c" style="--x:39.29">ve 6</span>
-<span class="fx-tk c" style="--x:46.43">sa 7</span>
-<span class="fx-tk c" style="--x:53.57">di 8</span>
-<span class="fx-tk c" style="--x:60.71">lu 9</span>
-<span class="fx-tk c" style="--x:67.86">ma 10</span>
-<span class="fx-tk c" style="--x:75.00">me 11</span>
-<span class="fx-tk c" style="--x:82.14">je 12</span>
-<span class="fx-tk c" style="--x:89.29">ve 13</span>
-<span class="fx-tk c" style="--x:96.43">sa 14</span>
+<span class="fx-tk c" style="--x:3.33">di 1</span>
+<span class="fx-tk c" style="--x:10.00">lu 2</span>
+<span class="fx-tk c" style="--x:16.67">ma 3</span>
+<span class="fx-tk c" style="--x:23.33">me 4</span>
+<span class="fx-tk c" style="--x:30.00">je 5</span>
+<span class="fx-tk c" style="--x:36.67">ve 6</span>
+<span class="fx-tk c" style="--x:43.33">sa 7</span>
+<span class="fx-tk c" style="--x:50.00">di 8</span>
+<span class="fx-tk c" style="--x:56.67">lu 9</span>
+<span class="fx-tk c" style="--x:63.33">ma 10</span>
+<span class="fx-tk c" style="--x:70.00">me 11</span>
+<span class="fx-tk c" style="--x:76.67">je 12</span>
+<span class="fx-tk c" style="--x:83.33">ve 13</span>
+<span class="fx-tk c" style="--x:90.00">sa 14</span>
+<span class="fx-tk c" style="--x:96.67">di 15</span>
 </div></div>
 <div class="fx-row"><span class="fx-l">Étapes</span><div class="fx-t st">
-<span class="fx-band k-pre" style="--x:0.00;--w:7.14" title="Spec v0.7.1 acceptée le 01/11">Spec</span>
-<span class="fx-band k-pre" style="--x:7.14;--w:28.57" title="#1301-ST, bêta 0.68.0, préparation de R0m">Préalables</span>
-<span class="fx-band k-body" style="--x:35.71;--w:25.00" title="R0m, R0b, R0c, R0a, #1553 : 6/11 → 9/11">R0 · socle</span>
-<span class="fx-band k-body" style="--x:60.71;--w:14.48" title="Nouveau chrome sur les quatre éditeurs : 9/11 → 11/11 12:39">R1 · R2 · R6</span>
-<span class="fx-band k-end" style="--x:75.19;--w:24.81" title="Recette et ajustements depuis la 0.69.11">Fin de phase</span>
+<span class="fx-band k-pre" style="--x:0.00;--w:6.67" title="Spec v0.7.1 acceptée le 01/11">Spec</span>
+<span class="fx-band k-pre" style="--x:6.67;--w:26.67" title="#1301-ST, bêta 0.68.0, préparation de R0m">Préalables</span>
+<span class="fx-band k-body" style="--x:33.33;--w:23.33" title="R0m, R0b, R0c, R0a, #1553 : 6/11 → 9/11">R0 · socle</span>
+<span class="fx-band k-body" style="--x:56.67;--w:13.51" title="Nouveau chrome sur les quatre éditeurs : 9/11 → 11/11 12:39">R1 · R2 · R6</span>
+<span class="fx-band k-end" style="--x:70.18;--w:22.99" title="Recette, ajustements et promotion : 11/11 12:39 → 14/11 23:24">Fin de phase</span>
+<span class="fx-band k-pre" style="--x:93.17;--w:6.83" title="Phase close le 14/11 à 23:24, après la bêta 0.70.0 (21:43) ; rien sur dev le 15/11">Close</span>
 </div></div>
 <div class="fx-row"><span class="fx-l">Spec</span><div class="fx-t" style="--h:38px">
-<i class="fx-dot k-ink" style="--x:4.29" title="Spec v0.7.1 acceptée le 01/11 14:25"></i><b class="fx-lab up" style="--x:4.29">v0.7.1 acceptée</b>
-<i class="fx-dot k-ink" style="--x:49.45" title="Spec v0.7.2 publiée le 07/11 22:10"></i><b class="fx-lab c dn" style="--x:49.45">7.2</b>
-<i class="fx-dot k-ink" style="--x:62.66" title="Spec v0.7.3 publiée le 09/11 18:32"></i><b class="fx-lab c up" style="--x:62.66">7.3</b>
-<i class="fx-dot k-ink" style="--x:68.03" title="Spec v0.7.4 publiée le 10/11 12:34"></i><b class="fx-lab c dn" style="--x:68.03">7.4</b>
-<i class="fx-dot k-ink" style="--x:74.74" title="Spec v0.7.5 publiée le 11/11 11:07"></i><b class="fx-lab c up" style="--x:74.74">7.5</b>
-<i class="fx-dot k-ink" style="--x:78.56" title="Spec v0.7.6 publiée le 11/11 23:57"></i><b class="fx-lab c dn" style="--x:78.56">7.6</b>
-<i class="fx-dot k-ink" style="--x:83.20" title="Spec v0.7.7 publiée le 12/11 15:33"></i><b class="fx-lab c up" style="--x:83.20">7.7</b>
-<i class="fx-dot k-ink" style="--x:85.27" title="Spec v0.7.8 publiée le 12/11 22:31"></i><b class="fx-lab c dn" style="--x:85.27">7.8</b>
-<i class="fx-dot k-ink" style="--x:88.36" title="Spec v0.7.9 publiée le 13/11 08:54"></i><b class="fx-lab c up" style="--x:88.36">7.9</b>
-<i class="fx-dot k-ink" style="--x:91.26" title="Spec v0.7.10 publiée le 13/11 18:39"></i><b class="fx-lab c dn" style="--x:91.26">7.10</b>
-<i class="fx-dot k-ink" style="--x:94.35" title="Spec v0.7.11 publiée le 14/11, sur go du mainteneur vers 05:00 (artifacts 8fa01b4)"></i><b class="fx-lab c up" style="--x:94.35">7.11</b>
-<i class="fx-dot k-ink" style="--x:95.20" title="Spec v0.7.12 publiée le 14/11 07:52, sur « Go push » du mainteneur (artifacts e40ed78)"></i><b class="fx-lab c dn" style="--x:95.20">7.12</b>
+<i class="fx-dot k-ink" style="--x:4.00" title="Spec v0.7.1 acceptée le 01/11 14:25"></i><b class="fx-lab up" style="--x:4.00">v0.7.1 acceptée</b>
+<i class="fx-dot k-ink" style="--x:46.16" title="Spec v0.7.2 publiée le 07/11 22:10"></i><b class="fx-lab c dn" style="--x:46.16">7.2</b>
+<i class="fx-dot k-ink" style="--x:58.48" title="Spec v0.7.3 publiée le 09/11 18:32"></i><b class="fx-lab c up" style="--x:58.48">7.3</b>
+<i class="fx-dot k-ink" style="--x:63.49" title="Spec v0.7.4 publiée le 10/11 12:34"></i><b class="fx-lab c dn" style="--x:63.49">7.4</b>
+<i class="fx-dot k-ink" style="--x:69.75" title="Spec v0.7.5 publiée le 11/11 11:07"></i><b class="fx-lab c up" style="--x:69.75">7.5</b>
+<i class="fx-dot k-ink" style="--x:73.32" title="Spec v0.7.6 publiée le 11/11 23:57"></i><b class="fx-lab c dn" style="--x:73.32">7.6</b>
+<i class="fx-dot k-ink" style="--x:77.65" title="Spec v0.7.7 publiée le 12/11 15:33"></i><b class="fx-lab c up" style="--x:77.65">7.7</b>
+<i class="fx-dot k-ink" style="--x:79.59" title="Spec v0.7.8 publiée le 12/11 22:31"></i><b class="fx-lab c dn" style="--x:79.59">7.8</b>
+<i class="fx-dot k-ink" style="--x:82.47" title="Spec v0.7.9 publiée le 13/11 08:54"></i><b class="fx-lab c up" style="--x:82.47">7.9</b>
+<i class="fx-dot k-ink" style="--x:85.18" title="Spec v0.7.10 publiée le 13/11 18:39"></i><b class="fx-lab c dn" style="--x:85.18">7.10</b>
+<i class="fx-dot k-ink" style="--x:88.06" title="Spec v0.7.11 publiée le 14/11, sur go du mainteneur vers 05:00 (artifacts 8fa01b4)"></i><b class="fx-lab c up" style="--x:88.06">7.11</b>
+<i class="fx-dot k-ink" style="--x:88.85" title="Spec v0.7.12 publiée le 14/11 07:52, sur « Go push » du mainteneur (artifacts e40ed78)"></i><b class="fx-lab c dn" style="--x:88.85">7.12</b>
+<i class="fx-dot k-ink" style="--x:93.16" title="Spec v0.7.13 publiée le 14/11 23:22, alignée sur le code de la bêta 0.70.0 (artifacts e6d030e)"></i><b class="fx-lab up" style="--x:93.16">7.13</b>
 </div></div>
 <div class="fx-row"><span class="fx-l">R0</span><div class="fx-t" style="--h:56px">
-<i class="fx-dot k-body" style="--x:7.84;--y:11px" title="#1301-ST, invariants d'envoi : PR #1522 mergée le 02/11 à 02:21 (dev 0.66.0)"></i><b class="fx-lab" style="--x:7.84;--y:11px">#1301-ST</b>
-<i class="fx-bar k-body" style="--x:38.96;--w:7.16;--y:11px" title="R0b : PR #1539 (06/11 10:55) et #1551 (07/11 10:59)"></i><b class="fx-lab rt" style="--x:38.96;--y:11px">R0b</b>
-<i class="fx-bar k-body" style="--x:49.33;--w:10.37;--y:11px" title="R0c : #1555 (07/11 21:44) à #1569 (08/11 16:17), puis #1574 (09/11 08:34)"></i><b class="fx-lab" style="--x:59.69;--y:11px">R0c</b>
-<i class="fx-dot k-body" style="--x:40.58;--y:28px" title="R0m : PR #1524 mergée le 06/11 à 16:20 (dev 0.69.2)"></i><b class="fx-lab rt" style="--x:40.58;--y:28px">R0m</b>
-<i class="fx-dot k-body" style="--x:53.66;--y:28px" title="#1553, citation en attente stockée : PR #1564 mergée le 08/11 à 12:17"></i><b class="fx-lab" style="--x:53.66;--y:28px">#1553</b>
-<i class="fx-bar k-body hatch" style="--x:47.32;--w:9.42;--y:45px" title="R0a, hors dépôt : prétests, bloc automatique sur S10e, séance sur S25 ; conclu le 08/11 à 22:40"></i><b class="fx-lab" style="--x:56.75;--y:45px">R0a · preuve sur appareil</b>
+<i class="fx-dot k-body" style="--x:7.32;--y:11px" title="#1301-ST, invariants d'envoi : PR #1522 mergée le 02/11 à 02:21 (dev 0.66.0)"></i><b class="fx-lab" style="--x:7.32;--y:11px">#1301-ST</b>
+<i class="fx-bar k-body" style="--x:36.37;--w:6.69;--y:11px" title="R0b : PR #1539 (06/11 10:55) et #1551 (07/11 10:59)"></i><b class="fx-lab rt" style="--x:36.37;--y:11px">R0b</b>
+<i class="fx-bar k-body" style="--x:46.04;--w:9.68;--y:11px" title="R0c : #1555 (07/11 21:44) à #1569 (08/11 16:17), puis #1574 (09/11 08:34)"></i><b class="fx-lab" style="--x:55.71;--y:11px">R0c</b>
+<i class="fx-dot k-body" style="--x:37.87;--y:28px" title="R0m : PR #1524 mergée le 06/11 à 16:20 (dev 0.69.2)"></i><b class="fx-lab rt" style="--x:37.87;--y:28px">R0m</b>
+<i class="fx-dot k-body" style="--x:50.08;--y:28px" title="#1553, citation en attente stockée : PR #1564 mergée le 08/11 à 12:17"></i><b class="fx-lab" style="--x:50.08;--y:28px">#1553</b>
+<i class="fx-bar k-body hatch" style="--x:44.17;--w:8.80;--y:45px" title="R0a, hors dépôt : prétests, bloc automatique sur S10e, séance sur S25 ; conclu le 08/11 à 22:40"></i><b class="fx-lab" style="--x:52.96;--y:45px">R0a · preuve sur appareil</b>
 </div></div>
 <div class="fx-row"><span class="fx-l">R1 · R2 · R6</span><div class="fx-t" style="--h:40px">
-<i class="fx-bar k-body" style="--x:62.84;--w:5.51;--y:12px" title="R1a-1 : #1583 à #1589 le 09/11 de 19:08 à 23:42, #1590 le 10/11 à 13:38"></i><b class="fx-lab rt" style="--x:62.84;--y:12px">R1a-1 · 8 PR</b>
-<i class="fx-bar k-body" style="--x:74.24;--w:0.88;--y:29px" title="R1a-2, R1b, R2a, R2b, R6 : #1591 à #1603, le 11/11 de 09:26 à 12:24"></i><b class="fx-lab rt" style="--x:74.24;--y:29px">R1a-2, R1b, R2a, R2b, R6 · 12 PR en 3 h</b>
+<i class="fx-bar k-body" style="--x:58.65;--w:5.14;--y:12px" title="R1a-1 : #1583 à #1589 le 09/11 de 19:08 à 23:42, #1590 le 10/11 à 13:38"></i><b class="fx-lab rt" style="--x:58.65;--y:12px">R1a-1 · 8 PR</b>
+<i class="fx-bar k-body" style="--x:69.29;--w:0.82;--y:29px" title="R1a-2, R1b, R2a, R2b, R6 : #1591 à #1603, le 11/11 de 09:26 à 12:24"></i><b class="fx-lab rt" style="--x:69.29;--y:29px">R1a-2, R1b, R2a, R2b, R6 · 12 PR en 3 h</b>
 </div></div>
 <div class="fx-row"><span class="fx-l">Fin de phase</span><div class="fx-t" style="--h:30px">
-<span class="fx-zone" style="--x:75.19;--w:24.81"></span>
-<i class="fx-dot k-end" style="--x:76.80" title="PR #1606 mergée le 11/11 18:03"></i>
-<i class="fx-dot k-end" style="--x:80.75" title="PR #1608 mergée le 12/11 07:19"></i>
-<i class="fx-dot k-end" style="--x:82.33" title="PR #1610 mergée le 12/11 12:37"></i>
-<i class="fx-dot k-end" style="--x:83.60" title="PR #1612 mergée le 12/11 16:53"></i>
-<i class="fx-dot k-end" style="--x:85.51" title="PR #1614 mergée le 12/11 23:18"></i>
-<i class="fx-dot k-end" style="--x:88.33" title="PR #1615 mergée le 13/11 08:47"></i>
-<i class="fx-dot k-end" style="--x:89.96" title="PR #1618 mergée le 13/11 14:15"></i>
-<i class="fx-dot k-end" style="--x:90.03" title="PR #1620 mergée le 13/11 14:31"></i>
-<i class="fx-dot k-end" style="--x:90.40" title="PR #1621 mergée le 13/11 15:45"></i>
-<i class="fx-dot k-end" style="--x:90.71" title="PR #1622 mergée le 13/11 16:48"></i>
-<i class="fx-dot k-end" style="--x:92.23" title="PR #1624 mergée le 13/11 21:54"></i>
-<i class="fx-dot k-end" style="--x:92.78" title="PR #1627 mergée le 13/11 23:44"></i>
-<i class="fx-dot k-end" style="--x:92.90" title="PR #1626 mergée le 14/11 00:08"></i>
-<i class="fx-dot k-end" style="--x:92.92" title="PR #1629 mergée le 14/11 00:12"></i>
-<i class="fx-dot k-end" style="--x:93.08" title="PR #1630 mergée le 14/11 00:45"></i>
-<i class="fx-dot k-end" style="--x:93.08" title="PR #1631 mergée le 14/11 00:45"></i>
-<i class="fx-dot k-end" style="--x:93.29" title="PR #1633 mergée le 14/11 01:28"></i>
-<i class="fx-dot k-end" style="--x:93.29" title="PR #1634 mergée le 14/11 01:28"></i>
-<i class="fx-dot k-end" style="--x:93.61" title="PR #1635 mergée le 14/11 02:32"></i>
-<i class="fx-dot k-end" style="--x:93.80" title="PR #1636 mergée le 14/11 03:10"></i>
-<i class="fx-dot k-end" style="--x:94.40" title="PR #1638 mergée le 14/11 05:11"></i>
-<i class="fx-dot k-end" style="--x:94.44" title="PR #1637 mergée le 14/11 05:19"></i>
-<i class="fx-dot k-end" style="--x:94.61" title="PR #1639 mergée le 14/11 05:53"></i>
-<i class="fx-dot k-end" style="--x:94.61" title="PR #1640 mergée le 14/11 05:53"></i>
-<i class="fx-dot k-end" style="--x:94.80" title="PR #1642 mergée le 14/11 06:32"></i>
-<i class="fx-dot k-end" style="--x:95.53" title="PR #1644 mergée le 14/11 08:58"></i>
-<i class="fx-dot k-end" style="--x:95.71" title="PR #1645 mergée le 14/11 09:36"></i>
-<i class="fx-dot k-end" style="--x:96.26" title="PR #1647 mergée le 14/11 11:27"></i>
-<b class="fx-lab rt" style="--x:75.19">28 PR de fin de phase, détail dans la loupe</b>
+<span class="fx-zone" style="--x:70.18;--w:22.99"></span>
+<i class="fx-dot k-end" style="--x:71.68" title="PR #1606 mergée le 11/11 18:03"></i>
+<i class="fx-dot k-end" style="--x:75.37" title="PR #1608 mergée le 12/11 07:19"></i>
+<i class="fx-dot k-end" style="--x:76.84" title="PR #1610 mergée le 12/11 12:37"></i>
+<i class="fx-dot k-end" style="--x:78.02" title="PR #1612 mergée le 12/11 16:53"></i>
+<i class="fx-dot k-end" style="--x:79.81" title="PR #1614 mergée le 12/11 23:18"></i>
+<i class="fx-dot k-end" style="--x:82.44" title="PR #1615 mergée le 13/11 08:47"></i>
+<i class="fx-dot k-end" style="--x:83.96" title="PR #1618 mergée le 13/11 14:15"></i>
+<i class="fx-dot k-end" style="--x:84.03" title="PR #1620 mergée le 13/11 14:31"></i>
+<i class="fx-dot k-end" style="--x:84.38" title="PR #1621 mergée le 13/11 15:45"></i>
+<i class="fx-dot k-end" style="--x:84.67" title="PR #1622 mergée le 13/11 16:48"></i>
+<i class="fx-dot k-end" style="--x:86.08" title="PR #1624 mergée le 13/11 21:54"></i>
+<i class="fx-dot k-end" style="--x:86.59" title="PR #1627 mergée le 13/11 23:44"></i>
+<i class="fx-dot k-end" style="--x:86.70" title="PR #1626 mergée le 14/11 00:08"></i>
+<i class="fx-dot k-end" style="--x:86.72" title="PR #1629 mergée le 14/11 00:12"></i>
+<i class="fx-dot k-end" style="--x:86.88" title="PR #1630 mergée le 14/11 00:45"></i>
+<i class="fx-dot k-end" style="--x:86.88" title="PR #1631 mergée le 14/11 00:45"></i>
+<i class="fx-dot k-end" style="--x:87.07" title="PR #1633 mergée le 14/11 01:28"></i>
+<i class="fx-dot k-end" style="--x:87.07" title="PR #1634 mergée le 14/11 01:28"></i>
+<i class="fx-dot k-end" style="--x:87.37" title="PR #1635 mergée le 14/11 02:32"></i>
+<i class="fx-dot k-end" style="--x:87.55" title="PR #1636 mergée le 14/11 03:10"></i>
+<i class="fx-dot k-end" style="--x:88.11" title="PR #1638 mergée le 14/11 05:11"></i>
+<i class="fx-dot k-end" style="--x:88.14" title="PR #1637 mergée le 14/11 05:19"></i>
+<i class="fx-dot k-end" style="--x:88.30" title="PR #1639 mergée le 14/11 05:53"></i>
+<i class="fx-dot k-end" style="--x:88.30" title="PR #1640 mergée le 14/11 05:53"></i>
+<i class="fx-dot k-end" style="--x:88.48" title="PR #1642 mergée le 14/11 06:32"></i>
+<i class="fx-dot k-end" style="--x:89.16" title="PR #1644 mergée le 14/11 08:58"></i>
+<i class="fx-dot k-end" style="--x:89.33" title="PR #1645 mergée le 14/11 09:36"></i>
+<i class="fx-dot k-end" style="--x:89.85" title="PR #1647 mergée le 14/11 11:27"></i>
+<i class="fx-dot k-end" style="--x:90.11" title="PR #1648 mergée le 14/11 12:23"></i>
+<i class="fx-dot k-end" style="--x:91.65" title="PR #1652 mergée le 14/11 17:56 (revue de promotion)"></i>
+<i class="fx-dot k-end" style="--x:91.74" title="PR #1653 mergée le 14/11 18:16 (revue de promotion)"></i>
+<i class="fx-dot k-end" style="--x:91.79" title="PR #1655 mergée le 14/11 18:26 (revue de promotion)"></i>
+<b class="fx-lab rt" style="--x:70.18">32 PR de fin de phase, détail dans la loupe</b>
 </div></div>
 <div class="fx-row"><span class="fx-l">Releases</span><div class="fx-t" style="--h:34px">
-<i class="fx-rel k-body" style="--x:7.95" title="Release dev 0.66.0, PR de version mergée le 02/11 02:42"></i>
-<i class="fx-rel k-body" style="--x:39.01" title="Release dev 0.69.0, PR de version mergée le 06/11 11:04"></i>
-<i class="fx-rel k-body" style="--x:40.63" title="Release dev 0.69.2, PR de version mergée le 06/11 16:32"></i>
-<i class="fx-rel k-body" style="--x:46.19" title="Release dev 0.69.4, PR de version mergée le 07/11 11:11"></i>
-<i class="fx-rel k-body" style="--x:49.48" title="Release dev 0.69.5, PR de version mergée le 07/11 22:15"></i>
-<i class="fx-rel k-body" style="--x:52.16" title="Release dev 0.69.6, PR de version mergée le 08/11 07:16"></i>
-<i class="fx-rel k-body" style="--x:53.85" title="Release dev 0.69.7, PR de version mergée le 08/11 12:56"></i>
-<i class="fx-rel k-body" style="--x:54.90" title="Release dev 0.69.8, PR de version mergée le 08/11 16:27"></i>
-<i class="fx-rel k-body" style="--x:59.76" title="Release dev 0.69.9, PR de version mergée le 09/11 08:47"></i>
-<i class="fx-rel k-body" style="--x:61.03" title="Release dev 0.69.10, PR de version mergée le 09/11 13:03"></i>
-<i class="fx-rel k-body" style="--x:75.19" title="Release dev 0.69.11, PR de version mergée le 11/11 12:39"></i>
-<i class="fx-rel k-end" style="--x:76.88" title="Release dev 0.69.12, PR de version mergée le 11/11 18:19"></i>
-<i class="fx-rel k-end" style="--x:80.83" title="Release dev 0.69.13, PR de version mergée le 12/11 07:36"></i>
-<i class="fx-rel k-end" style="--x:82.39" title="Release dev 0.69.14, PR de version mergée le 12/11 12:49"></i>
-<i class="fx-rel k-end" style="--x:83.89" title="Release dev 0.69.15, PR de version mergée le 12/11 17:53"></i>
-<i class="fx-rel k-end" style="--x:88.40" title="Release dev 0.69.16, PR de version mergée le 13/11 09:01"></i>
-<i class="fx-rel k-end" style="--x:90.71" title="Release dev 0.69.17, PR de version mergée le 13/11 16:48"></i>
-<i class="fx-rel k-end" style="--x:92.23" title="Release dev 0.69.18, PR de version mergée le 13/11 21:54"></i>
-<i class="fx-rel k-end" style="--x:93.15" title="Release dev 0.69.19, PR de version mergée le 14/11 00:59"></i>
-<i class="fx-rel k-end" style="--x:93.61" title="Release dev 0.69.20, PR de version mergée le 14/11 02:32"></i>
-<i class="fx-rel k-end" style="--x:94.65" title="Release dev 0.69.21, PR de version mergée le 14/11 06:02"></i>
-<i class="fx-rel k-end" style="--x:94.80" title="Release dev 0.69.22, PR de version mergée le 14/11 06:32"></i>
-<i class="fx-rel k-end" style="--x:95.71" title="Release dev 0.69.23, PR de version mergée le 14/11 09:36"></i>
-<i class="fx-rel beta" style="--x:20.64" title="Bêta 0.68.0 préparée le 03/11 à 21:22, la dernière avant la fin de la refonte"></i>
-<b class="fx-lab c up" style="--x:7.95">0.66.0</b>
-<b class="fx-lab c up" style="--x:20.64">bêta 0.68.0</b>
-<b class="fx-lab c up" style="--x:39.01">0.69.0</b>
-<b class="fx-lab c up" style="--x:75.19">0.69.11</b>
-<b class="fx-lab rt up" style="--x:95.71">0.69.23</b>
+<i class="fx-rel k-body" style="--x:7.42" title="Release dev 0.66.0, PR de version mergée le 02/11 02:42"></i>
+<i class="fx-rel k-body" style="--x:36.41" title="Release dev 0.69.0, PR de version mergée le 06/11 11:04"></i>
+<i class="fx-rel k-body" style="--x:37.93" title="Release dev 0.69.2, PR de version mergée le 06/11 16:32"></i>
+<i class="fx-rel k-body" style="--x:43.11" title="Release dev 0.69.4, PR de version mergée le 07/11 11:11"></i>
+<i class="fx-rel k-body" style="--x:46.18" title="Release dev 0.69.5, PR de version mergée le 07/11 22:15"></i>
+<i class="fx-rel k-body" style="--x:48.69" title="Release dev 0.69.6, PR de version mergée le 08/11 07:16"></i>
+<i class="fx-rel k-body" style="--x:50.26" title="Release dev 0.69.7, PR de version mergée le 08/11 12:56"></i>
+<i class="fx-rel k-body" style="--x:51.24" title="Release dev 0.69.8, PR de version mergée le 08/11 16:27"></i>
+<i class="fx-rel k-body" style="--x:55.77" title="Release dev 0.69.9, PR de version mergée le 09/11 08:47"></i>
+<i class="fx-rel k-body" style="--x:56.96" title="Release dev 0.69.10, PR de version mergée le 09/11 13:03"></i>
+<i class="fx-rel k-body" style="--x:70.18" title="Release dev 0.69.11, PR de version mergée le 11/11 12:39"></i>
+<i class="fx-rel k-end" style="--x:71.75" title="Release dev 0.69.12, PR de version mergée le 11/11 18:19"></i>
+<i class="fx-rel k-end" style="--x:75.44" title="Release dev 0.69.13, PR de version mergée le 12/11 07:36"></i>
+<i class="fx-rel k-end" style="--x:76.89" title="Release dev 0.69.14, PR de version mergée le 12/11 12:49"></i>
+<i class="fx-rel k-end" style="--x:78.30" title="Release dev 0.69.15, PR de version mergée le 12/11 17:53"></i>
+<i class="fx-rel k-end" style="--x:82.50" title="Release dev 0.69.16, PR de version mergée le 13/11 09:01"></i>
+<i class="fx-rel k-end" style="--x:84.67" title="Release dev 0.69.17, PR de version mergée le 13/11 16:48"></i>
+<i class="fx-rel k-end" style="--x:86.08" title="Release dev 0.69.18, PR de version mergée le 13/11 21:54"></i>
+<i class="fx-rel k-end" style="--x:86.94" title="Release dev 0.69.19, PR de version mergée le 14/11 00:59"></i>
+<i class="fx-rel k-end" style="--x:87.37" title="Release dev 0.69.20, PR de version mergée le 14/11 02:32"></i>
+<i class="fx-rel k-end" style="--x:88.34" title="Release dev 0.69.21, PR de version mergée le 14/11 06:02"></i>
+<i class="fx-rel k-end" style="--x:88.48" title="Release dev 0.69.22, PR de version mergée le 14/11 06:32"></i>
+<i class="fx-rel k-end" style="--x:89.33" title="Release dev 0.69.23, PR de version mergée le 14/11 09:36"></i>
+<i class="fx-rel k-end" style="--x:90.11" title="Release dev 0.69.24, PR de version mergée le 14/11 12:23"></i>
+<i class="fx-rel k-end" style="--x:92.18" title="Release dev 0.70.0 (app-v392) le 14/11 19:51, sur 28a01ff40 après la revue de promotion ; version fixée par #1650 à 12:37"></i>
+<i class="fx-rel beta" style="--x:19.27" title="Bêta 0.68.0 préparée le 03/11 à 21:22, la dernière avant la fin de la refonte"></i>
+<i class="fx-rel beta" style="--x:92.70" title="Bêta 0.70.0 = app-v393 : promotion #1651 mergée le 14/11 à 21:28 (main a82319b27), publiée à 21:43"></i>
+<b class="fx-lab c up" style="--x:7.42">0.66.0</b>
+<b class="fx-lab c up" style="--x:19.27">bêta 0.68.0</b>
+<b class="fx-lab c up" style="--x:36.41">0.69.0</b>
+<b class="fx-lab c up" style="--x:70.18">0.69.11</b>
+<b class="fx-lab rt up" style="--x:92.70">bêta 0.70.0</b>
 </div></div>
 <div class="fx-row"><span class="fx-l">Portes</span><div class="fx-t" style="--h:26px">
-<i class="fx-gate" style="--x:74.22" title="G1 : go du mainteneur le 11/11 à 09:23"></i>
-<i class="fx-gate" style="--x:74.51" title="G2 levée le 11/11 à 10:22"></i>
-<b class="fx-lab rt" style="--x:74.11">G1, G2 le 11/11</b>
-<b class="fx-lab rt muted" style="--x:96.38">G3, G4 : recette</b>
+<i class="fx-gate" style="--x:69.27" title="G1 : go du mainteneur le 11/11 à 09:23"></i>
+<i class="fx-gate" style="--x:69.55" title="G2 levée le 11/11 à 10:22"></i>
+<b class="fx-lab rt" style="--x:69.17">G1, G2 le 11/11</b>
+<i class="fx-gate der" style="--x:93.17" title="G3 et G4 closes par dérogation avec la phase, le 14/11 (go du mainteneur peu avant 23:00) ; recettes réduites du 14/11 sans KO bloquant ni majeur"></i>
+<b class="fx-lab rt" style="--x:93.17">G3, G4 par dérogation</b>
 </div></div>
-<div class="fx-row fx-histo"><span class="fx-l">PR mergées<br>par jour</span><div class="fx-t" style="--h:106px">
-<span class="fx-g" style="--n:5"><em>5</em></span><span class="fx-g" style="--n:10"><em>10</em></span><span class="fx-g" style="--n:15"><em>15</em></span>
-<span class="fx-col" style="--x:10.71;--t:1" title="lu 2/11 : 1 PR du corps de phase"><i class="k-body" style="--n:1"></i></span>
-<span class="fx-col" style="--x:39.29;--t:2" title="ve 6/11 : 2 PR du corps de phase"><i class="k-body" style="--n:2"></i></span>
-<span class="fx-col" style="--x:46.43;--t:3" title="sa 7/11 : 3 PR du corps de phase"><i class="k-body" style="--n:3"></i></span>
-<span class="fx-col" style="--x:53.57;--t:6" title="di 8/11 : 6 PR du corps de phase"><i class="k-body" style="--n:6"></i></span>
-<span class="fx-col" style="--x:60.71;--t:9" title="lu 9/11 : 9 PR du corps de phase"><i class="k-body" style="--n:9"></i><em>9</em></span>
-<span class="fx-col" style="--x:67.86;--t:1" title="ma 10/11 : 1 PR du corps de phase"><i class="k-body" style="--n:1"></i></span>
-<span class="fx-col" style="--x:75.00;--t:13" title="me 11/11 : 13 PR (12 corps de phase, 1 fin de phase)"><i class="k-body" style="--n:12"></i><i class="k-end" style="--n:1"></i><em>13</em></span>
-<span class="fx-col" style="--x:82.14;--t:4" title="je 12/11 : 4 PR de fin de phase"><i class="k-end" style="--n:4"></i></span>
-<span class="fx-col" style="--x:89.29;--t:7" title="ve 13/11 : 7 PR de fin de phase"><i class="k-end" style="--n:7"></i></span>
-<span class="fx-col" style="--x:96.43;--t:16" title="sa 14/11 : 16 PR de fin de phase"><i class="k-end" style="--n:16"></i><em>16</em></span>
+<div class="fx-row fx-histo"><span class="fx-l">PR mergées<br>par jour</span><div class="fx-t" style="--h:126px">
+<span class="fx-g" style="--n:5"><em>5</em></span><span class="fx-g" style="--n:10"><em>10</em></span><span class="fx-g" style="--n:15"><em>15</em></span><span class="fx-g" style="--n:20"><em>20</em></span>
+<span class="fx-col" style="--x:10.00;--t:1" title="lu 2/11 : 1 PR du corps de phase"><i class="k-body" style="--n:1"></i></span>
+<span class="fx-col" style="--x:36.67;--t:2" title="ve 6/11 : 2 PR du corps de phase"><i class="k-body" style="--n:2"></i></span>
+<span class="fx-col" style="--x:43.33;--t:3" title="sa 7/11 : 3 PR du corps de phase"><i class="k-body" style="--n:3"></i></span>
+<span class="fx-col" style="--x:50.00;--t:6" title="di 8/11 : 6 PR du corps de phase"><i class="k-body" style="--n:6"></i></span>
+<span class="fx-col" style="--x:56.67;--t:9" title="lu 9/11 : 9 PR du corps de phase"><i class="k-body" style="--n:9"></i><em>9</em></span>
+<span class="fx-col" style="--x:63.33;--t:1" title="ma 10/11 : 1 PR du corps de phase"><i class="k-body" style="--n:1"></i></span>
+<span class="fx-col" style="--x:70.00;--t:13" title="me 11/11 : 13 PR (12 corps de phase, 1 fin de phase)"><i class="k-body" style="--n:12"></i><i class="k-end" style="--n:1"></i><em>13</em></span>
+<span class="fx-col" style="--x:76.67;--t:4" title="je 12/11 : 4 PR de fin de phase"><i class="k-end" style="--n:4"></i></span>
+<span class="fx-col" style="--x:83.33;--t:7" title="ve 13/11 : 7 PR de fin de phase"><i class="k-end" style="--n:7"></i></span>
+<span class="fx-col" style="--x:90.00;--t:20" title="sa 14/11 : 20 PR de fin de phase"><i class="k-end" style="--n:20"></i><em>20</em></span>
 </div></div>
 </div></div>
-    <p class="legend"><span style="--k:var(--c-body)">corps de phase</span><span style="--k:var(--c-end)">fin de phase</span><span class="lg-hatch" style="--k:var(--c-body)">hors dépôt (R0a)</span><span class="lg-dot" style="--k:var(--ink-2)">spec publiée</span><span class="lg-gate" style="--k:var(--ink)">porte franchie</span><span class="lg-now" style="--k:var(--ink-3)">maintenant</span><em>survol d'une marque : date, heure, PR</em></p>
-    <p class="note">Le corps de phase a tenu en dix jours, avec un pic le 11/11 : treize PR mergées, la cascade de R1a-2 à R6 en trois heures après le go du mainteneur, puis le premier correctif de fin de phase le soir même. Depuis, la fin de phase a livré vingt-six PR d'ajustement en douze releases dev, et sept versions de la spec, en moins de trois jours ; le 14/11 compte seize PR mergées à 11:50. Les PR de version seules (#1632, #1641) ne sont comptées nulle part, comme les jours précédents.</p>
-    <div class="sechd"><h3>Loupe sur la fin de phase</h3><span class="muted">du 11/11 12 h au 14/11 12 h · les numéros renvoient aux remarques plus bas</span></div>
-<div class="fx" tabindex="0" role="region" aria-label="Loupe sur la fin de phase, du 11/11 12 h au 14/11 12 h ; défilement horizontal" data-end>
-<div class="fx-in" style="--grid:calc(600% / 72);min-width:960px">
-<span class="fx-now" style="--x:99.77" title="14/11 11:50" aria-hidden="true"></span>
+    <p class="legend"><span style="--k:var(--c-body)">corps de phase</span><span style="--k:var(--c-end)">fin de phase</span><span class="lg-hatch" style="--k:var(--c-body)">hors dépôt (R0a)</span><span class="lg-dot" style="--k:var(--ink-2)">spec publiée</span><span class="lg-gate" style="--k:var(--ink)">porte franchie</span><span class="lg-gate" style="--k:var(--paper-2);--kb:var(--ink)">porte close par dérogation</span><span class="lg-now" style="--k:var(--ink-3)">fermeture de #1417, 14/11 23:24</span><em>survol d'une marque : date, heure, PR</em></p>
+    <p class="note">Le corps de phase a tenu en dix jours, avec un pic le 11/11 : treize PR mergées, la cascade de R1a-2 à R6 en trois heures après le go du mainteneur, puis le premier correctif de fin de phase le soir même. La fin de phase a duré un peu moins de trois jours et demi : trente-deux PR, dont trois pour la revue de promotion, quatorze releases dev (0.69.12 à 0.70.0) et huit versions de la spec (v0.7.6 à v0.7.13). Le 14/11 compte vingt PR mergées, puis la bêta 0.70.0 à 21:43 et la fermeture de #1417 à 23:24 ; le 15/11, rien n'est entré dans dev. Les PR de version seules (#1632, #1641) et la préparation de la bêta (#1650) ne sont comptées nulle part, comme les jours précédents.</p>
+    <div class="sechd"><h3>Loupe sur la fin de phase</h3><span class="muted">du 11/11 12 h au 15/11 0 h, jusqu'à la fermeture de #1417 · les numéros renvoient aux remarques plus bas</span></div>
+<div class="fx" tabindex="0" role="region" aria-label="Loupe sur la fin de phase, du 11/11 12 h au 15/11 0 h ; défilement horizontal" data-end>
+<div class="fx-in" style="--grid:calc(600% / 84);min-width:1100px">
+<span class="fx-now" style="--x:99.29" title="14/11 23:24 : #1417 fermée, phase close" aria-hidden="true"></span>
 <div class="fx-row fx-axis"><span class="fx-l">heures</span><div class="fx-t">
 <span class="fx-tk lt" style="--x:0.00">me 11 · 12 h</span>
-<span class="fx-tk c b" style="--x:16.67">je 12</span>
-<span class="fx-tk c" style="--x:25.00">6 h</span>
-<span class="fx-tk c" style="--x:33.33">12 h</span>
-<span class="fx-tk c" style="--x:41.67">18 h</span>
-<span class="fx-tk c b" style="--x:50.00">ve 13</span>
-<span class="fx-tk c" style="--x:58.33">6 h</span>
-<span class="fx-tk c" style="--x:66.67">12 h</span>
-<span class="fx-tk c" style="--x:75.00">18 h</span>
-<span class="fx-tk c b" style="--x:83.33">sa 14</span>
-<span class="fx-tk c" style="--x:91.67">6 h</span>
+<span class="fx-tk c b" style="--x:14.29">je 12</span>
+<span class="fx-tk c" style="--x:21.43">6 h</span>
+<span class="fx-tk c" style="--x:28.57">12 h</span>
+<span class="fx-tk c" style="--x:35.71">18 h</span>
+<span class="fx-tk c b" style="--x:42.86">ve 13</span>
+<span class="fx-tk c" style="--x:50.00">6 h</span>
+<span class="fx-tk c" style="--x:57.14">12 h</span>
+<span class="fx-tk c" style="--x:64.29">18 h</span>
+<span class="fx-tk c b" style="--x:71.43">sa 14</span>
+<span class="fx-tk c" style="--x:78.57">6 h</span>
+<span class="fx-tk c" style="--x:85.71">12 h</span>
+<span class="fx-tk c" style="--x:92.86">18 h</span>
 </div></div>
 <div class="fx-row"><span class="fx-l">Retours</span><div class="fx-t" style="--h:46px">
-<i class="fx-brk" style="--x:1.16;--w:1.90" title="Retours sur la 0.69.11, fil DEV, de 12:50 à 14:12"></i>
-<b class="fx-lab lo" style="--x:1.16">0.69.11 → 1, 4, 5, 12 à 14</b>
-<i class="fx-brk" style="--x:34.26;--w:8.33" title="Citation topic contre MP (styx42, questions de XaTriX), puis retours sur la 0.69.14"></i>
-<b class="fx-lab lo" style="--x:34.26">12/11 → 6, 9, 10</b>
-<i class="fx-brk" style="--x:59.49;--w:2.38" title="Revue Astra de #1615 et remarque de XaTriX sur le panier"></i>
-<b class="fx-lab lo rt" style="--x:61.87;--y:38px">pendant la PR 2 → 7, 8, 11</b>
+<i class="fx-brk" style="--x:0.99;--w:1.63" title="Retours sur la 0.69.11, fil DEV, de 12:50 à 14:12"></i>
+<b class="fx-lab lo" style="--x:0.99">0.69.11 → 1, 4, 5, 12 à 14</b>
+<i class="fx-brk" style="--x:29.37;--w:7.14" title="Citation topic contre MP (styx42, questions de XaTriX), puis retours sur la 0.69.14"></i>
+<b class="fx-lab lo" style="--x:29.37">12/11 → 6, 9, 10</b>
+<i class="fx-brk" style="--x:50.99;--w:2.04" title="Revue Astra de #1615 et remarque de XaTriX sur le panier"></i>
+<b class="fx-lab lo rt" style="--x:53.04;--y:38px">pendant la PR 2 → 7, 8, 11</b>
 </div></div>
-<div class="fx-row"><span class="fx-l">Décisions</span><div class="fx-t" style="--h:64px">
-<b class="fx-pill" style="--x:5.56;--y:14px" title="11/11 ~16:00 : correctif de la citation, offre en feuille du bas, trait à 2 dp">1 · 2 · 4</b>
-<b class="fx-pill" style="--x:10.19;--y:38px" title="11/11 ~19:20 : icône restore_page">3</b>
-<b class="fx-pill" style="--x:28.77;--y:14px" title="12/11 08:43 : B aussi à 2 dp, bouton avion en papier">4 · 5</b>
-<b class="fx-pill" style="--x:35.02;--y:14px" title="12/11 13:13 : citation visible partout, brouillon sous ↺">6</b>
-<b class="fx-pill" style="--x:61.74;--y:14px" title="13/11 08:27-08:33 : réponse rapide suivie dans #1450, issue #1616">7 · 8</b>
-<b class="fx-pill" style="--x:78.12;--y:14px" title="13/11 ~20:15 : variante C de la feuille Options, onglets « Options | Formats », Formats à plat ; dans Options, « Réglages de l'éditeur » en haut, puis le ton et les 3 bascules">12 · 14</b>
-<b class="fx-pill rt" style="--x:82.52;--y:38px" title="13/11 23:25 : « ok reco », toutes les recommandations validées. QR1 = A, QR2 tel que codé, QR3 oui ; QP1 et QP2 oui ; Q4 = A, étendre ED-121 ; Q7 oui, Q8 le remplacement actuel, Q9 1 s intouchable ; Q1 un cran partout, en PR séparée, Q2 oui, Q3 plus tard ; Formats en MP à hauteur minimale (~5 formats) ; audit Roborazzi : option B, vérification bloquante">7 · 8 · 11 · 15</b>
-<b class="fx-lab rt muted" style="--x:82.64;--y:56px" title="13/11 vers 23:30 : mandat de nuit du mainteneur : tout finir, pousser les PR, releases dev si nécessaire, pas de PR bêta ; clos le 14/11 à 03:11, repris vers 05:05">mandat de nuit</b>
-<b class="fx-pill rt" style="--x:90.51;--y:14px" title="14/11, décisions du mainteneur : ~04:43 go pour capturer la requête d'édition MP (faite à 04:44) ; ~05:00 go pour pousser la spec v0.7.11 ; ~05:05 reprise du mandat de nuit ; ~05:10 « go reco » : « Ignorer » d'une citation déjà insérée aligné sur l'éditeur de post en réponse rapide, titre du premier post en graine (« Restaurer » reprend le titre du brouillon)">go reco</b>
-<b class="fx-pill rt" style="--x:94.26;--y:38px" title="14/11 vers 07:52 : « Go push » du mainteneur, spec v0.7.12 poussée à 07:52 ; « Go reco pour tout » sur le tableau des 3 suivis (garde ED-88 : #1644)">go push</b>
+<div class="fx-row"><span class="fx-l">Décisions</span><div class="fx-t" style="--h:76px">
+<b class="fx-pill" style="--x:4.76;--y:14px" title="11/11 ~16:00 : correctif de la citation, offre en feuille du bas, trait à 2 dp">1 · 2 · 4</b>
+<b class="fx-pill" style="--x:8.73;--y:38px" title="11/11 ~19:20 : icône restore_page">3</b>
+<b class="fx-pill" style="--x:24.66;--y:14px" title="12/11 08:43 : B aussi à 2 dp, bouton avion en papier">4 · 5</b>
+<b class="fx-pill" style="--x:30.02;--y:14px" title="12/11 13:13 : citation visible partout, brouillon sous ↺">6</b>
+<b class="fx-pill" style="--x:52.92;--y:14px" title="13/11 08:27-08:33 : réponse rapide suivie dans #1450, issue #1616">7 · 8</b>
+<b class="fx-pill" style="--x:66.96;--y:14px" title="13/11 ~20:15 : variante C de la feuille Options, onglets « Options | Formats », Formats à plat ; dans Options, « Réglages de l'éditeur » en haut, puis le ton et les 3 bascules">12 · 14</b>
+<b class="fx-pill rt" style="--x:70.73;--y:38px" title="13/11 23:25 : « ok reco », toutes les recommandations validées. QR1 = A, QR2 tel que codé, QR3 oui ; QP1 et QP2 oui ; Q4 = A, étendre ED-121 ; Q7 oui, Q8 le remplacement actuel, Q9 1 s intouchable ; Q1 un cran partout, en PR séparée, Q2 oui, Q3 plus tard ; Formats en MP à hauteur minimale (~5 formats) ; audit Roborazzi : option B, vérification bloquante">7 · 8 · 11 · 15</b>
+<b class="fx-lab rt muted" style="--x:70.83;--y:56px" title="13/11 vers 23:30 : mandat de nuit du mainteneur : tout finir, pousser les PR, releases dev si nécessaire, pas de PR bêta ; clos le 14/11 à 03:11, repris vers 05:05">mandat de nuit</b>
+<b class="fx-pill rt" style="--x:77.58;--y:14px" title="14/11, décisions du mainteneur : ~04:43 go pour capturer la requête d'édition MP (faite à 04:44) ; ~05:00 go pour pousser la spec v0.7.11 ; ~05:05 reprise du mandat de nuit ; ~05:10 « go reco » : « Ignorer » d'une citation déjà insérée aligné sur l'éditeur de post en réponse rapide, titre du premier post en graine (« Restaurer » reprend le titre du brouillon)">go reco</b>
+<b class="fx-pill rt" style="--x:80.79;--y:38px" title="14/11 vers 07:52 : « Go push » du mainteneur, spec v0.7.12 poussée à 07:52 ; « Go reco pour tout » sur le tableau des 3 suivis (garde ED-88 : #1644)">go push</b>
+<b class="fx-pill rt" style="--x:85.99;--y:62px" title="14/11, vers midi : refonte de la feuille des smileys reportée (#1649, ouverte à 12:14) ; « revert hauteur smileys, puis PR sur main pour la promotion bêta, plan de review avec Fable et Astra » : #1648 mergée à 12:23 (0.69.24), puis PR de promotion #1651">promotion</b>
+<b class="fx-pill" style="--x:87.40;--y:38px" title="14/11 vers 13:25 : go pour les recettes G3 et G4, réduites ensuite à une passe rapide (13:30 à 14:44, émulateur, 0.69.24) : aucun KO bloquant ni majeur ; KO mineur C8, défilement non restauré à la rotation">G3 · G4</b>
+<b class="fx-pill rt" style="--x:94.82;--y:62px" title="14/11, revue de promotion : vers 16:10, trois constats corrigés au tour 1 (#1652, #1653) ; 18:17, MPStorage en dérogation (#1654) ; vers 19:39, deux défauts antérieurs à la 0.68.0 en dérogation (#1656, #1657), « sujet fermé » en 0.70.x (#1658) ; GO technique sur #1651 à 19:39">revue</b>
+<b class="fx-pill rt rt8" style="--x:99.29;--y:14px" title="14/11 21:19 : « full go donc beta » ; 21:27 : go explicite pour merger #1651, mergée à 21:28, bêta 0.70.0 publiée à 21:43. Peu avant 23:00 : « go pour tout, clos aussi par dérogation » : G3 et G4 closes par dérogation, quatorze issues fermées, spec v0.7.13 (23:22), #1417 fermée (23:24)">go bêta · clôture</b>
 </div></div>
 <div class="fx-row"><span class="fx-l">Spec</span><div class="fx-t" style="--h:40px">
-<i class="fx-dot k-ink" style="--x:16.60;--y:13px" title="Spec v0.7.6 publiée le 11/11 23:57"></i><b class="fx-lab" style="--x:16.60;--y:13px">v0.7.6</b>
-<i class="fx-dot k-ink" style="--x:38.26;--y:13px" title="Spec v0.7.7 publiée le 12/11 15:33"></i><b class="fx-lab" style="--x:38.26;--y:13px">v0.7.7</b>
-<i class="fx-dot k-ink" style="--x:47.94;--y:13px" title="Spec v0.7.8 publiée le 12/11 22:31"></i><b class="fx-lab" style="--x:47.94;--y:13px">v0.7.8</b>
-<i class="fx-dot k-ink" style="--x:62.36;--y:13px" title="Spec v0.7.9 publiée le 13/11 08:54"></i><b class="fx-lab" style="--x:62.36;--y:13px">v0.7.9</b>
-<i class="fx-dot k-ink" style="--x:75.90;--y:13px" title="Spec v0.7.10 publiée le 13/11 18:39"></i><b class="fx-lab rt" style="--x:75.90;--y:13px">v0.7.10</b>
-<i class="fx-dot k-ink" style="--x:90.28;--y:13px" title="Spec v0.7.11 publiée le 14/11, sur go du mainteneur vers 05:00 (artifacts 8fa01b4)"></i><b class="fx-lab rt" style="--x:90.28;--y:13px">v0.7.11</b>
-<i class="fx-dot k-ink" style="--x:94.26;--y:28px" title="Spec v0.7.12 publiée le 14/11 07:52, sur « Go push » du mainteneur (artifacts e40ed78)"></i><b class="fx-lab rt" style="--x:94.26;--y:28px">v0.7.12</b>
+<i class="fx-dot k-ink" style="--x:14.23;--y:13px" title="Spec v0.7.6 publiée le 11/11 23:57"></i><b class="fx-lab" style="--x:14.23;--y:13px">v0.7.6</b>
+<i class="fx-dot k-ink" style="--x:32.80;--y:13px" title="Spec v0.7.7 publiée le 12/11 15:33"></i><b class="fx-lab" style="--x:32.80;--y:13px">v0.7.7</b>
+<i class="fx-dot k-ink" style="--x:41.09;--y:13px" title="Spec v0.7.8 publiée le 12/11 22:31"></i><b class="fx-lab" style="--x:41.09;--y:13px">v0.7.8</b>
+<i class="fx-dot k-ink" style="--x:53.45;--y:13px" title="Spec v0.7.9 publiée le 13/11 08:54"></i><b class="fx-lab" style="--x:53.45;--y:13px">v0.7.9</b>
+<i class="fx-dot k-ink" style="--x:65.06;--y:13px" title="Spec v0.7.10 publiée le 13/11 18:39"></i><b class="fx-lab rt" style="--x:65.06;--y:13px">v0.7.10</b>
+<i class="fx-dot k-ink" style="--x:77.38;--y:13px" title="Spec v0.7.11 publiée le 14/11, sur go du mainteneur vers 05:00 (artifacts 8fa01b4)"></i><b class="fx-lab rt" style="--x:77.38;--y:13px">v0.7.11</b>
+<i class="fx-dot k-ink" style="--x:80.79;--y:28px" title="Spec v0.7.12 publiée le 14/11 07:52, sur « Go push » du mainteneur (artifacts e40ed78)"></i><b class="fx-lab rt" style="--x:80.79;--y:28px">v0.7.12</b>
+<i class="fx-dot k-ink" style="--x:99.25;--y:13px" title="Spec v0.7.13 publiée le 14/11 23:22, alignée sur le code de la bêta 0.70.0 (artifacts e6d030e)"></i><b class="fx-lab rt" style="--x:99.25;--y:13px">v0.7.13</b>
 </div></div>
-<div class="fx-row"><span class="fx-l">Livraisons</span><div class="fx-t" style="--h:122px">
-<i class="fx-dot k-body" style="--x:0.90;--y:13px" title="Release dev 0.69.11 (refonte), PR de version mergée le 11/11 12:39"></i>
-<b class="fx-lab two" style="--x:0.90">0.69.11<span>refonte</span></b>
-<i class="fx-dot k-end" style="--x:8.77;--y:13px" title="Release dev 0.69.12 (#1606), PR de version mergée le 11/11 18:19"></i>
-<b class="fx-lab two" style="--x:8.77">0.69.12<span>#1606</span></b>
-<i class="fx-dot k-end" style="--x:27.22;--y:13px" title="Release dev 0.69.13 (#1608), PR de version mergée le 12/11 07:36"></i>
-<b class="fx-lab two" style="--x:27.22">0.69.13<span>#1608</span></b>
-<i class="fx-dot k-end" style="--x:34.47;--y:13px" title="Release dev 0.69.14 (#1610), PR de version mergée le 12/11 12:49"></i>
-<b class="fx-lab two" style="--x:34.47">0.69.14<span>#1610</span></b>
-<i class="fx-dot k-end" style="--x:41.50;--y:13px" title="Release dev 0.69.15 (#1612), PR de version mergée le 12/11 17:53"></i>
-<b class="fx-lab two" style="--x:41.50">0.69.15<span>#1612</span></b>
-<i class="fx-dot k-end hollow" style="--x:49.03;--y:13px" title="PR #1614 (socle) mergée le 12/11 23:18, livrée avec la 0.69.16"></i>
-<b class="fx-lab two" style="--x:49.03">&nbsp;<span>#1614</span></b>
-<i class="fx-dot k-end" style="--x:62.52;--y:13px" title="Release dev 0.69.16 (#1615), PR de version mergée le 13/11 09:01"></i>
-<b class="fx-lab two" style="--x:62.52">0.69.16<span>#1615</span></b>
-<i class="fx-dot k-end hollow" style="--x:69.79;--y:13px" title="PR #1618 (images dans l'aperçu) mergée le 13/11 14:15, livrée avec la 0.69.17"></i>
-<i class="fx-dot k-end hollow" style="--x:70.16;--y:13px" title="PR #1620 (rangée des formats) mergée le 13/11 14:31, livrée avec la 0.69.17"></i>
-<i class="fx-dot k-end hollow" style="--x:71.88;--y:13px" title="PR #1621 (réglages de l'éditeur) mergée le 13/11 15:45, livrée avec la 0.69.17"></i>
-<i class="fx-dot k-end" style="--x:73.33;--y:13px" title="Release dev 0.69.17 (#1618, #1620, #1621, #1622), PR de version #1622 mergée le 13/11 16:48 ; app-v384 publiée à 16:56"></i>
-<b class="fx-lab two" style="--x:73.33">0.69.17<span>4 PR</span></b>
-<i class="fx-dot k-end" style="--x:80.42;--y:13px" title="Release dev 0.69.18 (#1624), PR de version mergée le 13/11 21:54 ; app-v385"></i>
-<b class="fx-lab two" style="--x:80.42">0.69.18<span>#1624</span></b>
-<i class="fx-dot k-end hollow" style="--x:82.96;--y:43px" title="PR #1627 (accusé unique, R15, #1437) mergée le 13/11 23:44, livrée avec la 0.69.19"></i>
-<i class="fx-dot k-end hollow" style="--x:83.52;--y:43px" title="PR #1626 (grille du ton en 2 × 8) mergée le 14/11 00:08, livrée avec la 0.69.19"></i>
-<i class="fx-dot k-end hollow" style="--x:83.61;--y:43px" title="PR #1629 (réponse rapide et panier, #1450 et #1616) mergée le 14/11 00:12, livrée avec la 0.69.19"></i>
-<i class="fx-dot k-end hollow" style="--x:84.38;--y:43px" title="PR #1630 (feuilles du bas à un seul cran, smileys à hauteur fixe, plancher de hauteur en MP) et #1631 (R11, en-têtes sous l'offre ↺) mergées le 14/11 00:45, livrées avec la 0.69.19"></i>
-<i class="fx-dot k-end" style="--x:84.70;--y:43px" title="Release dev 0.69.19 (#1626, #1627, #1629, #1630, #1631), PR de version #1632 mergée le 14/11 00:59 ; app-v386, servie vers 01:15"></i>
-<b class="fx-lab rt" style="--x:82.96;--y:43px">0.69.19 · 5 PR</b>
-<i class="fx-dot k-end hollow" style="--x:85.37;--y:57px" title="PR #1633 (doc mvi.md) et #1634 (contrat d'édition MP, #1625 PR 1) mergées le 14/11 01:28, livrées avec la 0.69.20"></i>
-<i class="fx-dot k-end" style="--x:86.85;--y:57px" title="Release dev 0.69.20 : « Modifier » sur ses propres messages MP (#1635, PR de version) mergée le 14/11 02:32 ; app-v387, servie à 02:45"></i>
-<b class="fx-lab rt" style="--x:85.37;--y:57px">0.69.20 · #1625</b>
-<i class="fx-dot k-end hollow" style="--x:87.73;--y:71px" title="PR #1636 (captures Roborazzi élaguées au niveau B, 1 301 → 829) mergée le 14/11 03:10, dans la 0.69.21"></i>
-<i class="fx-dot k-end hollow" style="--x:90.53;--y:71px" title="PR #1638 (planche-contact Roborazzi) mergée le 14/11 05:11, dans la 0.69.21"></i>
-<i class="fx-dot k-end hollow" style="--x:90.72;--y:71px" title="PR #1637 (réponse d'édition MP capturée, épinglée en test) mergée le 14/11 05:19, livrée avec la 0.69.21"></i>
-<i class="fx-dot k-end hollow" style="--x:91.50;--y:71px" title="PR #1639 (suivis du gate de #1635 : résultat d'envoi MP lié au compte, sujet caché hors du brouillon d'édition) et #1640 (« Ignorer » de la réponse rapide aligné sur l'éditeur de post, titre servi du premier post laissé intact compté comme graine) mergées le 14/11 05:53, livrées avec la 0.69.21"></i>
-<i class="fx-dot k-end" style="--x:91.71;--y:71px" title="Release dev 0.69.21 (#1636 à #1640), PR de version #1641 mergée le 14/11 06:02 ; app-v388 ; #1625 close à 06:14"></i>
-<b class="fx-lab rt" style="--x:87.73;--y:71px">0.69.21 · 5 PR</b>
-<i class="fx-dot k-end" style="--x:92.41;--y:85px" title="Release dev 0.69.22 : « Ignorer » ne scelle une citation livrée que si elle est encore dans le champ (#1642, PR de version) mergée le 14/11 06:32 ; app-v389"></i>
-<b class="fx-lab rt" style="--x:92.41;--y:85px">0.69.22 · #1642</b>
-<i class="fx-dot k-end hollow" style="--x:95.79;--y:99px" title="PR #1644 (garde de présence ED-88 à la fermeture et au « Recharger », éditeur de post et éditeur MP) mergée le 14/11 08:58, livrée avec la 0.69.23"></i>
-<i class="fx-dot k-end" style="--x:96.67;--y:99px" title="Release dev 0.69.23 : « Ignorer » d'un brouillon parmi plusieurs garde la feuille ↺ ouverte (#1645, PR de version) mergée le 14/11 09:36 ; app-v390"></i>
-<b class="fx-lab rt" style="--x:95.79;--y:99px">0.69.23 · #1644, #1645</b>
-<i class="fx-dot k-end hollow" style="--x:99.24;--y:113px" title="PR #1647 (repli « Modifier » sur son propre MP sans lien d'édition servi ; menu « … » relu sur la page courante ; relecture MPStorage relancée au rafraîchissement) mergée le 14/11 11:27, pas encore livrée : visée pour la 0.69.24"></i>
-<b class="fx-lab rt" style="--x:99.24;--y:113px">#1647 mergée</b>
+<div class="fx-row"><span class="fx-l">Livraisons</span><div class="fx-t" style="--h:152px">
+<i class="fx-dot k-body" style="--x:0.77;--y:13px" title="Release dev 0.69.11 (refonte), PR de version mergée le 11/11 12:39"></i>
+<b class="fx-lab two" style="--x:0.77">0.69.11<span>refonte</span></b>
+<i class="fx-dot k-end" style="--x:7.52;--y:13px" title="Release dev 0.69.12 (#1606), PR de version mergée le 11/11 18:19"></i>
+<b class="fx-lab two" style="--x:7.52">0.69.12<span>#1606</span></b>
+<i class="fx-dot k-end" style="--x:23.33;--y:13px" title="Release dev 0.69.13 (#1608), PR de version mergée le 12/11 07:36"></i>
+<b class="fx-lab two" style="--x:23.33">0.69.13<span>#1608</span></b>
+<i class="fx-dot k-end" style="--x:29.54;--y:13px" title="Release dev 0.69.14 (#1610), PR de version mergée le 12/11 12:49"></i>
+<b class="fx-lab two" style="--x:29.54">0.69.14<span>#1610</span></b>
+<i class="fx-dot k-end" style="--x:35.58;--y:13px" title="Release dev 0.69.15 (#1612), PR de version mergée le 12/11 17:53"></i>
+<b class="fx-lab two" style="--x:35.58">0.69.15<span>#1612</span></b>
+<i class="fx-dot k-end hollow" style="--x:42.02;--y:13px" title="PR #1614 (socle) mergée le 12/11 23:18, livrée avec la 0.69.16"></i>
+<b class="fx-lab two" style="--x:42.02">&nbsp;<span>#1614</span></b>
+<i class="fx-dot k-end" style="--x:53.59;--y:13px" title="Release dev 0.69.16 (#1615), PR de version mergée le 13/11 09:01"></i>
+<b class="fx-lab two" style="--x:53.59">0.69.16<span>#1615</span></b>
+<i class="fx-dot k-end hollow" style="--x:59.82;--y:13px" title="PR #1618 (images dans l'aperçu) mergée le 13/11 14:15, livrée avec la 0.69.17"></i>
+<i class="fx-dot k-end hollow" style="--x:60.14;--y:13px" title="PR #1620 (rangée des formats) mergée le 13/11 14:31, livrée avec la 0.69.17"></i>
+<i class="fx-dot k-end hollow" style="--x:61.61;--y:13px" title="PR #1621 (réglages de l'éditeur) mergée le 13/11 15:45, livrée avec la 0.69.17"></i>
+<i class="fx-dot k-end" style="--x:62.86;--y:13px" title="Release dev 0.69.17 (#1618, #1620, #1621, #1622), PR de version #1622 mergée le 13/11 16:48 ; app-v384 publiée à 16:56"></i>
+<b class="fx-lab two" style="--x:62.86">0.69.17<span>4 PR</span></b>
+<i class="fx-dot k-end" style="--x:68.93;--y:13px" title="Release dev 0.69.18 (#1624), PR de version mergée le 13/11 21:54 ; app-v385"></i>
+<b class="fx-lab two" style="--x:68.93">0.69.18<span>#1624</span></b>
+<i class="fx-dot k-end hollow" style="--x:71.11;--y:43px" title="PR #1627 (accusé unique, R15, #1437) mergée le 13/11 23:44, livrée avec la 0.69.19"></i>
+<i class="fx-dot k-end hollow" style="--x:71.59;--y:43px" title="PR #1626 (grille du ton en 2 × 8) mergée le 14/11 00:08, livrée avec la 0.69.19"></i>
+<i class="fx-dot k-end hollow" style="--x:71.67;--y:43px" title="PR #1629 (réponse rapide et panier, #1450 et #1616) mergée le 14/11 00:12, livrée avec la 0.69.19"></i>
+<i class="fx-dot k-end hollow" style="--x:72.32;--y:43px" title="PR #1630 (feuilles du bas à un seul cran, smileys à hauteur fixe, plancher de hauteur en MP) et #1631 (R11, en-têtes sous l'offre ↺) mergées le 14/11 00:45, livrées avec la 0.69.19"></i>
+<i class="fx-dot k-end" style="--x:72.60;--y:43px" title="Release dev 0.69.19 (#1626, #1627, #1629, #1630, #1631), PR de version #1632 mergée le 14/11 00:59 ; app-v386, servie vers 01:15"></i>
+<b class="fx-lab rt" style="--x:71.11;--y:43px">0.69.19 · 5 PR</b>
+<i class="fx-dot k-end hollow" style="--x:73.17;--y:57px" title="PR #1633 (doc mvi.md) et #1634 (contrat d'édition MP, #1625 PR 1) mergées le 14/11 01:28, livrées avec la 0.69.20"></i>
+<i class="fx-dot k-end" style="--x:74.44;--y:57px" title="Release dev 0.69.20 : « Modifier » sur ses propres messages MP (#1635, PR de version) mergée le 14/11 02:32 ; app-v387, servie à 02:45"></i>
+<b class="fx-lab rt" style="--x:73.17;--y:57px">0.69.20 · #1625</b>
+<i class="fx-dot k-end hollow" style="--x:75.20;--y:71px" title="PR #1636 (captures Roborazzi élaguées au niveau B, 1 301 → 829) mergée le 14/11 03:10, dans la 0.69.21"></i>
+<i class="fx-dot k-end hollow" style="--x:77.60;--y:71px" title="PR #1638 (planche-contact Roborazzi) mergée le 14/11 05:11, dans la 0.69.21"></i>
+<i class="fx-dot k-end hollow" style="--x:77.76;--y:71px" title="PR #1637 (réponse d'édition MP capturée, épinglée en test) mergée le 14/11 05:19, livrée avec la 0.69.21"></i>
+<i class="fx-dot k-end hollow" style="--x:78.43;--y:71px" title="PR #1639 (suivis du gate de #1635 : résultat d'envoi MP lié au compte, sujet caché hors du brouillon d'édition) et #1640 (« Ignorer » de la réponse rapide aligné sur l'éditeur de post, titre servi du premier post laissé intact compté comme graine) mergées le 14/11 05:53, livrées avec la 0.69.21"></i>
+<i class="fx-dot k-end" style="--x:78.61;--y:71px" title="Release dev 0.69.21 (#1636 à #1640), PR de version #1641 mergée le 14/11 06:02 ; app-v388 ; #1625 close à 06:14"></i>
+<b class="fx-lab rt" style="--x:75.20;--y:71px">0.69.21 · 5 PR</b>
+<i class="fx-dot k-end" style="--x:79.21;--y:85px" title="Release dev 0.69.22 : « Ignorer » ne scelle une citation livrée que si elle est encore dans le champ (#1642, PR de version) mergée le 14/11 06:32 ; app-v389"></i>
+<b class="fx-lab rt" style="--x:79.21;--y:85px">0.69.22 · #1642</b>
+<i class="fx-dot k-end hollow" style="--x:82.10;--y:99px" title="PR #1644 (garde de présence ED-88 à la fermeture et au « Recharger », éditeur de post et éditeur MP) mergée le 14/11 08:58, livrée avec la 0.69.23"></i>
+<i class="fx-dot k-end" style="--x:82.86;--y:99px" title="Release dev 0.69.23 : « Ignorer » d'un brouillon parmi plusieurs garde la feuille ↺ ouverte (#1645, PR de version) mergée le 14/11 09:36 ; app-v390"></i>
+<b class="fx-lab rt" style="--x:82.10;--y:99px">0.69.23 · #1644, #1645</b>
+<i class="fx-dot k-end hollow" style="--x:85.06;--y:113px" title="PR #1647 (repli « Modifier » sur son propre MP sans lien d'édition servi ; menu « … » relu sur la page courante ; relecture MPStorage relancée au rafraîchissement) mergée le 14/11 11:27, livrée avec la 0.69.24"></i>
+<i class="fx-dot k-end" style="--x:86.17;--y:113px" title="Release dev 0.69.24 : hauteur commune des onglets smileys retirée (#1648, PR de version) mergée le 14/11 12:23 ; app-v391"></i>
+<b class="fx-lab rt" style="--x:85.06;--y:113px">0.69.24 · #1647, #1648</b>
+<i class="fx-dot k-end hollow" style="--x:86.45;--y:127px" title="PR #1650 (préparation de la bêta : version 0.70.0, changelog, notes Play, pages d'état) mergée le 14/11 12:37"></i>
+<i class="fx-dot k-end hollow" style="--x:92.78;--y:127px" title="PR #1652 (revue de promotion : aperçu d'édition MP hors du cache disque, rétention qui garde les envois incertains) mergée le 14/11 17:56, livrée avec la 0.70.0"></i>
+<i class="fx-dot k-end hollow" style="--x:93.17;--y:127px" title="PR #1653 (revue de promotion : envoi incertain restauré même si ses offres sont illisibles) mergée le 14/11 18:16, livrée avec la 0.70.0"></i>
+<i class="fx-dot k-end hollow" style="--x:93.37;--y:127px" title="PR #1655 (changelog de la 0.70.0 : correctifs de la revue) mergée le 14/11 18:26 ; dev = 28a01ff40"></i>
+<i class="fx-dot k-end" style="--x:95.06;--y:127px" title="Release dev 0.70.0 sur 28a01ff40 le 14/11 19:51 ; app-v392"></i>
+<b class="fx-lab rt" style="--x:86.45;--y:127px">0.70.0 · #1650, #1652, #1653, #1655</b>
+<i class="fx-dot k-ink" style="--x:97.28;--y:141px" title="Bêta 0.70.0 = app-v393 : promotion #1651 mergée le 14/11 à 21:28 (main a82319b27, même arbre que dev 28a01ff40), release à 21:37, annonces à 21:43"></i>
+<b class="fx-lab rt" style="--x:97.28;--y:141px">bêta 0.70.0 · #1651 → main</b>
 </div></div>
 </div></div>
   </section>
 
   <section class="panel" aria-labelledby="h-fin">
-    <div class="sechd"><h2 id="h-fin">Fin de phase</h2><span class="muted">depuis le 11/11, 12:39 · ce qui est fait, en cours, prévu</span></div>
-    <p class="note">La fin de phase ne livre plus de lots. Elle recette ce qui est dans dev (portes G3 et G4), corrige ce que la recette et les testeurs trouvent, et règle les remarques du mainteneur. Elle se termine par son go et la bêta du nouvel éditeur.</p>
+    <div class="sechd"><h2 id="h-fin">Fin de phase</h2><span class="muted">du 11/11, 12:39 au 14/11, 23:24 · close</span></div>
+    <p class="note">La fin de phase n'a plus livré de lots. Elle a recetté ce qui était dans dev (portes G3 et G4), corrigé ce que la recette et les testeurs ont trouvé, réglé les remarques du mainteneur, puis préparé et relu la promotion vers <code>main</code>. Elle s'est terminée le 14/11, sur go du mainteneur : bêta 0.70.0 à 21:43, puis fermeture de #1417 à 23:24, G3 et G4 closes par dérogation.</p>
     <div class="board">
       <div class="col">
-        <div class="hd"><h3>Fait</h3><span class="pill p-done">0.69.12 → 0.69.23</span></div>
+        <div class="hd"><h3>Promotion et bêta, 14/11</h3><span class="pill p-done">bêta 0.70.0</span></div>
+        <ul>
+          <li>12:37 : #1650 prépare la bêta (version 0.70.0, changelog, notes Play, pages d'état) ; PR de promotion <a href="https://github.com/ForumHFR/redface2/pull/1651">#1651</a> ouverte de <code>dev</code> vers <code>main</code> ; plan de revue validé par Astra et Fable ; T0 vert, 6 991 tests sans échec. Appel aux testeurs sur le fil DEV à 12:56.</li>
+          <li>13:30 → 14:44 : recettes G3 et G4 réduites sur émulateur, en 0.69.24 (le candidat bêta d'avant la revue) : aucun KO bloquant ni majeur ; KO mineur C8, défilement non restauré à la rotation. Détail sous « Portes de passage ».</li>
+          <li>15:27 → 19:36 : revue de promotion en quatre lots (persistance, écritures, interface, livraison), en double lecture par Fable et Astra. Tour 1 : <a href="https://github.com/ForumHFR/redface2/pull/1652">#1652</a> (17:56, aperçu d'édition MP hors du cache disque, rétention qui garde les envois incertains) et <a href="https://github.com/ForumHFR/redface2/pull/1653">#1653</a> (18:16, envoi incertain restauré même si ses offres sont illisibles), chacune validée sur box, CI verte et gate Astra GO ; #1655 (18:26) les ajoute au changelog.</li>
+          <li>Dérogations du mainteneur pour trois défauts présents dès la 0.68.0 : MPStorage (<a href="https://github.com/ForumHFR/redface2/issues/1654">#1654</a>, 18:17), accusé de suppression (<a href="https://github.com/ForumHFR/redface2/issues/1656">#1656</a>), succès en file après un changement de compte (<a href="https://github.com/ForumHFR/redface2/issues/1657">#1657</a>) ; « sujet fermé » en modification MP rangé en 0.70.x (<a href="https://github.com/ForumHFR/redface2/issues/1658">#1658</a>).</li>
+          <li><b>GO technique</b> sur #1651 à 19:39 ; <b>dev 0.70.0</b> à 19:51 (app-v392, sur <code>28a01ff40</code>) : F-Droid servi, changelog DEV posté.</li>
+          <li><b>Bêta 0.70.0 = app-v393</b> : #1651 mergée à 21:28 sur go du mainteneur, <code>main</code> = <code>a82319b27</code>, même arbre que <code>dev</code> ; release à 21:37 ; Play Store, piste bêta (validation de Google à suivre) ; F-Droid bêta servi ; annonces sur les fils TU et DEV à 21:43.</li>
+        </ul>
+      </div>
+      <div class="col">
+        <div class="hd"><h3>Clôture, 14/11 au soir</h3><span class="pill p-done">#1417 fermée</span></div>
+        <ul>
+          <li>Peu avant 23:00, go du mainteneur : « go pour tout, clos aussi par dérogation ». La bêta est partie avec la refonte complète ; G3 et G4 sont closes par dérogation.</li>
+          <li>Quatorze issues fermées à 22:57-22:58 : issues de lot #1509, #1513, #1450, #1451, #1514, #1515, #1516, #1452 ; issues liées corrigées #872, #873, #1105, #1382, #1471, #1475. Gardées ouvertes : #878 (avec R4, #1454), #1033, #242, #1301.</li>
+          <li><a href="https://github.com/ForumHFR/redface2/issues/1664">#1664</a> (22:58) : constats mineurs des recettes (rotation, brouillon « Envoi incertain » impossible à écarter, libellé de la feuille Options, C6), complétée par l'écart ED-88 de la réponse rapide.</li>
+          <li>S1, écarts TalkBack de la feuille des smileys : dérogation bornée, rattachée à #1649. Gm (material3 1.5.0-beta02) : couverte par le go bêta, après huit jours en dev sans retour bloquant.</li>
+          <li>Spec <b>v0.7.13</b> publiée à 23:22 (artifacts <code>e6d030e</code>), alignée sur le code de la bêta.</li>
+          <li><b>23:24 : <a href="https://github.com/ForumHFR/redface2/issues/1417">#1417</a> fermée</b>, avec son commentaire de clôture.</li>
+          <li><span>Worktrees : 92 supprimés (147 → 55). Le 15/11 : rien sur <code>dev</code>, rien en cours.</span></li>
+        </ul>
+      </div>
+      <div class="col wide">
+        <div class="hd"><h3>Ajustements, du 11/11 au 14/11</h3><span class="pill p-done">0.69.12 → 0.69.24</span></div>
         <ul>
           <li>Six PR d'ajustement, cinq releases dev en 39 heures (11/11 18:19 → 13/11 09:01). <span>Remarques 1 à 6.</span></li>
           <li>Quatre PR le 13/11 de 14:15 à 16:48 (#1618, #1620, #1621, #1622), livrées en <b>0.69.17</b> (app-v384) : publiée à 16:56, servie sur F-Droid, changelog DEV posté. <span>Remarques 12, 13 et 14.</span></li>
@@ -502,31 +558,11 @@ footer{font-size:12px;color:var(--ink-3);border-top:1px solid var(--line);paddin
           <li><b>0.69.22</b> à 06:32 (#1642, app-v389) : « Ignorer » ne scelle une citation livrée que si elle est encore dans le champ.</li>
           <li>Vers 07:00 : fin de phase de la session rf2-dev (/rf2-fin-phase), qui clôt le mandat de nuit ; 16 worktrees de la phase supprimés. La session reprend ensuite sur les go du mainteneur.</li>
           <li>#1644 (08:58) : garde de présence ED-88 à la fermeture et au « Recharger », éditeur de post et éditeur MP. <b>0.69.23</b> à 09:36 (#1645, app-v390) : « Ignorer » d'un brouillon parmi plusieurs garde la feuille ↺ ouverte, sur retour du mainteneur ; changelog DEV posté. <span>Remarques 6 et 8.</span></li>
-          <li><a href="https://github.com/ForumHFR/redface2/pull/1647">#1647</a> mergée à 11:27, pas encore livrée : repli « Modifier » sur son propre MP quand HFR ne sert pas de lien d'édition ; le menu « … » relit le message sur la page courante ; relecture MPStorage relancée au rafraîchissement.</li>
-          <li>Feuille des smileys : quatre <a href="https://forumhfr.github.io/artifacts/editeur-smileys/">propositions</a> publiées à 10:58 puis 11:13. Opus « palette au pouce », Sol (partielle : Favoris et détail non rendus), Fable « clavier à smileys », Astra « bibliothèque de poche ».</li>
+          <li><a href="https://github.com/ForumHFR/redface2/pull/1647">#1647</a> (11:27) : repli « Modifier » sur son propre MP quand HFR ne sert pas de lien d'édition ; le menu « … » relit le message sur la page courante ; relecture MPStorage relancée au rafraîchissement. <b>0.69.24</b> à 12:23 (<a href="https://github.com/ForumHFR/redface2/pull/1648">#1648</a>, app-v391) : la hauteur commune des onglets smileys (#1630) est retirée à la demande du mainteneur, chaque onglet reprend la sienne ; F-Droid servi, changelog DEV à 12:37.</li>
+          <li>Feuille des smileys : quatre <a href="https://forumhfr.github.io/artifacts/editeur-smileys/">propositions</a> publiées à 10:58 puis 11:13, Sol complétée vers 12:07. Opus « palette au pouce », Sol, Fable « clavier à smileys », Astra « bibliothèque de poche ». Refonte reportée par le mainteneur : <a href="https://github.com/ForumHFR/redface2/issues/1649">#1649</a>.</li>
           <li><span>Issues ouvertes : #1643 (08:28), références Roborazzi orphelines, Infra &amp; dette ; #1646 (10:29), test instable <code>MessageCardReadingParityTest</code>.</span></li>
-          <li><span>Infra, #1623 (issue #1619), 13/11 17:06 : cache Gradle de la CI écrit depuis <code>dev</code>, entrées des tests déclarées, tests <code>:app</code> lancés seulement en prod, release construite sans cache. Gain sur les PR à mesurer.</span></li>
+          <li><span>Infra, #1623 (issue #1619), 13/11 17:06 : cache Gradle de la CI écrit depuis <code>dev</code>, entrées des tests déclarées, tests <code>:app</code> lancés seulement en prod, release construite sans cache. Mesuré sur #1624 : environ 9,5 min par run contre 14 ; #1619 fermée.</span></li>
         </ul>
-      </div>
-      <div class="col">
-        <div class="hd"><h3>En cours</h3><span class="pill p-run">rf2-dev</span></div>
-        <ul>
-          <li><b>Attente du mainteneur</b> : cinq points, détail sous « Ce qui attend le mainteneur ».</li>
-          <li>#1647 mergée, en attente de la 0.69.24.</li>
-          <li>Revert de la hauteur commune des smileys prêt en local, selon la proposition retenue.</li>
-        </ul>
-      </div>
-      <div class="col">
-        <div class="hd"><h3>Prévu</h3><span class="pill p-wait">dans l'ordre</span></div>
-        <ol>
-          <li>Sur réponse du mainteneur : dev 0.69.24 avec #1647, plus un correctif si besoin.</li>
-          <li>PR smileys pour la proposition retenue.</li>
-          <li>Spec v0.7.13, sur go du mainteneur : limite fermeture/« Recharger » levée, comportement de la feuille ↺.</li>
-          <li>Recette G3 : protocole d'envoi (B.3) et C8 (rotation, mort du processus, en-têtes) sur les quatre éditeurs.</li>
-          <li>Recette G4 : C1 à C10 filmés ; S1, la feuille des smileys, corrigée ou dérogation bornée.</li>
-          <li>Clôture : issues de lot fermées, reliquats rangés en issues de suite.</li>
-          <li>Go du mainteneur, puis bêta du nouvel éditeur, la première depuis la 0.68.0.</li>
-        </ol>
       </div>
     </div>
   </section>
@@ -537,7 +573,7 @@ footer{font-size:12px;color:var(--ink-3);border-top:1px solid var(--line);paddin
       <table>
         <thead><tr><th>N°</th><th>Remarque</th><th>Origine</th><th>État</th><th>Suite</th></tr></thead>
         <tbody>
-          <tr class="grp end"><th colspan="5">Livrées · 14</th></tr>
+          <tr class="grp end"><th colspan="5">Livrées · 14, toutes dans la bêta 0.70.0</th></tr>
           <tr><td class="n">1</td><td class="what">« Citer » ne marche plus quand un brouillon attend ; favoris HFR absents, Envoyer grisé. Le formulaire se charge désormais sous l'offre</td><td class="src"><span class="tag t-test">testeurs</span>styx42 <a href="https://forum.hardware.fr/forum2.php?config=hfr.inc&amp;cat=23&amp;post=35421&amp;numreponse=2805736">#2805736</a>, Dintr-un lemn <a href="https://forum.hardware.fr/forum2.php?config=hfr.inc&amp;cat=23&amp;post=35421&amp;numreponse=2805758">#2805758</a> ; go du 11/11 16:00</td><td class="st"><span class="pill p-done">0.69.12</span></td><td class="next">PR <a href="https://github.com/ForumHFR/redface2/pull/1606">#1606</a>. Recette sur appareil de #1450</td></tr>
           <tr><td class="n">2</td><td class="what">Le menu ↺ est laid : l'offre du brouillon passe en feuille du bas, l'attente de la citation s'affiche puis disparaît seule</td><td class="src"><span class="tag">XaTriX</span>11/11 16:00, libellé revu à 18:44</td><td class="st"><span class="pill p-done">0.69.13</span></td><td class="next">PR <a href="https://github.com/ForumHFR/redface2/pull/1608">#1608</a>. L'avis minuté a disparu en 0.69.16, avec la citation immédiate</td></tr>
           <tr><td class="n">3</td><td class="what">Icône du brouillon : <code>restore_page</code> (Material Symbols) à la place de l'ancienne</td><td class="src"><span class="tag">XaTriX</span>choix sur la planche d'icônes, 11/11 19:20</td><td class="st"><span class="pill p-done">0.69.13</span></td><td class="next">PR <a href="https://github.com/ForumHFR/redface2/pull/1608">#1608</a>, sur les cinq éditeurs. Rien à suivre</td></tr>
@@ -546,7 +582,7 @@ footer{font-size:12px;color:var(--ink-3);border-top:1px solid var(--line);paddin
           <tr><td class="n">6</td><td class="what">Topic et MP traitaient la citation différemment : citation visible tout de suite partout, brouillon offert sous ↺ (point, date, extrait)</td><td class="src"><span class="tag t-test">testeurs</span>styx42 <a href="https://forum.hardware.fr/forum2.php?config=hfr.inc&amp;cat=23&amp;post=35421&amp;numreponse=2805876">#2805876</a>, questions de XaTriX ; go du 12/11 13:13</td><td class="st"><span class="pill p-done">0.69.16</span></td><td class="next">PR <a href="https://github.com/ForumHFR/redface2/pull/1614">#1614</a> et <a href="https://github.com/ForumHFR/redface2/pull/1615">#1615</a>, spec v0.7.8 et v0.7.9. En plus : fermeture qui demande « Brouillon non enregistré » si l'écriture échoue. Suite en 0.69.23 (#1645) : « Ignorer » d'un brouillon parmi plusieurs garde la feuille ↺ ouverte (retour du mainteneur)</td></tr>
           <tr><td class="n">7</td><td class="what">Réponse rapide : la feuille se ferme avant la dernière écriture du brouillon, du texte peut se perdre</td><td class="src"><span class="tag">revue</span>gate Astra de #1615, 13/11 ; en tête de file sur décision de XaTriX</td><td class="st"><span class="pill p-done">0.69.19</span></td><td class="next">PR <a href="https://github.com/ForumHFR/redface2/pull/1629">#1629</a>, avec #1616, mergée le 14/11 à 00:12. Tranché le 13/11 à 23:25 : QR1 = A, la feuille reste montée et un dialogue s'ouvre ; QR2 tel que codé, QR3 oui. Suite livrée en 0.69.21 (<a href="https://github.com/ForumHFR/redface2/pull/1640">#1640</a>) : « Ignorer » d'une citation déjà insérée aligné sur l'éditeur de post (go du 14/11 vers 05:10) ; en 0.69.22 (<a href="https://github.com/ForumHFR/redface2/pull/1642">#1642</a>), il ne scelle une citation livrée que si elle est encore dans le champ</td></tr>
           <tr><td class="n">8</td><td class="what">Le panier multi-citation n'est vidé qu'au succès de l'envoi</td><td class="src"><span class="tag">XaTriX</span>13/11 08:33, après avis de Fable</td><td class="st"><span class="pill p-done">0.69.19</span></td><td class="next">Issue <a href="https://github.com/ForumHFR/redface2/issues/1616">#1616</a>, ED-88 amendé (v0.7.9), fermée. PR <a href="https://github.com/ForumHFR/redface2/pull/1629">#1629</a> avec la réponse rapide, mergée le 14/11 à 00:12 ; QR1 = A, portée QP1 et QP2 oui (13/11 23:25). Suite en 0.69.23 (<a href="https://github.com/ForumHFR/redface2/pull/1644">#1644</a>) : garde de présence ED-88 à la fermeture et au « Recharger », éditeur de post et éditeur MP (« Go reco pour tout »)</td></tr>
-          <tr><td class="n">9</td><td class="what">Les feuilles « … » (options du message) et smileys changent plusieurs fois de taille à l'ouverture</td><td class="src"><span class="tag t-test">testeurs</span>antiseptiqueIncolore <a href="https://forum.hardware.fr/forum2.php?config=hfr.inc&amp;cat=23&amp;post=35421&amp;numreponse=2805926">#2805926</a>, vidéo <a href="https://forum.hardware.fr/forum2.php?config=hfr.inc&amp;cat=23&amp;post=35421&amp;numreponse=2805932">#2805932</a>, 0.69.14</td><td class="st"><span class="pill p-done">0.69.18</span></td><td class="next">PR <a href="https://github.com/ForumHFR/redface2/pull/1624">#1624</a> (feuilles Options, smileys et ↺). À confirmer : un saut reste visible sur émulateur ; question posée aux testeurs. Suite livrée en 0.69.19 (#1630) : feuilles du bas à un seul cran, smileys à hauteur fixe (Q1, Q2). Reste le test du tagbug par le mainteneur sur son appareil</td></tr>
+          <tr><td class="n">9</td><td class="what">Les feuilles « … » (options du message) et smileys changent plusieurs fois de taille à l'ouverture</td><td class="src"><span class="tag t-test">testeurs</span>antiseptiqueIncolore <a href="https://forum.hardware.fr/forum2.php?config=hfr.inc&amp;cat=23&amp;post=35421&amp;numreponse=2805926">#2805926</a>, vidéo <a href="https://forum.hardware.fr/forum2.php?config=hfr.inc&amp;cat=23&amp;post=35421&amp;numreponse=2805932">#2805932</a>, 0.69.14</td><td class="st"><span class="pill p-done">0.69.18</span></td><td class="next">PR <a href="https://github.com/ForumHFR/redface2/pull/1624">#1624</a> (feuilles Options, smileys et ↺). À confirmer : un saut reste visible sur émulateur ; question posée aux testeurs. Suite livrée en 0.69.19 (#1630) : feuilles du bas à un seul cran, smileys à hauteur fixe (Q1, Q2). La hauteur commune des onglets smileys est retirée en 0.69.24 (#1648), à la demande du mainteneur ; refonte de la feuille dans #1649. Reste le test du tagbug par le mainteneur sur son appareil</td></tr>
           <tr><td class="n">11</td><td class="what">Nouveau sujet et nouveau MP : sous une offre de brouillon non décidée, un titre ou des destinataires modifiés ne sont pas écrits à la fermeture</td><td class="src"><span class="tag">revue</span>gate Astra de #1615, 13/11</td><td class="st"><span class="pill p-done">0.69.19</span></td><td class="next">PR <a href="https://github.com/ForumHFR/redface2/pull/1631">#1631</a>, mergée le 14/11 à 00:45 : titre et destinataires gardés sous l'offre ↺, ED-121 étendu au nouveau sujet et au nouveau MP (Q4 = A, 13/11 23:25)</td></tr>
           <tr><td class="n">12</td><td class="what">Le raccourci de la barre est introuvable (« Aucun » par défaut) ; ouvrir les réglages de l'éditeur depuis l'éditeur</td><td class="src"><span class="tag t-test">testeurs</span>nicko <a href="https://forum.hardware.fr/forum2.php?config=hfr.inc&amp;cat=23&amp;post=35421&amp;numreponse=2805739">#2805739</a>, thibw <a href="https://forum.hardware.fr/forum2.php?config=hfr.inc&amp;cat=23&amp;post=35421&amp;numreponse=2805744">#2805744</a> ; <span class="tag">XaTriX</span><a href="https://forum.hardware.fr/forum2.php?config=hfr.inc&amp;cat=23&amp;post=35421&amp;numreponse=2805742">#2805742</a></td><td class="st"><span class="pill p-done">0.69.17</span></td><td class="next">PR <a href="https://github.com/ForumHFR/redface2/pull/1621">#1621</a> : « Réglages de l'éditeur » depuis la feuille Options, barre du bas cachée (ED-39). Suite livrée en 0.69.18 (<a href="https://github.com/ForumHFR/redface2/pull/1624">#1624</a>) : la ligne nomme le raccourci, défaut « Aucun » gardé (décision du mainteneur)</td></tr>
           <tr><td class="n">13</td><td class="what">Afficher les images dans l'aperçu</td><td class="src"><span class="tag">XaTriX</span><a href="https://forum.hardware.fr/forum2.php?config=hfr.inc&amp;cat=23&amp;post=35421&amp;numreponse=2805743">#2805743</a></td><td class="st"><span class="pill p-done">0.69.17</span></td><td class="next">PR <a href="https://github.com/ForumHFR/redface2/pull/1618">#1618</a> : une image dans <code>[url]</code> ou dans un style est visible dans l'aperçu (suite de R2b, #1452)</td></tr>
@@ -563,74 +599,71 @@ footer{font-size:12px;color:var(--ink-3);border-top:1px solid var(--line);paddin
     <section class="panel" aria-labelledby="h-gates">
       <h2 id="h-gates">Portes de passage</h2>
       <ul class="gates">
-        <li class="gate"><div class="hd"><b>Gm</b><span class="pill p-wait">sans bêta</span></div>
-          <ul class="conds"><li class="y">R0m en dev 0.69.2 le 6/11, trois jours atteints le 9/11</li><li class="n">Plus de bêta intermédiaire depuis le 7/11 : R0m sortira avec la refonte</li></ul></li>
+        <li class="gate"><div class="hd"><b>Gm</b><span class="pill p-ask">couverte par la bêta</span></div>
+          <ul class="conds"><li class="y">R0m en dev 0.69.2 le 6/11, trois jours atteints le 9/11</li><li class="y">Partie en bêta 0.70.0 le 14/11 : couverte par le go bêta, après huit jours en dev sans retour bloquant</li></ul></li>
         <li class="gate"><div class="hd"><b>G1</b><span class="pill p-done">go du mainteneur</span></div>
           <ul class="conds"><li class="y">Go le 11/11 à 09:23 pour merger R1a-2 ; les points sur appareil passent après le merge</li><li class="y">#1301-ST et R0b mergés, R0a concluant avec réserves</li><li class="n">Observation de B5 intégré sur S10e (six séquences, deux claviers)</li><li class="n">ADR accepté</li><li class="r">Ancien éditeur capturé (un point restant sur appareil)</li></ul></li>
         <li class="gate"><div class="hd"><b>G2</b><span class="pill p-done">levée</span></div>
           <ul class="conds"><li class="y">Levée par le mainteneur le 11/11 à 10:22 ; R1b, R2a, R2b et R6 mergés dans la foulée</li></ul></li>
-        <li class="gate"><div class="hd"><b>G3</b><span class="pill p-run">1 / 2 conditions</span></div>
-          <ul class="conds"><li class="y">Quatre surfaces migrées (R1 entier le 11/11 à 11:25)</li><li class="n">Protocole d'envoi et C8 (rotation, mort du processus, en-têtes) sur chacune</li></ul></li>
-        <li class="gate"><div class="hd"><b>G4</b><span class="pill p-wait">1 / 4 conditions</span></div>
-          <ul class="conds"><li class="y">R2a, R2b et R6 convergés et mergés (0.69.11)</li><li class="n">C1 à C10 filmés (écarts TalkBack des cartes reportés à #1599)</li><li class="n">S1 (feuille des smileys, suite de #1154) corrigé, ou dérogation bornée</li><li class="n">Go du mainteneur, puis bêta du nouvel éditeur</li></ul></li>
+        <li class="gate"><div class="hd"><b>G3</b><span class="pill p-ask">close par dérogation</span></div>
+          <ul class="conds"><li class="y">Quatre surfaces migrées (R1 entier le 11/11 à 11:25)</li><li class="y">Recette réduite du 14/11 (émulateur, 0.69.24) : mise à jour 0.66 → 0.69.24 avec trois brouillons incertains, B.3 cas 1 et 5 en réponse MP, modification MP, C8 mort du processus</li><li class="r">KO mineur : C8 rotation, défilement non restauré (#1664)</li><li class="n">Non joués, dérogés : B.3 sur les surfaces de sujet et le nouveau MP, B.3 cas 2, 3, 4, 6 et 7, C8 en-têtes</li></ul></li>
+        <li class="gate"><div class="hd"><b>G4</b><span class="pill p-ask">close par dérogation</span></div>
+          <ul class="conds"><li class="y">R2a, R2b et R6 convergés et mergés (0.69.11)</li><li class="y">Recette du 14/11 : C1, C2, C4 ; C3, C6 et C7 dans leur périmètre</li><li class="n">Non joués, dérogés : C3 sous Android 10, C5 (raccourci, <code>[img]</code> après upload), C9 réponse rapide, C10 TalkBack, C7 sur le nouveau MP</li><li class="n">S1 (feuille des smileys, suite de #1154) : dérogation bornée, rattachée à #1649</li><li class="y">Go du mainteneur, puis bêta du nouvel éditeur : 0.70.0 le 14/11 à 21:43</li></ul></li>
       </ul>
+      <p class="note">G3 et G4 sont closes avec la phase, le 14/11 : la bêta est partie avant la fin des recettes, sur décision du mainteneur. Les volets non joués restent chez lui.</p>
     </section>
 
     <section class="panel" aria-labelledby="h-asks">
       <h2 id="h-asks">Ce qui attend le mainteneur</h2>
-      <p class="note"><b>Cinq réponses</b>, et le test du tagbug sur son appareil (0.69.18). Sur sa réponse : dev 0.69.24 avec #1647, puis une PR smileys pour la proposition retenue.</p>
+      <p class="note">La phase est close et rien n'est en cours : la suite part sur son go. À suivre aussi : la validation de Google pour la piste bêta du Play Store.</p>
       <h3>En attente</h3>
       <ol class="asks">
-        <li>Où « Modifier » manquait dans les MP : il marche dans les DT. Le repli #1647 est mergé.</li>
-        <li>Quelle <a href="https://forumhfr.github.io/artifacts/editeur-smileys/">proposition</a> de feuille des smileys garder : Opus, Sol (partielle), Fable ou Astra. Le revert de la hauteur commune est prêt en local.</li>
-        <li>Spec v0.7.13 : limite fermeture/« Recharger » levée, comportement de la feuille ↺.</li>
-        <li><a href="https://github.com/ForumHFR/redface2/issues/1628">#1628</a>, retirer le format E-mail ? Sorti de la phase le 13/11 vers 23:30 (« issue à part »), non tranché.</li>
-        <li>La phase suivante : recettes G3 et G4, puis bêta.</li>
+        <li>Lancer la <b>0.70.x</b> : <a href="https://github.com/ForumHFR/redface2/issues/1654">#1654</a> (MPStorage : garde de compte jusqu'au transport), <a href="https://github.com/ForumHFR/redface2/issues/1656">#1656</a> (un accusé de suppression ne doit jamais valoir publication), <a href="https://github.com/ForumHFR/redface2/issues/1657">#1657</a> (un succès en file ne doit pas s'appliquer après un changement de compte), <a href="https://github.com/ForumHFR/redface2/issues/1658">#1658</a> (« sujet fermé » en modification MP et en signalement : envoi incertain).</li>
+        <li><a href="https://github.com/ForumHFR/redface2/issues/1664">#1664</a>, deux décisions : l'écart ED-88 de la réponse rapide, le libellé « Raccourci : Aucun » de la feuille Options (ED-39) ; avec les autres constats mineurs, dont C8 (défilement non restauré à la rotation).</li>
+        <li>Les volets de G3 et G4 non joués : B.3 en sujet (sujet de test à désigner), nouveau MP, Android 10, TalkBack.</li>
+        <li>La feuille des smileys : une des quatre <a href="https://forumhfr.github.io/artifacts/editeur-smileys/">propositions</a>, ou un mélange (<a href="https://github.com/ForumHFR/redface2/issues/1649">#1649</a>) ; S1 y est rattaché.</li>
+        <li><a href="https://github.com/ForumHFR/redface2/issues/1628">#1628</a>, retirer le format E-mail ? Non tranché.</li>
       </ol>
-      <h3>Tranché le 14/11 au matin</h3>
+      <h3>Tranché le 14/11 au soir</h3>
       <ol class="asks">
-        <li>« Go push » : <b>spec v0.7.12 poussée à 07:52</b> (artifacts <code>e40ed78</code>).</li>
-        <li>Tableau de recommandations sur les 3 suivis : <b>« Go reco pour tout »</b>. Garde de présence ED-88 mergée à 08:58 (#1644).</li>
-        <li>Retour sur la feuille ↺ : <b>« Ignorer » d'un brouillon parmi plusieurs la garde ouverte</b>. Livré en 0.69.23 (#1645).</li>
+        <li>21:19, « full go donc beta » : <b>go de la bêta 0.70.0</b>.</li>
+        <li>21:27, go explicite pour <b>merger #1651</b> en admin (<code>main</code> exige une revue) : mergée à 21:28, bêta publiée à 21:43.</li>
+        <li>Peu avant 23:00, « go pour tout, clos aussi par dérogation » : <b>phase close</b>, G3 et G4 closes par dérogation, S1 bornée vers #1649 ; #1417 fermée à 23:24.</li>
       </ol>
-      <h3>Tranché le 14/11, de 04:43 à 05:10</h3>
+      <h3>Tranché le 14/11 dans la journée</h3>
       <ol class="asks">
-        <li>Vers 04:43 : go pour capturer la requête d'édition MP. <b>Faite à 04:44 : succès, contenu inchangé</b> ; réponse épinglée en test (#1637).</li>
-        <li>Vers 05:00 : go pour pousser la spec v0.7.11. <b>Poussée</b> (artifacts <code>8fa01b4</code>) : spec v18 et lexique v22 en ligne.</li>
-        <li>Vers 05:05 : <b>reprise du mandat de nuit</b>.</li>
-        <li>Vers 05:10, « go reco » sur deux points. <b>« Ignorer » d'une citation déjà insérée : la réponse rapide s'aligne sur l'éditeur de post</b> (scelle la citation, vide le panier). <b>Édition du premier post d'un sujet : le titre servi non modifié est une graine, « Restaurer » reprend le titre du brouillon</b>, comme en MP. Livré en 0.69.21 (#1640).</li>
+        <li>Vers midi : <b>refonte de la feuille des smileys reportée</b> (#1649, ouverte à 12:14) ; « revert hauteur smileys, puis PR sur main pour la promotion bêta, plan de review avec Fable et Astra » : <b>hauteur commune des onglets retirée</b> (#1648, 0.69.24 à 12:23), puis <b>promotion bêta lancée</b>.</li>
+        <li>Vers 13:25 : <b>recettes G3 et G4</b>, réduites ensuite à une passe rapide.</li>
+        <li>Revue de promotion : trois constats corrigés au tour 1 (#1652, #1653) ; MPStorage en dérogation (#1654, 18:17) ; vers 19:39, deux défauts antérieurs à la 0.68.0 en dérogation (#1656, #1657) et « sujet fermé » en 0.70.x (#1658).</li>
       </ol>
-      <h3>Tranché le 13/11 à 23:25</h3>
+      <h3>Tranché avant, tout livré</h3>
       <ol class="asks">
-        <li>QR1, réponse rapide et #1616 : si l'écriture du brouillon échoue à la fermeture, A la feuille reste montée et un dialogue s'ouvre (option codée), B une snackbar « Rouvrir », C le geste de fermeture est refusé. <b>Tranché : A ; QR2 tel que codé ; QR3, oui.</b> Livré en 0.69.19 (#1629).</li>
-        <li>R15 : Q7, offre « Dernière page » dès l'accusé (option C) ; Q8, cas résiduel : remplacement actuel, offre seule ou rien ; Q9, la borne d'1 s est-elle intouchable ? <b>Tranché : Q7 oui ; Q8 le remplacement actuel ; Q9 1 s, intouchable.</b> Livré en 0.69.19 (#1627).</li>
-        <li>R11, Q4 : étendre ED-121 aux en-têtes du brouillon (titre, destinataires) ? <b>Tranché : A, étendre ED-121.</b> Livré en 0.69.19 (#1631). La 10, trait en thème sombre, reste en attente.</li>
-        <li>La portée d'ED-88 pour #1616 (réponse rapide, mode cartes). <b>Tranché : QP1 et QP2, oui.</b> Livré en 0.69.19 (#1629).</li>
-        <li>Tagbug, Q1 à Q3. <b>Tranché : Q1 un cran partout, dans une PR séparée ; Q2 oui ; Q3 plus tard.</b> Q1 et Q2 livrés en 0.69.19 (#1630).</li>
-        <li>Q-MP, onglet Formats en MP. <b>Tranché : hauteur minimale (~5 formats).</b> Livré en 0.69.19 (#1630).</li>
-        <li>L'audit Roborazzi, rendu : garder, et élaguer de 1 275 à 815 captures. <b>Tranché : option B ; vérification bloquante.</b> Élagage mergé le 14/11 (#1636) : 1 301 → 829 captures.</li>
+        <li>14/11 au matin : spec v0.7.12 (07:52) ; « Go reco pour tout », garde de présence ED-88 (#1644) ; « Ignorer » d'un brouillon parmi plusieurs garde la feuille ↺ ouverte (#1645).</li>
+        <li>14/11, de 04:43 à 05:10 : capture de la requête d'édition MP (#1637), spec v0.7.11, reprise du mandat de nuit ; « go reco » sur « Ignorer » d'une citation insérée et le titre du premier post (#1640).</li>
+        <li>13/11 23:25, « ok reco » : réponse rapide QR1 à QR3 et portée d'ED-88 QP1, QP2 (#1629) ; accusé unique Q7 à Q9 (#1627) ; ED-121 étendu, Q4 (#1631) ; tagbug Q1, Q2 et Q-MP (#1630 ; la hauteur commune des smileys, Q2, retirée ensuite par #1648) ; audit Roborazzi, option B (#1636).</li>
       </ol>
       <h3>Pour plus tard</h3>
       <ol class="asks">
-        <li>La recette de la 0.69.16 sur appareil (dialogue de fermeture, annonce TalkBack).</li>
-        <li>Les recettes G3 et G4 sur appareil, et la séance S10e restante (B5 intégré, ancien éditeur). S1 ou une dérogation pour G4 ; S1 attend la relance de rf2-smalldev.</li>
-        <li>Le trait hors de l'éditeur (flèche retour, chevrons, reste de l'app), après les rendus.</li>
-        <li>Les décisions de fin de refonte : fermeture de #1513 (réserve : écoute TalkBack réelle non faite), arbitrages de la PR 1 de R6 (#1602), ED-66, clé de position et plancher de 120 dp de R2b, H2, ED-14 avec le focus.</li>
-        <li>Les questions restées ouvertes à la livraison : clavier non rouvert au retour au message, Œil coché peu lisible en thème sombre, infobulle de l'Œil sur la barre d'état ; le clavier rouvert à la rotation après l'onglet Wiki, antérieur à la refonte : issue de suivi ou non.</li>
-        <li>Les treize arbitrages de la nuit du 9 au 10/11 : ratification à confirmer.</li>
-        <li>Infra : lancer les tests CI sur toutes les PR de <code>docs/</code> ? Aujourd'hui une PR qui ne touche que <code>docs/adr/</code> les saute ; les inclure coûte ~14 min de CI par PR de doc.</li>
-        <li>Le go de la bêta, à la fin de la refonte.</li>
+        <li>La 10, trait des icônes en thème sombre ; le trait hors de l'éditeur (flèche retour, chevrons, reste de l'app), après les rendus.</li>
+        <li>Le test du tagbug sur son appareil (0.69.18).</li>
+        <li>Les arbitrages de la PR 1 de R6 (#1602), ED-66, clé de position et plancher de 120 dp de R2b, H2, ED-14 avec le focus ; les treize arbitrages de la nuit du 9 au 10/11, ratification à confirmer.</li>
+        <li>Les questions restées ouvertes à la livraison : clavier non rouvert au retour au message, Œil coché peu lisible en thème sombre, infobulle de l'Œil sur la barre d'état, clavier rouvert à la rotation après l'onglet Wiki.</li>
+        <li>Infra : lancer les tests CI sur les PR qui ne touchent que <code>docs/</code> ? Environ 14 min de CI par PR de doc.</li>
       </ol>
     </section>
   </div>
 
   <section class="panel rel" aria-labelledby="h-rel">
-    <div class="sechd"><h2 id="h-rel">Livraisons</h2><span class="muted">releases dev de la refonte · heure du merge de la PR de version</span></div>
+    <div class="sechd"><h2 id="h-rel">Livraisons</h2><span class="muted">releases de la refonte · heure du merge de la PR de version ; 0.70.0 : de la release ; bêta : des annonces</span></div>
     <div class="tablebox">
       <table>
         <thead><tr><th>Version</th><th>Date</th><th>Contenu</th></tr></thead>
         <tbody>
+          <tr class="grp beta"><th colspan="3">Bêta</th></tr>
+          <tr><td>bêta 0.70.0</td><td class="d">14/11 21:43</td><td>Promotion <a href="https://github.com/ForumHFR/redface2/pull/1651">#1651</a> mergée à 21:28 sur go du mainteneur : <code>main</code> = <code>a82319b27</code>, même arbre que dev <code>28a01ff40</code> ; depuis la bêta 0.68.0, 1 380 fichiers, +82 001 −7 713 lignes. app-v393, release à 21:37 ; Play Store (piste bêta), F-Droid bêta, annonces TU et DEV. La première bêta depuis la 0.68.0</td></tr>
           <tr class="grp end"><th colspan="3">Fin de phase</th></tr>
+          <tr><td>0.70.0</td><td class="d">14/11 19:51</td><td>Version fixée par #1650 (12:37) ; correctifs de la revue de promotion : aperçu d'édition MP hors du cache disque et rétention qui garde les envois incertains (#1652), envoi incertain restauré même si ses offres sont illisibles (#1653), changelog (#1655) ; app-v392, F-Droid servi, changelog DEV posté</td></tr>
+          <tr><td>0.69.24</td><td class="d">14/11 12:23</td><td>Hauteur commune des onglets smileys retirée, chaque onglet reprend la sienne (#1648, PR de version) ; « Modifier » en repli sur son propre MP, menu « … » relu sur la page courante (#1647) ; app-v391, F-Droid servi, changelog DEV à 12:37</td></tr>
           <tr><td>0.69.23</td><td class="d">14/11 09:36</td><td>« Ignorer » d'un brouillon parmi plusieurs garde la feuille ↺ ouverte (#1645) ; garde de présence ED-88 à la fermeture et au « Recharger » (#1644) ; app-v390, changelog DEV posté</td></tr>
           <tr><td>0.69.22</td><td class="d">14/11 06:32</td><td>« Ignorer » ne scelle une citation livrée que si elle est encore dans le champ (#1642) ; app-v389</td></tr>
           <tr><td>0.69.21</td><td class="d">14/11 06:02</td><td>« Ignorer » de la réponse rapide aligné sur l'éditeur de post, titre servi du premier post laissé intact compté comme graine (#1640) ; suivis du gate de #1635 (#1639) ; réponse d'édition MP épinglée en test (#1637) ; captures Roborazzi élaguées (#1636, #1638) ; PR de version #1641, app-v388. #1625 close à 06:14</td></tr>
@@ -658,31 +691,31 @@ footer{font-size:12px;color:var(--ink-3);border-top:1px solid var(--line);paddin
         </tbody>
       </table>
     </div>
-    <p class="note">0.69.1 et 0.69.3 : correctifs hors refonte. La 0.69.9 plantait au lancement : KSP 2.3.13 perdait parfois des modules Hilt sans faire échouer le build. Retour à KSP 2.3.12 en 0.69.10 ; depuis le 9/11, la release refuse un APK ou un AAB auquel il manque des entrées Hilt (#1582). La 0.69.17 (app-v384) : tag à 16:48, publiée à 16:56, servie sur F-Droid ; dev était rouge depuis #1621 (une capture Roborazzi dépendait du réseau), corrigé par #1622.</p>
+    <p class="note">0.69.1 et 0.69.3 : correctifs hors refonte. La 0.69.9 plantait au lancement : KSP 2.3.13 perdait parfois des modules Hilt sans faire échouer le build. Retour à KSP 2.3.12 en 0.69.10 ; depuis le 9/11, la release refuse un APK ou un AAB auquel il manque des entrées Hilt (#1582). La 0.69.17 (app-v384) : tag à 16:48, publiée à 16:56, servie sur F-Droid ; dev était rouge depuis #1621 (une capture Roborazzi dépendait du réseau), corrigé par #1622. La 0.70.0 n'a pas de PR de version : #1650 a fixé la version à 12:37, la release est partie à 19:51 sur <code>28a01ff40</code>, après la revue de promotion.</p>
   </section>
 
   <section class="panel lots" aria-labelledby="h-lots">
-    <div class="sechd"><h2 id="h-lots">Lots</h2><span class="muted">corps de phase, tous livrés · ajustements de fin de phase en bas · session rf2-dev sauf mention</span></div>
+    <div class="sechd"><h2 id="h-lots">Lots</h2><span class="muted">corps de phase et ajustements de fin de phase, tous livrés en bêta 0.70.0 · session rf2-dev sauf mention</span></div>
     <p class="key"><b>Taille</b>, en lignes modifiées (code et tests) : <span class="sz">S</span>moins de 1 000, <span class="sz">M</span>1 000 à 3 000, <span class="sz sz-l">L</span>3 000 à 6 000, <span class="sz sz-xl">XL</span>au-delà. Diff réel, captures Roborazzi à part.</p>
     <div class="tablebox">
       <table>
         <thead><tr><th>Ph.</th><th>Lot</th><th>Taille</th><th>Contenu</th><th>État</th><th>Livraison et reste</th></tr></thead>
         <tbody>
           <tr class="grp body"><th colspan="6">Corps de phase · 14 lots</th></tr>
-          <tr><td class="ph">1</td><td class="lot"><b>R0m</b> <a href="https://github.com/ForumHFR/redface2/issues/1509">#1509</a></td><td class="size"><span class="sz">S</span><span class="szd">+399 −5</span></td><td class="what2">material3 1.5.0-beta02, 17 feuilles testées</td><td><span class="pill p-done">livré</span></td><td>PR <a href="https://github.com/ForumHFR/redface2/pull/1524">#1524</a>, 0.69.2 (6/11). Partira en bêta avec la refonte</td></tr>
-          <tr><td class="ph">—</td><td class="lot"><b>#1301-ST</b> <a href="https://github.com/ForumHFR/redface2/issues/1301">#1301</a></td><td class="size"><span class="sz sz-xl">XL</span><span class="szd">+8 666 −1 852</span></td><td class="what2">Invariants d'envoi ED-160 à ED-172 <span class="muted">· rf2-smalldev</span></td><td><span class="pill p-done">livré</span></td><td>PR <a href="https://github.com/ForumHFR/redface2/pull/1522">#1522</a>, 0.66.0 (2/11). Protocole B.3 sur appareil : compté dans G3</td></tr>
-          <tr><td class="ph">4</td><td class="lot"><b>R0b</b> <a href="https://github.com/ForumHFR/redface2/issues/1456">#1456</a></td><td class="size"><span class="sz sz-l">L</span><span class="szd">+4 979 −877, 2 PR</span></td><td class="what2">Frontière d'émission, contrat d'erreur côté UI</td><td><span class="pill p-done">livré</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1539">#1539</a> en 0.69.0, <a href="https://github.com/ForumHFR/redface2/pull/1551">#1551</a> en 0.69.4 (7/11), après six gates Astra, cinq NO GO puis GO</td></tr>
-          <tr><td class="ph">—</td><td class="lot"><b>R0c</b> <a href="https://github.com/ForumHFR/redface2/issues/1512">#1512</a></td><td class="size"><span class="sz sz-xl">XL</span><span class="szd">+7 503 −1 806, 7 PR</span></td><td class="what2">Quatre ViewModels sur <code>TextFieldState</code> <span class="muted">· rf2-smalldev</span></td><td><span class="pill p-done">livré</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1555">#1555</a> à <a href="https://github.com/ForumHFR/redface2/pull/1569">#1569</a>, 0.69.5 à 0.69.8 (7-8/11), puis <a href="https://github.com/ForumHFR/redface2/pull/1574">#1574</a> en 0.69.9. Recette 24/24, issue fermée le 9/11</td></tr>
+          <tr><td class="ph">1</td><td class="lot"><b>R0m</b> <a href="https://github.com/ForumHFR/redface2/issues/1509">#1509</a></td><td class="size"><span class="sz">S</span><span class="szd">+399 −5</span></td><td class="what2">material3 1.5.0-beta02, 17 feuilles testées</td><td><span class="pill p-done">clos</span></td><td>PR <a href="https://github.com/ForumHFR/redface2/pull/1524">#1524</a>, 0.69.2 (6/11). En bêta 0.70.0 ; issue fermée le 14/11</td></tr>
+          <tr><td class="ph">—</td><td class="lot"><b>#1301-ST</b> <a href="https://github.com/ForumHFR/redface2/issues/1301">#1301</a></td><td class="size"><span class="sz sz-xl">XL</span><span class="szd">+8 666 −1 852</span></td><td class="what2">Invariants d'envoi ED-160 à ED-172 <span class="muted">· rf2-smalldev</span></td><td><span class="pill p-done">livré</span></td><td>PR <a href="https://github.com/ForumHFR/redface2/pull/1522">#1522</a>, 0.66.0 (2/11). Issue gardée ouverte : preuves sur appareil (B.3 sur le nouveau chrome, rotation et TalkBack de l'accusé, double appui réel)</td></tr>
+          <tr><td class="ph">4</td><td class="lot"><b>R0b</b> <a href="https://github.com/ForumHFR/redface2/issues/1456">#1456</a></td><td class="size"><span class="sz sz-l">L</span><span class="szd">+4 979 −877, 2 PR</span></td><td class="what2">Frontière d'émission, contrat d'erreur côté UI</td><td><span class="pill p-done">clos</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1539">#1539</a> en 0.69.0, <a href="https://github.com/ForumHFR/redface2/pull/1551">#1551</a> en 0.69.4 (7/11), après six gates Astra, cinq NO GO puis GO</td></tr>
+          <tr><td class="ph">—</td><td class="lot"><b>R0c</b> <a href="https://github.com/ForumHFR/redface2/issues/1512">#1512</a></td><td class="size"><span class="sz sz-xl">XL</span><span class="szd">+7 503 −1 806, 7 PR</span></td><td class="what2">Quatre ViewModels sur <code>TextFieldState</code> <span class="muted">· rf2-smalldev</span></td><td><span class="pill p-done">clos</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1555">#1555</a> à <a href="https://github.com/ForumHFR/redface2/pull/1569">#1569</a>, 0.69.5 à 0.69.8 (7-8/11), puis <a href="https://github.com/ForumHFR/redface2/pull/1574">#1574</a> en 0.69.9. Recette 24/24, issue fermée le 9/11</td></tr>
           <tr><td class="ph">2</td><td class="lot"><b>R0a</b> <a href="https://github.com/ForumHFR/redface2/issues/1455">#1455</a></td><td class="size"><span class="sz">M</span><span class="szd">hors dépôt, 15 règles</span></td><td class="what2">Preuve d'interaction sur appareil, critères A à O</td><td><span class="pill p-done">conclu</span></td><td>Concluant avec réserves le 8/11 (S10e et S25) ; B5 conservée, repli E non adopté. Reste l'observation de B5 intégré (G1)</td></tr>
-          <tr><td class="ph">—</td><td class="lot"><b>#1553</b> <a href="https://github.com/ForumHFR/redface2/issues/1553">#1553</a></td><td class="size"><span class="sz sz-xl">XL</span><span class="szd">+6 017 −1 512</span></td><td class="what2">Citation en attente stockée dans le brouillon</td><td><span class="pill p-done">livré</span></td><td>PR <a href="https://github.com/ForumHFR/redface2/pull/1564">#1564</a>, 0.69.7 (8/11)</td></tr>
-          <tr><td class="ph">3</td><td class="lot"><b>R1a-1</b> <a href="https://github.com/ForumHFR/redface2/issues/1513">#1513</a></td><td class="size"><span class="sz sz-xl">XL</span><span class="szd">+9 578 −113, 8 PR</span></td><td class="what2"><code>EditorScaffold</code> et composants du chrome</td><td><span class="pill p-done">mergé</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1583">#1583</a> à <a href="https://github.com/ForumHFR/redface2/pull/1590">#1590</a> (9-10/11), chacune après un GO de Fable. Fermeture possible, réserve TalkBack</td></tr>
-          <tr><td class="ph">5</td><td class="lot"><b>R1a-2</b> <a href="https://github.com/ForumHFR/redface2/issues/1450">#1450</a></td><td class="size"><span class="sz sz-xl">XL</span><span class="szd">+6 909 −960, 4 PR</span></td><td class="what2">Éditeur de post sur le nouveau chrome</td><td><span class="pill p-done">mergé</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1591">#1591</a> à <a href="https://github.com/ForumHFR/redface2/pull/1594">#1594</a> (11/11, 09:26-10:12), après le go G1. Les ajustements de la citation sont suivis dans cette issue</td></tr>
-          <tr><td class="ph">6</td><td class="lot"><b>R1b-1</b> <a href="https://github.com/ForumHFR/redface2/issues/1451">#1451</a></td><td class="size"><span class="sz sz-xl">XL</span><span class="szd">+7 252 −1 507, 2 PR</span></td><td class="what2">Nouveau sujet, socle commun aux trois surfaces</td><td><span class="pill p-done">mergé</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1595">#1595</a>, <a href="https://github.com/ForumHFR/redface2/pull/1596">#1596</a> (11/11, 10:28 et 10:44), après la levée de G2</td></tr>
-          <tr><td class="ph">7</td><td class="lot"><b>R1b-2a</b> <a href="https://github.com/ForumHFR/redface2/issues/1514">#1514</a></td><td class="size"><span class="sz sz-l">L</span><span class="szd">+3 366 −743</span></td><td class="what2">Réponse MP</td><td><span class="pill p-done">mergé</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1597">#1597</a> (11/11, 11:08)</td></tr>
-          <tr><td class="ph">8</td><td class="lot"><b>R1b-2b</b> <a href="https://github.com/ForumHFR/redface2/issues/1515">#1515</a></td><td class="size"><span class="sz sz-l">L</span><span class="szd">+4 415 −1 121</span></td><td class="what2">Nouveau MP</td><td><span class="pill p-done">mergé</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1598">#1598</a> (11/11, 11:25) : R1 entier dans dev</td></tr>
-          <tr><td class="ph">9</td><td class="lot"><b>R6</b> <a href="https://github.com/ForumHFR/redface2/issues/1516">#1516</a></td><td class="size"><span class="sz sz-l">L</span><span class="szd">+3 282 −318, 2 PR</span></td><td class="what2">Raccourci de la barre d'action, « Aucun » par défaut</td><td><span class="pill p-done">mergé</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1602">#1602</a>, <a href="https://github.com/ForumHFR/redface2/pull/1603">#1603</a> (11/11, 12:10 et 12:24). Arbitrages de la PR 1 à ratifier ; découvrabilité : remarque 12</td></tr>
-          <tr><td class="ph">10</td><td class="lot"><b>R2a</b> <a href="https://github.com/ForumHFR/redface2/issues/1452">#1452</a></td><td class="size"><span class="sz">M</span><span class="szd">+852 −403</span></td><td class="what2">Panneau de citations, mode cartes</td><td><span class="pill p-done">mergé</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1600">#1600</a> (11/11, 11:40). Écarts TalkBack reportés à <a href="https://github.com/ForumHFR/redface2/issues/1599">#1599</a></td></tr>
-          <tr><td class="ph">11</td><td class="lot"><b>R2b</b> <a href="https://github.com/ForumHFR/redface2/issues/1452">#1452</a></td><td class="size"><span class="sz sz-l">L</span><span class="szd">+3 539 −288</span></td><td class="what2">Aperçu en partage, smileys perso (#873)</td><td><span class="pill p-done">mergé</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1601">#1601</a> (11/11, 11:54), recette 9 cas sur 9 avec R2a. Images dans l'aperçu : remarque 13</td></tr>
+          <tr><td class="ph">—</td><td class="lot"><b>#1553</b> <a href="https://github.com/ForumHFR/redface2/issues/1553">#1553</a></td><td class="size"><span class="sz sz-xl">XL</span><span class="szd">+6 017 −1 512</span></td><td class="what2">Citation en attente stockée dans le brouillon</td><td><span class="pill p-done">clos</span></td><td>PR <a href="https://github.com/ForumHFR/redface2/pull/1564">#1564</a>, 0.69.7 (8/11)</td></tr>
+          <tr><td class="ph">3</td><td class="lot"><b>R1a-1</b> <a href="https://github.com/ForumHFR/redface2/issues/1513">#1513</a></td><td class="size"><span class="sz sz-xl">XL</span><span class="szd">+9 578 −113, 8 PR</span></td><td class="what2"><code>EditorScaffold</code> et composants du chrome</td><td><span class="pill p-done">clos</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1583">#1583</a> à <a href="https://github.com/ForumHFR/redface2/pull/1590">#1590</a> (9-10/11), chacune après un GO de Fable. Issue fermée le 14/11 par dérogation, réserve TalkBack</td></tr>
+          <tr><td class="ph">5</td><td class="lot"><b>R1a-2</b> <a href="https://github.com/ForumHFR/redface2/issues/1450">#1450</a></td><td class="size"><span class="sz sz-xl">XL</span><span class="szd">+6 909 −960, 4 PR</span></td><td class="what2">Éditeur de post sur le nouveau chrome</td><td><span class="pill p-done">clos</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1591">#1591</a> à <a href="https://github.com/ForumHFR/redface2/pull/1594">#1594</a> (11/11, 09:26-10:12), après le go G1. Les ajustements de la citation y étaient suivis ; fermée le 14/11</td></tr>
+          <tr><td class="ph">6</td><td class="lot"><b>R1b-1</b> <a href="https://github.com/ForumHFR/redface2/issues/1451">#1451</a></td><td class="size"><span class="sz sz-xl">XL</span><span class="szd">+7 252 −1 507, 2 PR</span></td><td class="what2">Nouveau sujet, socle commun aux trois surfaces</td><td><span class="pill p-done">clos</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1595">#1595</a>, <a href="https://github.com/ForumHFR/redface2/pull/1596">#1596</a> (11/11, 10:28 et 10:44), après la levée de G2 ; fermée le 14/11</td></tr>
+          <tr><td class="ph">7</td><td class="lot"><b>R1b-2a</b> <a href="https://github.com/ForumHFR/redface2/issues/1514">#1514</a></td><td class="size"><span class="sz sz-l">L</span><span class="szd">+3 366 −743</span></td><td class="what2">Réponse MP</td><td><span class="pill p-done">clos</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1597">#1597</a> (11/11, 11:08) ; fermée le 14/11</td></tr>
+          <tr><td class="ph">8</td><td class="lot"><b>R1b-2b</b> <a href="https://github.com/ForumHFR/redface2/issues/1515">#1515</a></td><td class="size"><span class="sz sz-l">L</span><span class="szd">+4 415 −1 121</span></td><td class="what2">Nouveau MP</td><td><span class="pill p-done">clos</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1598">#1598</a> (11/11, 11:25) : R1 entier dans dev ; fermée le 14/11</td></tr>
+          <tr><td class="ph">9</td><td class="lot"><b>R6</b> <a href="https://github.com/ForumHFR/redface2/issues/1516">#1516</a></td><td class="size"><span class="sz sz-l">L</span><span class="szd">+3 282 −318, 2 PR</span></td><td class="what2">Raccourci de la barre d'action, « Aucun » par défaut</td><td><span class="pill p-done">clos</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1602">#1602</a>, <a href="https://github.com/ForumHFR/redface2/pull/1603">#1603</a> (11/11, 12:10 et 12:24). Découvrabilité : remarque 12. Fermée le 14/11 ; arbitrages de la PR 1 à ratifier</td></tr>
+          <tr><td class="ph">10</td><td class="lot"><b>R2a</b> <a href="https://github.com/ForumHFR/redface2/issues/1452">#1452</a></td><td class="size"><span class="sz">M</span><span class="szd">+852 −403</span></td><td class="what2">Panneau de citations, mode cartes</td><td><span class="pill p-done">clos</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1600">#1600</a> (11/11, 11:40). Écarts TalkBack reportés à <a href="https://github.com/ForumHFR/redface2/issues/1599">#1599</a>, ouverte ; #1452 fermée le 14/11</td></tr>
+          <tr><td class="ph">11</td><td class="lot"><b>R2b</b> <a href="https://github.com/ForumHFR/redface2/issues/1452">#1452</a></td><td class="size"><span class="sz sz-l">L</span><span class="szd">+3 539 −288</span></td><td class="what2">Aperçu en partage, smileys perso (#873)</td><td><span class="pill p-done">clos</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1601">#1601</a> (11/11, 11:54), recette 9 cas sur 9 avec R2a. Images dans l'aperçu : remarque 13</td></tr>
           <tr class="grp end"><th colspan="6">Fin de phase · ajustements</th></tr>
           <tr><td class="ph">—</td><td class="lot"><b>Citation, A</b> <a href="https://github.com/ForumHFR/redface2/issues/1450">#1450</a></td><td class="size"><span class="sz">M</span><span class="szd">+988 −78</span></td><td class="what2">Formulaire chargé sous l'offre</td><td><span class="pill p-done">livré</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1606">#1606</a>, 0.69.12 (11/11)</td></tr>
           <tr><td class="ph">—</td><td class="lot"><b>Citation, B</b> <a href="https://github.com/ForumHFR/redface2/issues/1450">#1450</a></td><td class="size"><span class="sz">M</span><span class="szd">+2 091 −425, 388 captures</span></td><td class="what2">Offre en feuille du bas, avis minuté</td><td><span class="pill p-done">livré</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1608">#1608</a>, 0.69.13 (12/11)</td></tr>
@@ -696,27 +729,30 @@ footer{font-size:12px;color:var(--ink-3);border-top:1px solid var(--line);paddin
           <tr><td class="ph">—</td><td class="lot"><b>Ton du message</b> <a href="https://github.com/ForumHFR/redface2/issues/1513">#1513</a></td><td class="size"><span class="sz">S</span><span class="szd">+612 −110, 47 fichiers</span></td><td class="what2">Grille refaite : noms, 48 dp, 6 ou 8 colonnes</td><td><span class="pill p-done">livré</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1622">#1622</a>, 0.69.17 (13/11), avec le bump de version ; répare dev</td></tr>
           <tr><td class="ph">—</td><td class="lot"><b>Feuille Options</b></td><td class="size"><span class="sz">M</span><span class="szd">+1 553 −154, 86 fichiers</span></td><td class="what2">Variante C, raccourci nommé (#1516), correctif du tagbug</td><td><span class="pill p-done">livré</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1624">#1624</a>, 0.69.18 (13/11). Tagbug à confirmer sur appareil</td></tr>
           <tr><td class="ph">—</td><td class="lot"><b>Grille du ton</b> <a href="https://github.com/ForumHFR/redface2/issues/1417">#1417</a></td><td class="size"><span class="sz">S</span><span class="szd">+81 −44, 50 fichiers</span></td><td class="what2">2 × 8 au lieu de 3 lignes, sprites nets, 48 références réenregistrées</td><td><span class="pill p-done">livré</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1626">#1626</a>, 0.69.19 (14/11)</td></tr>
-          <tr><td class="ph">—</td><td class="lot"><b>Accusé unique</b> <a href="https://github.com/ForumHFR/redface2/issues/1437">#1437</a></td><td class="size"><span class="szd">non estimée</span></td><td class="what2">Un seul accusé, « Dernière page » prédite ; spec <code>mvi.md</code> amendée</td><td><span class="pill p-done">livré</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1627">#1627</a>, 0.69.19 (14/11) ; #1437 fermée</td></tr>
-          <tr><td class="ph">—</td><td class="lot"><b>En-têtes du brouillon</b></td><td class="size"><span class="szd">non estimée</span></td><td class="what2">R11 : titre et destinataires gardés sous l'offre ↺, ED-121 étendu au nouveau sujet et au nouveau MP</td><td><span class="pill p-done">livré</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1631">#1631</a>, 0.69.19 (14/11)</td></tr>
-          <tr><td class="ph">—</td><td class="lot"><b>Réponse rapide</b> <a href="https://github.com/ForumHFR/redface2/issues/1450">#1450</a></td><td class="size"><span class="szd">non estimée</span></td><td class="what2">Écriture finale avant la fermeture</td><td><span class="pill p-done">livré</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1629">#1629</a>, avec #1616, 0.69.19 (14/11). Suite : « Ignorer » d'une citation insérée, dans <a href="https://github.com/ForumHFR/redface2/pull/1640">#1640</a></td></tr>
-          <tr><td class="ph">—</td><td class="lot"><b>Panier</b> <a href="https://github.com/ForumHFR/redface2/issues/1616">#1616</a></td><td class="size"><span class="szd">non estimée</span></td><td class="what2">Vider le panier après livraison durable</td><td><span class="pill p-done">livré</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1629">#1629</a>, 0.69.19 (14/11) ; #1616 fermée</td></tr>
-          <tr><td class="ph">—</td><td class="lot"><b>Feuilles du bas</b></td><td class="size"><span class="szd">non estimée</span></td><td class="what2">Un seul cran pour toutes les feuilles du bas, smileys à hauteur fixe, plancher de hauteur en MP</td><td><span class="pill p-done">livré</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1630">#1630</a>, 0.69.19 (14/11)</td></tr>
-          <tr><td class="ph">—</td><td class="lot"><b>Élagage Roborazzi</b></td><td class="size"><span class="szd">non estimée</span></td><td class="what2">Élagage des captures au niveau B, garde anti-doublon, planche-contact</td><td><span class="pill p-done">livré</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1636">#1636</a> (14/11 03:10) : 1 301 → 829 captures ; planche-contact corrigée par <a href="https://github.com/ForumHFR/redface2/pull/1638">#1638</a> (05:11) ; dans la 0.69.21. Suite : <a href="https://github.com/ForumHFR/redface2/issues/1643">#1643</a>, références orphelines, ouverte</td></tr>
-          <tr><td class="ph">—</td><td class="lot"><b>Éditer son MP</b> <a href="https://github.com/ForumHFR/redface2/issues/1625">#1625</a></td><td class="size"><span class="szd">non estimée</span></td><td class="what2">Action « Modifier » du menu MP, branchement de l'édition, <code>EditPostContext.cat</code></td><td><span class="pill p-done">livré</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1634">#1634</a> (contrat d'édition MP) et <a href="https://github.com/ForumHFR/redface2/pull/1635">#1635</a> (« Modifier » depuis le menu du fil, PR de version), 0.69.20 (14/11) ; #1625 close le 14/11 à 06:14, livrée dans la 0.69.21</td></tr>
-          <tr><td class="ph">—</td><td class="lot"><b>Capture de l'édition MP</b> <a href="https://github.com/ForumHFR/redface2/issues/1625">#1625</a></td><td class="size"><span class="szd">non estimée</span></td><td class="what2">Réponse capturée le 14/11 à 04:44, épinglée en test</td><td><span class="pill p-done">livré</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1637">#1637</a>, 0.69.21 (14/11)</td></tr>
-          <tr><td class="ph">—</td><td class="lot"><b>Suivis de #1635</b> <a href="https://github.com/ForumHFR/redface2/issues/1625">#1625</a></td><td class="size"><span class="szd">non estimée</span></td><td class="what2">Résultat d'envoi MP lié au compte, sujet caché hors du brouillon d'édition</td><td><span class="pill p-done">livré</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1639">#1639</a>, 0.69.21 (14/11)</td></tr>
-          <tr><td class="ph">—</td><td class="lot"><b>Décisions de 05:10</b></td><td class="size"><span class="szd">non estimée</span></td><td class="what2">« Ignorer » d'une citation insérée en réponse rapide, comme dans l'éditeur de post ; titre du premier post en graine, « Restaurer » reprend celui du brouillon</td><td><span class="pill p-done">livré</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1640">#1640</a>, 0.69.21 (14/11)</td></tr>
-          <tr><td class="ph">—</td><td class="lot"><b>Ignorer, citation livrée</b> <a href="https://github.com/ForumHFR/redface2/issues/1417">#1417</a></td><td class="size"><span class="szd">non estimée</span></td><td class="what2">« Ignorer » ne scelle une citation livrée que si elle est encore dans le champ</td><td><span class="pill p-done">livré</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1642">#1642</a>, 0.69.22 (14/11)</td></tr>
-          <tr><td class="ph">—</td><td class="lot"><b>Garde ED-88</b> <a href="https://github.com/ForumHFR/redface2/issues/1417">#1417</a></td><td class="size"><span class="szd">non estimée</span></td><td class="what2">Garde de présence à la fermeture et au « Recharger », éditeur de post et éditeur MP</td><td><span class="pill p-done">livré</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1644">#1644</a>, 0.69.23 (14/11) ; « Go reco pour tout »</td></tr>
-          <tr><td class="ph">—</td><td class="lot"><b>Feuille ↺</b> <a href="https://github.com/ForumHFR/redface2/issues/1417">#1417</a></td><td class="size"><span class="szd">non estimée</span></td><td class="what2">« Ignorer » d'un brouillon parmi plusieurs garde la feuille ouverte</td><td><span class="pill p-done">livré</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1645">#1645</a>, 0.69.23 (14/11), sur retour du mainteneur</td></tr>
-          <tr><td class="ph">—</td><td class="lot"><b>Modifier en repli</b> <a href="https://github.com/ForumHFR/redface2/issues/1625">#1625</a></td><td class="size"><span class="szd">non estimée</span></td><td class="what2">« Modifier » sur son propre MP sans lien d'édition servi ; menu « … » relu sur la page courante ; relecture MPStorage au rafraîchissement</td><td><span class="pill p-done">mergé</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1647">#1647</a>, mergée le 14/11 à 11:27. Visée : 0.69.24</td></tr>
-          <tr><td class="ph">—</td><td class="lot"><b>Feuille des smileys</b></td><td class="size"><span class="szd">non estimée</span></td><td class="what2">PR sur la <a href="https://forumhfr.github.io/artifacts/editeur-smileys/">proposition</a> retenue</td><td><span class="pill p-wait">à faire</span></td><td>Quatre propositions publiées le 14/11 (10:58, 11:13) ; attend le choix du mainteneur</td></tr>
+          <tr><td class="ph">—</td><td class="lot"><b>Accusé unique</b> <a href="https://github.com/ForumHFR/redface2/issues/1437">#1437</a></td><td class="size"><span class="sz">S</span><span class="szd">+912 −34, 7 fichiers</span></td><td class="what2">Un seul accusé, « Dernière page » prédite ; spec <code>mvi.md</code> amendée</td><td><span class="pill p-done">livré</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1627">#1627</a>, 0.69.19 (14/11) ; #1437 fermée</td></tr>
+          <tr><td class="ph">—</td><td class="lot"><b>En-têtes du brouillon</b></td><td class="size"><span class="sz">M</span><span class="szd">+1 255 −189, 27 fichiers</span></td><td class="what2">R11 : titre et destinataires gardés sous l'offre ↺, ED-121 étendu au nouveau sujet et au nouveau MP</td><td><span class="pill p-done">livré</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1631">#1631</a>, 0.69.19 (14/11)</td></tr>
+          <tr><td class="ph">—</td><td class="lot"><b>Réponse rapide</b> <a href="https://github.com/ForumHFR/redface2/issues/1450">#1450</a></td><td class="size"><span class="sz">M</span><span class="szd">+1 241 −90, 18 fichiers</span></td><td class="what2">Écriture finale avant la fermeture</td><td><span class="pill p-done">livré</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1629">#1629</a>, avec #1616, 0.69.19 (14/11). Suite : « Ignorer » d'une citation insérée, dans <a href="https://github.com/ForumHFR/redface2/pull/1640">#1640</a></td></tr>
+          <tr><td class="ph">—</td><td class="lot"><b>Panier</b> <a href="https://github.com/ForumHFR/redface2/issues/1616">#1616</a></td><td class="size"><span class="szd">avec #1629</span></td><td class="what2">Vider le panier après livraison durable</td><td><span class="pill p-done">livré</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1629">#1629</a>, 0.69.19 (14/11) ; #1616 fermée</td></tr>
+          <tr><td class="ph">—</td><td class="lot"><b>Feuilles du bas</b></td><td class="size"><span class="sz">S</span><span class="szd">+101 −21, 49 fichiers</span></td><td class="what2">Un seul cran pour toutes les feuilles du bas, smileys à hauteur fixe, plancher de hauteur en MP</td><td><span class="pill p-done">livré</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1630">#1630</a>, 0.69.19 (14/11). Hauteur commune des smileys retirée par #1648 (0.69.24)</td></tr>
+          <tr><td class="ph">—</td><td class="lot"><b>Élagage Roborazzi</b></td><td class="size"><span class="sz">S</span><span class="szd">+537 −70, 2 PR</span></td><td class="what2">Élagage des captures au niveau B, garde anti-doublon, planche-contact</td><td><span class="pill p-done">livré</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1636">#1636</a> (14/11 03:10) : 1 301 → 829 captures ; planche-contact corrigée par <a href="https://github.com/ForumHFR/redface2/pull/1638">#1638</a> (05:11) ; dans la 0.69.21. Suite : <a href="https://github.com/ForumHFR/redface2/issues/1643">#1643</a>, références orphelines, ouverte</td></tr>
+          <tr><td class="ph">—</td><td class="lot"><b>Éditer son MP</b> <a href="https://github.com/ForumHFR/redface2/issues/1625">#1625</a></td><td class="size"><span class="sz">M</span><span class="szd">+2 757 −121, 2 PR</span></td><td class="what2">Action « Modifier » du menu MP, branchement de l'édition, <code>EditPostContext.cat</code></td><td><span class="pill p-done">livré</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1634">#1634</a> (contrat d'édition MP) et <a href="https://github.com/ForumHFR/redface2/pull/1635">#1635</a> (« Modifier » depuis le menu du fil, PR de version), 0.69.20 (14/11) ; #1625 close le 14/11 à 06:14, livrée dans la 0.69.21</td></tr>
+          <tr><td class="ph">—</td><td class="lot"><b>Capture de l'édition MP</b> <a href="https://github.com/ForumHFR/redface2/issues/1625">#1625</a></td><td class="size"><span class="sz">S</span><span class="szd">+132 −29, 11 fichiers</span></td><td class="what2">Réponse capturée le 14/11 à 04:44, épinglée en test</td><td><span class="pill p-done">livré</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1637">#1637</a>, 0.69.21 (14/11)</td></tr>
+          <tr><td class="ph">—</td><td class="lot"><b>Suivis de #1635</b> <a href="https://github.com/ForumHFR/redface2/issues/1625">#1625</a></td><td class="size"><span class="sz">S</span><span class="szd">+182 −18, 11 fichiers</span></td><td class="what2">Résultat d'envoi MP lié au compte, sujet caché hors du brouillon d'édition</td><td><span class="pill p-done">livré</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1639">#1639</a>, 0.69.21 (14/11)</td></tr>
+          <tr><td class="ph">—</td><td class="lot"><b>Décisions de 05:10</b></td><td class="size"><span class="sz">S</span><span class="szd">+143 −19, 6 fichiers</span></td><td class="what2">« Ignorer » d'une citation insérée en réponse rapide, comme dans l'éditeur de post ; titre du premier post en graine, « Restaurer » reprend celui du brouillon</td><td><span class="pill p-done">livré</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1640">#1640</a>, 0.69.21 (14/11)</td></tr>
+          <tr><td class="ph">—</td><td class="lot"><b>Ignorer, citation livrée</b> <a href="https://github.com/ForumHFR/redface2/issues/1417">#1417</a></td><td class="size"><span class="sz">S</span><span class="szd">+153 −22, 9 fichiers</span></td><td class="what2">« Ignorer » ne scelle une citation livrée que si elle est encore dans le champ</td><td><span class="pill p-done">livré</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1642">#1642</a>, 0.69.22 (14/11)</td></tr>
+          <tr><td class="ph">—</td><td class="lot"><b>Garde ED-88</b> <a href="https://github.com/ForumHFR/redface2/issues/1417">#1417</a></td><td class="size"><span class="sz">S</span><span class="szd">+258 −15, 10 fichiers</span></td><td class="what2">Garde de présence à la fermeture et au « Recharger », éditeur de post et éditeur MP</td><td><span class="pill p-done">livré</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1644">#1644</a>, 0.69.23 (14/11) ; « Go reco pour tout »</td></tr>
+          <tr><td class="ph">—</td><td class="lot"><b>Feuille ↺</b> <a href="https://github.com/ForumHFR/redface2/issues/1417">#1417</a></td><td class="size"><span class="sz">S</span><span class="szd">+911 −76, 41 fichiers</span></td><td class="what2">« Ignorer » d'un brouillon parmi plusieurs garde la feuille ouverte</td><td><span class="pill p-done">livré</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1645">#1645</a>, 0.69.23 (14/11), sur retour du mainteneur</td></tr>
+          <tr><td class="ph">—</td><td class="lot"><b>Modifier en repli</b> <a href="https://github.com/ForumHFR/redface2/issues/1625">#1625</a></td><td class="size"><span class="sz">S</span><span class="szd">+250 −25, 9 fichiers</span></td><td class="what2">« Modifier » sur son propre MP sans lien d'édition servi ; menu « … » relu sur la page courante ; relecture MPStorage au rafraîchissement</td><td><span class="pill p-done">livré</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1647">#1647</a>, 0.69.24 (14/11)</td></tr>
+          <tr><td class="ph">—</td><td class="lot"><b>Hauteur des smileys</b> <a href="https://github.com/ForumHFR/redface2/issues/1417">#1417</a></td><td class="size"><span class="sz">S</span><span class="szd">+19 −37, 11 fichiers</span></td><td class="what2">Hauteur commune des onglets retirée, à la demande du mainteneur</td><td><span class="pill p-done">livré</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1648">#1648</a>, 0.69.24 (14/11), avec le bump de version</td></tr>
+          <tr><td class="ph">—</td><td class="lot"><b>Aperçu MP, rétention</b> <a href="https://github.com/ForumHFR/redface2/pull/1651">#1651</a></td><td class="size"><span class="sz">S</span><span class="szd">+257 −13, 12 fichiers</span></td><td class="what2">Revue de promotion : aperçu d'édition MP hors du cache disque, rétention qui garde les envois incertains</td><td><span class="pill p-done">livré</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1652">#1652</a>, 0.70.0 (14/11) ; gate Astra GO</td></tr>
+          <tr><td class="ph">—</td><td class="lot"><b>Offres illisibles</b> <a href="https://github.com/ForumHFR/redface2/pull/1651">#1651</a></td><td class="size"><span class="sz">S</span><span class="szd">+406 −28, 7 fichiers</span></td><td class="what2">Revue de promotion : envoi incertain restauré même si ses offres ne se lisent pas</td><td><span class="pill p-done">livré</span></td><td><a href="https://github.com/ForumHFR/redface2/pull/1653">#1653</a>, 0.70.0 (14/11) ; gate Astra GO au second tour</td></tr>
+          <tr><td class="ph">—</td><td class="lot"><b>Feuille des smileys</b> <a href="https://github.com/ForumHFR/redface2/issues/1649">#1649</a></td><td class="size"><span class="szd">non estimée</span></td><td class="what2">Refonte sur la <a href="https://forumhfr.github.io/artifacts/editeur-smileys/">proposition</a> retenue</td><td><span class="pill p-wait">reportée</span></td><td>Hors phase depuis le 14/11 ; quatre propositions publiées (10:58, 11:13) ; S1 rattaché en dérogation bornée</td></tr>
         </tbody>
       </table>
     </div>
   </section>
 
-  <footer>Version 19 de la page, état au 14/11/2026 à 11:50. Tenue à partir du tableau de bord des sessions de développement, des journaux de suivi et de l'historique de <code>dev</code>. Plan de référence : PHASES-v07 (spec v0.7.1 acceptée le 1/11).</footer>
+  <footer>Version 20 de la page, état au 15/11/2026 à 22:00 : phase close. Tenue à partir du tableau de bord des sessions de développement, des journaux de suivi, de l'historique de <code>dev</code> et de GitHub. Plan de référence : PHASES-v07 (spec v0.7.1 acceptée le 1/11) ; spec finale v0.7.13 (14/11).</footer>
 </div>
 <script>
 document.querySelectorAll('.fx[data-end]').forEach(function (el) {
